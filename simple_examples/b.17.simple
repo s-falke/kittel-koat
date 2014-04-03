@@ -1,0 +1,10 @@
+var x: int, y: int, z: int;
+
+begin
+  while (x > z) do
+    while (y > z) do
+      y = y - 1;
+    done;
+    x = x - 1;
+  done;
+end

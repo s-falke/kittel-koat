@@ -1,0 +1,1 @@
+eval(i, j) -> eval(i - nat, j + pos) [ i - j >= 1 /\ nat >= 0 /\ pos > 0 ]

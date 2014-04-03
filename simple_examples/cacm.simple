@@ -1,0 +1,16 @@
+/* Cook, Podelski, Rybalchenko: Proving program termination */
+
+var x: int, y: int;
+
+begin
+  x = random;
+  y = random;
+  while ((x > 0) and (y > 0)) do
+    if (brandom) then
+      x = x - 1;
+      y = y + 1;
+    else
+      y = y - 1;
+    endif;
+  done;
+end

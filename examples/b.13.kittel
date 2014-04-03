@@ -1,0 +1,6 @@
+eval(x, y, z) -> eval(x - 1, y, z) [ x > z /\ x > z ]
+eval(x, y, z) -> eval(x - 1, y, z) [ y > z /\ x > z ]
+eval(x, y, z) -> eval(x, y - 1, z) [ x > z /\ x <= z /\ y > z ]
+eval(x, y, z) -> eval(x, y - 1, z) [ y > z /\ x <= z /\ y > z ]
+eval(x, y, z) -> eval(x, y, z) [ x > z /\ x <= z /\ y <= z ]
+eval(x, y, z) -> eval(x, y, z) [ y > z /\ x <= z /\ y <= z ]

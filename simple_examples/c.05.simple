@@ -1,0 +1,14 @@
+var x: int, y: int;
+
+begin
+  assume ((x > 0) and (y > 0));
+  while (not (x == y)) do
+    if (x > y) then
+      assume ((x > 0) and (y > 0));
+      x = x - y;
+    else
+      assume ((x > 0) and (y > 0));
+      y = y - x;
+    endif;
+  done;
+end

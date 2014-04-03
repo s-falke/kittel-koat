@@ -1,0 +1,23 @@
+var i: int, j: int, an: int, bn: int, cn: int;
+
+begin
+  while ((i < an) or (j < bn)) do
+    if (i >= an) then
+      cn = cn + 1;
+      j = j + 1;
+    else
+      if (j >= bn) then
+        cn = cn + 1;
+        i = i + 1;
+      else
+        if (brandom) then
+          cn = cn + 1;
+          i = i + 1;
+        else
+          cn = cn + 1;
+          j = j + 1;
+        endif;
+      endif;
+    endif;
+  done;
+end

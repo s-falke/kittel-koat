@@ -1,0 +1,15 @@
+var x: int, y: int;
+
+begin
+  while ((x > 0) and (y > 0)) do
+    if (x > y) then
+      while (x > 0) do
+        x = x - 1;
+      done;
+    else
+      while (y > 0) do
+        y = y - 1;
+      done;
+    endif;
+  done;
+end

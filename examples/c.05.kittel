@@ -1,0 +1,4 @@
+eval(x, y) -> eval(x - y, y) [ x > y /\ x > 0 /\ y > 0 /\ x > y ]
+eval(x, y) -> eval(x - y, y) [ x < y /\ x > 0 /\ y > 0 /\ x > y ]
+eval(x, y) -> eval(x, y - x) [ x > y /\ x > 0 /\ y > 0 /\ x <= y ]
+eval(x, y) -> eval(x, y - x) [ x < y /\ x > 0 /\ y > 0 /\ x <= y ]

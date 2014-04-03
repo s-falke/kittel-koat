@@ -1,0 +1,15 @@
+var x: int, y: int, z: int;
+
+begin
+  while (x > y) do
+    if (x > z) then
+      if (brandom) then
+        y = y + 1;
+      else
+        z = z + 1;
+      endif;
+    else
+      x = x - 1;
+    endif;
+  done;
+end

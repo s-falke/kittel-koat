@@ -1,0 +1,5 @@
+# from "Termination Analysis with Compositional Transition Invariants"
+# by Kroening, Sharygina, Tsitovich, and Wintersteiger
+
+eval(i) -> eval(i + 1) [ i < 255 ]
+eval(i) -> eval(i + 2) [ i < 255 ]

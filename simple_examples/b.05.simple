@@ -1,0 +1,9 @@
+var x: int, tmp: int;
+
+begin
+  tmp = random;
+  while ((x > 0) and (x == 2*tmp)) do
+    x = x - 1;
+    tmp = random;
+  done;
+end

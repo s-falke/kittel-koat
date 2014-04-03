@@ -1,0 +1,11 @@
+var x: int, y: int;
+
+begin
+  while (not (x == y)) do
+    if (x > y) then
+      y = y + 1;
+    else
+      x = x + 1;
+    endif;
+  done;
+end

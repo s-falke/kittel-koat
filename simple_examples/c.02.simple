@@ -1,0 +1,13 @@
+var x: int, y: int;
+
+begin
+  while (x >= 0) do
+    x = x + 1;
+    y = 1;
+    while (x > y) do
+      assume (y > 0);
+      y = y + 1;
+    done;
+    x = x - 2;
+  done;
+end

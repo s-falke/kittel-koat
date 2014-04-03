@@ -1,0 +1,8 @@
+var x: int, y: int;
+
+begin
+  while (x > y) do
+    x = x - 1;
+    y = y + 1;
+  done;
+end

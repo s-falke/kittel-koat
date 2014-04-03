@@ -1,0 +1,13 @@
+/* Kroening, Sharygina, Tsitovich, Wintersteiger. Termination Analysis with Compositional Transition Invariants */
+
+var i: int;
+
+begin
+  while (i < 255) do
+    if (brandom) then
+      i = i + 1;
+    else
+      i = i + 2;
+    endif;
+  done;
+end

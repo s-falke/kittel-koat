@@ -1,0 +1,25 @@
+# from "Termination Analysis with Compositional Transition Invariants"
+# by Kroening, Sharygina, Tsitovich, and Wintersteiger
+
+eval_0(x, debug) -> eval_1(x, 0)
+eval_1(x, debug) -> eval_1(x - 1, debug) [ x < 255 /\ debug = 0 /\ x = y + y + 1]
+eval_1(x, debug) -> eval_1(x + 2, debug) [ x < 255 /\ debug = 0 /\ x = y + y ]
+eval_1(x, debug) -> eval_1(0, debug) [ x < 255 /\ debug = 0 /\ debug > 0 ]
+eval_1(x, debug) -> eval_1(0, debug) [ x < 255 /\ debug = 0 /\ debug < 0 ]
+
+
+# Interproc was run on the following:
+# var x : int, debug : int;
+# begin
+#   debug = 0;
+#   while x < 255 do
+#     if (x % 2 != 0) then
+#       x = x - 1;
+#     else
+#       x = x + 2;
+#     endif;
+#     if (debug != 0) then
+#       x = 0;
+#     endif;
+#   done;
+# end

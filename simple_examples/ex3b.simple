@@ -1,0 +1,7 @@
+var x: int, y: int;
+
+begin
+  while ((x > 1) and (x < y)) do
+    x = x*x;
+  done;
+end

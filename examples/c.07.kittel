@@ -1,0 +1,1 @@
+eval(i, j, k) -> eval(j, i + 1, k - 1) [ k >= j /\ 100 >= i ]

@@ -1,0 +1,23 @@
+/* Kroening, Sharygina, Tsitovich, Wintersteiger. Termination Analysis with Compositional Transition Invariants */
+
+var x : int, debug : int, tmp: int;
+
+begin
+  debug = 0;
+  while (x < 255) do
+    tmp = random;
+    if (brandom) then
+      assume (x == 2*tmp + 1);
+      x = x - 1;
+    else
+      assume (x == 2*tmp);
+      x = x + 2;
+    endif;
+    assume (debug == 0);
+    if (not (debug == 0)) then
+      x = 0;
+    else
+      skip;
+    endif;
+  done;
+end

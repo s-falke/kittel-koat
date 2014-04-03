@@ -1,0 +1,4 @@
+eval(l, u) -> eval(l', u) [ l >= 0 /\ u >= 0 /\ l < u /\ 2*l' + r = l + u + 2 /\ l + u + 2 >= 0 /\ 0 <= r /\ r < 2 ]
+eval(l, u) -> eval(l', u) [ l >= 0 /\ u >= 0 /\ l < u /\ 2*l' + r = l + u + 2 /\ l + u + 2 < 0 /\ -2 < r /\ r <= 0 ]
+eval(l, u) -> eval(l, u') [ l >= 0 /\ u >= 0 /\ l < u /\ 2*u' + r = l + u /\ l + u >= 0 /\ 0 <= r /\ r < 2 ]
+eval(l, u) -> eval(l, u') [ l >= 0 /\ u >= 0 /\ l < u /\ 2*u' + r = l + u /\ l + u < 0 /\ -2 < r /\ r <= 0 ]

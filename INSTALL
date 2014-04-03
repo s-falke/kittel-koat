@@ -1,0 +1,10 @@
+Requirements:
+  OCaml (reasonably recent version; I use version 4.01.0)
+  OCamlgraph (reasonably recent version; I use version 1.8.3)
+  One or more of the following SMT-solvers:
+    yices, yices2, z3, cvc4, mathsat5
+
+Build instructions:
+  "make kittel" builds the termination analysis backend "kittel.native"
+  "make koat" builds the complexity analysis backend "koat.native"
+  "make convert" builds "convert.native" which converts Simple programs to C

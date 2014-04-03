@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS l0))
+(VAR r x f i)
+(RULES
+  l0(r, x, f, i) -> l1(0, x, f, i)
+  l1(r, x, f, i) -> l2(r, x, 1, 1) [ x >= 0 ]
+  l2(r, x, f, i) -> l2(r, x, f*i, i + 1) [ i < x ]
+  l2(r, x, f, i) -> l1(r + f, x - 1, f, i) [ i >= x ]
+)

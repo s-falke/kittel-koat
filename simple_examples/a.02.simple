@@ -1,0 +1,16 @@
+var l: int, u: int, tmp: int;
+
+begin
+  assume ((l >= 0) and (u >= 0));
+  while (l < u) do
+    if (brandom) then
+      tmp = random;
+      assume ((l + u - 2*tmp >= 0) and (l + u - 2*tmp <= 1));
+      l = tmp + 1;
+    else
+      tmp = random;
+      assume ((l + u - 2*tmp >= 0) and (l + u - 2*tmp <= 1));
+      u = tmp;
+    endif;
+  done;
+end

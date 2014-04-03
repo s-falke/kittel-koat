@@ -1,0 +1,44 @@
+var L: int, R: int, I: int, J: int, N: int, continue: int;
+
+begin
+  assume (N >= 2);
+  L = random;
+  assume ((N - 2*L >= 0) and (N - 2*L <= 1));
+  L = L + 1;
+  if (L>=2) then
+    L = L - 1;
+  else
+    R = R - 1;
+  endif;
+  while (R >= 2) do
+    I = L;
+    J = 2 * I;
+    continue = 1;
+    while ((J <= R) and (continue > 0)) do
+      if (J <= R - 1) then
+        if (brandom) then
+          J = J + 1;
+        else
+          skip;
+        endif;
+      else
+        skip;
+      endif;
+      if (brandom) then
+        continue = 0;
+      else
+        assume (J >= 1);
+        I = J;
+        J = 2 * J;
+      endif;
+    done;
+    if (L >= 2) then
+      assume ((L >= 1) and (R >= 2));
+      L = L - 1;
+    else
+      assume ((L >= 1) and (R >= 2));
+      R = R - 1;
+    endif;
+  done;
+end
+

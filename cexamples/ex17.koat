@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR n i j)
+(RULES
+  start(n, i, j) -> bb4(n, i, j)
+  bb4(n, i, j) -> bb2(n, i, n) [ n >= 0 /\ i >= 0 /\ i > 0 ]
+  bb2(n, i, j) -> bb2(n, i, j - 1) [ n >= 0 /\ i >= 0 /\ j >= 0 /\ j > 0 ]
+  bb2(n, i, j) -> bb4(n, i - 1, j) [ n >= 0 /\ i >= 0 /\ j >= 0 /\ j <= 0 ]
+)

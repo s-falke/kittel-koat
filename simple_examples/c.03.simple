@@ -1,0 +1,11 @@
+var x: int, y: int, z: int;
+
+begin
+  while (x < y) do
+    if (x < z) then
+      x = x + 1;
+    else
+      z = z + 1;
+    endif;
+  done;
+end

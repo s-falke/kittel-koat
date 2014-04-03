@@ -1,0 +1,11 @@
+var i: int, j: int;
+
+begin
+  while (i >= 0) do
+    j = 0;
+    while (j <= i - 1) do
+      j = j + 1;
+    done;
+    i = i - 1;
+  done;
+end

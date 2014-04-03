@@ -1,0 +1,10 @@
+var i: int, j: int, k: int, tmp: int;
+
+begin
+  while ((i <= 100) and (j <= k)) do
+    tmp = i;
+    i = j;
+    j = tmp + 1;
+    k = k - 1;
+  done;
+end

@@ -1,0 +1,7 @@
+var x: int;
+
+begin
+  while ((x > 1) and (x < 100)) do
+    x = x*x;
+  done;
+end

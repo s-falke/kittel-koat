@@ -1,0 +1,2 @@
+eval_0(x, y, r) -> eval_1(x, y, 1)
+eval_1(x, y, r) -> eval_1(x, y - 1, r * x) [ y > 0 ]

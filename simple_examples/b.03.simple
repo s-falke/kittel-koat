@@ -1,0 +1,9 @@
+var x: int, y: int;
+
+begin
+  assume (x > 0);
+  while (x > y) do
+    assume (x > 0);
+    y = x + y;
+  done;
+end

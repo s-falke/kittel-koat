@@ -1,0 +1,10 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f1))
+(VAR x)
+(RULES
+  f1(x) -> f2(x^3)
+  f2(x) -> f3(x^17)
+  f3(x) -> f4(x)
+  f4(x) -> g(x)
+  g(x) -> g(x - 1) [ x > 0 ]
+)

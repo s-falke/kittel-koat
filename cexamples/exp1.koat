@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f))
+(VAR x y)
+(RULES
+  f(x, y) -> g(x, 1)
+  g(x, y) -> g(x - 1, 2 * y) [ x > 0 ]
+  g(x, y) -> h(x, y) [ x <= 0 ]
+  h(x, y) -> h(x, y - 1) [ y > 0 ]
+)

@@ -1,0 +1,3 @@
+eval_0(x, y, z) -> eval_1(x, y, z) [ y > 0 ]
+eval_1(x, y, z) -> eval_1(x + y, y, z) [ x < y /\ y < z /\ y > 0 ]
+eval_1(x, y, z) -> eval_1(x, y, x - y) [ x < y /\ y < z /\ y > 0 ]

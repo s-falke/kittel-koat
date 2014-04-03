@@ -1,0 +1,16 @@
+var x: int, tmp: int;
+
+begin
+  while (x > 0) do
+    tmp = random;
+    if (brandom) then
+      assume (x == 2*tmp);
+      assume (tmp - 1 >= 0);
+      x = tmp;
+    else
+      assume (x == 2*tmp + 1);
+      assume (tmp >= 0);
+      x = x - 1;
+    endif;
+  done;
+end

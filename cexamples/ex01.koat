@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR n x)
+(RULES
+  start(n, x) -> f(n, x)
+  f(n, x) -> f(n, x + 1) [ x < n ]
+  f(n, x) -> g(n, x) [ x <= n /\ x >= n ]
+  g(n, x) -> g(n - 1, x) [ n > 0 ]
+)

@@ -1,0 +1,16 @@
+var x: int, y: int, z: int, flag: int;
+
+begin
+  flag = 1;
+  while ((y < z) and (flag > 0)) do
+    if ((y > 0) and (x > 1)) then
+      y = y * x;
+    else
+      if ((y > 0) and (x < -1)) then
+        y = -y * x;
+      else
+        flag = 0;
+      endif;
+    endif;
+  done;
+end

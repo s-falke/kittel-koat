@@ -1,0 +1,3 @@
+eval(x) -> eval(x - 1) [ x > 0 ]
+eval(x) -> eval(x') [ x > 0 /\ 2*x' + r = x /\ x >= 0 /\ 0 <= r /\ r < 2 ]
+eval(x) -> eval(x') [ x > 0 /\ 2*x' + r = x /\ x < 0 /\ -2 < r /\ r <= 0 ]

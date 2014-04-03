@@ -1,0 +1,17 @@
+var x: int, y: int, z: int;
+
+begin
+  if (y > 0) then
+    while ((x < y) and (y < z)) do
+      if (brandom) then
+        assume (y > 0);
+        x = x + y;
+      else
+        assume (y > 0);
+        z = x - y;
+      endif;
+    done;
+  else
+    skip;
+  endif;
+end

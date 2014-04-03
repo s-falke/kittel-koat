@@ -1,0 +1,8 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR x)
+(RULES
+  start(x) -> facSum(x)
+  facSum(x) -> Com_2(fac(x), facSum(x - 1)) :|: x > 0
+  fac(x) -> fac(x - 1) :|: x > 0
+)

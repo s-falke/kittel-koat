@@ -1,0 +1,9 @@
+var x: int, y: int, tmp: int;
+
+begin
+  while (x > y) do
+    tmp = x;
+    x = y;
+    y = tmp;
+  done;
+end

@@ -1,0 +1,12 @@
+var i: int, j: int, tmp: int;
+
+begin
+  while (i - j >= 1) do
+    tmp = random;
+    assume (tmp >= 0);
+    i = i - tmp;
+    tmp = random;
+    assume (tmp > 0);
+    j = j + tmp;
+  done;
+end
