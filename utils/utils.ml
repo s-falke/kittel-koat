@@ -106,3 +106,13 @@ let intersect l l' =
 (* return elements from l' that are not in l *)
 let notIn l l' =
   List.filter (fun e -> not (contains l e)) l'
+
+let rec iter3 f xs ys zs =
+  match xs with
+    | [] -> ()
+    | x::xrest -> f x (List.hd ys) (List.hd zs); iter3 f xrest (List.tl ys) (List.tl zs)
+
+let rec map3 f xs ys zs =
+  match xs with
+    | [] -> []
+    | x::xrest -> (f x (List.hd ys) (List.hd zs))::(map3 f xrest (List.tl ys) (List.tl zs))
