@@ -216,7 +216,7 @@ let rec formula_to_smt_file file formula =
   match formula with
     | And []
     | AndA [] ->
-	output_string file "true"
+            output_string file "true"
     | And fs ->
             output_string file "(and " ;
             List.iter (formula_to_smt_file file) fs ;
@@ -228,7 +228,7 @@ let rec formula_to_smt_file file formula =
     | Or fs ->
             output_string file "(or " ;
             List.iter (formula_to_smt_file file) fs ;
-            output_string file ")" ; 
+            output_string file ")" ;
     | Not f ->
             output_string file "(not " ;
             formula_to_smt_file file f ;
