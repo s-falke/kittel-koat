@@ -84,7 +84,7 @@ let rec getComplexity rcc rule =
 
 let rec getCost rcc rule =
   match rcc with
-    | [] -> failwith "Internal error in Cintprob.getComplexity"
+    | [] -> failwith "Internal error in Cintprob.getCost"
     | (r, c, c')::rest -> if Comrule.equal r rule then
                             c'
                           else
