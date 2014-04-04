@@ -3,6 +3,8 @@
 KITTeL is an automatic termination prover for integer transition
 systems and imperative programs written in a fragment of
 [Simple](http://pop-art.inrialpes.fr/people/bjeannet/bjeannet-forge/interproc/manual_syntax.html).
+For programs written in other languages (e.g., C), consider using the
+frontend [llvm2KITTeL](https://github.com/s-falke/llvm2kittel).
 
 KoAT is an automatic complexity analyzer taking the same kinds of inputs.
 
