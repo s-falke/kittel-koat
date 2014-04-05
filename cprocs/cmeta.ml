@@ -22,7 +22,7 @@ let i = ref 1
 let proofs = ref []
 let output_nums = ref []
 let input_nums = ref []
-let todo = ref (([], "", Big_int.zero_big_int), (Termgraph.G.empty, Array.of_list []), None, 0)
+let todo = ref (([], "", Expexp.zero), (Termgraph.G.empty, Array.of_list []), None, 0)
 
 let first (x, _, _) =
   x
@@ -77,11 +77,11 @@ let rec process trs maxchaining startfun =
 and getComplexity (rccgl, _, _, _) =
   Complexity.add (addComplexities (first rccgl)) (getAsComplexity (third rccgl))
 and getAsComplexity c =
-  Complexity.P (Expexp.fromConstant c)
+  Complexity.P c
 and addComplexities rcc =
   Complexity.listAdd (List.map getOneComplexity rcc)
 and getOneComplexity (_, c, cost) =
-  Complexity.mult c (Complexity.P (Expexp.fromConstant cost))
+  Complexity.mult c (Complexity.P cost)
 and getProof (rccg, _, _, _) inums onums theproofs =
   fun () -> "Initial complexity problem:\n1:" ^
             (Cprob.toStringG rccg) ^

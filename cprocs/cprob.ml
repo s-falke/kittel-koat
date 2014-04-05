@@ -18,10 +18,10 @@
   limitations under the License.
 *)
 
-type rulecost = Big_int.big_int (* The future: Expexp.expexp *)
+type rulecost = Expexp.expexp (* Was: Big_int.big_int *)
 
 type cRule = (Rule.rule * Complexity.complexity * rulecost)
-type cprob = cRule list
+type cProb = cRule list
 
 let getRule ((r, _, _) : cRule) = r
 and getComplexity ((_, compl, _) : cRule) = compl
@@ -33,7 +33,7 @@ let rec toStringPrefix prefix rcc =
     if rcc = [] then
       "(none)"
     else
-      let cstrings = List.map (fun anrcc -> "(" ^ (Complexity.toString (getComplexity anrcc)) ^ ", " ^ (Big_int.string_of_big_int (getCost anrcc)) ^ ")") rcc in
+      let cstrings = List.map (fun anrcc -> "(" ^ (Complexity.toString (getComplexity anrcc)) ^ ", " ^ (Expexp.toString (getCost anrcc)) ^ ")") rcc in
         let cstringlens = List.map String.length cstrings in
           let maxlen = List.fold_left max 1 cstringlens in
             (String.concat "\n" (List.map2 (toStringPrefixOne (prefix ^ "\t") maxlen) rcc cstrings))
@@ -53,19 +53,19 @@ and third (_, _, c) =
 let rec toStringGPrefix prefix rccgl =
   (toStringPrefix prefix (first rccgl)) ^ "\n" ^
   prefix ^ "start location:\n" ^ prefix ^ "\t" ^ (second rccgl) ^ "\n" ^
-  prefix ^ "leaf cost:\n" ^ prefix ^ "\t" ^ (Big_int.string_of_big_int (third rccgl))
+  prefix ^ "leaf cost:\n" ^ prefix ^ "\t" ^ (Expexp.toString (third rccgl))
 and toStringG rccgl =
   toStringGPrefix "\t" rccgl
 and toStringGNumber rccgl i =
   (string_of_int i) ^ ":" ^ (toStringG rccgl)
 
 let getInitial trs g =
-  (List.map (fun r -> if (Term.getFun (Rule.getLeft r)) = g then (r, Complexity.P Expexp.one, Big_int.unit_big_int) else (r, Complexity.Unknown, Big_int.unit_big_int)) trs, g, Big_int.zero_big_int)
+  (List.map (fun r -> if (Term.getFun (Rule.getLeft r)) = g then (r, Complexity.P Expexp.one, Expexp.one) else (r, Complexity.Unknown, Expexp.one)) trs, g, Expexp.zero)
 
 let isSolved rcc =
   List.for_all (fun (_, c, _) -> c <> Complexity.Unknown) rcc
 
-let rec getComplexity rcc rule =
+let rec getComplexity (rcc : cProb) rule =
   match rcc with
     | [] -> failwith "Internal error in Cprob.getComplexity"
     | (r, c, _)::rest -> if Rule.equal r rule then
@@ -73,7 +73,7 @@ let rec getComplexity rcc rule =
                          else
                            getComplexity rest rule
 
-let rec getCost rcc rule =
+let rec getCost (rcc : cProb) rule =
   match rcc with
     | [] -> failwith "Internal error in Cprob.getCost"
     | (r, _, c)::rest -> if Rule.equal r rule then

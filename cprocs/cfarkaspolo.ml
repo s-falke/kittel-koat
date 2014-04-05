@@ -165,7 +165,7 @@ and isNonMIN isMINs model f =
     Poly.eq_big_int Big_int.zero_big_int (List.assoc isMINvar model)
 
 and equal rcc nrcc =
-  List.for_all2 (fun (_, c, c') (_, d, d') -> (Complexity.equal c d) && (Poly.eq_big_int c' d')) rcc nrcc
+  List.for_all2 (fun (_, c, c') (_, d, d') -> (Complexity.equal c d) && (Expexp.equal c' d')) rcc nrcc
 
 and getS4SizeComplexities tgraph rcc =
   let unknowns = List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc) in

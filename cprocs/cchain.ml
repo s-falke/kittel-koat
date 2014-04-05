@@ -82,7 +82,7 @@ and buildNewRules (rule, c, c') succs =
   match succs with
     | [] -> []
     | (rule', c'')::rest -> let newrule = Chain.buildNewRule rule rule' in
-                             (newrule, c, Big_int.add_big_int c' c'')::(buildNewRules (rule, c, c') rest)
+                             (newrule, c, Expexp.add c' c'')::(buildNewRules (rule, c, c') rest)
 
 and contains rcc (rule, _, _) =
   (List.exists (fun (rule', _, _) -> rule == rule') rcc) || (List.exists (fun (rule', _, _) -> Rule.equal rule rule') rcc)

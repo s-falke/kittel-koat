@@ -30,7 +30,7 @@ let rec process (rcc, g, l) tgraph rvgraph =
       else
         let nrcc = removeRules rcc leaves
         and ng = g
-        and nl = Big_int.add_big_int l (getNewLeafCost rcc leaves)
+        and nl = Expexp.add l (getNewLeafCost rcc leaves)
         and ntgraph = Termgraph.removeNodes tgraph leaves
         and nrvgraph = getNewRVGraph rvgraph leaves in
           Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g, l) (nrcc, ng, nl))
@@ -47,7 +47,7 @@ and getProof ini outi rccgl nrccgl =
   (Cprob.toStringGNumber nrccgl outi)
 
 and getNewLeafCost rcc leaves =
-  List.fold_left Big_int.add_big_int Big_int.zero_big_int (List.map (Cprob.getCost rcc) leaves)
+  List.fold_left Expexp.add Expexp.zero (List.map (Cprob.getCost rcc) leaves)
 
 and removeRules rcc rules =
   List.filter (fun (rule, _, _) -> not (Trs.contains rules rule)) rcc
