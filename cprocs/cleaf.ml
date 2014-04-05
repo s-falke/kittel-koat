@@ -25,7 +25,7 @@ let rec process (rcc, g, l) tgraph rvgraph =
   else
   (
     let leaves = Termgraph.computeRulesInTwigs tgraph in
-      if (leaves = []) || (List.for_all (fun rule -> (Cprob.getComplexity rcc rule) <> Cprob.Unknown) leaves) then
+      if (leaves = []) || (List.for_all (fun rule -> (Cprob.getComplexity rcc rule) <> Complexity.Unknown) leaves) then
         None
       else
         let nrcc = removeRules rcc leaves

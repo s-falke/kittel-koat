@@ -70,9 +70,9 @@ let rec process cint maxchaining startfun =
 and getComplexity (rccg, _, _, _) =
   addComplexities (fst rccg)
 and addComplexities rcc =
-  Cintprob.listAdd (List.map getOneComplexity rcc)
+  Complexity.listAdd (List.map getOneComplexity rcc)
 and getOneComplexity (_, c, cost) =
-  Cintprob.mult c (Cintprob.P (Expexp.fromConstant cost))
+  Complexity.mult c (Complexity.P (Expexp.fromConstant cost))
 and getProof (rccg, _, _, _) inums onums theproofs =
   fun () -> "Initial complexity problem:\n1:" ^
             (Cintprob.toStringG rccg) ^

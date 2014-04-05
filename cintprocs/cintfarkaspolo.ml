@@ -41,7 +41,7 @@ let rec process useSizeComplexities degree (rcc, g) tgraph rvgraph =
     let vars = getVars rcc in
       let globalSizeComplexities = if useSizeComplexities then Cintrvgraph.computeGlobalSizeComplexities (Cfarkaspolo.getOut rvgraph) rcc g vars else [] in
         let r = List.map first rcc
-        and s = if useSizeComplexities then (constructAllS (getS4SizeComplexities tgraph rcc)) else [(List.map first (List.filter (fun (_, c, _) -> c = Cintprob.Unknown) rcc))] in
+        and s = if useSizeComplexities then (constructAllS (getS4SizeComplexities tgraph rcc)) else [(List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc))] in
           doLoop useSizeComplexities degree (rcc, g) tgraph rvgraph vars globalSizeComplexities r s
   )
 and constructAllS s =
@@ -147,10 +147,10 @@ and getVars rcc =
   Term.getVars (Comrule.getLeft (first (List.hd rcc)))
 
 and equal rcc nrcc =
-  List.for_all2 (fun (_, c, c') (_, d, d') -> (Cintprob.equal c d) && (Poly.eq_big_int c' d')) rcc nrcc
+  List.for_all2 (fun (_, c, c') (_, d, d') -> (Complexity.equal c d) && (Poly.eq_big_int c' d')) rcc nrcc
 
 and getS4SizeComplexities tgraph rcc =
-  let unknowns = List.map first (List.filter (fun (_, c, _) -> c = Cintprob.Unknown) rcc) in
+  let unknowns = List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc) in
     let res = removeRulesWithUnknownPreds tgraph rcc unknowns in
       res
 and removeRulesWithUnknownPreds tgraph rcc unknowns =
@@ -170,16 +170,16 @@ and removeOneRuleWithUnknownPreds tgraph rcc x unknowns accu =
 and hasUnknownPred tgraph rcc r unknowns =
   let preds = Cintgraph.getPreds tgraph [r] in
     let otherPreds = takeout preds unknowns in
-      List.exists (fun rule -> (Cintprob.getComplexity rcc rule) = Cintprob.Unknown) otherPreds
+      List.exists (fun rule -> (Cintprob.getComplexity rcc rule) = Complexity.Unknown) otherPreds
 
 and getC useSizeComplexities tgraph conc rcc g toOrient globalSizeComplexities vars =
   if useSizeComplexities then
     let funs = getFuns toOrient
     and pre_toOrient = takeout (Cintgraph.getPreds tgraph toOrient) toOrient in
-      Cintprob.listAdd (List.map (getTerm conc rcc pre_toOrient globalSizeComplexities vars) funs)
+      Complexity.listAdd (List.map (getTerm conc rcc pre_toOrient globalSizeComplexities vars) funs)
   else
     let pol_g = List.assoc g conc in
-      Cintprob.P (Expexp.abs (Expexp.instantiate (Expexp.fromPoly pol_g) (getBindings vars 1)))
+      Complexity.P (Expexp.abs (Expexp.instantiate (Expexp.fromPoly pol_g) (getBindings vars 1)))
 and getBindings lvars i =
   match lvars with
     | [] -> []
@@ -191,19 +191,19 @@ and takeout l1 l2 =
 and getTerm conc rcc pre_toOrient globalSizeComplexities vars f =
   let t_f = List.filter (fun rule -> Utils.contains (List.map Term.getFun (Comrule.getRights rule)) f) pre_toOrient
   and pol_f = List.assoc f conc in
-    Cintprob.listAdd (List.map (getTermForPreRule f pol_f rcc globalSizeComplexities vars) t_f)
+    Complexity.listAdd (List.map (getTermForPreRule f pol_f rcc globalSizeComplexities vars) t_f)
 and getTermForPreRule f pol_f rcc globalSizeComplexities vars prerule =
   let k = Cintprob.getComplexity rcc prerule
   and applied = getAppliedSum f pol_f globalSizeComplexities prerule vars in
-    Cintprob.mult k applied
+    Complexity.mult k applied
 and getAppliedSum f pol_f globalSizeComplexities prerule vars =
   let rhss = Comrule.getRights prerule in
     let rhssWithNums = List.combine rhss (Utils.getList 0 ((List.length rhss) - 1)) in
     let rhssWithNums_f = List.filter (fun (r, j) -> (Term.getFun r) = f) rhssWithNums in
-      Cintprob.listAdd (List.map (getAppliedOne pol_f globalSizeComplexities prerule vars) rhssWithNums_f)
+      Complexity.listAdd (List.map (getAppliedOne pol_f globalSizeComplexities prerule vars) rhssWithNums_f)
 and getAppliedOne pol_f globalSizeComplexities prerule vars (rhs, j) =
   let csmap = getCSmap globalSizeComplexities prerule rhs j vars in
-    Cintprob.apply (Expexp.fromPoly (Poly.abs pol_f)) csmap
+    Complexity.apply (Expexp.fromPoly (Poly.abs pol_f)) csmap
 and getCSmap globalSizeComplexities prerule rhs j vars =
   getCSmapAux globalSizeComplexities prerule j 0 (Term.getArity rhs) vars
 and getCSmapAux globalSizeComplexities prerule j i n vars =
@@ -224,7 +224,7 @@ and findEntry globalSizeComplexities prerule j i vars =
 and annotate rcc s strict model d =
   match rcc with
     | [] -> []
-    | (rule, c, c')::rest -> if s <> [] && Comrule.equal rule (List.hd s) && c = Cintprob.Unknown then
+    | (rule, c, c')::rest -> if s <> [] && Comrule.equal rule (List.hd s) && c = Complexity.Unknown then
                                if Farkaspolo.isStrict (List.hd strict) model then
                                  (rule, d, c')::(annotate rest (List.tl s) (List.tl strict) model d)
                                else
@@ -252,12 +252,12 @@ and pol_to_string pol =
 and pol_to_string_one (f, pol) =
   "\tPol(" ^ f ^ ") = " ^ (Poly.toString (Cfarkaspolo.rename pol))
 and isNewlyBound rcc (r, c, c') =
-  (c <> Cintprob.Unknown) && (isUnknown rcc r)
+  (c <> Complexity.Unknown) && (isUnknown rcc r)
 and isUnknown rcc r' =
   match rcc with
     | [] -> failwith "Did not find rule!"
     | (r, c, c')::rest -> if Comrule.equal r r' then
-                            c = Cintprob.Unknown
+                            c = Complexity.Unknown
                           else
                             isUnknown rest r'
 and printSizeComplexities rcc sizeComplexities vars =

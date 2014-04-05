@@ -116,9 +116,9 @@ let main () =
               | Some (c, proof) ->
                 (
                   let stop = Unix.gettimeofday () in
-                    Printf.printf "%s\n\n" (Cprob.toStringComplexityCompetitionStyle c);
+                    Printf.printf "%s\n\n" (Complexity.toStringCompetitionStyle c);
                     Printf.printf "%s" (proof ());
-                    Printf.printf "%s\n\n" ("Complexity upper bound " ^ (Cprob.toStringComplexity c));
+                    Printf.printf "%s\n\n" ("Complexity upper bound " ^ (Complexity.toString c));
                     Printf.printf "Time: %.3f sec (SMT: %.3f sec)\n" (stop -. start) (!Smt.smt_time)
                 )
       else
@@ -130,9 +130,9 @@ let main () =
             | Some (c, proof) ->
               (
                 let stop = Unix.gettimeofday () in
-                  Printf.printf "%s\n\n" (Cintprob.toStringComplexityCompetitionStyle c);
+                  Printf.printf "%s\n\n" (Complexity.toStringCompetitionStyle c);
                   Printf.printf "%s" (proof ());
-                  Printf.printf "%s\n\n" ("Complexity upper bound " ^ (Cintprob.toStringComplexity c));
+                  Printf.printf "%s\n\n" ("Complexity upper bound " ^ (Complexity.toString c));
                   Printf.printf "Time: %.3f sec (SMT: %.3f sec)\n" (stop -. start) (!Smt.smt_time)
               )
       )
