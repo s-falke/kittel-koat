@@ -46,7 +46,7 @@ let rec process useSizeComplexities useMinimal degree (rcc, g, l) tgraph rvgraph
     let vars = getVars rcc in
       let globalSizeComplexities = if useSizeComplexities then Crvgraph.computeGlobalSizeComplexities (getOut rvgraph) rcc g vars else [] in
         let r = List.map first rcc
-        and s = if useSizeComplexities then (constructAllS (getS4SizeComplexities tgraph rcc)) else [(List.map first (List.filter (fun (_, c, _) -> c = Cprob.Unknown) rcc))] in
+        and s = if useSizeComplexities then (constructAllS (getS4SizeComplexities tgraph rcc)) else [(List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc))] in
           doLoop useSizeComplexities useMinimal degree (rcc, g, l) tgraph rvgraph vars globalSizeComplexities r s
   )
 and constructAllS s =
@@ -165,10 +165,10 @@ and isNonMIN isMINs model f =
     Poly.eq_big_int Big_int.zero_big_int (List.assoc isMINvar model)
 
 and equal rcc nrcc =
-  List.for_all2 (fun (_, c, c') (_, d, d') -> (Cprob.equal c d) && (Poly.eq_big_int c' d')) rcc nrcc
+  List.for_all2 (fun (_, c, c') (_, d, d') -> (Complexity.equal c d) && (Poly.eq_big_int c' d')) rcc nrcc
 
 and getS4SizeComplexities tgraph rcc =
-  let unknowns = List.map first (List.filter (fun (_, c, _) -> c = Cprob.Unknown) rcc) in
+  let unknowns = List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc) in
     let res = removeRulesWithUnknownPreds tgraph rcc unknowns in
       res
 and removeRulesWithUnknownPreds tgraph rcc unknowns =
@@ -188,16 +188,16 @@ and removeOneRuleWithUnknownPreds tgraph rcc x unknowns accu =
 and hasUnknownPred tgraph rcc r unknowns =
   let preds = Termgraph.getPreds tgraph [r] in
     let otherPreds = takeout preds unknowns in
-      List.exists (fun rule -> (Cprob.getComplexity rcc rule) = Cprob.Unknown) otherPreds
+      List.exists (fun rule -> (Cprob.getComplexity rcc rule) = Complexity.Unknown) otherPreds
 
 and getC useSizeComplexities tgraph conc rc g toOrient globalSizeComplexities vars =
   if useSizeComplexities then
     let funs = getFuns toOrient
     and pre_toOrient = takeout (Termgraph.getPreds tgraph toOrient) toOrient in
-      Cprob.listAdd (List.map (getTerm conc rc pre_toOrient globalSizeComplexities vars) funs)
+      Complexity.listAdd (List.map (getTerm conc rc pre_toOrient globalSizeComplexities vars) funs)
   else
     let pol_g = List.assoc g conc in
-      Cprob.P (Expexp.abs (Expexp.instantiate (Expexp.fromPoly (getOut pol_g)) (getBindings vars 1)))
+      Complexity.P (Expexp.abs (Expexp.instantiate (Expexp.fromPoly (getOut pol_g)) (getBindings vars 1)))
 and getBindings lvars i =
   match lvars with
     | [] -> []
@@ -209,12 +209,12 @@ and takeout l1 l2 =
 and getTerm conc rc pre_toOrient globalSizeComplexities vars f =
   let t_f = List.filter (fun rule -> (Term.getFun (Rule.getRight rule)) = f) pre_toOrient
   and pol_f = List.assoc f conc in
-    Cprob.listAdd (List.map (getTermForPreRule pol_f rc globalSizeComplexities vars) t_f)
+    Complexity.listAdd (List.map (getTermForPreRule pol_f rc globalSizeComplexities vars) t_f)
 and getTermForPreRule pol_f rc globalSizeComplexities vars prerule =
   let k = Cprob.getComplexity rc prerule
   and csmap = getCSmap globalSizeComplexities prerule vars in
-    let applied = Cprob.apply (Expexp.abs (Expexp.fromPoly (getOut pol_f))) csmap in
-      Cprob.mult k applied
+    let applied = Complexity.apply (Expexp.abs (Expexp.fromPoly (getOut pol_f))) csmap in
+      Complexity.mult k applied
 and getCSmap globalSizeComplexities prerule vars =
   getCSmapAux globalSizeComplexities prerule 0 (Term.getArity (Rule.getRight prerule)) vars
 and getCSmapAux globalSizeComplexities rule i n vars =
@@ -235,7 +235,7 @@ and findEntry globalSizeComplexities rule i vars =
 and annotate rcc s strict model d =
   match rcc with
     | [] -> []
-    | (rule, c, c')::rest -> if s <> [] && Rule.equal rule (List.hd s) && c = Cprob.Unknown then
+    | (rule, c, c')::rest -> if s <> [] && Rule.equal rule (List.hd s) && c = Complexity.Unknown then
                                if isStrict (List.hd strict) model then
                                  (rule, d, c')::(annotate rest (List.tl s) (List.tl strict) model d)
                                else
@@ -251,7 +251,7 @@ and isStrict strict model =
 and annotateMinimal rcc s bounds stricts rhsmins model d =
   match rcc with
     | [] -> []
-    | (rule, c, c')::rest -> if s <> [] && Rule.equal rule (List.hd s) && c = Cprob.Unknown then
+    | (rule, c, c')::rest -> if s <> [] && Rule.equal rule (List.hd s) && c = Complexity.Unknown then
                                if isStrictMinimal (List.hd bounds) (List.hd stricts) (List.hd rhsmins) model then
                                  (rule, d, c')::(annotateMinimal rest (List.tl s) (List.tl bounds) (List.tl stricts) (List.tl rhsmins) model d)
                                else
@@ -285,12 +285,12 @@ and rename pol =
     let mapping = List.map (fun x_i -> (x_i, Poly.fromVar ("V" ^ (String.sub x_i 1 ((String.length x_i) - 1))))) vars in
       Poly.instantiate pol mapping
 and isNewlyBound rcc (r, c, c') =
-  (c <> Cprob.Unknown) && (isUnknown rcc r)
+  (c <> Complexity.Unknown) && (isUnknown rcc r)
 and isUnknown rcc r' =
   match rcc with
     | [] -> failwith "Did not find rule!"
     | (r, c, c')::rest -> if Rule.equal r r' then
-                            c = Cprob.Unknown
+                            c = Complexity.Unknown
                           else
                             isUnknown rest r'
 and printSizeComplexities rcc sizeComplexities vars =

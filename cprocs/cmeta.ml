@@ -75,13 +75,13 @@ let rec process trs maxchaining startfun =
         output_nums := List.rev !output_nums;
         Some (getComplexity !todo, getProof initial !input_nums !output_nums !proofs)
 and getComplexity (rccgl, _, _, _) =
-  Cprob.add (addComplexities (first rccgl)) (getAsComplexity (third rccgl))
+  Complexity.add (addComplexities (first rccgl)) (getAsComplexity (third rccgl))
 and getAsComplexity c =
-  Cprob.P (Expexp.fromConstant c)
+  Complexity.P (Expexp.fromConstant c)
 and addComplexities rcc =
-  Cprob.listAdd (List.map getOneComplexity rcc)
+  Complexity.listAdd (List.map getOneComplexity rcc)
 and getOneComplexity (_, c, cost) =
-  Cprob.mult c (Cprob.P (Expexp.fromConstant cost))
+  Complexity.mult c (Complexity.P (Expexp.fromConstant cost))
 and getProof (rccg, _, _, _) inums onums theproofs =
   fun () -> "Initial complexity problem:\n1:" ^
             (Cprob.toStringG rccg) ^

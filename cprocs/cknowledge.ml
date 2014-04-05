@@ -24,8 +24,8 @@ let rec process (rcc, g, l) tgraph rvgraph =
     None
   else
   (
-    let s = (List.map first (List.filter (fun (_, c, _) -> c = Cprob.Unknown) rcc))
-    and k = (List.map first (List.filter (fun (_, c, _) -> c <> Cprob.Unknown) rcc)) in
+    let s = (List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc))
+    and k = (List.map first (List.filter (fun (_, c, _) -> c <> Complexity.Unknown) rcc)) in
       let subsumed = List.rev (Termgraph.computeSubsumed tgraph s k) in
         if subsumed = [] then
           None
@@ -56,7 +56,7 @@ and updateComplexity rcc rule d =
                           else
                             (r, c, c')::(updateComplexity rest rule d)
 and getSum rcc pre =
-  Cprob.listAdd (List.map (Cprob.getComplexity rcc) pre)
+  Complexity.listAdd (List.map (Cprob.getComplexity rcc) pre)
 
 and getProof ini outi rccgl nrccgl =
   "Repeatedly propagating knowledge in problem " ^

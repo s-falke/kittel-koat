@@ -68,13 +68,13 @@ let isConstant c =
 
 let rec complexity2localcomplexity c vars =
   match c with
-    | Cintprob.P p -> if (not (Expexp.isConst p)) && (Expexp.isSumOfVarsPlusConstant p) then
+    | Complexity.P p -> if (not (Expexp.isConst p)) && (Expexp.isSumOfVarsPlusConstant p) then
                         (SumPlusConstant (Expexp.getConstant p), getVarNums p vars)
                       else if (not (Expexp.isConst p)) && (Expexp.isScaledSumOfVarsPlusConstant p) then
                         (ScaledSumPlusConstant (Expexp.getConstant p, Expexp.getScaleFactor p), getVarNums p vars)
                       else
                         (P p, getVarNums p vars)
-    | Cintprob.Unknown -> (Unknown, [])
+    | Complexity.Unknown -> (Unknown, [])
 and getVarNums p vars =
   let pv = Expexp.getVars p in
     getVarNumList pv vars 0
@@ -88,12 +88,12 @@ and getVarNumList pv vars i =
 
 let rec toSmallestComplexity c vars =
   match c with
-    | (Max e, v) -> Cintprob.P (Expexp.add (getSum v vars) (Expexp.fromConstant e))
-    | (MaxPlusConstant e, v) -> Cintprob.P (Expexp.add (getSum v vars) (Expexp.fromConstant e))
-    | (SumPlusConstant e, v) -> Cintprob.P (Expexp.add (getSum v vars) (Expexp.fromConstant e))
-    | (ScaledSumPlusConstant (e, s), v) -> Cintprob.P (Expexp.constmult (Expexp.add (getSum v vars) (Expexp.fromConstant e)) s)
-    | (P p, _) -> Cintprob.P p
-    | (Unknown, _) -> Cintprob.Unknown
+    | (Max e, v) -> Complexity.P (Expexp.add (getSum v vars) (Expexp.fromConstant e))
+    | (MaxPlusConstant e, v) -> Complexity.P (Expexp.add (getSum v vars) (Expexp.fromConstant e))
+    | (SumPlusConstant e, v) -> Complexity.P (Expexp.add (getSum v vars) (Expexp.fromConstant e))
+    | (ScaledSumPlusConstant (e, s), v) -> Complexity.P (Expexp.constmult (Expexp.add (getSum v vars) (Expexp.fromConstant e)) s)
+    | (P p, _) -> Complexity.P p
+    | (Unknown, _) -> Complexity.Unknown
 and getSum v vars =
   match v with
     | [] -> Expexp.zero
@@ -187,7 +187,7 @@ and disjoint v v' =
 and unite v v' =
   List.sort compare (Utils.remdup (v @ v'))
 and addAsSmallestComplexities c d vars =
-  let cc = (Cintprob.add (toSmallestComplexity c vars) (toSmallestComplexity d vars)) in
+  let cc = (Complexity.add (toSmallestComplexity c vars) (toSmallestComplexity d vars)) in
     complexity2localcomplexity cc vars
 
 let rec addList l vars =
@@ -259,7 +259,7 @@ let rec getMax c d vars =
     | (Unknown, v) -> (Unknown, [])
 and getExpexp c =
   match c with
-    | Cintprob.P p -> p
+    | Complexity.P p -> p
     | _ -> failwith "Internal error in Cintlocalsizecomplexity.getExpexp"
 and listMax list vars =
   match list with
@@ -450,4 +450,4 @@ and dumpGSC ((i, j), c) =
 let rec dumpGSCsAsComplexities ruleWithGSCs vars =
   String.concat "\n" (List.map (dumpOneGSCAsComplexity vars) ruleWithGSCs)
 and dumpOneGSCAsComplexity vars (rule, ((i, j), c)) =
-  "\tS(" ^ (Comrule.toString rule) ^ ", " ^ (string_of_int i) ^ "." ^ (string_of_int j) ^ ") = " ^ (Cintprob.toStringComplexity (toSmallestComplexity c vars))
+  "\tS(" ^ (Comrule.toString rule) ^ ", " ^ (string_of_int i) ^ "." ^ (string_of_int j) ^ ") = " ^ (Complexity.toString (toSmallestComplexity c vars))

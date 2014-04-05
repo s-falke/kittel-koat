@@ -392,7 +392,7 @@ and insertIntoAll y tmp =
     | [] -> []
     | z::rest -> (y::z)::(insertIntoAll y rest)
 and plug_them_in outer vars plugin =
-  let compose = Cintprob.apply (getPol outer) (getBinding vars plugin) in
+  let compose = Complexity.apply (getPol outer) (getBinding vars plugin) in
     compose
 and getBinding vars plugin =
   List.map2 (fun x y -> (x, y)) vars plugin
@@ -402,8 +402,8 @@ and getSccLeftFuns  scc =
   List.map (fun (rule, _) -> Term.getFun (Comrule.getLeft rule)) scc
 and getPol c =
   match c with
-    | Cintprob.P p -> p
-    | Cintprob.Unknown -> failwith "Internal error in Cintrvgraph.getPol"
+    | Complexity.P p -> p
+    | Complexity.Unknown -> failwith "Internal error in Cintrvgraph.getPol"
 and getLSC (_, (_, lsc)) =
   lsc
 
@@ -417,36 +417,36 @@ and gscForNonTrivialScc scc condensed rc rvgraph vars accu =
       and maxs = List.filter isMax scc
       and maxPlusConstants = List.filter isMaxPlusConstant scc in
         let first = Cintlocalsizecomplexity.listMax ((List.map (fun scc -> getGSC accu scc) sccpreds) @ (List.map getAsPol maxs)) vars
-        and second = c2lsc (Cintprob.listAdd (List.map (getMaxPlusConstantTerm rc vars) maxPlusConstants)) vars
-        and third = c2lsc (Cintprob.listAdd (List.map2 (getPossiblyScaledSumPlusConstantTerm rc rvgraph scc vars accu) possiblyScaledSumPlusConstants v_betas)) vars in
+        and second = c2lsc (Complexity.listAdd (List.map (getMaxPlusConstantTerm rc vars) maxPlusConstants)) vars
+        and third = c2lsc (Complexity.listAdd (List.map2 (getPossiblyScaledSumPlusConstantTerm rc rvgraph scc vars accu) possiblyScaledSumPlusConstants v_betas)) vars in
           let sum = Cintlocalsizecomplexity.addList [first;second;third] vars in
             let firstMult = getScaleProduct rc possiblyScaledSumPlusConstants v_betas
             and secondMult = getVarsizeProduct rc possiblyScaledSumPlusConstants v_betas in
-              let factor = Cintprob.mult firstMult secondMult in
-                let res = c2lsc (Cintprob.mult factor (Cintlocalsizecomplexity.toSmallestComplexity sum vars)) vars in
+              let factor = Complexity.mult firstMult secondMult in
+                let res = c2lsc (Complexity.mult factor (Cintlocalsizecomplexity.toSmallestComplexity sum vars)) vars in
                   res
 and getVarsizeProduct rc ruleWithLSCs v_betas =
-  List.fold_left Cintprob.mult (Cintprob.P Expexp.one) (List.map2 (getVarsizeFactor rc) ruleWithLSCs v_betas)
+  List.fold_left Complexity.mult (Complexity.P Expexp.one) (List.map2 (getVarsizeFactor rc) ruleWithLSCs v_betas)
 and getVarsizeFactor rc ruleWithLSC v_beta =
   let num = List.length v_beta
   and r = Cintprob.getComplexity rc (fst ruleWithLSC) in
     if num < 2 then
-      Cintprob.P (Expexp.one)
-    else if r = Cintprob.Unknown then
-      Cintprob.Unknown
+      Complexity.P (Expexp.one)
+    else if r = Complexity.Unknown then
+      Complexity.Unknown
     else
-      Cintprob.P (Expexp.Exp (Expexp.fromConstant (Big_int.big_int_of_int num), Cintprob.getExpexp r))
+      Complexity.P (Expexp.Exp (Expexp.fromConstant (Big_int.big_int_of_int num), Complexity.getExpexp r))
 and getScaleProduct rc ruleWithLSCs v_betas =
-  List.fold_left Cintprob.mult (Cintprob.P Expexp.one) (List.map2 (getScaleFactor rc) ruleWithLSCs v_betas)
+  List.fold_left Complexity.mult (Complexity.P Expexp.one) (List.map2 (getScaleFactor rc) ruleWithLSCs v_betas)
 and getScaleFactor rc ruleWithLSC v_beta =
   let s = Cintlocalsizecomplexity.getS (snd (snd ruleWithLSC))
   and r = Cintprob.getComplexity rc (fst ruleWithLSC) in
     if Big_int.eq_big_int s Big_int.unit_big_int || Big_int.eq_big_int s Big_int.zero_big_int then
-      Cintprob.P (Expexp.one)
-    else if r = Cintprob.Unknown then
-      Cintprob.Unknown
+      Complexity.P (Expexp.one)
+    else if r = Complexity.Unknown then
+      Complexity.Unknown
     else
-      Cintprob.P (Expexp.Exp (Expexp.fromConstant s, Cintprob.getExpexp r))
+      Complexity.P (Expexp.Exp (Expexp.fromConstant s, Complexity.getExpexp r))
 and isTooBig ruleWithLSC =
   let lsc = getLSC (ruleWithLSC) in
     match lsc with
@@ -501,7 +501,7 @@ and getGSCForOne accu rv =
 and getMaxPlusConstantTerm rc vars ruleWithLSC =
   let r = Cintprob.getComplexity rc (fst ruleWithLSC)
   and e = Cintlocalsizecomplexity.toSmallestComplexity (getAsPol ruleWithLSC) vars in
-    Cintprob.mult r e
+    Complexity.mult r e
 and getPossiblyScaledSumPlusConstantTerm rc rvgraph scc vars accu ruleWithLSC v_beta =
   let r = Cintprob.getComplexity rc (fst ruleWithLSC)
   and e = Cintlocalsizecomplexity.toSmallestComplexity (getAsPol ruleWithLSC) vars
@@ -509,8 +509,8 @@ and getPossiblyScaledSumPlusConstantTerm rc rvgraph scc vars accu ruleWithLSC v_
   and beta_nums = (snd (snd (snd ruleWithLSC))) in
     let toSumFor = Utils.removeAll beta_nums v_beta in
       let sumTerm = Cintlocalsizecomplexity.addList (List.map (getTermForSum preds vars) toSumFor) vars in
-        let tmp = Cintprob.add e (Cintlocalsizecomplexity.toSmallestComplexity sumTerm vars) in
-          Cintprob.mult r tmp
+        let tmp = Complexity.add e (Cintlocalsizecomplexity.toSmallestComplexity sumTerm vars) in
+          Complexity.mult r tmp
 and getTermForSum preds vars i =
   let preds_i = List.filter (fun x -> snd (fst (snd x)) = i) preds in
     Cintlocalsizecomplexity.listMax (List.map (fun x -> snd (snd x)) preds_i) vars

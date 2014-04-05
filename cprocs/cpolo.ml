@@ -36,7 +36,7 @@ let rec process degree useSizeComplexities (rcc, g, l) tgraph rvgraph =
       let globalSizeComplexities = if useSizeComplexities then Crvgraph.computeGlobalSizeComplexities (Cfarkaspolo.getOut rvgraph) rcc g vars else [] in
         Polo.count := 1;
         let r = List.map first rcc
-        and s = (List.map first (List.filter (fun (_, c, _) -> c = Cprob.Unknown) rcc)) in
+        and s = (List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc)) in
           let toOrient = if useSizeComplexities then s else r in
             let (abs, params) = Polo.create_poly_map degree toOrient in
               let (conds, polys, bounds) = Polo.create_conds_polys_bounds toOrient abs Big_int.unit_big_int in
@@ -74,7 +74,7 @@ and third (_, _, c) =
 and annotate rcc s polystrict boundconditions model d =
   match rcc with
     | [] -> []
-    | (rule, c, c')::rest -> if s <> [] && Rule.equal rule (List.hd s) && c = Cprob.Unknown then
+    | (rule, c, c')::rest -> if s <> [] && Rule.equal rule (List.hd s) && c = Complexity.Unknown then
                                if isStrictlySmaller (List.hd polystrict) (List.hd boundconditions) model then
                                  (rule, d, c')::(annotate rest (List.tl s) (List.tl polystrict) (List.tl boundconditions) model d)
                                else
