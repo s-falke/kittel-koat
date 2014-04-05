@@ -80,7 +80,11 @@ and getAsComplexity c =
   Complexity.P c
 and addComplexities rcc =
   Complexity.listAdd (List.map getOneComplexity rcc)
-and getOneComplexity (_, c, cost) =
+and getOneComplexity (rule, c, cost) = (*tgraph globalSizeComplexities vars =
+  let preRules = Termgraph.getPreds tgraph rule in
+  let getOneComplexityPerPreRule (rule, c, cost) preRule globalSizeComplexities vars =
+    let csmap = getCSmap globalSizeComplexities preRule vars in
+  TODO *)
   Complexity.mult c (Complexity.P cost)
 and getProof (rccg, _, _, _) inums onums theproofs =
   fun () -> "Initial complexity problem:\n1:" ^

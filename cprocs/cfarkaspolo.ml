@@ -212,25 +212,10 @@ and getTerm conc rc pre_toOrient globalSizeComplexities vars f =
     Complexity.listAdd (List.map (getTermForPreRule pol_f rc globalSizeComplexities vars) t_f)
 and getTermForPreRule pol_f rc globalSizeComplexities vars prerule =
   let k = Cprob.getComplexity rc prerule
-  and csmap = getCSmap globalSizeComplexities prerule vars in
+  and csmap = GlobalSizeComplexities.extractSizeMapFromRule globalSizeComplexities prerule vars in
     let applied = Complexity.apply (Expexp.abs (Expexp.fromPoly (getOut pol_f))) csmap in
       Complexity.mult k applied
-and getCSmap globalSizeComplexities prerule vars =
-  getCSmapAux globalSizeComplexities prerule 0 (Term.getArity (Rule.getRight prerule)) vars
-and getCSmapAux globalSizeComplexities rule i n vars =
-  if i >= n then
-    []
-  else
-    (getCSmapEntry globalSizeComplexities rule i vars)::(getCSmapAux globalSizeComplexities rule (i + 1) n vars)
-and getCSmapEntry globalSizeComplexities rule i vars =
-  ("X_" ^ (string_of_int (i + 1)), findEntry globalSizeComplexities rule i vars)
-and findEntry globalSizeComplexities rule i vars =
-  match globalSizeComplexities with
-    | [] -> failwith "Did not find entry!"
-    | (rule', (j, c))::rest -> if (i = j) && (Rule.equal rule rule') then
-                                 Clocalsizecomplexity.toSmallestComplexity c vars
-                               else
-                                 findEntry rest rule i vars
+
 
 and annotate rcc s strict model d =
   match rcc with
