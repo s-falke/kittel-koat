@@ -83,11 +83,7 @@ and getC conc rcc g vars =
       let k_pow_pol_g_plus_one = Expexp.Exp (Expexp.fromConstant (Big_int.big_int_of_int k), pol_g_plus_one) in
         let k_pow_pol_g_plus_one_minus_one = Expexp.Sum (k_pow_pol_g_plus_one, Expexp.negate Expexp.one) in
           let res = k_pow_pol_g_plus_one_minus_one in
-            Complexity.P (Expexp.abs (Expexp.instantiate res (getBindings vars 1)))
-and getBindings lvars i =
-  match lvars with
-    | [] -> []
-    | v::rest -> ("X_" ^ (string_of_int i), Expexp.fromVar v)::(getBindings rest (i + 1))
+            Complexity.P (Expexp.abs (Expexp.instantiate res (Cintfarkaspolo.getBindings vars 1)))
 and get_max_arity rcc =
   List.fold_left max 0 (List.map (fun (r, _, _) -> List.length (Comrule.getRights r)) rcc)
 
