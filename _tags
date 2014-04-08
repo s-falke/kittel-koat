@@ -1,2 +1,2 @@
-<utils> or <ints> or <terms> or <procs> or <smt> or <simple> or <cprocs> or <cintprocs>: include
+<utils> or <ints> or <terms> or <procs> or <smt> or <simple> or <cprocs> or <cintprocs> or <common-procs>: include
 <**/*.ml>: annot

@@ -18,12 +18,17 @@
   limitations under the License.
 *)
 
+module CTRS = Ctrs.Make(Rule)
+module RVG = Rvgraph.Make(Rule)
+module LSC = LocalSizeComplexity.Make(Rule)
+module TGraph = Tgraph.Make(Rule)
+
 let max_chaining = ref 0
 let done_chaining = ref 0
 
 (* Chain rules *)
 let rec process max_fanout (rcc, g, l) tgraph rvgraph=
-  if (!done_chaining >= !max_chaining) || Cprob.isSolved rcc then
+  if (!done_chaining >= !max_chaining) || CTRS.isSolved rcc then
     None
   else
   (
@@ -40,9 +45,9 @@ let rec process max_fanout (rcc, g, l) tgraph rvgraph=
             and ng = g
             and nl = l
             and plainNewRules = List.map first newRules in
-              let ntgraph = Termgraph.addNodes (Termgraph.removeNodes tgraph [first oldRule]) plainNewRules in
+              let ntgraph = TGraph.addNodes (TGraph.removeNodes tgraph [first oldRule]) plainNewRules in
                 let nrvgraph = getNewRVGraph rvgraph oldRule plainNewRules ntgraph in
-                  Some (((nrcc, ng, l), ntgraph, nrvgraph), fun ini outi -> getProof ini outi oldRule newRules (rcc, g, l) (nrcc, ng, nl))
+                  Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi oldRule newRules (rcc, g, l) (nrcc, ng, nl))
           )
         )
   )
@@ -57,8 +62,8 @@ and third (_, _, c) =
 and getNewRVGraph rvgraph oldRule plainNewRules ntgraph =
   match rvgraph with
     | None -> None
-    | Some rvg -> let newRulesWithLSCs = Clocalsizecomplexity.computeLocalSizeComplexities plainNewRules in
-                    Some (Crvgraph.addNodes (Crvgraph.removeNodes rvg [first oldRule]) newRulesWithLSCs ntgraph)
+    | Some rvg -> let newRulesWithLSCs = LSC.computeLocalSizeComplexities plainNewRules in
+                    Some (RVG.addNodes (RVG.removeNodes rvg [first oldRule]) newRulesWithLSCs ntgraph)
 
 and getNewRules max_fanout rcc tgraph =
   let candidates = getCandidates rcc tgraph in
@@ -66,8 +71,8 @@ and getNewRules max_fanout rcc tgraph =
 and getCandidates rcc tgraph =
   List.map (computeCand rcc tgraph) rcc
 and computeCand rcc tgraph (rule, c, c') =
-  let succs = Termgraph.getSuccs tgraph [rule] in
-    ((rule, c, c'), List.map (fun succ -> (succ, Cprob.getCost rcc succ)) succs)
+  let succs = TGraph.getSuccs tgraph [rule] in
+    ((rule, c, c'), List.map (fun succ -> (succ, CTRS.getCost rcc succ)) succs)
 and findFirst max_fanout candidates =
   match candidates with
     | [] -> None
@@ -104,6 +109,6 @@ and getProof ini outi oldRule newRules rccgl nrccgl =
     and none = numNewRules = 0 in
       "By chaining the transition " ^ (Rule.toString (first oldRule)) ^ " with all transitions in problem " ^
       (string_of_int ini) ^ ", the following new " ^ (if single then "transition is" else "transitions are") ^ " obtained:\n" ^
-      (if none then "\t(none)" else (Trs.toStringPrefix "\t" (List.map first newRules))) ^ "\n" ^
+      (if none then "\t(none)" else (CTRS.toStringPrefix "\t" newRules)) ^ "\n" ^
       "We thus obtain the following problem:\n" ^
-      (Cprob.toStringGNumber nrccgl outi)
+      (CTRS.toStringGNumber nrccgl outi)

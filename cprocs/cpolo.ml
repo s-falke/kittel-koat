@@ -18,22 +18,28 @@
   limitations under the License.
 *)
 
+module CTRS = Ctrs.Make(Rule)
+module RVG = Rvgraph.Make(Rule)
+module LSC = LocalSizeComplexity.Make(Rule)
+module GSC = GlobalSizeComplexity.Make(Rule)
+module TGraph = Tgraph.Make(Rule)
+
 let rec getSubset r s set =
   match r with
     | [] -> []
-    | ru::rr -> if Trs.contains s ru then
+    | ru::rr -> if (List.exists (fun ru' -> Rule.equal ru ru') s) then
                   (List.hd set)::(getSubset rr s (List.tl set))
                 else
                   (getSubset rr s (List.tl set))
 
 (* Find a polynomial interpretation *)
 let rec process degree useSizeComplexities (rcc, g, l) tgraph rvgraph =
-  if Cprob.isSolved rcc then
+  if CTRS.isSolved rcc then
     None
   else
   (
     let vars = Cfarkaspolo.getVars rcc in
-      let globalSizeComplexities = if useSizeComplexities then Crvgraph.computeGlobalSizeComplexities (Cfarkaspolo.getOut rvgraph) rcc g vars else [] in
+      let globalSizeComplexities = if useSizeComplexities then GSC.computeGlobalSizeComplexities (Utils.unboxOption rvgraph) rcc g vars else [] in
         Polo.count := 1;
         let r = List.map first rcc
         and s = (List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc)) in

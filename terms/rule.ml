@@ -38,6 +38,10 @@ let getLeft (l, _, _) =
 let getRight (_, r, _) =
   r
 
+(* Get rhs of a rule *)
+let getRights (_, r, _) =
+  [r]
+
 (* Get cond of a rule *)
 let getCond (_, _, c) =
   c
@@ -51,8 +55,8 @@ let getLeftFun (l, _, _) =
   Term.getFun l
 
 (* Get function symbol from right side *)
-let getRightFun (_, r, _) =
-  Term.getFun r
+let getRightFuns (_, r, _) =
+  [Term.getFun r]
 
 (* Return the variables of a rule *)
 let getVars (l, r, c) =

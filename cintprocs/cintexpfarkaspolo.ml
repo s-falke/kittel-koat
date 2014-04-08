@@ -18,14 +18,18 @@
   limitations under the License.
 *)
 
+module CTRS = Ctrs.Make(Comrule)
+module RVG = Rvgraph.Make(Comrule)
+module LSC = LocalSizeComplexity.Make(Comrule)
+module GSC = GlobalSizeComplexity.Make(Comrule)
+module TGraph = Tgraph.Make(Comrule)
+
 let first (x, _, _) =
   x
-and second (_, c, _) =
-  c
 
 (* Find a polynomial interpretation *)
-let rec process degree (rcc, g) tgraph rvgraph =
-  if degree < 0 || degree > 1 || Cintprob.isSolved rcc then
+let rec process degree (rcc, g, l) tgraph rvgraph =
+  if degree < 0 || degree > 1 || CTRS.isSolved rcc then
     None
   else
   (
@@ -53,12 +57,13 @@ let rec process degree (rcc, g) tgraph rvgraph =
                                 let c = getC conc rcc g vars in
                                   let nrcc = Cintfarkaspolo.annotate rcc s strict model' c
                                   and ng = g
+                                  and nl = l
                                   and ntgraph = tgraph
                                   and nrvgraph = rvgraph in
                                     if Cintfarkaspolo.equal rcc nrcc then
                                       None
                                     else
-                                      Some (((nrcc, g), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g) (nrcc, ng) conc toOrient vars)
+                                      Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g, l) (nrcc, ng, nl) conc toOrient vars)
                           )
   )
 
@@ -87,12 +92,12 @@ and getC conc rcc g vars =
 and get_max_arity rcc =
   List.fold_left max 0 (List.map (fun (r, _, _) -> List.length (Comrule.getRights r)) rcc)
 
-and getProof ini outi rccg nrccg pol toOrient vars =
-  let newlybound = List.filter (Cintfarkaspolo.isNewlyBound (fst rccg)) (fst nrccg) in
+and getProof ini outi rccgl nrccgl pol toOrient vars =
+  let newlybound = List.filter (Cintfarkaspolo.isNewlyBound (first rccgl)) (first nrccgl) in
     let more = (List.length newlybound) <> 1 in
       "A polynomial rank function for exponential bounds with\n" ^
       (Cintfarkaspolo.pol_to_string pol) ^ "\n" ^
       "orients all transitions weakly and the " ^ (if more then "transitions" else "transition") ^ "\n" ^
-      (Cint.toStringPrefix "\t" (List.map first newlybound)) ^ "\n" ^
+      (CTRS.toStringPrefix "\t" newlybound) ^ "\n" ^
       "strictly and produces the following problem:\n" ^
-      (Cintprob.toStringGNumber nrccg outi)
+      (CTRS.toStringGNumber nrccgl outi)

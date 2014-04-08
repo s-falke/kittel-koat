@@ -18,7 +18,7 @@
   limitations under the License.
 *)
 
-type cint = Comrule.comrule list
+type cint = Comrule.rule list
 
 (* Create a string for a Cint *)
 let rec toStringPrefix p rules =

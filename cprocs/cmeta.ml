@@ -18,14 +18,26 @@
   limitations under the License.
 *)
 
+module CTRS = Ctrs.Make(Rule)
+module RVG = Rvgraph.Make(Rule)
+module LSC = LocalSizeComplexity.Make(Rule)
+module GSC = GlobalSizeComplexity.Make(Rule)
+module TGraph = Tgraph.Make(Rule)
+
+module KnowledgeProc = KnowledgePropagationProc.Make(Rule)
+module UnreachableProc = DeleteUnreachableProc.Make(Rule)
+module UnsatProc = DeleteUnsatProc.Make(Rule)
+
 let i = ref 1
 let proofs = ref []
 let output_nums = ref []
 let input_nums = ref []
-let todo = ref (([], "", Expexp.zero), (Termgraph.G.empty, Array.of_list []), None, 0)
+let todo = ref (([], "", Expexp.zero), (TGraph.G.empty, Array.of_list []), None, 0)
 
 let first (x, _, _) =
   x
+and second (_, y, _) =
+  y
 and third (_, _, z) =
   z
 
@@ -51,15 +63,16 @@ and checkRules arity lvars trs =
 
 and checkStartCondition tgraph trs startfun =
   let startRules = List.filter (fun rule -> (Term.getFun (Rule.getLeft rule)) = startfun) trs in
-    if (Termgraph.getPreds tgraph startRules) <> [] then
+    if (TGraph.getPreds tgraph startRules) <> [] then
       raise (Cint_aux.ParseException (0, 0, "Error: Start nodes have incoming edges!"))
 
 let rec process trs maxchaining startfun =
   check trs;
-  let tgraph = Termgraph.compute trs in
+  let vars = Term.getVars (Rule.getLeft (List.hd trs)) in
+  let tgraph = TGraph.compute trs in
     checkStartCondition tgraph trs startfun;
     let rvgraph = None in
-      let initial = (Cprob.getInitial trs startfun, tgraph, rvgraph, 1) in
+      let initial = (CTRS.getInitial trs startfun, tgraph, rvgraph, 1) in
         i := 1;
         proofs := [];
         input_nums := [];
@@ -67,28 +80,30 @@ let rec process trs maxchaining startfun =
         todo := initial;
         Cchain.max_chaining := maxchaining;
         Cchain.done_chaining := 0;
-        run Cunsat.process;
+        run UnsatProc.process;
         run Cleaf.process;
         doLoop ();
         proofs := List.rev !proofs;
         input_nums := List.rev !input_nums;
         output_nums := List.rev !output_nums;
-        Some (getComplexity !todo, getProof initial !input_nums !output_nums !proofs)
-and getComplexity (rccgl, _, _, _) =
-  Complexity.add (addComplexities (first rccgl)) (getAsComplexity (third rccgl))
-and getAsComplexity c =
-  Complexity.P c
-and addComplexities rcc =
-  Complexity.listAdd (List.map getOneComplexity rcc)
-and getOneComplexity (rule, c, cost) = (*tgraph globalSizeComplexities vars =
-  let preRules = Termgraph.getPreds tgraph rule in
+        insertRVGraphIfNeeded ();
+        let (rccl, tgraph, rvgraph, _) = !todo in
+        let globalSizeComplexities = GSC.computeGlobalSizeComplexities (Utils.unboxOption rvgraph) (first rccl) (second rccl) vars in
+        Some (getComplexity tgraph globalSizeComplexities vars !todo, getProof initial !input_nums !output_nums !proofs)
+and getComplexity tgraph globalSizeComplexities vars (rccgl, _, _, _) =
+  Complexity.add (addComplexities tgraph globalSizeComplexities vars (first rccgl)) (Complexity.P (third rccgl))
+and addComplexities tgraph globalSizeComplexities vars rcc =
+  Complexity.listAdd (List.map (getOneComplexity tgraph globalSizeComplexities vars) rcc)
+and getOneComplexity tgraph globalSizeComplexities vars (rule, c, cost) =
+  (* let preRules = Termgraph.getPreds tgraph rule in
   let getOneComplexityPerPreRule (rule, c, cost) preRule globalSizeComplexities vars =
-    let csmap = getCSmap globalSizeComplexities preRule vars in
-  TODO *)
+    let csmap = getCSmap globalSizeComplexities preRule vars
+    None
+  in *)
   Complexity.mult c (Complexity.P cost)
 and getProof (rccg, _, _, _) inums onums theproofs =
   fun () -> "Initial complexity problem:\n1:" ^
-            (Cprob.toStringG rccg) ^
+            (CTRS.toStringG rccg) ^
             "\n\n" ^
             (attachProofs inums onums theproofs)
 and attachProofs inums onums tproofs =
@@ -109,7 +124,7 @@ and run proc =
   match !todo with
     | (rccgl, tgraph, rvgraph, ini) ->
       (
-        if Cprob.isSolved (first rccgl) then
+        if CTRS.isSolved (first rccgl) then
           ()
         else
           match (proc rccgl tgraph rvgraph) with
@@ -121,7 +136,7 @@ and run_ite proc1 proc2 proc3 =
   match !todo with
     | (rccgl, tgraph, rvgraph, ini) ->
       (
-        if Cprob.isSolved (first rccgl) then
+        if CTRS.isSolved (first rccgl) then
           ()
         else
           match (proc1 rccgl tgraph rvgraph) with
@@ -133,16 +148,16 @@ and run_ite proc1 proc2 proc3 =
 and insertRVGraphIfNeeded () =
   match !todo with
     | (_, _, Some _, _) -> ()
-    | (rcggl, tgraph, None, ini) -> let lscs = Clocalsizecomplexity.computeLocalSizeComplexities (List.map first (first rcggl)) in
-                                      todo := (rcggl, tgraph, Some (Crvgraph.compute lscs tgraph), ini)
+    | (rcggl, tgraph, None, ini) -> let lscs = LSC.computeLocalSizeComplexities (List.map first (first rcggl)) in
+                                      todo := (rcggl, tgraph, Some (RVG.compute lscs tgraph), ini)
 and doLoop () =
   doUnreachableRemoval ();
   doKnowledgePropagation ();
   doFarkasConstant ()
 and doUnreachableRemoval () =
-  run Cunreachable.process
+  run UnreachableProc.process
 and doKnowledgePropagation () =
-  run Cknowledge.process
+  run KnowledgeProc.process
 and doFarkasConstant () =
   run_ite (Cfarkaspolo.process false false 0) doLoop doFarkasConstantSizeBound
 and doFarkasConstantSizeBound () =

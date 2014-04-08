@@ -116,3 +116,8 @@ let rec map3 f xs ys zs =
   match xs with
     | [] -> []
     | x::xrest -> (f x (List.hd ys) (List.hd zs))::(map3 f xrest (List.tl ys) (List.tl zs))
+
+let unboxOption oOpt =
+  match oOpt with
+    | Some o -> o
+    | _ -> failwith "trying to access Some value where None is"

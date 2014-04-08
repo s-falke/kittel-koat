@@ -18,20 +18,25 @@
   limitations under the License.
 *)
 
+module CTRS = Ctrs.Make(Rule)
+module RVG = Rvgraph.Make(Rule)
+module LSC = LocalSizeComplexity.Make(Rule)
+module TGraph = Tgraph.Make(Rule)
+
 (* Remove leaves *)
 let rec process (rcc, g, l) tgraph rvgraph =
-  if Cprob.isSolved rcc then
+  if CTRS.isSolved rcc then
     None
   else
   (
-    let leaves = Termgraph.computeRulesInTwigs tgraph in
-      if (leaves = []) || (List.for_all (fun rule -> (Cprob.getComplexity rcc rule) <> Complexity.Unknown) leaves) then
+    let leaves = TGraph.computeRulesInTwigs tgraph in
+      if (leaves = []) || (List.for_all (fun rule -> (CTRS.getComplexity rcc rule) <> Complexity.Unknown) leaves) then
         None
       else
         let nrcc = removeRules rcc leaves
         and ng = g
         and nl = Expexp.add l (getNewLeafCost rcc leaves)
-        and ntgraph = Termgraph.removeNodes tgraph leaves
+        and ntgraph = TGraph.removeNodes tgraph leaves
         and nrvgraph = getNewRVGraph rvgraph leaves in
           Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g, l) (nrcc, ng, nl))
   )
@@ -39,15 +44,15 @@ let rec process (rcc, g, l) tgraph rvgraph =
 and getNewRVGraph rvgraph leaves =
   match rvgraph with
     | None -> None
-    | Some rvg -> Some (Crvgraph.removeNodes rvg leaves)
+    | Some rvg -> Some (RVG.removeNodes rvg leaves)
 
 and getProof ini outi rccgl nrccgl =
   "Repeatedly removing leaves of the complexity graph in problem " ^
   (string_of_int ini) ^ " produces the following problem:\n" ^
-  (Cprob.toStringGNumber nrccgl outi)
+  (CTRS.toStringGNumber nrccgl outi)
 
 and getNewLeafCost rcc leaves =
-  List.fold_left Expexp.add Expexp.zero (List.map (Cprob.getCost rcc) leaves)
+  List.fold_left Expexp.add Expexp.zero (List.map (CTRS.getCost rcc) leaves)
 
 and removeRules rcc rules =
-  List.filter (fun (rule, _, _) -> not (Trs.contains rules rule)) rcc
+  List.filter (fun (rule, _, _) -> not (List.exists (fun rule' -> Rule.equal rule rule') rules)) rcc

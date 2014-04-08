@@ -18,11 +18,17 @@
   limitations under the License.
 *)
 
+module CTRS = Ctrs.Make(Comrule)
+module RVG = Rvgraph.Make(Comrule)
+module LSC = LocalSizeComplexity.Make(Comrule)
+module GSC = GlobalSizeComplexity.Make(Comrule)
+module TGraph = Tgraph.Make(Comrule)
+
 let rec getOnlyFor xx r s =
   match xx with
     | [] -> []
     | x::xs -> let rule = List.hd r in
-                 if (Cint.contains s rule) then
+                 if (List.exists (fun rule' -> Comrule.equal rule rule') s) then
                    x::(getOnlyFor xs (List.tl r) s)
                  else
                    getOnlyFor xs (List.tl r) s
@@ -33,23 +39,23 @@ and second (_, c, _) =
   c
 
 (* Find a polynomial interpretation *)
-let rec process useSizeComplexities degree (rcc, g) tgraph rvgraph =
-  if degree < 0 || degree > 1 || Cintprob.isSolved rcc then
+let rec process useSizeComplexities degree (rcc, g, l) tgraph rvgraph =
+  if degree < 0 || degree > 1 || CTRS.isSolved rcc then
     None
   else
   (
     let vars = getVars rcc in
-      let globalSizeComplexities = if useSizeComplexities then Cintrvgraph.computeGlobalSizeComplexities (Cfarkaspolo.getOut rvgraph) rcc g vars else [] in
+      let globalSizeComplexities = if useSizeComplexities then RVG.computeGlobalSizeComplexities (Utils.unboxOption rvgraph) rcc g vars else [] in
         let r = List.map first rcc
         and s = if useSizeComplexities then (constructAllS (getS4SizeComplexities tgraph rcc)) else [(List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc))] in
-          doLoop useSizeComplexities degree (rcc, g) tgraph rvgraph vars globalSizeComplexities r s
+          doLoop useSizeComplexities degree (rcc, g, l) tgraph rvgraph vars globalSizeComplexities r s
   )
 and constructAllS s =
   match s with
     | [] -> [[]]
     | e::rest -> let tmp = constructAllS rest in
                    List.flatten (List.map (fun l -> [e::l; l]) tmp)
-and doLoop useSizeComplexities degree (rcc, g) tgraph rvgraph vars globalSizeComplexities r alls =
+and doLoop useSizeComplexities degree (rcc, g, l) tgraph rvgraph vars globalSizeComplexities r alls =
   if alls = [] then
     None
   else
@@ -58,7 +64,7 @@ and doLoop useSizeComplexities degree (rcc, g) tgraph rvgraph vars globalSizeCom
       Farkaspolo.all_lambdas := [];
       let toOrient = if useSizeComplexities then s else r in
         if toOrient = [] then
-          doLoop useSizeComplexities degree (rcc, g) tgraph rvgraph vars globalSizeComplexities r (List.tl alls)
+          doLoop useSizeComplexities degree (rcc, g, l) tgraph rvgraph vars globalSizeComplexities r (List.tl alls)
         else
           let (abs, params) = create_poly_map toOrient in
             let cwbs = get_cwbs toOrient abs in
@@ -78,15 +84,16 @@ and doLoop useSizeComplexities degree (rcc, g) tgraph rvgraph vars globalSizeCom
                                   let c = getC useSizeComplexities tgraph conc rcc g toOrient globalSizeComplexities vars in
                                     let nrcc = annotate rcc s strict model' c
                                     and ng = g
+				    and nl = l
                                     and ntgraph = tgraph
                                     and nrvgraph = rvgraph in
                                       if equal rcc nrcc then
                                         if useSizeComplexities then
-                                          doLoop useSizeComplexities degree (rcc, g) tgraph rvgraph vars globalSizeComplexities r (List.tl alls)
+                                          doLoop useSizeComplexities degree (rcc, g, l) tgraph rvgraph vars globalSizeComplexities r (List.tl alls)
                                         else
                                           None
                                       else
-                                        Some (((nrcc, g), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g) (nrcc, ng) conc useSizeComplexities globalSizeComplexities toOrient vars)
+                                        Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g, l) (nrcc, ng, nl) conc useSizeComplexities globalSizeComplexities toOrient vars)
                             )
 
 (* set up parametric polynomials *)
@@ -147,35 +154,35 @@ and getVars rcc =
   Term.getVars (Comrule.getLeft (first (List.hd rcc)))
 
 and equal rcc nrcc =
-  List.for_all2 (fun (_, c, c') (_, d, d') -> (Complexity.equal c d) && (Poly.eq_big_int c' d')) rcc nrcc
+  List.for_all2 (fun (_, c, c') (_, d, d') -> (Complexity.equal c d) && (Expexp.equal c' d')) rcc nrcc
 
 and getS4SizeComplexities tgraph rcc =
   let unknowns = List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc) in
-    let res = removeRulesWithUnknownPreds tgraph rcc unknowns in
+    let res = removeComrulesWithUnknownPreds tgraph rcc unknowns in
       res
-and removeRulesWithUnknownPreds tgraph rcc unknowns =
+and removeComrulesWithUnknownPreds tgraph rcc unknowns =
   let oldsize = List.length unknowns
-  and tmp = removeOneRuleWithUnknownPreds tgraph rcc unknowns unknowns [] in
+  and tmp = removeOneComruleWithUnknownPreds tgraph rcc unknowns unknowns [] in
     if oldsize = (List.length tmp) then
       unknowns
     else
-      removeRulesWithUnknownPreds tgraph rcc tmp
-and removeOneRuleWithUnknownPreds tgraph rcc x unknowns accu =
+      removeComrulesWithUnknownPreds tgraph rcc tmp
+and removeOneComruleWithUnknownPreds tgraph rcc x unknowns accu =
   match x with
     | [] -> accu
     | r::rest -> if hasUnknownPred tgraph rcc r unknowns then
                    accu @ rest
                  else
-                   removeOneRuleWithUnknownPreds tgraph rcc rest unknowns (accu @ [r])
+                   removeOneComruleWithUnknownPreds tgraph rcc rest unknowns (accu @ [r])
 and hasUnknownPred tgraph rcc r unknowns =
-  let preds = Cintgraph.getPreds tgraph [r] in
+  let preds = TGraph.getPreds tgraph [r] in
     let otherPreds = takeout preds unknowns in
-      List.exists (fun rule -> (Cintprob.getComplexity rcc rule) = Complexity.Unknown) otherPreds
+      List.exists (fun rule -> (CTRS.getComplexity rcc rule) = Complexity.Unknown) otherPreds
 
 and getC useSizeComplexities tgraph conc rcc g toOrient globalSizeComplexities vars =
   if useSizeComplexities then
     let funs = getFuns toOrient
-    and pre_toOrient = takeout (Cintgraph.getPreds tgraph toOrient) toOrient in
+    and pre_toOrient = takeout (TGraph.getPreds tgraph toOrient) toOrient in
       Complexity.listAdd (List.map (getTerm conc rcc pre_toOrient globalSizeComplexities vars) funs)
   else
     let pol_g = List.assoc g conc in
@@ -187,13 +194,13 @@ and getBindings lvars i =
 and getFuns rules =
   Utils.remdup (List.map (fun rule -> Term.getFun (Comrule.getLeft rule)) rules)
 and takeout l1 l2 =
-  List.filter (fun rule -> not (Cint.contains l2 rule)) l1
+  List.filter (fun rule -> not (List.exists (fun rule' -> Comrule.equal rule rule') l2)) l1
 and getTerm conc rcc pre_toOrient globalSizeComplexities vars f =
   let t_f = List.filter (fun rule -> Utils.contains (List.map Term.getFun (Comrule.getRights rule)) f) pre_toOrient
   and pol_f = List.assoc f conc in
-    Complexity.listAdd (List.map (getTermForPreRule f pol_f rcc globalSizeComplexities vars) t_f)
-and getTermForPreRule f pol_f rcc globalSizeComplexities vars prerule =
-  let k = Cintprob.getComplexity rcc prerule
+    Complexity.listAdd (List.map (getTermForPreComrule f pol_f rcc globalSizeComplexities vars) t_f)
+and getTermForPreComrule f pol_f rcc globalSizeComplexities vars prerule =
+  let k = CTRS.getComplexity rcc prerule
   and applied = getAppliedSum f pol_f globalSizeComplexities prerule vars in
     Complexity.mult k applied
 and getAppliedSum f pol_f globalSizeComplexities prerule vars =
@@ -217,7 +224,7 @@ and findEntry globalSizeComplexities prerule j i vars =
   match globalSizeComplexities with
     | [] -> failwith "Did not find entry!"
     | (rule', ((j', i'), c))::rest -> if (j' = j) && (i' = i) && (Comrule.equal prerule rule') then
-                                 Cintlocalsizecomplexity.toSmallestComplexity c vars
+                                 LSC.toSmallestComplexity c vars
                                else
                                  findEntry rest prerule j i vars
 
@@ -232,20 +239,20 @@ and annotate rcc s strict model d =
                              else
                                (rule, c, c')::(annotate rest s strict model d)
 
-and getProof ini outi rccg nrccg pol useSizeComplexities sizeComplexities toOrient vars =
-  let newlybound = List.filter (isNewlyBound (fst rccg)) (fst nrccg) in
+and getProof ini outi rccgl nrccgl pol useSizeComplexities sizeComplexities toOrient vars =
+  let newlybound = List.filter (isNewlyBound (first rccgl)) (first nrccgl) in
     let more = (List.length newlybound) <> 1 in
       "A polynomial rank function with\n" ^
       (pol_to_string pol) ^ "\n" ^
-      (if useSizeComplexities then ("and size complexities\n" ^ (printSizeComplexities (fst rccg) sizeComplexities vars) ^ "\n") else "") ^
-      "orients " ^ (printOrientedRules useSizeComplexities toOrient) ^ "weakly and the " ^ (if more then "transitions" else "transition") ^ "\n" ^
-      (Cint.toStringPrefix "\t" (List.map first newlybound)) ^ "\n" ^
+      (if useSizeComplexities then ("and size complexities\n" ^ (printSizeComplexities (first rccgl) sizeComplexities vars) ^ "\n") else "") ^
+      "orients " ^ (printOrientedComrules useSizeComplexities toOrient) ^ "weakly and the " ^ (if more then "transitions" else "transition") ^ "\n" ^
+      (CTRS.toStringPrefix "\t" newlybound) ^ "\n" ^
       "strictly and produces the following problem:\n" ^
-      (Cintprob.toStringGNumber nrccg outi)
-and printOrientedRules useSizeComplexities toOrient =
+      (CTRS.toStringGNumber nrccgl outi)
+and printOrientedComrules useSizeComplexities toOrient =
   if useSizeComplexities then
     "the " ^ (if (List.length toOrient) <> 1 then "transitions" else "transitions") ^ "\n" ^
-    (Cint.toStringPrefix "\t" toOrient) ^ "\n"
+    (CTRS.toStringPrefix "\t" (List.map (fun r -> (r, Complexity.Unknown, Expexp.zero)) toOrient) ^ "\n")
   else "all transitions "
 and pol_to_string pol =
   String.concat "\n" (List.map pol_to_string_one pol)
@@ -262,25 +269,25 @@ and isUnknown rcc r' =
                             isUnknown rest r'
 and printSizeComplexities rcc sizeComplexities vars =
   let sortedSizeComplexities = sortSizeComplexities rcc sizeComplexities in
-    Cintlocalsizecomplexity.dumpGSCsAsComplexities sortedSizeComplexities vars
+    LSC.dumpGSCsAsComplexities sortedSizeComplexities vars
 and sortSizeComplexities rcc sizeComplexities =
   match rcc with
     | [] -> []
-    | (rule, _, _)::rest -> (getSizeComplexitiesForRule rule sizeComplexities) @ (sortSizeComplexities rest sizeComplexities)
-and getSizeComplexitiesForRule rule sizeComplexities =
-  getSizeComplexitiesForRule' rule sizeComplexities 0 (List.length (Comrule.getRights rule))
-and getSizeComplexitiesForRule' rule sizeComplexities j m =
+    | (rule, _, _)::rest -> (getSizeComplexitiesForComrule rule sizeComplexities) @ (sortSizeComplexities rest sizeComplexities)
+and getSizeComplexitiesForComrule rule sizeComplexities =
+  getSizeComplexitiesForComrule' rule sizeComplexities 0 (List.length (Comrule.getRights rule))
+and getSizeComplexitiesForComrule' rule sizeComplexities j m =
   if j >= m then
     []
   else
     let rhs = List.nth (Comrule.getRights rule) j in
-      (getSizeComplexitiesForRuleAux rule sizeComplexities j 0 (Term.getArity rhs)) @ (getSizeComplexitiesForRule' rule sizeComplexities (j + 1) m)
-and getSizeComplexitiesForRuleAux rule sizeComplexities j i n =
+      (getSizeComplexitiesForComruleAux rule sizeComplexities j 0 (Term.getArity rhs)) @ (getSizeComplexitiesForComrule' rule sizeComplexities (j + 1) m)
+and getSizeComplexitiesForComruleAux rule sizeComplexities j i n =
   if i >= n then
     []
   else
-    (findFullEntry sizeComplexities rule j i)::(getSizeComplexitiesForRuleAux rule sizeComplexities j (i + 1) n)
-and findFullEntry sizeComplexities rule j i =
+    (findFullEntry sizeComplexities rule j i)::(getSizeComplexitiesForComruleAux rule sizeComplexities j (i + 1) n)
+and findFullEntry sizeComplexities rule j i : Comrule.rule * ((int * int) * (LSC.localcomplexity * int list))  =
   match sizeComplexities with
     | [] -> failwith "Did not find full entry!"
     | (rule', ((j', i'), c))::rest -> if (j' = j) && (i' = i) && (Comrule.equal rule rule') then

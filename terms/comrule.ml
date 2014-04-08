@@ -18,7 +18,7 @@
   limitations under the License.
 *)
 
-type comrule = Term.term * Term.term list * Pc.cond
+type rule = Term.term * Term.term list * Pc.cond
 
 (* Create a string for a rule *)
 let rec toString (l, rs, c) =
@@ -168,6 +168,6 @@ and remove c d =
 let isUnary (_, rs, c) =
   List.length rs = 1
 
-(* Instantiate a comrule *)
+(* Instantiate a rule *)
 let instantiate (l, rs, c) varmap =
   (Term.instantiate l varmap, List.map (fun r -> Term.instantiate r varmap) rs, Pc.instantiate c varmap)
