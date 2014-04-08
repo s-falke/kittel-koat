@@ -20,13 +20,13 @@
 
 open AbstractRule
 
-module Make (RuleT : AbstractRule) = struct  
+module Make (RuleT : AbstractRule) = struct
   module CTRS = Ctrs.Make(RuleT)
   module TGraph = Tgraph.Make(RuleT)
   module RVG = Rvgraph.Make(RuleT)
-  
+
   let first (x, _, _) = x
-  
+
   let rec process (rcc, g, l) tgraph rvgraph =
     if CTRS.isSolved rcc then
       None
@@ -42,16 +42,16 @@ module Make (RuleT : AbstractRule) = struct
             and ntgraph = TGraph.removeNodes tgraph plainUnsats
             and nrvgraph = getNewRVGraph rvgraph plainUnsats in
               Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g, l) (nrcc, ng, nl) unsats)
-  
+
   and getNewRVGraph rvgraph plainUnsats =
     match rvgraph with
       | None -> None
       | Some rvg -> Some (RVG.removeNodes rvg plainUnsats)
-  
+
   and condIsSatisfiable (rule, _, _) =
     let cond = RuleT.getCond rule in
       Smt.isSatisfiable (Pc.dropNonLinearAtoms cond) <> Ynm.No
-  
+
   and getProof ini outi rccgl nrccgl unsats =
     if first nrccgl = [] then
       "Testing for unsatisfiable constraints removes all transitions from problem " ^

@@ -35,18 +35,18 @@ module Make (RuleT : AbstractRule) = struct
       | (SumPlusConstant e, _) -> e
       | (ScaledSumPlusConstant (e, _), _) -> e
       | _ -> failwith "Internal error in LocalSizeComplexity.getE"
-  
+
   let getS c =
     match c with
       | (SumPlusConstant _ , _) -> Big_int.unit_big_int
       | (ScaledSumPlusConstant (_, s), _) -> s
       | _ -> failwith "Internal error in LocalSizeComplexity.getS"
-  
+
   let getConstant c =
     match c with
       | (P p, v) -> Expexp.getConstant p
       | _ -> failwith "Internal error in LocalSizeComplexity.getConstant"
-  
+
   let rec equal c d =
     c == d || equalInternal c d
   and equalInternal c d =
@@ -59,7 +59,7 @@ module Make (RuleT : AbstractRule) = struct
       | _ -> false
   and equalVar v v' =
     (v == v') || ((List.length v = List.length v') && (List.for_all2 (fun a b -> (a == b) || (a = b)) v v'))
-  
+
   let isConstant c =
     match c with
       | (Max _, _) -> false
@@ -68,7 +68,7 @@ module Make (RuleT : AbstractRule) = struct
       | (ScaledSumPlusConstant _, _) -> false
       | (P p, v) -> (v = []) && (Expexp.isConst p)
       | (Unknown, _) -> false
-  
+
   let rec complexity2localcomplexity c vars =
     match c with
       | Complexity.P p -> if (not (Expexp.isConst p)) && (Expexp.isSumOfVarsPlusConstant p) then
@@ -88,7 +88,7 @@ module Make (RuleT : AbstractRule) = struct
                      i::(getVarNumList pv rest (i + 1))
                    else
                      getVarNumList pv rest (i + 1)
-  
+
   let rec toSmallestComplexity c vars =
     match c with
       | (Max e, v) -> Complexity.P (Expexp.add (getSum v vars) (Expexp.fromConstant e))
@@ -101,7 +101,7 @@ module Make (RuleT : AbstractRule) = struct
     match v with
       | [] -> Expexp.zero
       | x::rest -> Expexp.add (Expexp.fromVar (List.nth vars x)) (getSum rest vars)
-  
+
   let rec add c d vars =
     match c with
       | (Max e, v) -> addMax e v d vars
@@ -192,13 +192,13 @@ module Make (RuleT : AbstractRule) = struct
   and addAsSmallestComplexities c d vars =
     let cc = (Complexity.add (toSmallestComplexity c vars) (toSmallestComplexity d vars)) in
       complexity2localcomplexity cc vars
-  
+
   let rec addList l vars =
     match l with
       | [] -> (P Expexp.zero, [])
       | [x] -> x
       | x::y::rest -> addList ((add x y vars)::rest) vars
-  
+
   let rec getMax c d vars =
     match c with
       | (Max e, v) -> (
@@ -269,7 +269,7 @@ module Make (RuleT : AbstractRule) = struct
       | [] -> (P Expexp.zero, [])
       | [x] -> x
       | x::y::rest -> listMax ((getMax x y vars)::rest) vars
-  
+
   let rec toStringLocalComplexity c =
     match c with
       | (Max e, v) -> "=(" ^ (Big_int.string_of_big_int e) ^ ") " ^ (varString v)
@@ -280,7 +280,7 @@ module Make (RuleT : AbstractRule) = struct
       | (Unknown, v) -> "?"
   and varString v =
     "[" ^ (String.concat ";" (List.map string_of_int v)) ^ "]"
-  
+
   (* compute local size complexities *)
   let maxBound = ref ""
   let maxPlusConstantBound = ref ""
@@ -288,7 +288,7 @@ module Make (RuleT : AbstractRule) = struct
   let maxS = Big_int.big_int_of_int 1024
   let eConstant = ref Big_int.zero_big_int
   let sConstant = ref Big_int.zero_big_int
-  
+
   let rec computeLocalSizeComplexities trs =
     List.flatten (List.map (fun (rule, lsbs) -> List.map (fun lsb -> (rule, lsb)) lsbs) (List.map computeLocalSizeComplexitiesOne trs))
   and computeLocalSizeComplexitiesOne rule =
@@ -426,10 +426,10 @@ module Make (RuleT : AbstractRule) = struct
                        with
                          | Not_found -> tmp
                    )
-  
+
   let equalLSC (i, c) (i', c') =
     (i = i') && (equal c c')
-  
+
   let rec dumpLSCs ruleWithLSCs =
     String.concat "\n" (List.map dumpOneLSC ruleWithLSCs)
   and dumpOneLSC (rule, lsb) =
@@ -438,14 +438,14 @@ module Make (RuleT : AbstractRule) = struct
     (string_of_int i) ^ ": " ^ (toStringLocalComplexity c_vars)
   and dumpLSCDot (rule, lsb) =
     (RuleT.toDotString rule) ^ ":: " ^ (dumpLSC lsb)
-  
+
   let rec dumpGSCs ruleWithGSCs =
     String.concat "\n" (List.map dumpOneGSC ruleWithGSCs)
   and dumpOneGSC (rule, gsb) =
     (RuleT.toString rule) ^ ":: " ^ (dumpGSC gsb)
   and dumpGSC (i, c) =
     (string_of_int i) ^ ": " ^ (toStringLocalComplexity c)
-  
+
   let rec dumpGSCsAsComplexities ruleWithGSCs vars =
     String.concat "\n" (List.map (dumpOneGSCAsComplexity vars) ruleWithGSCs)
   and dumpOneGSCAsComplexity vars (rule, ((i, j), c)) =

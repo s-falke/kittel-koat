@@ -19,7 +19,7 @@
 *)
 
 open AbstractRule
-  
+
 module Int = struct
   type t = int
   let compare = compare
@@ -32,7 +32,7 @@ exception Found of int
 module Make (RuleT : AbstractRule) = struct
   module G = Graph.Persistent.Digraph.Concrete(Int)
   module SCC = Graph.Components.Make(G)
-  
+
   let rec toDot (g, trsa) =
     "digraph kittel {\n" ^
     (getNodes trsa) ^
@@ -55,7 +55,7 @@ module Make (RuleT : AbstractRule) = struct
         done
       done;
       String.concat "\n" !accu
-  
+
   (* Compute termination graph of trs *)
   let rec compute trs =
     let len = List.length trs in
@@ -102,7 +102,7 @@ module Make (RuleT : AbstractRule) = struct
     match largs with
       | [] -> accu
       | x::l -> getSubstitutionAux l (List.tl rargs) ((List.hd (Poly.getVars x), List.hd rargs)::accu)
-  
+
   (* Return nontrivial SCCs *)
   let rec getNontrivialSccs (g, trsa) =
     let sccs = SCC.scc_list g in
@@ -121,10 +121,10 @@ module Make (RuleT : AbstractRule) = struct
             res := (snd elem)::!res
       done;
       List.rev !res
-  
+
   let hasEdgeNums g trsa i j =
     G.mem_edge g (fst trsa.(i)) (fst trsa.(j))
-  
+
   (* Compute reachable nodes *)
   let rec computeReachable (g, trsa) startNodes =
     let frontier = ref (getNums trsa startNodes)
@@ -165,7 +165,7 @@ module Make (RuleT : AbstractRule) = struct
       !res
   and getRules trsa nums =
     List.map (fun i -> (snd trsa.(i))) nums
-  
+
   (* Compute rules in s that are subsumed by rules in k *)
   let rec computeSubsumed (g, trsa) s k =
     let subsumed = ref []
@@ -194,7 +194,7 @@ module Make (RuleT : AbstractRule) = struct
       !res
   and isK kl subsumed j =
     (Utils.contains !subsumed j) || (Utils.contains kl j)
-  
+
   (* remove nodes *)
   let rec removeNodes (g, trsa) rules =
     let bad = getPairs trsa rules in
@@ -219,7 +219,7 @@ module Make (RuleT : AbstractRule) = struct
             res := (i, fst entry)::!res
       done;
       !res
-  
+
   (* add nodes *)
   let rec addNodes (g, trsa) rules =
     let maxx = getMaxNum trsa in
@@ -265,7 +265,7 @@ module Make (RuleT : AbstractRule) = struct
   and addToArray trsa news =
     let trsa' = Array.init (List.length news) (fun i -> List.nth news i) in
       Array.append trsa trsa'
-  
+
   (* only keep certain nodes *)
   let rec keepNodes (g, trsa) rules =
     let bad = getComplementPairs trsa rules in
@@ -279,7 +279,7 @@ module Make (RuleT : AbstractRule) = struct
             res := (i, fst entry)::!res
       done;
       !res
-  
+
   (* compute predecessors of rules *)
   let rec getPreds (g, trsa) rules =
     let preds = ref []
@@ -294,7 +294,7 @@ module Make (RuleT : AbstractRule) = struct
             preds := j::!preds
         done;
     done
-  
+
   (* compute sucessors of rules *)
   let rec getSuccs (g, trsa) rules =
     let succs = ref []
@@ -309,9 +309,9 @@ module Make (RuleT : AbstractRule) = struct
             succs := j::!succs
         done;
     done
-  
+
   exception Found of int
-  
+
   (* determine whether there is an edge *)
   let rec hasEdge (g, trsa) rule1 rule2 =
     let rule1num = getNum trsa rule1

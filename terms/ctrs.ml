@@ -29,7 +29,7 @@ module Make(RuleT : AbstractRule) = struct
   let getRule ((r, _, _) : cRule) = r
   and getComplexity ((_, compl, _) : cRule) = compl
   and getCost ((_, _, cost) : cRule) = cost
-  
+
   let rec toStringPrefix prefix rcc =
     prefix ^ "T:\n" ^
     (
@@ -46,7 +46,7 @@ module Make(RuleT : AbstractRule) = struct
     prefix ^ cstring ^ pad ^ (RuleT.toString (getRule anrcc))
   and toString rcg =
     toStringPrefix "\t" rcg
-  
+
   let first (r, _, _) =
     r
   and second (_, c, _) =
@@ -61,13 +61,13 @@ module Make(RuleT : AbstractRule) = struct
     toStringGPrefix "\t" rccgl
   and toStringGNumber rccgl i =
     (string_of_int i) ^ ":" ^ (toStringG rccgl)
-  
+
   let getInitial trs g =
     (List.map (fun r -> if (Term.getFun (Rule.getLeft r)) = g then (r, Complexity.P Expexp.one, Expexp.one) else (r, Complexity.Unknown, Expexp.one)) trs, g, Expexp.zero)
-  
+
   let isSolved rcc =
     List.for_all (fun (_, c, _) -> c <> Complexity.Unknown) rcc
-  
+
   let rec getComplexity (rcc : cTRS) rule =
     match rcc with
       | [] -> failwith "Internal error in cTRS.getComplexity"
@@ -75,7 +75,7 @@ module Make(RuleT : AbstractRule) = struct
                              c
                            else
                              getComplexity rest rule
-  
+
   let rec getCost (rcc : cTRS) rule =
     match rcc with
       | [] -> failwith "Internal error in cTRS.getCost"

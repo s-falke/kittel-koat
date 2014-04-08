@@ -84,7 +84,7 @@ and doLoop useSizeComplexities degree (rcc, g, l) tgraph rvgraph vars globalSize
                                   let c = getC useSizeComplexities tgraph conc rcc g toOrient globalSizeComplexities vars in
                                     let nrcc = annotate rcc s strict model' c
                                     and ng = g
-				    and nl = l
+                                    and nl = l
                                     and ntgraph = tgraph
                                     and nrvgraph = rvgraph in
                                       if equal rcc nrcc then

@@ -23,7 +23,7 @@ open AbstractRule
 module Make (RuleT : AbstractRule) = struct
   module CTRS = Ctrs.Make(RuleT)
   module TGraph = Tgraph.Make(RuleT)
-  
+
   (* Remove subsumed rules *)
   let rec process (rcc, g, l) tgraph rvgraph =
     if CTRS.isSolved rcc then
@@ -43,10 +43,10 @@ module Make (RuleT : AbstractRule) = struct
             and nrvgraph = rvgraph in
               Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g, l) (nrcc, ng, nl))
     )
-  
+
   and first (x, _, _) =
     x
-  
+
   and update rcc subsumed tgraph =
     match subsumed with
       | [] -> rcc
@@ -63,7 +63,7 @@ module Make (RuleT : AbstractRule) = struct
                               (r, c, c')::(updateComplexity rest rule d)
   and getSum rcc pre =
     Complexity.listAdd (List.map (CTRS.getComplexity rcc) pre)
-  
+
   and getProof ini outi rccgl nrccgl =
     "Repeatedly propagating knowledge in problem " ^
     (string_of_int ini) ^

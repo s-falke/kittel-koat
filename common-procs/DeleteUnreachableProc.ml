@@ -20,14 +20,14 @@
 
 open AbstractRule
 
-module Make (RuleT : AbstractRule) = struct  
+module Make (RuleT : AbstractRule) = struct
   module CTRS = Ctrs.Make(RuleT)
   module TGraph = Tgraph.Make(RuleT)
   module RVG = Rvgraph.Make(RuleT)
-  
-  let first (x, _, _) = 
+
+  let first (x, _, _) =
     x
-  
+
   (* Remove unreachable *)
   let rec process (rcc, g, l) tgraph rvgraph =
     if CTRS.isSolved rcc then
@@ -46,12 +46,12 @@ module Make (RuleT : AbstractRule) = struct
             and nrvgraph = getNewRVGraph rvgraph reachable in
               Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g, l) (nrcc, ng, nl))
     )
-  
+
   and getNewRVGraph rvgraph reachable =
     match rvgraph with
       | None -> None
       | Some rvg -> Some (RVG.keepNodes rvg reachable)
-  
+
   and getProof ini outi rccgl nrccgl =
     if first nrccgl = [] then
       "Testing for reachability in the complexity graph removes all transitions from problem " ^
@@ -65,14 +65,14 @@ module Make (RuleT : AbstractRule) = struct
           (CTRS.toString removed) ^ "\n" ^
           "We thus obtain the following problem:\n" ^
           (CTRS.toStringGNumber nrccgl outi)
-  
+
   and getStartNodes rcc g =
     List.filter (fun rule -> g = (Term.getFun (RuleT.getLeft rule))) (List.map first rcc)
-  
+
   and keepOnly rcc rules =
     List.filter (fun (rule, _, _) -> List.exists (fun rule' -> RuleT.equal rule rule') rules) rcc
-  
+
   and keepOnlyComplement rcc rules =
     List.filter (fun (rule, _, _) -> not (List.exists (fun rule' -> RuleT.equal rule rule') rules)) rcc
 end
-  
+

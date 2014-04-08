@@ -82,7 +82,7 @@ module Make(RuleT : AbstractRule) = struct
       | Complexity.Unknown -> failwith "Internal error in Crvgraph.getPol"
   and getLSC (_, (_, lsc)) =
     lsc
-  
+
   and gscForNonTrivialScc scc condensed rc rvgraph vars accu =
     if List.exists isTooBig scc then
       (LSC.Unknown, [])
@@ -194,7 +194,7 @@ module Make(RuleT : AbstractRule) = struct
           LSC.toSmallestComplexity tmp' vars
   and takeout rvs scc =
     List.filter (fun rv -> not (inScc scc rv)) rvs
-  
+
   and getCondensedPreds (g, nodesa) somenodes =
     let preds = ref []
     and somenums = ref (getCondensedNums nodesa somenodes) in
@@ -219,7 +219,7 @@ module Make(RuleT : AbstractRule) = struct
     G.mem_edge g (fst nodesa.(i)) (fst nodesa.(j))
   and getSccsNums nodesa nums =
     List.map (fun i -> (fst (snd nodesa.(i)))) nums
-  
+
   (** Find bound for i-th variable in lhs of rule r *)
   let rec findEntry globalSizeComplexities prerule j i vars =
     match globalSizeComplexities with

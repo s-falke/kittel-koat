@@ -85,8 +85,8 @@ let rec process cint maxchaining startfun =
         output_nums := List.rev !output_nums;
         insertRVGraphIfNeeded ();
         let (rccl, tgraph, rvgraph, _) = !todo in
-        let rvgraph = Utils.unboxOption rvgraph in 
-	(* let tmp2 : ((int * int) * (LSC.localcomplexity * int list)) = snd (snd ((snd rvgraph).(0))) in *)
+        let rvgraph = Utils.unboxOption rvgraph in
+        (* let tmp2 : ((int * int) * (LSC.localcomplexity * int list)) = snd (snd ((snd rvgraph).(0))) in *)
         let globalSizeComplexities = GSC.computeGlobalSizeComplexities rvgraph (first rccl) (second rccl) vars in
         Some (getComplexity tgraph globalSizeComplexities vars !todo, getProof initial !input_nums !output_nums !proofs)
 and getComplexity tgraph globalSizeComplexities vars (rccgl, _, _, _) =
@@ -147,7 +147,7 @@ and run_ite proc1 proc2 proc3 =
 and insertRVGraphIfNeeded () =
   match !todo with
     | (_, _, Some _, _) -> ()
-    | ((rcc, g, l), tgraph, None, ini) ->  let (rules : Comrule.rule list) = List.map (fun (x,_,_) -> x) rcc in 
+    | ((rcc, g, l), tgraph, None, ini) ->  let (rules : Comrule.rule list) = List.map (fun (x,_,_) -> x) rcc in
                                      let lscs = LSC.computeLocalSizeComplexities rules in
                                      todo := ((rcc, g, l), tgraph, Some (RVG.compute lscs tgraph), ini)
 

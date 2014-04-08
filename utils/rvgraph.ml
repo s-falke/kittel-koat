@@ -27,7 +27,7 @@ module Make (RuleT : AbstractRule) = struct
   module LSC = LocalSizeComplexity.Make(RuleT)
   module CTRS = Ctrs.Make(RuleT)
   module TGraph = Tgraph.Make(RuleT)
-  
+
   let rec toDot (g, rva) =
     "digraph koat {\n" ^
     (getNodes rva) ^
@@ -50,7 +50,7 @@ module Make (RuleT : AbstractRule) = struct
         done
       done;
       String.concat "\n" !accu
-  
+
   (* Compute rv graph *)
   let rec compute rvs tgraph =
     let len = List.length rvs in
@@ -92,9 +92,9 @@ module Make (RuleT : AbstractRule) = struct
         done
       done;
       !res
-  
+
   exception Found of int
-  
+
   (* determine whether there is an edge *)
   let rec hasEdge (g, rva) rv1 rv2 =
     let rv1num = getNum rva rv1
@@ -115,7 +115,7 @@ module Make (RuleT : AbstractRule) = struct
         failwith "Did not find rv!"
       with
         | Found i -> i
-  
+
   (* compute predecessors of rvs *)
   let rec getPreds (g, rva) rvs =
     let preds = ref []
@@ -144,7 +144,7 @@ module Make (RuleT : AbstractRule) = struct
     G.mem_edge g (fst rva.(i)) (fst rva.(j))
   and getRvs rva nums =
     List.map (fun i -> (snd rva.(i))) nums
-  
+
   (* remove nodes *)
   let rec removeNodes (g, rva) rules =
     let bad = getPairs rva rules in
@@ -169,7 +169,7 @@ module Make (RuleT : AbstractRule) = struct
             res := (i, fst entry)::!res
       done;
       !res
-  
+
   (* add nodes *)
   let rec addNodes (g, rva) ruleWithLSCs tgraph =
     let maxx = getMaxNum rva in
@@ -224,7 +224,7 @@ module Make (RuleT : AbstractRule) = struct
   and addToArray rva news =
     let rva' = Array.init (List.length news) (fun i -> List.nth news i) in
       Array.append rva rva'
-  
+
   (* only keep certain nodes *)
   let rec keepNodes (g, rva) rules =
     let bad = getComplementPairs rva rules in
@@ -238,7 +238,7 @@ module Make (RuleT : AbstractRule) = struct
             res := (i, fst entry)::!res
       done;
       !res
-  
+
   (* Return all SCCs *)
   let rec getSccs (g, rva) =
     let sccs = SCC.scc_list g in
@@ -251,7 +251,7 @@ module Make (RuleT : AbstractRule) = struct
             res := (snd elem)::!res
       done;
       List.rev !res
-  
+
   (* condense *)
   let rec condense rvgraph =
     let sccs = getSccs rvgraph in
@@ -288,7 +288,7 @@ module Make (RuleT : AbstractRule) = struct
       len = 1 && (let rv = List.nth scc 0 in not (hasEdge rvgraph rv rv))
   and equalSccs scc1 scc2 =
     scc1 == scc2 || ((List.length scc1) = (List.length scc2) && (List.for_all2 (fun (r1, lsc1) (r2, lsc2) -> (LSC.equalLSC lsc1 lsc2) && (RuleT.equal r1 r2)) scc1 scc2))
-  
+
   (* return nodes in topological order *)
   let rec getNodesInTopologicalOrder (g, nodesa) =
     let revtopo = Topo.fold (fun x l -> x::l) g [] in
@@ -301,7 +301,7 @@ module Make (RuleT : AbstractRule) = struct
             res := Some (snd elem)
       done;
       Utils.unboxOption !res
-  
+
   let rec condensedToDot (g, nodesa) =
     "digraph koat {\n" ^
     (getCondensedNodes nodesa) ^
@@ -326,7 +326,7 @@ module Make (RuleT : AbstractRule) = struct
         done
       done;
       String.concat "\n" !accu
-  
+
   (* computes global size complexities for result variables *)
   let rec computeGlobalSizeComplexities rvgraph rc g vars =
     let condensed = condense rvgraph in
@@ -402,7 +402,7 @@ module Make (RuleT : AbstractRule) = struct
       | Complexity.Unknown -> failwith "Internal error in rvgraph.getPol"
   and getLSC (_, (_, lsc)) =
     lsc
-  
+
   and gscForNonTrivialScc scc condensed rc rvgraph vars accu =
     if List.exists isTooBig scc then
       (LSC.Unknown, [])
@@ -512,7 +512,7 @@ module Make (RuleT : AbstractRule) = struct
       LSC.listMax (List.map (fun x -> snd (snd x)) preds_i) vars
   and takeout rvs scc =
     List.filter (fun rv -> not (inScc scc rv)) rvs
-  
+
   and getCondensedPreds (g, nodesa) somenodes =
     let preds = ref []
     and somenums = ref (getCondensedNums nodesa somenodes) in
