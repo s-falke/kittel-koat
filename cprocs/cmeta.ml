@@ -27,6 +27,7 @@ module TGraph = Tgraph.Make(Rule)
 module KnowledgeProc = KnowledgePropagationProc.Make(Rule)
 module UnreachableProc = DeleteUnreachableProc.Make(Rule)
 module UnsatProc = DeleteUnsatProc.Make(Rule)
+module ChainProc = ComplexityChainProc.Make(Rule)
 
 let i = ref 1
 let proofs = ref []
@@ -78,8 +79,8 @@ let rec process trs maxchaining startfun =
         input_nums := [];
         output_nums := [];
         todo := initial;
-        Cchain.max_chaining := maxchaining;
-        Cchain.done_chaining := 0;
+        ChainProc.max_chaining := maxchaining;
+        ChainProc.done_chaining := 0;
         run UnsatProc.process;
         run Cleaf.process;
         doLoop ();
@@ -176,8 +177,8 @@ and doFarkasMinimal () =
 and doPolo2 () =
   run_ite (Cpolo.process 2 false) doLoop doChain1
 and doChain1 () =
-  run_ite (Cchain.process 1) doLoop doChain2
+  run_ite (ChainProc.process 1) doLoop doChain2
 and doChain2 () =
-  run_ite (Cchain.process 2) doLoop doNothing
+  run_ite (ChainProc.process 2) doLoop doNothing
 and doNothing () =
   ()

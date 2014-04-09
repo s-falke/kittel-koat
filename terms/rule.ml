@@ -159,3 +159,20 @@ and remove c d =
                     rest
                   else
                     d'::(remove rest d)
+
+and chainTwoRules rule1 rule2 =
+  let (l, (_, args), c) = rule1 in
+  let ((_, args'), r, c') = renameVars (getVars rule1) rule2 in
+  let rec remdupC c =
+    match c with
+      | [] -> []
+      | x::xs -> x::(remdupC (List.filter (fun y -> not (Pc.equalAtom x y)) xs))
+  and getSubstitution args args' =
+    match args' with
+      | [] -> []
+      | x::xx -> (getName x, List.hd args)::(getSubstitution (List.tl args) xx)
+  and getName poly = List.hd (Poly.getVars poly) in
+    let subby = getSubstitution args args' in
+      (l, Term.instantiate r subby, remdupC (c @ (Pc.instantiate c' subby)))
+and isUnary (r : rule) = 
+  true

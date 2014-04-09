@@ -171,3 +171,28 @@ let isUnary (_, rs, c) =
 (* Instantiate a rule *)
 let instantiate (l, rs, c) varmap =
   (Term.instantiate l varmap, List.map (fun r -> Term.instantiate r varmap) rs, Pc.instantiate c varmap)
+
+let chainTwoRules rule1 rule2 =
+  if (not (isUnary rule1)) then 
+    failwith "Trying to chain rule1 and rule2 where rule1 is non-unary"
+  else
+  let l = getLeft rule1
+  and args = Term.getArgs (List.hd (getRights rule1))
+  and c = getCond rule1
+  and rule2' = renameVars (getVars rule1) rule2 in
+  let rec remdupC c =
+    match c with
+      | [] -> []
+      | x::xs -> x::(remdupC (List.filter (fun y -> not (Pc.equalAtom x y)) xs))
+  and getSubstitution args args' =
+    match args' with
+      | [] -> []
+      | x::xx -> (getName x, List.hd args)::(getSubstitution (List.tl args) xx)
+  and getName poly =
+    List.hd (Poly.getVars poly) in
+    let args' = Term.getArgs (getLeft rule2')
+    and rs = getRights rule2'
+    and c' = getCond rule2' in
+      let subby = getSubstitution args args' in
+        (l, List.map (fun r -> Term.instantiate r subby) rs, remdupC (c @ (Pc.instantiate c' subby)))
+

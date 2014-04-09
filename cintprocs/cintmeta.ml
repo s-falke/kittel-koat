@@ -27,6 +27,7 @@ module TGraph = Tgraph.Make(Comrule)
 module KnowledgeProc = KnowledgePropagationProc.Make(Comrule)
 module UnreachableProc = DeleteUnreachableProc.Make(Comrule)
 module UnsatProc = DeleteUnsatProc.Make(Comrule)
+module ChainProc = ComplexityChainProc.Make(Comrule)
 
 let i = ref 1
 let proofs = ref []
@@ -34,7 +35,6 @@ let output_nums = ref []
 let input_nums = ref []
 (** *)
 let todo = ref (([], "", Expexp.zero), (TGraph.G.empty, Array.of_list []), None, 0)
-let (_, _, (rvgtmp : (RVG.G.t * (RVG.G.vertex * (Comrule.rule * ((int * int) * (LSC.localcomplexity * int list)))) array) option), _) = !todo
 
 let first (x, _, _) = x
 let second(_, y, _) = y
@@ -76,8 +76,8 @@ let rec process cint maxchaining startfun =
         input_nums := [];
         output_nums := [];
         todo := initial;
-        Cintchain.max_chaining := maxchaining;
-        Cintchain.done_chaining := 0;
+        ChainProc.max_chaining := maxchaining;
+        ChainProc.done_chaining := 0;
         run UnsatProc.process;
         doLoop ();
         proofs := List.rev !proofs;
@@ -171,8 +171,8 @@ and doFarkasSizeBound () =
 and doExpFarkas () =
   run_ite (Cintexpfarkaspolo.process 1) doLoop doChain1
 and doChain1 () =
-  run_ite (Cintchain.process 1) doLoop doChain2
+  run_ite (ChainProc.process 1) doLoop doChain2
 and doChain2 () =
-  run_ite (Cintchain.process 2) doLoop doNothing
+  run_ite (ChainProc.process 2) doLoop doNothing
 and doNothing () =
   ()

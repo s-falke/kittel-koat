@@ -74,20 +74,5 @@ and getNewRulesOne rule trs allowNonlinear =
 and buildNewRules rule rules =
   match rules with
     | [] -> []
-    | r::rr -> let neww = buildNewRule rule r in
+    | r::rr -> let neww = Rule.chainTwoRules rule r in
                  neww::(buildNewRules rule rr)
-and buildNewRule rule1 rule2 =
-  let (l, (_, args), c) = rule1
-  and ((_, args'), r, c') = Rule.renameVars (Rule.getVars rule1) rule2 in
-    let subby = getSubstitution args args' in
-      (l, Term.instantiate r subby, remdupC (c @ (Pc.instantiate c' subby)))
-and remdupC c =
-  match c with
-    | [] -> []
-    | x::xs -> x::(remdupC (List.filter (fun y -> not (Pc.equalAtom x y)) xs))
-and getSubstitution args args' =
-  match args' with
-    | [] -> []
-    | x::xx -> (getName x, List.hd args)::(getSubstitution (List.tl args) xx)
-and getName poly =
-  List.hd (Poly.getVars poly)
