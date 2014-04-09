@@ -216,6 +216,10 @@ let mult e1 e2 =
     | (Pol p, Pol q) -> Pol (Poly.mult p q)
     | _ -> normalize (Mul (e1, e2))
 
+(* Exps two expexps *)
+let exp e1 e2 =
+  normalize (Exp (e1, e2))
+
 let fromConstant c =
   Pol (Poly.fromConstant c)
 

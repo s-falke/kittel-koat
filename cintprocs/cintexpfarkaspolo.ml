@@ -84,11 +84,18 @@ and getC conc rcc g vars =
   (* TODO: check correctness of this... *)
   let pol_g = Expexp.fromPoly (List.assoc g conc)
   and k = get_max_arity rcc in
-    let pol_g_plus_one = Expexp.add pol_g Expexp.one in
-      let k_pow_pol_g_plus_one = Expexp.Exp (Expexp.fromConstant (Big_int.big_int_of_int k), pol_g_plus_one) in
-        let k_pow_pol_g_plus_one_minus_one = Expexp.Sum (k_pow_pol_g_plus_one, Expexp.negate Expexp.one) in
-          let res = k_pow_pol_g_plus_one_minus_one in
-            Complexity.P (Expexp.abs (Expexp.instantiate res (Cintfarkaspolo.getBindings vars 1)))
+    let powterm = getPowTerm k pol_g in
+      let powterm_minus_one = Expexp.minus powterm Expexp.one in
+        Complexity.P (Expexp.abs (Expexp.instantiate powterm_minus_one (Cintfarkaspolo.getBindings vars 1)))
+and getPowTerm k pol =
+  if k = 2 then
+    let pol_plus_one = Expexp.add pol Expexp.one in
+      let k_pow_pol_plus_one = Expexp.exp (Expexp.fromConstant (Big_int.big_int_of_int 2)) pol_plus_one in
+        k_pow_pol_plus_one
+  else
+    let k_pow_pol = Expexp.exp (Expexp.fromConstant (Big_int.big_int_of_int k)) pol in
+      let twice_k_pow_pol = Expexp.mult (Expexp.fromConstant (Big_int.big_int_of_int 2)) k_pow_pol in
+        twice_k_pow_pol
 and get_max_arity rcc =
   List.fold_left max 0 (List.map (fun (r, _, _) -> List.length (Comrule.getRights r)) rcc)
 
