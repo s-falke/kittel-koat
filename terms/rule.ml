@@ -174,5 +174,5 @@ and chainTwoRules rule1 rule2 =
   and getName poly = List.hd (Poly.getVars poly) in
     let subby = getSubstitution args args' in
       (l, Term.instantiate r subby, remdupC (c @ (Pc.instantiate c' subby)))
-and isUnary (r : rule) = 
+and isUnary (r : rule) =
   true

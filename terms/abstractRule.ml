@@ -27,7 +27,7 @@ module type AbstractRule =
     (** Normalize rule to the standard internal format. *)
     val internalize: rule -> rule
 
-    (** Chain two rules to obtain a new one. 
+    (** Chain two rules to obtain a new one.
       * Currently assumes the first one to be unary.
       *)
     val chainTwoRules: rule -> rule -> rule

@@ -173,7 +173,7 @@ let instantiate (l, rs, c) varmap =
   (Term.instantiate l varmap, List.map (fun r -> Term.instantiate r varmap) rs, Pc.instantiate c varmap)
 
 let chainTwoRules rule1 rule2 =
-  if (not (isUnary rule1)) then 
+  if (not (isUnary rule1)) then
     failwith "Trying to chain rule1 and rule2 where rule1 is non-unary"
   else
   let l = getLeft rule1

@@ -28,7 +28,7 @@ module Make(RuleT : AbstractRule) = struct
 
   let max_chaining = ref 0
   let done_chaining = ref 0
-  
+
   (* Chain rules *)
   let rec process max_fanout (rcc, g, l) tgraph rvgraph=
     if (!done_chaining >= !max_chaining) || CTRS.isSolved rcc then
@@ -54,16 +54,16 @@ module Make(RuleT : AbstractRule) = struct
             )
           )
     )
-  
+
   and first (x, _, _) =
     x
-  
+
   and getNewRVGraph rvgraph oldRule plainNewRules ntgraph =
     match rvgraph with
       | None -> None
       | Some rvg -> let newRulesWithLSCs = LSC.computeLocalSizeComplexities plainNewRules in
                       Some (RVG.addNodes (RVG.removeNodes rvg [first oldRule]) newRulesWithLSCs ntgraph)
-  
+
   and getNewRules max_fanout rcc tgraph =
     let candidates = getCandidates rcc tgraph in
       findFirst max_fanout candidates
@@ -87,12 +87,12 @@ module Make(RuleT : AbstractRule) = struct
       | [] -> []
       | (rule', c'')::rest -> let newrule = RuleT.chainTwoRules rule rule' in
                                (newrule, c, Expexp.add c' c'')::(buildNewRules (rule, c, c') rest)
-  
+
   and contains rcc (rule, _, _) =
     List.exists (fun (rule', _, _) -> RuleT.equal rule rule') rcc
   and containsRule rules (rule, _, _) =
     List.exists (fun rule' -> RuleT.equal rule rule') (List.map fst rules)
-  
+
   and replace rcc rule newRules =
     match rcc with
       | [] -> []
@@ -100,7 +100,7 @@ module Make(RuleT : AbstractRule) = struct
                                   newRules @ rest
                                 else
                                   (rule', c, c')::(replace rest rule newRules)
-  
+
   and getProof ini outi oldRule newRules rccgl nrccgl =
     let numNewRules = List.length newRules in
       let single = numNewRules = 1
