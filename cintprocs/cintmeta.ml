@@ -93,13 +93,13 @@ and getComplexity tgraph globalSizeComplexities vars (rccgl, _, _, _) =
   Complexity.add (addComplexities tgraph globalSizeComplexities vars (first rccgl)) (Complexity.P (third rccgl))
 and addComplexities tgraph globalSizeComplexities vars rcc =
   Complexity.listAdd (List.map (getOneComplexity tgraph globalSizeComplexities vars) rcc)
-and getOneComplexity tgraph globalSizeComplexities vars (rule, c, cost) =
-  (* let preComrules = Termgraph.getPreds tgraph rule in
-  let getOneComplexityPerPreComrule (rule, c, cost) preComrule globalSizeComplexities vars =
-    let csmap = getCSmap globalSizeComplexities preComrule vars
-    None
-  in *)
-  Complexity.mult c (Complexity.P cost)
+and getOneComplexity tgraph globalSizeComplexities vars (rule, complexity, cost) =
+  let preRules = TGraph.getPreds tgraph [rule] in
+  let getCostPerPreRule globalSizeComplexities vars preRule =
+    let csmap = GSC.extractSizeMapForRule globalSizeComplexities preRule 0 vars in
+    Complexity.apply cost csmap
+  in
+  Complexity.mult complexity (Complexity.sup (List.map (getCostPerPreRule globalSizeComplexities vars) preRules))
 and getProof (rccg, _, _, _) inums onums theproofs =
   fun () -> "Initial complexity problem:\n1:" ^
             (CTRS.toStringG rccg) ^

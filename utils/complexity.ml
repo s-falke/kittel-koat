@@ -63,13 +63,16 @@ let rec apply pol csmap =
       Unknown
     else
       P (Expexp.instantiate pol csmap')
+
 and getExpexp c =
   match c with
     | P p -> p
     | Unknown -> failwith "Internal error in Cintprob.getExpexp"
+
 and dependsOnUnknown pol csmap' =
   let vars = Expexp.getVars pol in
     List.exists (mappedToUnknown csmap') vars
+
 and mappedToUnknown csmap' v =
   match csmap' with
     | [] -> true
@@ -77,3 +80,7 @@ and mappedToUnknown csmap' v =
                          false
                        else
                          mappedToUnknown rest v
+
+(** Get upper bound on all complexities in xs *)
+let sup cs =
+  listAdd cs (* TODO: Do something better here, at lesat try filtering out those things that are definitely smaller. *)
