@@ -271,13 +271,9 @@ and rename pol =
       Poly.instantiate pol mapping
 and isNewlyBound rcc (r, c, c') =
   (c <> Complexity.Unknown) && (isUnknown rcc r)
-and isUnknown rcc r' =
-  match rcc with
-    | [] -> failwith "Did not find rule!"
-    | (r, c, c')::rest -> if Rule.equal r r' then
-                            c = Complexity.Unknown
-                          else
-                            isUnknown rest r'
+and isUnknown rcc r =
+  let rEntry = List.find (fun (r', _, _) -> Rule.equal r r') rcc in
+  CTRS.getRuleComplexity rEntry = Complexity.Unknown
 and printSizeComplexities rcc sizeComplexities vars =
   let sortedSizeComplexities = sortSizeComplexities rcc sizeComplexities in
     LSC.dumpGSCsAsComplexities sortedSizeComplexities vars
