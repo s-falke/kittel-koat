@@ -20,8 +20,8 @@
 
 module CTRS = Ctrs.Make(Comrule)
 module RVG = Rvgraph.Make(Comrule)
-module LSC = LocalSizeComplexity.Make(Comrule)
 module GSC = GlobalSizeComplexity.Make(Comrule)
+module LSC = GSC.LSC
 module TGraph = Tgraph.Make(Comrule)
 
 let rec getOnlyFor xx r s =
@@ -225,7 +225,7 @@ and getProof ini outi rccgl nrccgl pol useSizeComplexities sizeComplexities toOr
     let more = (List.length newlybound) <> 1 in
       "A polynomial rank function with\n" ^
       (pol_to_string pol) ^ "\n" ^
-      (if useSizeComplexities then ("and size complexities\n" ^ (printSizeComplexities (first rccgl) sizeComplexities vars) ^ "\n") else "") ^
+      (if useSizeComplexities then ("and size complexities\n" ^ (GSC.printSizeComplexities (first rccgl) sizeComplexities vars) ^ "\n") else "") ^
       "orients " ^ (printOrientedComrules useSizeComplexities toOrient) ^ "weakly and the " ^ (if more then "transitions" else "transition") ^ "\n" ^
       (CTRS.toStringPrefix "\t" newlybound) ^ "\n" ^
       "strictly and produces the following problem:\n" ^
@@ -248,30 +248,3 @@ and isUnknown rcc r' =
                             c = Complexity.Unknown
                           else
                             isUnknown rest r'
-and printSizeComplexities rcc sizeComplexities vars =
-  let sortedSizeComplexities = sortSizeComplexities rcc sizeComplexities in
-    LSC.dumpGSCsAsComplexities sortedSizeComplexities vars
-and sortSizeComplexities rcc sizeComplexities =
-  match rcc with
-    | [] -> []
-    | (rule, _, _)::rest -> (getSizeComplexitiesForComrule rule sizeComplexities) @ (sortSizeComplexities rest sizeComplexities)
-and getSizeComplexitiesForComrule rule sizeComplexities =
-  getSizeComplexitiesForComrule' rule sizeComplexities 0 (List.length (Comrule.getRights rule))
-and getSizeComplexitiesForComrule' rule sizeComplexities j m =
-  if j >= m then
-    []
-  else
-    let rhs = List.nth (Comrule.getRights rule) j in
-      (getSizeComplexitiesForComruleAux rule sizeComplexities j 0 (Term.getArity rhs)) @ (getSizeComplexitiesForComrule' rule sizeComplexities (j + 1) m)
-and getSizeComplexitiesForComruleAux rule sizeComplexities j i n =
-  if i >= n then
-    []
-  else
-    (findFullEntry sizeComplexities rule j i)::(getSizeComplexitiesForComruleAux rule sizeComplexities j (i + 1) n)
-and findFullEntry sizeComplexities rule j i : Comrule.rule * ((int * int) * (LSC.localcomplexity * int list))  =
-  match sizeComplexities with
-    | [] -> failwith "Did not find full entry!"
-    | (rule', ((j', i'), c))::rest -> if (j' = j) && (i' = i) && (Comrule.equal rule rule') then
-                                        (rule', ((j', i'), c))
-                                      else
-                                        findFullEntry rest rule j i

@@ -251,7 +251,7 @@ and getProof ini outi rccgl nrccgl pol useSizeComplexities sizeComplexities toOr
     let more = (List.length newlybound) <> 1 in
       "A polynomial rank function with\n" ^
       (pol_to_string pol) ^ "\n" ^
-      (if useSizeComplexities then ("and size complexities\n" ^ (printSizeComplexities (first rccgl) sizeComplexities vars) ^ "\n") else "") ^
+      (if useSizeComplexities then ("and size complexities\n" ^ (GSC.printSizeComplexities (first rccgl) sizeComplexities vars) ^ "\n") else "") ^
       "orients " ^ (printOrientedRules useSizeComplexities toOrient) ^ "weakly and the " ^ (if more then "transitions" else "transition") ^ "\n" ^
       (Trs.toStringPrefix "\t" (List.map first newlybound)) ^ "\n" ^
       "strictly and produces the following problem:\n" ^
@@ -274,24 +274,3 @@ and isNewlyBound rcc (r, c, c') =
 and isUnknown rcc r =
   let rEntry = List.find (fun (r', _, _) -> Rule.equal r r') rcc in
   CTRS.getRuleComplexity rEntry = Complexity.Unknown
-and printSizeComplexities rcc sizeComplexities vars =
-  let sortedSizeComplexities = sortSizeComplexities rcc sizeComplexities in
-    LSC.dumpGSCsAsComplexities sortedSizeComplexities vars
-and sortSizeComplexities rcc sizeComplexities =
-  match rcc with
-    | [] -> []
-    | (rule, _, _)::rest -> (getSizeComplexitiesForRule rule sizeComplexities) @ (sortSizeComplexities rest sizeComplexities)
-and getSizeComplexitiesForRule rule sizeComplexities =
-  getSizeComplexitiesForRuleAux rule sizeComplexities 0 (Term.getArity (Rule.getRight rule))
-and getSizeComplexitiesForRuleAux rule sizeComplexities i n =
-  if i >= n then
-    []
-  else
-    (findFullEntry sizeComplexities rule 0 i)::(getSizeComplexitiesForRuleAux rule sizeComplexities (i + 1) n)
-and findFullEntry sizeComplexities rule j i =
-  match sizeComplexities with
-    | [] -> failwith "Did not find full entry!"
-    | (rule', ((j', i'), c))::rest -> if (i = i') && (j = j') && (Rule.equal rule rule') then
-                                 (rule', ((j, i), c))
-                               else
-                                 findFullEntry rest rule j i

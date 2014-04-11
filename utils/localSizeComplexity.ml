@@ -438,16 +438,4 @@ module Make (RuleT : AbstractRule) = struct
     (string_of_int i) ^ ": " ^ (toStringLocalComplexity c_vars)
   and dumpLSCDot (rule, lsb) =
     (RuleT.toDotString rule) ^ ":: " ^ (dumpLSC lsb)
-
-  let rec dumpGSCs ruleWithGSCs =
-    String.concat "\n" (List.map dumpOneGSC ruleWithGSCs)
-  and dumpOneGSC (rule, gsb) =
-    (RuleT.toString rule) ^ ":: " ^ (dumpGSC gsb)
-  and dumpGSC (i, c) =
-    (string_of_int i) ^ ": " ^ (toStringLocalComplexity c)
-
-  let rec dumpGSCsAsComplexities ruleWithGSCs vars =
-    String.concat "\n" (List.map (dumpOneGSCAsComplexity vars) ruleWithGSCs)
-  and dumpOneGSCAsComplexity vars (rule, ((i, j), c)) =
-    "\tS(" ^ (RuleT.toString rule) ^ ", " ^ (string_of_int i) ^ "-" ^ (string_of_int j) ^ ") = " ^ (Complexity.toString (toSmallestComplexity c vars))
 end

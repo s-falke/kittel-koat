@@ -129,3 +129,16 @@ let unboxOption oOpt =
   match oOpt with
     | Some o -> o
     | _ -> failwith "trying to access Some value where None is"
+
+let rec mapFlat f l =
+  match l with
+    | []    -> []
+    | x::xs -> (f x) @ (mapFlat f xs)
+
+let mapiFlat f l =
+  let rec mapiFlat' i f l =
+    match l with
+      | []    -> []
+      | x::xs -> (f i x) @ (mapiFlat' (i+1) f xs)
+  in
+  mapiFlat' 0 f l

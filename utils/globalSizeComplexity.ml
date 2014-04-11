@@ -221,17 +221,51 @@ module Make(RuleT : AbstractRule) = struct
     List.map (fun i -> (fst (snd nodesa.(i)))) nums
 
   (** Find bound for the i-th variable in the j-th rhs of rule r *)
-  let rec findEntry globalSizeComplexities rule j i vars =
+  let rec findFullEntry globalSizeComplexities rule j i =
     match globalSizeComplexities with
       | [] -> failwith "Did not find entry!"
       | (rule', ((j', i'), c))::rest -> if (j' = j) && (i' = i) && (RuleT.equal rule rule') then
-                                   LSC.toSmallestComplexity c vars
+                                   (rule', ((j', i'), c))
                                  else
-                                   findEntry rest rule j i vars
+                                   findFullEntry rest rule j i
+
+  (** Find bound for the i-th variable in the j-th rhs of rule r *)
+  let rec findEntry globalSizeComplexities rule j i vars =
+    let (_, (_, c)) = findFullEntry globalSizeComplexities rule j i in
+    LSC.toSmallestComplexity c vars
 
   (** Extract mapping for variables X_1 .. X_{length vars} to their 
       global size complexity after using the j-th rhs of rule r *)
   let extractSizeMapForRule globalSizeComplexities r j vars =
     List.mapi (fun i _ -> "X_" ^ (string_of_int (i + 1)), findEntry globalSizeComplexities r j i vars) vars
 
+  (** Pretty-print list of (rule, rhs-num, arg-num, size complexity) tuples, where complexities are represented by their classes *)
+  let rec dumpGSCs ruleWithGSCs =
+    let dumpOneGSC (rule, gsb) =
+      let dumpGSC (i, c) =
+        (string_of_int i) ^ ": " ^ (LSC.toStringLocalComplexity c)
+      in
+      (RuleT.toString rule) ^ ":: " ^ (dumpGSC gsb)
+    in
+    String.concat "\n" (List.map dumpOneGSC ruleWithGSCs)
+
+  (** Pretty-print list of (rule, rhs-num, arg-num, size complexity) tuples. *)
+  let dumpGSCsAsComplexities ruleWithGSCs vars =
+    let dumpOneGSCAsComplexity vars (rule, ((i, j), c)) =
+      "\tS(" ^ (RuleT.toString rule) ^ ", " ^ (string_of_int i) ^ "-" ^ (string_of_int j) ^ ") = " ^ (Complexity.toString (LSC.toSmallestComplexity c vars))
+    in
+    String.concat "\n" (List.map (dumpOneGSCAsComplexity vars) ruleWithGSCs)
+
+  (** Get list of entries (each a list for each argument) for each right hand side *)
+  let getSizeComplexitiesForRule rule sizeComplexities =
+    (** Get list of entries, one for each argument on the right hand side *)
+    let getSizeComplexitiesForRule' rule sizeComplexities j (_, rhsArgs) =
+      List.mapi (fun i _ -> findFullEntry sizeComplexities rule j i) rhsArgs
+    in
+    Utils.mapiFlat (getSizeComplexitiesForRule' rule sizeComplexities) (RuleT.getRights rule)
+
+  (** Print out pretty-printed size complexities for variables vars in rules rcc *)
+  let printSizeComplexities rcc sizeComplexities vars =
+    let sortedSizeComplexities = Utils.mapFlat (fun (rule, _, _) -> getSizeComplexitiesForRule rule sizeComplexities) rcc in
+    dumpGSCsAsComplexities sortedSizeComplexities vars
 end
