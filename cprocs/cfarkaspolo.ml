@@ -50,10 +50,7 @@ let rec process useSizeComplexities useMinimal degree (rcc, g, l) tgraph rvgraph
           doLoop useSizeComplexities useMinimal degree (rcc, g, l) tgraph rvgraph vars globalSizeComplexities r s
   )
 and constructAllS s =
-  match s with
-    | [] -> [[]]
-    | e::rest -> let tmp = constructAllS rest in
-                   List.flatten (List.map (fun l -> [e::l; l]) tmp)
+  List.fold_right (fun e rest -> Utils.mapFlat (fun l -> [e::l; l]) rest) s [[]]
 and doLoop useSizeComplexities useMinimal degree (rcc, g, l) tgraph rvgraph vars globalSizeComplexities r alls =
   if alls = [] then
     None
