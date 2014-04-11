@@ -27,8 +27,8 @@ module Make(RuleT : AbstractRule) = struct
   type cTRS = cRule list
 
   let getRule ((r, _, _) : cRule) = r
-  and getComplexity ((_, compl, _) : cRule) = compl
-  and getCost ((_, _, cost) : cRule) = cost
+  and getRuleComplexity ((_, compl, _) : cRule) = compl
+  and getRuleCost ((_, _, cost) : cRule) = cost
 
   let rec toStringPrefix prefix rcc =
     prefix ^ "T:\n" ^
@@ -36,7 +36,7 @@ module Make(RuleT : AbstractRule) = struct
       if rcc = [] then
         "(none)"
       else
-        let cstrings = List.map (fun anrcc -> "(" ^ (Complexity.toString (getComplexity anrcc)) ^ ", " ^ (Expexp.toString (getCost anrcc)) ^ ")") rcc in
+        let cstrings = List.map (fun anrcc -> "(" ^ (Complexity.toString (getRuleComplexity anrcc)) ^ ", " ^ (Expexp.toString (getRuleCost anrcc)) ^ ")") rcc in
           let cstringlens = List.map String.length cstrings in
             let maxlen = List.fold_left max 1 cstringlens in
               (String.concat "\n" (List.map2 (toStringPrefixOne (prefix ^ "\t") maxlen) rcc cstrings))
