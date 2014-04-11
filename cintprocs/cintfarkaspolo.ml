@@ -130,10 +130,7 @@ and addThem list =
     | [x] -> x
     | x::y::rest -> addThem ((Parapoly.add x y)::rest)
 and getAllLists rpolinsts =
-  match rpolinsts with
-    | [] -> [[]]
-    | rpolinst::rest -> let tmp = getAllLists rest in
-                          addMeIn rpolinst tmp
+  List.fold_right (fun rpolinst rest -> addMeIn rpolinst rest) rpolinsts [[]]
 and addMeIn rpolinst tmp =
   (List.map (fun list -> ([], ([], Big_int.zero_big_int))::list) tmp) @
   (List.map (fun list -> rpolinst::list) tmp)
