@@ -220,16 +220,18 @@ module Make(RuleT : AbstractRule) = struct
   and getSccsNums nodesa nums =
     List.map (fun i -> (fst (snd nodesa.(i)))) nums
 
-  (** Find bound for i-th variable in lhs of rule r *)
-  let rec findEntry globalSizeComplexities prerule j i vars =
+  (** Find bound for the i-th variable in the j-th rhs of rule r *)
+  let rec findEntry globalSizeComplexities rule j i vars =
     match globalSizeComplexities with
       | [] -> failwith "Did not find entry!"
-      | (rule', ((j', i'), c))::rest -> if (j' = j) && (i' = i) && (Rule.equal prerule rule') then
+      | (rule', ((j', i'), c))::rest -> if (j' = j) && (i' = i) && (RuleT.equal rule rule') then
                                    LSC.toSmallestComplexity c vars
                                  else
-                                   findEntry rest prerule j i vars
+                                   findEntry rest rule j i vars
 
-  (** Extract map from variables to size complexities *)
-  let extractSizeMapFromRule globalSizeComplexities rule vars =
-    List.mapi (fun i _ -> "X_" ^ (string_of_int (i + 1)), findEntry globalSizeComplexities rule 0 i vars) vars
+  (** Extract mapping for variables X_1 .. X_{length vars} to their 
+      global size complexity after using the j-th rhs of rule r *)
+  let extractSizeMapForRule globalSizeComplexities r j vars =
+    List.mapi (fun i _ -> "X_" ^ (string_of_int (i + 1)), findEntry globalSizeComplexities r j i vars) vars
+
 end

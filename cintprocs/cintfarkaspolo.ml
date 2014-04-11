@@ -209,25 +209,8 @@ and getAppliedSum f pol_f globalSizeComplexities prerule vars =
     let rhssWithNums_f = List.filter (fun (r, j) -> (Term.getFun r) = f) rhssWithNums in
       Complexity.listAdd (List.map (getAppliedOne pol_f globalSizeComplexities prerule vars) rhssWithNums_f)
 and getAppliedOne pol_f globalSizeComplexities prerule vars (rhs, j) =
-  let csmap = getCSmap globalSizeComplexities prerule rhs j vars in
+  let csmap = GSC.extractSizeMapForRule globalSizeComplexities prerule j vars in
     Complexity.apply (Expexp.fromPoly (Poly.abs pol_f)) csmap
-and getCSmap globalSizeComplexities prerule rhs j vars =
-  getCSmapAux globalSizeComplexities prerule j 0 (Term.getArity rhs) vars
-and getCSmapAux globalSizeComplexities prerule j i n vars =
-  if i >= n then
-    []
-  else
-    (getCSmapEntry globalSizeComplexities prerule j i vars)::(getCSmapAux globalSizeComplexities prerule j (i + 1) n vars)
-and getCSmapEntry globalSizeComplexities prerule j i vars =
-  ("X_" ^ (string_of_int (i + 1)), findEntry globalSizeComplexities prerule j i vars)
-and findEntry globalSizeComplexities prerule j i vars =
-  match globalSizeComplexities with
-    | [] -> failwith "Did not find entry!"
-    | (rule', ((j', i'), c))::rest -> if (j' = j) && (i' = i) && (Comrule.equal prerule rule') then
-                                 LSC.toSmallestComplexity c vars
-                               else
-                                 findEntry rest prerule j i vars
-
 and annotate rcc s strict model d =
   match rcc with
     | [] -> []

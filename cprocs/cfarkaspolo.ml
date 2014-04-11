@@ -212,7 +212,7 @@ and getTerm conc rc pre_toOrient globalSizeComplexities vars f =
     Complexity.listAdd (List.map (getTermForPreRule pol_f rc globalSizeComplexities vars) t_f)
 and getTermForPreRule pol_f rc globalSizeComplexities vars prerule =
   let k = CTRS.getComplexity rc prerule
-  and csmap = GSC.extractSizeMapFromRule globalSizeComplexities prerule vars in
+  and csmap = GSC.extractSizeMapForRule globalSizeComplexities prerule 0 vars in
     let applied = Complexity.apply (Expexp.abs (Expexp.fromPoly (Utils.unboxOption pol_f))) csmap in
       Complexity.mult k applied
 
