@@ -107,6 +107,14 @@ let intersect l l' =
 let notIn l l' =
   List.filter (fun e -> not (contains l e)) l'
 
+(** Parametric contains: returns true if l contains an element e' with (c e e') *)
+let containsP c l e =
+  List.exists (fun e' -> c e e') l
+
+(** Parametric version of notIn: return elements from l' that are not in l, where c is used for comparison (cf containsG) *)
+let notInP c l l' =
+  List.filter (fun e -> not (containsP c l e)) l'
+
 let rec iter3 f xs ys zs =
   match xs with
     | [] -> ()

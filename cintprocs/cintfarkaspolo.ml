@@ -28,7 +28,7 @@ let rec getOnlyFor xx r s =
   match xx with
     | [] -> []
     | x::xs -> let rule = List.hd r in
-                 if (List.exists (fun rule' -> Comrule.equal rule rule') s) then
+                 if (Utils.containsP Comrule.equal s rule) then
                    x::(getOnlyFor xs (List.tl r) s)
                  else
                    getOnlyFor xs (List.tl r) s
@@ -176,13 +176,13 @@ and removeOneComruleWithUnknownPreds tgraph rcc x unknowns accu =
                    removeOneComruleWithUnknownPreds tgraph rcc rest unknowns (accu @ [r])
 and hasUnknownPred tgraph rcc r unknowns =
   let preds = TGraph.getPreds tgraph [r] in
-    let otherPreds = takeout preds unknowns in
+    let otherPreds = Utils.notInP Comrule.equal unknowns preds in
       List.exists (fun rule -> (CTRS.getComplexity rcc rule) = Complexity.Unknown) otherPreds
 
 and getC useSizeComplexities tgraph conc rcc g toOrient globalSizeComplexities vars =
   if useSizeComplexities then
     let funs = getFuns toOrient
-    and pre_toOrient = takeout (TGraph.getPreds tgraph toOrient) toOrient in
+    and pre_toOrient = Utils.notInP Comrule.equal toOrient (TGraph.getPreds tgraph toOrient) in
       Complexity.listAdd (List.map (getTerm conc rcc pre_toOrient globalSizeComplexities vars) funs)
   else
     let pol_g = List.assoc g conc in
@@ -193,8 +193,6 @@ and getBindings lvars i =
     | v::rest -> ("X_" ^ (string_of_int i), Expexp.fromVar v)::(getBindings rest (i + 1))
 and getFuns rules =
   Utils.remdup (List.map (fun rule -> Term.getFun (Comrule.getLeft rule)) rules)
-and takeout l1 l2 =
-  List.filter (fun rule -> not (List.exists (fun rule' -> Comrule.equal rule rule') l2)) l1
 and getTerm conc rcc pre_toOrient globalSizeComplexities vars f =
   let t_f = List.filter (fun rule -> Utils.contains (List.map Term.getFun (Comrule.getRights rule)) f) pre_toOrient
   and pol_f = List.assoc f conc in
