@@ -86,4 +86,7 @@ module Make(RuleT : AbstractRule) = struct
 
   let contains (trs : cTRS) rule =
     (List.exists (fun rule' -> RuleT.equal (first rule') rule) trs)
+
+  let hasUnknownComplexity rcc r =
+    getComplexity rcc r = Complexity.Unknown
 end

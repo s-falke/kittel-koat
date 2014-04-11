@@ -240,11 +240,4 @@ and pol_to_string pol =
 and pol_to_string_one (f, pol) =
   "\tPol(" ^ f ^ ") = " ^ (Poly.toString (Cfarkaspolo.rename pol))
 and isNewlyBound rcc (r, c, c') =
-  (c <> Complexity.Unknown) && (isUnknown rcc r)
-and isUnknown rcc r' =
-  match rcc with
-    | [] -> failwith "Did not find rule!"
-    | (r, c, c')::rest -> if Comrule.equal r r' then
-                            c = Complexity.Unknown
-                          else
-                            isUnknown rest r'
+  (c <> Complexity.Unknown) && (CTRS.hasUnknownComplexity rcc r)

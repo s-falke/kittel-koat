@@ -270,7 +270,4 @@ and rename pol =
     let mapping = List.map (fun x_i -> (x_i, Poly.fromVar ("V" ^ (String.sub x_i 1 ((String.length x_i) - 1))))) vars in
       Poly.instantiate pol mapping
 and isNewlyBound rcc (r, c, c') =
-  (c <> Complexity.Unknown) && (isUnknown rcc r)
-and isUnknown rcc r =
-  let rEntry = List.find (fun (r', _, _) -> Rule.equal r r') rcc in
-  CTRS.getRuleComplexity rEntry = Complexity.Unknown
+  (c <> Complexity.Unknown) && (CTRS.hasUnknownComplexity rcc r)
