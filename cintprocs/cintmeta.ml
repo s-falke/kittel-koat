@@ -167,9 +167,11 @@ and doFarkasConstantSizeBound () =
 and doFarkas () =
   run_ite (Cintfarkaspolo.process false 1) doLoop doFarkasSizeBound
 and doFarkasSizeBound () =
-  run_ite (Cintfarkaspolo.process true 1) doLoop doExpFarkas
+  run_ite (Cintfarkaspolo.process true 1) doLoop doChain1
+(*
 and doExpFarkas () =
   run_ite (Cintexpfarkaspolo.process 1) doLoop doChain1
+*)
 and doChain1 () =
   run_ite (ChainProc.process 1) doLoop doChain2
 and doChain2 () =
