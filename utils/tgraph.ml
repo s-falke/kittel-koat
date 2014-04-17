@@ -1,5 +1,5 @@
 (*
-  CINT graph
+  Termination graph
 
   @author Stephan Falke
 
