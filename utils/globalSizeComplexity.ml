@@ -239,6 +239,11 @@ module Make(RuleT : AbstractRule) = struct
   let extractSizeMapForRule globalSizeComplexities r j vars =
     List.mapi (fun i _ -> "X_" ^ (string_of_int (i + 1)), findEntry globalSizeComplexities r j i vars) vars
 
+  (** Extract mapping for variables in vars to their
+      global size complexity after using the j-th rhs of rule r *)
+  let extractSizeMapForRuleForVars globalSizeComplexities r j vars =
+    List.mapi (fun i _ -> List.nth vars i, findEntry globalSizeComplexities r j i vars) vars
+
   (** Pretty-print list of (rule, rhs-num, arg-num, size complexity) tuples, where complexities are represented by their classes *)
   let rec dumpGSCs ruleWithGSCs =
     let dumpOneGSC (rule, gsb) =

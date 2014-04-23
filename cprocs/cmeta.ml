@@ -98,7 +98,7 @@ and addComplexities tgraph globalSizeComplexities vars rcc =
 and getOneComplexity tgraph globalSizeComplexities vars (rule, complexity, cost) =
   let preRules = TGraph.getPreds tgraph [rule] in
   let getCostPerPreRule globalSizeComplexities vars preRule =
-    let csmap = GSC.extractSizeMapForRule globalSizeComplexities preRule 0 vars in
+    let csmap = GSC.extractSizeMapForRuleForVars globalSizeComplexities preRule 0 vars in
     Complexity.apply cost csmap
   in
   Complexity.mult complexity (Complexity.sup (List.map (getCostPerPreRule globalSizeComplexities vars) preRules))
