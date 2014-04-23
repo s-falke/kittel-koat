@@ -82,5 +82,13 @@ and mappedToUnknown csmap' v =
                          mappedToUnknown rest v
 
 (** Get upper bound on all complexities in xs *)
-let sup cs =
-  listAdd cs (* TODO: Do something better here, at lesat try filtering out those things that are definitely smaller. *)
+let rec sup cs =
+  if List.exists (fun c -> c = Unknown) cs then
+    Unknown
+  else
+    let plaincs = List.map strip cs in
+      P (List.fold_left Expexp.max Expexp.zero plaincs)
+and strip c =
+  match c with
+    | P cc -> cc
+    | Unknown -> failwith "Cannot strip an Unknown!"
