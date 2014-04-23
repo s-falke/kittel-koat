@@ -242,8 +242,8 @@ module Make(RuleT : AbstractRule) = struct
   (** Pretty-print list of (rule, rhs-num, arg-num, size complexity) tuples, where complexities are represented by their classes *)
   let rec dumpGSCs ruleWithGSCs =
     let dumpOneGSC (rule, gsb) =
-      let dumpGSC (i, c) =
-        (string_of_int i) ^ ": " ^ (LSC.toStringLocalComplexity c)
+      let dumpGSC ((i, j), c) =
+        (string_of_int i) ^ "." ^ (string_of_int j) ^ ": " ^ (LSC.toStringLocalComplexity c)
       in
       (RuleT.toString rule) ^ ":: " ^ (dumpGSC gsb)
     in
