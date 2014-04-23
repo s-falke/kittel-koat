@@ -29,7 +29,10 @@ module UnreachableProc = DeleteUnreachableProc.Make(Rule)
 module UnsatProc = DeleteUnsatProc.Make(Rule)
 module ChainProc = ComplexityChainProc.Make(Rule)
 
+let sep = 10000
+
 let i = ref 1
+let done_inner = ref 0
 let proofs = ref []
 let output_nums = ref []
 let input_nums = ref []
@@ -88,9 +91,41 @@ let rec process trs maxchaining startfun =
         input_nums := List.rev !input_nums;
         output_nums := List.rev !output_nums;
         insertRVGraphIfNeeded ();
-        let (rccl, tgraph, rvgraph, _) = !todo in
-        let globalSizeComplexities = GSC.computeGlobalSizeComplexities (Utils.unboxOption rvgraph) (first rccl) (second rccl) vars in
+        let (rccgl, tgraph, rvgraph, _) = !todo in
+        let globalSizeComplexities = GSC.computeGlobalSizeComplexities (Utils.unboxOption rvgraph) (first rccgl) (second rccgl) vars in
         Some (getComplexity tgraph globalSizeComplexities vars !todo, getProof initial !input_nums !output_nums !proofs)
+and processInner rccgltrv =
+  let vars = Term.getVars (Rule.getLeft (first (List.hd (first (first rccgltrv)))))
+  and initial = (first rccgltrv, second rccgltrv, third rccgltrv, (1 + sep * (!done_inner + 1)))
+  and old_i = !i
+  and old_proofs = !proofs
+  and old_input_nums = !input_nums
+  and old_output_nums = !output_nums
+  and old_todo = !todo
+  and old_done_chaining = !ChainProc.done_chaining
+  in
+    i := 1;
+    proofs := [];
+    input_nums := [];
+    output_nums := [];
+    todo := initial;
+    ChainProc.done_chaining := 0;
+    doLoop ();
+    incr done_inner;
+    proofs := List.rev !proofs;
+    input_nums := List.rev (List.map (fun i -> i + sep * !done_inner) !input_nums);
+    output_nums := List.rev (List.map (fun i -> i + sep * !done_inner) !output_nums);
+    insertRVGraphIfNeeded ();
+    let (rccgl, tgraph, rvgraph, _) = !todo in
+    let globalSizeComplexities = GSC.computeGlobalSizeComplexities (Utils.unboxOption rvgraph) (first rccgl) (second rccgl) vars in
+    let res = Some (getComplexity tgraph globalSizeComplexities vars !todo, globalSizeComplexities, getProof initial !input_nums !output_nums !proofs) in
+    ChainProc.done_chaining := old_done_chaining;
+    todo := old_todo;
+    output_nums := old_output_nums;
+    input_nums := old_input_nums;
+    proofs := old_proofs;
+    i := old_i;
+    res
 and getComplexity tgraph globalSizeComplexities vars (rccgl, _, _, _) =
   Complexity.add (addComplexities tgraph globalSizeComplexities vars (first rccgl)) (Complexity.P (third rccgl))
 and addComplexities tgraph globalSizeComplexities vars rcc =
@@ -102,15 +137,14 @@ and getOneComplexity tgraph globalSizeComplexities vars (rule, complexity, cost)
     Complexity.apply cost csmap
   in
   Complexity.mult complexity (Complexity.sup (List.map (getCostPerPreRule globalSizeComplexities vars) preRules))
-and getProof (rccg, _, _, _) inums onums theproofs =
-  fun () -> "Initial complexity problem:\n1:" ^
+and getProof (rccg, _, _, i) inums onums theproofs =
+  fun () -> "Initial complexity problem:\n" ^ (string_of_int i) ^ ":" ^
             (CTRS.toStringG rccg) ^
-            "\n\n" ^
             (attachProofs inums onums theproofs)
 and attachProofs inums onums tproofs =
   match inums with
     | [] -> ""
-    | i::is -> ((List.hd tproofs) i (List.hd onums)) ^ "\n\n" ^ (attachProofs is (List.tl onums) (List.tl tproofs))
+    | i::is -> "\n\n" ^ ((List.hd tproofs) i (List.hd onums)) ^ (attachProofs is (List.tl onums) (List.tl tproofs))
 and update nrccgl p ini =
   let outi = !i + 1 in
     todo := attachNumber nrccgl outi;
@@ -159,6 +193,8 @@ and doUnreachableRemoval () =
   run UnreachableProc.process
 and doKnowledgePropagation () =
   run KnowledgeProc.process
+and doSeparate () =
+  run_ite (Cseparate.process processInner (!done_inner + 1) sep) doLoop doFarkasConstant
 and doFarkasConstant () =
   run_ite (Cfarkaspolo.process false false 0) doLoop doFarkasConstantSizeBound
 and doFarkasConstantSizeBound () =
