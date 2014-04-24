@@ -110,8 +110,8 @@ and processInner rccgltrv =
     output_nums := [];
     todo := initial;
     ChainProc.done_chaining := 0;
-    doLoop ();
     incr done_inner;
+    doLoop ();
     proofs := List.rev !proofs;
     input_nums := List.rev (List.map (fun i -> i + sep * !done_inner) !input_nums);
     output_nums := List.rev (List.map (fun i -> i + sep * !done_inner) !output_nums);
@@ -185,6 +185,24 @@ and insertRVGraphIfNeeded () =
     | (_, _, Some _, _) -> ()
     | (rcggl, tgraph, None, ini) -> let lscs = LSC.computeLocalSizeComplexities (List.map first (first rcggl)) in
                                       todo := (rcggl, tgraph, Some (RVG.compute lscs tgraph), ini)
+
+
+and getInnerFuns () =
+  match !todo with
+    | (rccgl, tgraph, _, _) ->
+      (
+        let sccs = TGraph.getNontrivialSccs tgraph in
+          if sccs = [] then
+            []
+          else
+            let l' = Utils.remdup (List.flatten (List.map Rule.getFuns (List.nth sccs 0)))
+            and allfuns = Utils.remdup (List.flatten (List.map Rule.getFuns (List.map first (first rccgl)))) in
+              if (List.length l') = (List.length allfuns) then
+                []
+              else
+                l'
+      )
+
 and doLoop () =
   doUnreachableRemoval ();
   doKnowledgePropagation ();
@@ -194,7 +212,8 @@ and doUnreachableRemoval () =
 and doKnowledgePropagation () =
   run KnowledgeProc.process
 and doSeparate () =
-  run_ite (Cseparate.process processInner (!done_inner + 1) sep) doLoop doFarkasConstant
+  let l' = getInnerFuns () in
+    run_ite (Cseparate.process processInner l' (!done_inner + 1) sep) doLoop doFarkasConstant
 and doFarkasConstant () =
   run_ite (Cfarkaspolo.process false false 0) doLoop doFarkasConstantSizeBound
 and doFarkasConstantSizeBound () =

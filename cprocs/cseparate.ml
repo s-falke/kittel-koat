@@ -27,22 +27,22 @@ let first (x, _, _) =
   x
 
 (* separate analysis *)
-let rec process innerprover sep sepNumberMultiplier (rcc, g, l) tgraph rvgraph =
-  if CTRS.isSolved rcc then
+let rec process innerprover l' sep sepNumberMultiplier (rcc, g, l) tgraph rvgraph =
+  if CTRS.isSolved rcc || l' = [] then
     None
   else
   (
     let vars = Term.getVars (Rule.getLeft (first (List.hd rcc))) in
-    let tmp = split (rcc, g, l) sepNumberMultiplier vars tgraph rvgraph in
-      match tmp with
-        | None-> None
-        | Some (inner, outer) -> let subproof = innerprover inner in
-                                 (
-                                   match subproof with
-                                     | None -> None
-                                     | Some (compl, gsc, proof) -> let realouter = fixWeight outer compl in
-                                         Some (realouter, fun ini outi -> getProof sep sepNumberMultiplier ini outi inner proof realouter)
-                                 )
+      let tmp = split (rcc, g, l) l' (sep * sepNumberMultiplier) vars tgraph rvgraph in
+        match tmp with
+          | None-> None
+          | Some (inner, outer) -> let subproof = innerprover inner in
+                                   (
+                                     match subproof with
+                                       | None -> None
+                                       | Some (compl, gsc, proof) -> let realouter = fixWeight outer compl in
+                                           Some (realouter, fun ini outi -> getProof sep sepNumberMultiplier ini outi inner proof realouter)
+                                   )
   )
 and fixWeight ((rcc, g, l), tgraph, rvgraph) compl =
   (((fixWeightOne (List.hd rcc) compl)::(List.tl rcc), g, l), tgraph, rvgraph)
@@ -60,25 +60,28 @@ and indent_lines text =
   let lines = Str.split (Str.regexp "\n") text in
     String.concat "\n" (List.map (fun line -> "\t" ^ line) lines)
 
-and split (rcc, g, l) count vars tgraph rvgraph =
-  let sccs = TGraph.getNontrivialSccs tgraph in
-    if sccs = [] then
-      None
-    else if ((List.length (List.nth sccs 0)) = (List.length rcc)) then
+and split (rcc, g, l) l' count vars tgraph rvgraph =
+  let allfuns = Utils.remdup (List.flatten (List.map (fun (r, _, _) -> Rule.getFuns r) rcc))
+  and innerfuns = l' in
+    if (List.length allfuns) = (List.length innerfuns) then
       None
     else
-      let allfuns = Utils.remdup (List.flatten (List.map (fun (r, _, _) -> Rule.getFuns r) rcc))
-      and innerfuns = Utils.remdup (List.flatten (List.map Rule.getFuns (List.nth sccs 0))) in
-        let outerfuns = Utils.removeAll allfuns innerfuns in
-          Some (turn_into_proper_format innerfuns outerfuns count (rcc, g, l) vars tgraph rvgraph)
+      let outerfuns = Utils.removeAll allfuns l' in
+        turn_into_proper_format innerfuns outerfuns count (rcc, g, l) vars tgraph rvgraph
 and turn_into_proper_format innerfuns outerfuns count (rcc, g, l) vars tgraph rvgraph =
   let allrules = List.map first rcc in
-    let innerrules = getInnerRules allrules innerfuns
-    and outerrules = getOuterRules allrules innerfuns
-    and pre_innerrules = getPredRules allrules innerfuns in
-      let inner = getInner innerrules pre_innerrules count (rcc, g, l) vars tgraph rvgraph
-      and outer = getOuter outerrules innerfuns count (rcc, g, l) vars tgraph rvgraph in
-        (inner, outer)
+    let innerrules = getInnerRules allrules innerfuns in
+      if (List.length innerrules) = (List.length allrules) then
+        None
+      else
+        let outerrules = getOuterRules allrules innerfuns
+        and pre_innerrules = getPredRules allrules innerfuns in
+          let inner = getInner innerrules pre_innerrules count (rcc, g, l) vars tgraph rvgraph in
+            if (List.length (first (first inner))) = (List.length rcc) then
+              None
+            else
+              let outer = getOuter outerrules innerfuns count (rcc, g, l) vars tgraph rvgraph in
+                Some (inner, outer)
 and getInnerRules rules funs =
   List.filter (fun rule -> Utils.contains funs (Term.getFun (Rule.getLeft rule)) && Utils.contains funs (Term.getFun (Rule.getRight rule))) rules
 and getOuterRules rules funs =
