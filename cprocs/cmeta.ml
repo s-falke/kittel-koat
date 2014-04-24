@@ -127,16 +127,19 @@ and processInner rccgltrv =
     i := old_i;
     res
 and getComplexity tgraph globalSizeComplexities vars (rccgl, _, _, _) =
-  Complexity.add (addComplexities tgraph globalSizeComplexities vars (first rccgl)) (Complexity.P (third rccgl))
-and addComplexities tgraph globalSizeComplexities vars rcc =
-  Complexity.listAdd (List.map (getOneComplexity tgraph globalSizeComplexities vars) rcc)
-and getOneComplexity tgraph globalSizeComplexities vars (rule, complexity, cost) =
-  let preRules = TGraph.getPreds tgraph [rule] in
-  let getCostPerPreRule globalSizeComplexities vars preRule =
-    let csmap = GSC.extractSizeMapForRuleForVars globalSizeComplexities preRule 0 vars in
-    Complexity.apply cost csmap
-  in
-  Complexity.mult complexity (Complexity.sup (List.map (getCostPerPreRule globalSizeComplexities vars) preRules))
+  Complexity.add (addComplexities tgraph globalSizeComplexities vars (first rccgl) (second rccgl)) (Complexity.P (third rccgl))
+and addComplexities tgraph globalSizeComplexities vars rcc g =
+  Complexity.listAdd (List.map (getOneComplexity tgraph globalSizeComplexities vars g) rcc)
+and getOneComplexity tgraph globalSizeComplexities vars g (rule, complexity, cost) =
+  if (Term.getFun (Rule.getLeft rule)) = g then
+    Complexity.mult complexity (Complexity.P cost)
+  else
+    let preRules = TGraph.getPreds tgraph [rule] in
+    let getCostPerPreRule globalSizeComplexities vars preRule =
+      let csmap = GSC.extractSizeMapForRuleForVars globalSizeComplexities preRule 0 vars in
+      Complexity.apply cost csmap
+    in
+      Complexity.mult complexity (Complexity.sup (List.map (getCostPerPreRule globalSizeComplexities vars) preRules))
 and getProof (rccg, _, _, i) inums onums theproofs =
   fun () -> "Initial complexity problem:\n" ^ (string_of_int i) ^ ":" ^
             (CTRS.toStringG rccg) ^
