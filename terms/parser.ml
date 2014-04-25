@@ -27,7 +27,7 @@ let endsWith s suff =
     with
       | Invalid_argument _ -> false
 
-let parse filename combine =
+let parseTrs filename combine =
   let inchan = open_in filename in
     let res = if (endsWith filename ".simple") then
                 Simple.createTrs combine (Simple_aux.getProgram inchan)

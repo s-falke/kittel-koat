@@ -113,7 +113,7 @@ let main () =
     exit 1
   )
   else
-    let tt = Parser.parse !filename !combine in
+    let tt = Parser.parseTrs !filename !combine in
       Smt.smt_time := 0.0;
       let start = Unix.gettimeofday () in
         match (if !timeout = 0.0 then (Meta.process tt !maxchaining) else (timed_run Meta.process tt !maxchaining !timeout None)) with
