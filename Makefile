@@ -2,7 +2,7 @@ LIBPATH=-cflags -I,+ocamlgraph -lflags -I,+ocamlgraph
 LIBS=-libs graph,unix,nums,str
 OPTS=-cflags -warn-error,+a
 
-default: kittel
+default: kittel koat
 
 all: kittel koat convert
 
