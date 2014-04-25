@@ -234,7 +234,7 @@ module Make(RuleT : AbstractRule) = struct
     let (_, (_, c)) = findFullEntry globalSizeComplexities rule j i in
     LSC.toSmallestComplexity c vars
 
-  (** Extract mapping for variables X_1 .. X_{length vars} to their 
+  (** Extract mapping for variables X_1 .. X_{length vars} to their
       global size complexity after using the j-th rhs of rule r *)
   let extractSizeMapForRule globalSizeComplexities r j vars =
     List.mapi (fun i _ -> "X_" ^ (string_of_int (i + 1)), findEntry globalSizeComplexities r j i vars) vars
