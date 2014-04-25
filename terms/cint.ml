@@ -81,3 +81,8 @@ and ruletotrs (l, rs, c) =
 
 let contains cint comrule =
   (List.exists (fun comrule' -> comrule' == comrule) cint) || (List.exists (fun comrule' -> Comrule.equal comrule' comrule) cint)
+
+let rec separate cint =
+  List.flatten (List.map toSep cint)
+and toSep (l, rs, c) =
+  List.map (fun r -> (l, r, c)) rs

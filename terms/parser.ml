@@ -31,6 +31,9 @@ let parse filename combine =
   let inchan = open_in filename in
     let res = if (endsWith filename ".simple") then
                 Simple.createTrs combine (Simple_aux.getProgram inchan)
+              else if (endsWith filename ".koat") then
+                let cint = Cint_aux.getCint inchan in
+                  Cint.separate (snd cint)
               else
                 Trs_aux.getTrs inchan
               in
