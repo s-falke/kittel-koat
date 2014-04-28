@@ -195,15 +195,15 @@ and getInnerFuns () =
     | (rccgl, tgraph, _, _) ->
       (
         let sccs = TGraph.getNontrivialSccs tgraph in
-          if sccs = [] then
-            []
-          else
-            let l' = Utils.remdup (List.flatten (List.map Rule.getFuns (List.nth sccs 0)))
-            and allfuns = Utils.remdup (List.flatten (List.map Rule.getFuns (List.map first (first rccgl)))) in
-              if (List.length l') = (List.length allfuns) then
-                []
-              else
-                l'
+          match sccs with
+            | [] -> []
+            | [_] -> []
+            | scc::_ -> let l' = Utils.remdup (List.flatten (List.map Rule.getFuns scc))
+                        and allfuns = Utils.remdup (List.flatten (List.map Rule.getFuns (List.map first (first rccgl)))) in
+                          if (List.length l') = (List.length allfuns) then
+                            []
+                          else
+                            l'
       )
 
 and doLoop () =

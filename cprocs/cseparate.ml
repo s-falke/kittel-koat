@@ -35,7 +35,7 @@ let rec process innerprover l' sep sepNumberMultiplier (rcc, g, l) tgraph rvgrap
     let vars = Term.getVars (Rule.getLeft (first (List.hd rcc))) in
       let tmp = split (rcc, g, l) l' (sep * sepNumberMultiplier) vars tgraph rvgraph in
         match tmp with
-          | None-> None
+          | None -> None
           | Some (inner, outer) -> let subproof = innerprover inner in
                                    (
                                      match subproof with
