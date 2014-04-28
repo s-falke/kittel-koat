@@ -26,7 +26,6 @@ type formula =
         | Or of (formula list)
         | Not of formula
         | Atom of Pc.atom
-        ;;
 
 let docleanup = true
 
@@ -237,7 +236,7 @@ let rec formula_to_smt_file file formula =
             output_string file (Pc.atomSMT atom)
 
 let write_smt_file vars formula =
-  let (thefilename, formulafile) = Filename.open_temp_file "FORMULA" ".smt" in
+  let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_1_" ".smt" in
     output_string formulafile header;
     output_var_string formulafile vars;
     output_string formulafile midder;
@@ -357,7 +356,7 @@ let isSatisfiableFarkasPoloMinimal minrestrictions minimplications weakconds wea
 
 (* sizebound stuff *)
 let rec isConstantBound cond t c =
-  let (thefilename, formulafile) = Filename.open_temp_file "FORMULA" ".smt"
+  let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_2_" ".smt"
   and absTerms = getAbsTerms [(t, "T")] in
     output_string formulafile header;
     output_var_string formulafile (Utils.remdup ((Poly.getVars t) @ (Pc.getVars cond)));
@@ -403,7 +402,7 @@ let rec isMaxBound cond t c a =
   if a = [] then
     false
   else
-    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA" ".smt"
+    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_3_" ".smt"
     and aPolys = List.map (fun x -> (Poly.fromVar x, x)) a in
       let absTerms = getAbsTerms ((t, "T")::aPolys)
       and cond' = List.filter (fun c -> Utils.containsOne a (Pc.getVarsAtom c)) cond in
@@ -449,7 +448,7 @@ let rec isMaxPlusConstantBound cond t c a =
   if a = [] then
     false
   else
-    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA" ".smt"
+    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_4_" ".smt"
     and aPolys = List.map (fun x -> (Poly.fromVar x, x)) a in
       let absTerms = getAbsTerms ((t, "T")::aPolys)
       and cond' = List.filter (fun c -> Utils.containsOne a (Pc.getVarsAtom c)) cond in
@@ -479,7 +478,7 @@ let rec isSumPlusConstantBound cond t c a =
   if a = [] then
     false
   else
-    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA" ".smt"
+    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_5_" ".smt"
     and aPolys = List.map (fun x -> (Poly.fromVar x, x)) a in
       let absTerms = getAbsTerms ((t, "T")::aPolys)
       and cond' = List.filter (fun c -> Utils.containsOne a (Pc.getVarsAtom c)) cond in
@@ -520,7 +519,7 @@ let rec isScaledSumPlusConstantBound cond t c s a =
   if a = [] then
     false
   else
-    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA" ".smt"
+    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_6_" ".smt"
     and aPolys = List.map (fun x -> (Poly.fromVar x, x)) a in
       let absTerms = getAbsTerms ((t, "T")::aPolys)
       and cond' = List.filter (fun c -> Utils.containsOne a (Pc.getVarsAtom c)) cond in
