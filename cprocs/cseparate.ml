@@ -67,21 +67,15 @@ and split (rcc, g, l) l' count vars tgraph rvgraph =
       None
     else
       let outerfuns = Utils.removeAll allfuns l' in
-        turn_into_proper_format innerfuns outerfuns count (rcc, g, l) vars tgraph rvgraph
+        Some (turn_into_proper_format innerfuns outerfuns count (rcc, g, l) vars tgraph rvgraph)
 and turn_into_proper_format innerfuns outerfuns count (rcc, g, l) vars tgraph rvgraph =
   let allrules = List.map first rcc in
-    let innerrules = getInnerRules allrules innerfuns in
-      if (List.length innerrules) = (List.length allrules) then
-        None
-      else
-        let outerrules = getOuterRules allrules innerfuns
-        and pre_innerrules = getPredRules allrules innerfuns in
-          let inner = getInner innerrules pre_innerrules count (rcc, g, l) vars tgraph rvgraph in
-            if (List.length (first (first inner))) = (List.length rcc) then
-              None
-            else
-              let outer = getOuter outerrules innerfuns count (rcc, g, l) vars tgraph rvgraph in
-                Some (inner, outer)
+    let innerrules = getInnerRules allrules innerfuns
+    and outerrules = getOuterRules allrules innerfuns
+    and pre_innerrules = getPredRules allrules innerfuns in
+      let inner = getInner innerrules pre_innerrules count (rcc, g, l) vars tgraph rvgraph
+      and outer = getOuter outerrules innerfuns count (rcc, g, l) vars tgraph rvgraph in
+        (inner, outer)
 and getInnerRules rules funs =
   List.filter (fun rule -> Utils.contains funs (Term.getFun (Rule.getLeft rule)) && Utils.contains funs (Term.getFun (Rule.getRight rule))) rules
 and getOuterRules rules funs =
