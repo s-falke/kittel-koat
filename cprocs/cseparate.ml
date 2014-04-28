@@ -84,12 +84,13 @@ and getPredRules rules funs =
   List.filter (fun rule -> not (Utils.contains funs (Term.getFun (Rule.getLeft rule))) && Utils.contains funs (Term.getFun (Rule.getRight rule))) rules
 
 and getInner innerrules pre_innerrules count (rcc, g, l) vars tgraph rvgraph =
-  let entries = getEntries ("%inner_" ^ (string_of_int count) ^ "_start") pre_innerrules vars
-  and tgraph' = TGraph.keepNodes tgraph innerrules
-  and rvgraph' = getNewRVG rvgraph innerrules in
-    let tgraph'' = TGraph.addNodes tgraph' entries
-    and rcc' = List.map (fun t -> (t, Complexity.P Expexp.one, Expexp.zero)) entries in
-      (((rcc' @ (get_only rcc innerrules)), "%inner_" ^ (string_of_int count) ^ "_start", Expexp.zero), tgraph'', getAddedRVG rvgraph' entries tgraph'')
+  let startfun = "inner_" ^ (string_of_int count) ^ "_start." in
+    let entries = getEntries startfun pre_innerrules vars
+    and tgraph' = TGraph.keepNodes tgraph innerrules
+    and rvgraph' = getNewRVG rvgraph innerrules in
+      let tgraph'' = TGraph.addNodes tgraph' entries
+      and rcc' = List.map (fun t -> (t, Complexity.P Expexp.one, Expexp.zero)) entries in
+        (((rcc' @ (get_only rcc innerrules)), startfun, Expexp.zero), tgraph'', getAddedRVG rvgraph' entries tgraph'')
 and getEntries g pre_innerrules vars =
   let pre_innerrules_funs = Utils.remdup (List.map (fun rule -> Term.getFun (Rule.getRight rule)) pre_innerrules)
   and lhs = (g, List.map Poly.fromVar vars) in
@@ -105,9 +106,9 @@ and getAddedRVG rvgraph' t' tgraph'' =
 
 and getOuter outerrules innerfuns count (rcc, g, l) vars tgraph rvgraph =
   let varsPols = List.map Poly.fromVar vars
-  and varsPols' = List.map (fun v -> Poly.fromVar ("?" ^ v)) vars
-  and inLoopFun = "%inner_" ^ (string_of_int count) ^ "_in"
-  and outLoopFun = "%inner_" ^ (string_of_int count) ^ "_out" in
+  and varsPols' = List.map (fun v -> Poly.fromVar (v ^ ".")) vars
+  and inLoopFun = "inner_" ^ (string_of_int count) ^ "_in."
+  and outLoopFun = "inner_" ^ (string_of_int count) ^ "_out." in
     (* TODO: add size complexities to the constraint... *)
     let t' = ((inLoopFun, varsPols), (outLoopFun, varsPols'), [])
     and tskip = ((inLoopFun, varsPols), (outLoopFun, varsPols), [])
