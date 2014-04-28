@@ -34,4 +34,4 @@ module type AbstractRule =
 
     (** True iff there is only one rhs *)
     val isUnary: rule -> bool
-  end;;
+  end
