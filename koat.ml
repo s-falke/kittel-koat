@@ -90,7 +90,9 @@ let rec speclist =
     ("-max-chaining", Arg.Set_int maxchaining, "- Set the maximum  number the chaining processor is applied");
     ("--max-chaining", Arg.Set_int maxchaining, "");
     ("-help", Arg.Unit (fun () -> print_usage (); exit 1), "        - Display this list of options");
-    ("--help", Arg.Unit (fun () -> print_usage (); exit 1), "")
+    ("--help", Arg.Unit (fun () -> print_usage (); exit 1), "");
+    ("-version", Arg.Unit (fun () -> Printf.printf "KoAT\nCopyright 2010-2014 Stephan Falke\nVersion %s\n" Git_sha1.git_sha1; exit 1), "     - Display the version of this program");
+    ("--version", Arg.Unit (fun () -> Printf.printf "KoAT\nCopyright 2010-2014 Stephan Falke\nVersion %s\n" Git_sha1.git_sha1; exit 1), "")
   ]
 and print_usage () =
   Arg.usage speclist usage

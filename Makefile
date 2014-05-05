@@ -6,16 +6,16 @@ default: kittel koat
 
 all: kittel koat convert
 
-kittel: force_look
+kittel: make_git_sha1 force_look
 	ocamlbuild ${OPTS} ${LIBPATH} ${LIBS} kittel.native
 
-kittel.d.byte: force_look
+kittel.d.byte: make_git_sha1 force_look
 	ocamlbuild ${OPTS} ${LIBPATH} ${LIBS} kittel.d.byte
 
-koat: force_look
+koat: make_git_sha1 force_look
 	ocamlbuild ${OPTS} ${LIBPATH} ${LIBS} koat.native
 
-koat.d.byte: force_look
+koat.d.byte: make_git_sha1 force_look
 	ocamlbuild ${OPTS} ${LIBPATH} ${LIBS} koat.d.byte
 
 convert: force_look
@@ -23,6 +23,10 @@ convert: force_look
 
 clean: force_look
 	ocamlbuild -clean
+	rm git_sha1.ml
+
+make_git_sha1: force_look
+	./make_git_sha1.sh git_sha1.ml
 
 force_look:
 	@true

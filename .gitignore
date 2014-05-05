@@ -2,3 +2,4 @@
 _build
 *.native
 *.d.byte
+git_sha1.ml
