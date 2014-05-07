@@ -40,14 +40,27 @@ let rec process innerprover l' sep sepNumberMultiplier (rcc, g, l) tgraph rvgrap
                                    (
                                      match subproof with
                                        | None -> None
-                                       | Some (compl, gsc, proof) -> let realouter = fixWeight outer compl in
+                                       | Some (compl, gsc, proof) -> let realouter = fixLoopSummary outer compl in
                                            Some (realouter, fun ini outi -> getProof sep sepNumberMultiplier ini outi inner proof realouter)
                                    )
   )
-and fixWeight ((rcc, g, l), tgraph, rvgraph) compl =
-  (((fixWeightOne (List.hd rcc) compl)::(List.tl rcc), g, l), tgraph, rvgraph)
-and fixWeightOne (r, c, _) compl =
+and fixLoopSummary ((rcc, g, l), tgraph, rvgraph) compl =
+  let firstRCC = List.hd rcc in
+    let fixedFirstRCC = fixWeight firstRCC compl in
+      let summaryFixedFirstRCC = addSummary fixedFirstRCC in
+        let tgraph' = TGraph.addNodes (TGraph.removeNodes tgraph [first firstRCC]) (List.map first summaryFixedFirstRCC) in
+          let rvgraph' = getFixedRVGraph rvgraph firstRCC summaryFixedFirstRCC tgraph' in
+            ((summaryFixedFirstRCC @ (List.tl rcc), g, l), tgraph', rvgraph')
+and fixWeight (r, c, _) compl =
   (r, c, Complexity.getExpexp compl)
+and addSummary rcc =
+  (* TODO: add size complexities to the constraint... *)
+  [rcc]
+and getFixedRVGraph rvgraph firstRCC summayFixedFirstRCC tgraph' =
+  match rvgraph with
+    | None -> None
+    | Some rvg -> let newRulesWithLSCs = LSC.computeLocalSizeComplexities (List.map first summayFixedFirstRCC) in
+                    Some (RVG.addNodes (RVG.removeNodes rvg [first firstRCC]) newRulesWithLSCs tgraph')
 
 and getProof sep sepNumberMultiplier ini outi (irccgl, _, _) proof (orccgl, _, _) =
   "Separating problem " ^ (string_of_int ini) ^ " produces the problem\n" ^
@@ -109,7 +122,6 @@ and getOuter outerrules innerfuns innerrules count (rcc, g, l) vars tgraph rvgra
   and varsPols' = getHavocedVars innerrules vars
   and inLoopFun = "inner_" ^ (string_of_int count) ^ "_in."
   and outLoopFun = "inner_" ^ (string_of_int count) ^ "_out." in
-    (* TODO: add size complexities to the constraint... *)
     let t' = ((inLoopFun, varsPols), (outLoopFun, varsPols'), [])
     and tskip = ((inLoopFun, varsPols), (outLoopFun, varsPols), [])
     and t_pre_post = getPrePostRules innerfuns inLoopFun outLoopFun rcc in
