@@ -74,7 +74,7 @@ and turn_into_proper_format innerfuns outerfuns count (rcc, g, l) vars tgraph rv
     and outerrules = getOuterRules allrules innerfuns
     and pre_innerrules = getPredRules allrules innerfuns in
       let inner = getInner innerrules pre_innerrules count (rcc, g, l) vars tgraph rvgraph
-      and outer = getOuter outerrules innerfuns count (rcc, g, l) vars tgraph rvgraph in
+      and outer = getOuter outerrules innerfuns innerrules count (rcc, g, l) vars tgraph rvgraph in
         (inner, outer)
 and getInnerRules rules funs =
   List.filter (fun rule -> Utils.contains funs (Term.getFun (Rule.getLeft rule)) && Utils.contains funs (Term.getFun (Rule.getRight rule))) rules
@@ -104,9 +104,9 @@ and getAddedRVG rvgraph' t' tgraph'' =
     | Some rvg -> let newRulesWithLSCs = LSC.computeLocalSizeComplexities t' in
                     Some (RVG.addNodes rvg newRulesWithLSCs tgraph'')
 
-and getOuter outerrules innerfuns count (rcc, g, l) vars tgraph rvgraph =
+and getOuter outerrules innerfuns innerrules count (rcc, g, l) vars tgraph rvgraph =
   let varsPols = List.map Poly.fromVar vars
-  and varsPols' = List.map (fun v -> Poly.fromVar (v ^ ".")) vars
+  and varsPols' = getHavocedVars innerrules vars
   and inLoopFun = "inner_" ^ (string_of_int count) ^ "_in."
   and outLoopFun = "inner_" ^ (string_of_int count) ^ "_out." in
     (* TODO: add size complexities to the constraint... *)
@@ -118,6 +118,22 @@ and getOuter outerrules innerfuns count (rcc, g, l) vars tgraph rvgraph =
           let rvgraph' = getOuterRVGraph rvgraph outerrules t' tskip t_pre_post_rules tgraph'
           and rules' = [(t', Complexity.Unknown, Expexp.zero); (tskip, Complexity.Unknown, Expexp.zero)] @ t_pre_post @ (get_only rcc outerrules) in
             ((rules', g, l), tgraph', rvgraph')
+and getHavocedVars innerrules vars =
+  let preserved = List.filter (isPreserved innerrules vars) vars in
+    List.map Poly.fromVar (List.map (getHavocedVar preserved) vars)
+and getHavocedVar preserved var =
+  if Utils.contains preserved var then
+    var
+  else
+    (var ^ ".")
+and isPreserved rules vars var =
+  if rules = [] then
+    true
+  else
+    let idx = Utils.getIdx vars var in
+      not (List.exists (isAltered idx) rules)
+and isAltered i (l, r, _) =
+  not (Poly.equal (List.nth (Term.getArgs l) i) (List.nth (Term.getArgs r) i))
 and getPrePostRules innerfuns inLoopFun outLoopFun rcc =
   match rcc with
     | [] -> []

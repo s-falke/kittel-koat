@@ -142,3 +142,13 @@ let mapiFlat f l =
       | x::xs -> (f i x) @ (mapiFlat' (i+1) f xs)
   in
   mapiFlat' 0 f l
+
+let rec getIdx l e =
+  getIdxAux l e 0
+and getIdxAux l e i =
+  match l with
+    | [] -> raise Not_found
+    | e'::rest -> if e = e' then
+                    i
+                  else
+                    getIdxAux rest e (i + 1)
