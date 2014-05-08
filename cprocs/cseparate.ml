@@ -21,13 +21,14 @@
 module CTRS = Ctrs.Make(Rule)
 module RVG = Rvgraph.Make(Rule)
 module LSC = LocalSizeComplexity.Make(Rule)
+module GSC = GlobalSizeComplexity.Make(Rule)
 module TGraph = Tgraph.Make(Rule)
 
 let first (x, _, _) =
   x
 
 (* separate analysis *)
-let rec process innerprover l' sep sepNumberMultiplier (rcc, g, l) tgraph rvgraph =
+let rec process innerprover l' addSizeSummaries sep sepNumberMultiplier (rcc, g, l) tgraph rvgraph =
   if CTRS.isSolved rcc || l' = [] then
     None
   else
@@ -36,26 +37,77 @@ let rec process innerprover l' sep sepNumberMultiplier (rcc, g, l) tgraph rvgrap
       let tmp = split (rcc, g, l) l' (sep * sepNumberMultiplier) vars tgraph rvgraph in
         match tmp with
           | None -> None
-          | Some (inner, outer) -> let subproof = innerprover inner in
-                                   (
-                                     match subproof with
-                                       | None -> None
-                                       | Some (compl, gsc, proof) -> let realouter = fixLoopSummary outer compl in
-                                           Some (realouter, fun ini outi -> getProof sep sepNumberMultiplier ini outi inner proof realouter)
-                                   )
+          | Some (inner, outer, exits) -> let subproof = innerprover inner in
+                                          (
+                                            match subproof with
+                                              | None -> None
+                                              | Some (compl, gsc, proof) -> let realouter = fixLoopSummary outer compl gsc addSizeSummaries exits vars in
+                                                                              Some (realouter, fun ini outi -> getProof sep sepNumberMultiplier ini outi inner proof realouter)
+                                          )
   )
-and fixLoopSummary ((rcc, g, l), tgraph, rvgraph) compl =
+and fixLoopSummary ((rcc, g, l), tgraph, rvgraph) compl gsc addSizeSummaries exits vars =
   let firstRCC = List.hd rcc in
     let fixedFirstRCC = fixWeight firstRCC compl in
-      let summaryFixedFirstRCC = addSummary fixedFirstRCC in
+      let summaryFixedFirstRCC = addSummary fixedFirstRCC gsc addSizeSummaries exits vars in
         let tgraph' = TGraph.addNodes (TGraph.removeNodes tgraph [first firstRCC]) (List.map first summaryFixedFirstRCC) in
           let rvgraph' = getFixedRVGraph rvgraph firstRCC summaryFixedFirstRCC tgraph' in
             ((summaryFixedFirstRCC @ (List.tl rcc), g, l), tgraph', rvgraph')
 and fixWeight (r, c, _) compl =
   (r, c, Complexity.getExpexp compl)
-and addSummary rcc =
-  (* TODO: add size complexities to the constraint... *)
-  [rcc]
+and addSummary (rule, compl, cost) gsc addSizeSummaries exits vars =
+  if (not addSizeSummaries) || (exits = []) then
+    [(rule, compl, cost)]
+  else
+  (
+    let csmaps = List.map (fun exit -> GSC.extractSizeMapForRuleForVars gsc exit 0 vars) exits in
+      let max_map = getMaxMap csmaps in
+        let havocedVars = Utils.removeAll (Term.getVars (Rule.getRight rule)) (Term.getVars (Rule.getLeft rule)) in
+          let sizeBoundsForHavocedVars = getSizeBounds max_map havocedVars in
+            let sizeBoundsConstraints = getSizeBoundsConstraints sizeBoundsForHavocedVars in
+              List.map (fun c -> ((Rule.getLeft rule, Rule.getRight rule, c), compl, cost)) sizeBoundsConstraints
+  )
+and getMaxMap csmaps =
+  match csmaps with
+    | [] -> failwith "internal error in Cseparate.getMaxMap"
+    | [csmap] -> csmap
+    | csmap::rest -> maxThem csmap (getMaxMap rest)
+and maxThem csmap csmap' =
+  List.map2 (fun (x, c) (y, c') -> maxThemAux x c y c') csmap csmap'
+and maxThemAux x c y c' =
+  if x <> y then
+    failwith "internal error in Cseparate.maxThem"
+  else
+    (x, Complexity.sup [c;c'])
+and getSizeBounds max_map havocedVars =
+  List.map (fun v -> (v, getSizeBound max_map v)) havocedVars
+and getSizeBound max_map v =
+  let real_v = String.sub v 0 ((String.length v) - 1) in
+    List.assoc real_v max_map
+and getSizeBoundsConstraints sizeBounds =
+  let plainConstraint = List.flatten (getPlainConstraint sizeBounds) in
+    let c_vars = Pc.getVars plainConstraint in
+      case_split [plainConstraint] c_vars
+and getPlainConstraint sizeBounds =
+  match sizeBounds with
+    | [] -> []
+    | (x, b)::rest -> let pol_opt = Complexity.getPoly b in
+                      (
+                        match pol_opt with
+                          | None -> []
+                          | Some p -> [Pc.Leq (Poly.fromVar x, p)]::(getPlainConstraint rest)
+                      )
+and case_split cs vars =
+  match vars with
+    | [] -> cs
+    | x::rest -> case_split (split_one cs x) rest
+and split_one cs x =
+  let x_pol = Poly.fromVar x in
+    let subst = [(x, Poly.negate x_pol)]
+    and geq = Pc.Geq (x_pol, Poly.zero)
+    and lt = Pc.Lss (x_pol, Poly.zero) in
+      (List.map (apply_split geq []) cs) @ (List.map (apply_split lt subst) cs)
+and apply_split c subs c' =
+  c::(Pc.instantiate c' subs)
 and getFixedRVGraph rvgraph firstRCC summayFixedFirstRCC tgraph' =
   match rvgraph with
     | None -> None
@@ -87,14 +139,19 @@ and turn_into_proper_format innerfuns outerfuns count (rcc, g, l) vars tgraph rv
     and outerrules = getOuterRules allrules innerfuns
     and pre_innerrules = getPredRules allrules innerfuns in
       let inner = getInner innerrules pre_innerrules count (rcc, g, l) vars tgraph rvgraph
-      and outer = getOuter outerrules innerfuns innerrules count (rcc, g, l) vars tgraph rvgraph in
-        (inner, outer)
+      and outer = getOuter outerrules innerfuns innerrules count (rcc, g, l) vars tgraph rvgraph
+      and exits = getExitRules allrules innerrules tgraph in
+        (inner, outer, exits)
 and getInnerRules rules funs =
   List.filter (fun rule -> Utils.contains funs (Term.getFun (Rule.getLeft rule)) && Utils.contains funs (Term.getFun (Rule.getRight rule))) rules
 and getOuterRules rules funs =
   List.filter (fun rule -> not (Utils.contains funs (Term.getFun (Rule.getLeft rule))) && not (Utils.contains funs (Term.getFun (Rule.getRight rule)))) rules
 and getPredRules rules funs =
   List.filter (fun rule -> not (Utils.contains funs (Term.getFun (Rule.getLeft rule))) && Utils.contains funs (Term.getFun (Rule.getRight rule))) rules
+and getExitRules rules innerrules tgraph =
+  let succs = TGraph.getSuccs tgraph innerrules in
+    let outer_succs = List.filter (fun succ -> not (List.exists (Rule.equal succ) innerrules)) succs in
+      List.filter (fun innerrule -> List.exists (fun succ -> TGraph.hasEdge tgraph innerrule succ) outer_succs) innerrules
 
 and getInner innerrules pre_innerrules count (rcc, g, l) vars tgraph rvgraph =
   let startfun = "inner_" ^ (string_of_int count) ^ "_start." in

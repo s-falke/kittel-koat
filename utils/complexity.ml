@@ -69,6 +69,11 @@ and getExpexp c =
     | P p -> p
     | Unknown -> failwith "Internal error in Cintprob.getExpexp"
 
+and getPoly c =
+  match c with
+    | P p -> Expexp.getPoly p
+    | Unknown -> None
+
 and dependsOnUnknown pol csmap' =
   let vars = Expexp.getVars pol in
     List.exists (mappedToUnknown csmap') vars

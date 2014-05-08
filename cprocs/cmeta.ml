@@ -216,7 +216,7 @@ and doKnowledgePropagation () =
   run KnowledgeProc.process
 and doSeparate () =
   let l' = getInnerFuns () in
-    run_ite (Cseparate.process processInner l' (!done_inner + 1) sep) doLoop doFarkasConstant
+    run_ite (Cseparate.process processInner l' true (!done_inner + 1) sep) doLoop doFarkasConstant
 and doFarkasConstant () =
   run_ite (Cfarkaspolo.process false false 0) doLoop doFarkasConstantSizeBound
 and doFarkasConstantSizeBound () =

@@ -317,3 +317,8 @@ and remdup s =
   match s with
     | [] -> []
     | e::rest -> e::(remdup (List.filter (fun e' -> not (equal e e')) rest))
+
+let getPoly e =
+  match e with
+    | Pol p -> Some p
+    | _ -> None
