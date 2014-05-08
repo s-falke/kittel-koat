@@ -115,12 +115,14 @@ and getFixedRVGraph rvgraph firstRCC summayFixedFirstRCC tgraph' =
                     Some (RVG.addNodes (RVG.removeNodes rvg [first firstRCC]) newRulesWithLSCs tgraph')
 
 and getProof sep sepNumberMultiplier ini outi (irccgl, _, _) proof (orccgl, _, _) =
-  "Separating problem " ^ (string_of_int ini) ^ " produces the problem\n" ^
-  (CTRS.toStringGNumber orccgl outi) ^ "\nand the following isolated subproblem:\n" ^
+  "Separating problem " ^ (string_of_int ini) ^ " produces the isolated subproblem\n" ^
   (CTRS.toStringGNumber irccgl (1 + sep * sepNumberMultiplier)) ^ "\n\n" ^
   "=== begin of proof for isolated subproblem " ^ (string_of_int (1 + sep * sepNumberMultiplier)) ^ " ===\n" ^
   indent_lines (proof ()) ^
-  "\n=== end of proof for isolated subproblem " ^ (string_of_int (1 + sep * sepNumberMultiplier)) ^ " ==="
+  "\n=== end of proof for isolated subproblem " ^ (string_of_int (1 + sep * sepNumberMultiplier)) ^ " ===\n\n" ^
+  "Applying the information from the isolated subproblem " ^ (string_of_int (1 + sep * sepNumberMultiplier)) ^
+  " to problem " ^ (string_of_int ini) ^ " produces the following problem:\n" ^
+  (CTRS.toStringGNumber orccgl outi)
 and indent_lines text =
   let lines = Str.split (Str.regexp "\n") text in
     String.concat "\n" (List.map (fun line -> "\t" ^ line) lines)
