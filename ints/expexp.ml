@@ -33,6 +33,7 @@ let rec toString e =
     | Pol p -> Poly.toString p
     | Sum (e1, e2) -> "(" ^ (toString e1) ^ ") + (" ^ (toString e2) ^ ")"
     | Mul (e1, e2) -> "(" ^ (toString e1) ^ ") * (" ^ (toString e2) ^ ")"
+    | Exp (Pol p1, e2) when Poly.isConst p1 -> (Poly.toString p1) ^ "^(" ^ (toString e2) ^ ")"
     | Exp (e1, e2) -> "(" ^ (toString e1) ^ ")^(" ^ (toString e2) ^ ")"
 
 (* equality comparison *)
