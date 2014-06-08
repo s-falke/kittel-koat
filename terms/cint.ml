@@ -33,10 +33,10 @@ let rec getArityOf f cint =
 and getFterm f cint =
   match cint with
     | [] -> failwith "internal error in Cint.getArityOf"
-    | (l, rs, _)::rr -> if (Term.getFun l = f) then
-                          l
-                        else if (List.exists (fun r -> Term.getFun r = f) rs) then
-                          getFtermFrom f rs
+    | r::rr -> if (Term.getFun (Comrule.getLeft r) = f) then
+                          Comrule.getLeft r
+                        else if (List.exists (fun r -> Term.getFun r = f) (Comrule.getRights r)) then
+                          getFtermFrom f (Comrule.getRights r)
                         else
                           getFterm f rr
 and getFtermFrom f rs =
@@ -73,16 +73,19 @@ let isUnary cint =
 (* convert unary cint to a trs *)
 let rec toTrs cint =
   List.map ruletotrs cint
-and ruletotrs (l, rs, c) =
-  if List.length rs <> 1 then
+and ruletotrs r =
+  if not(Comrule.isUnary r) then
     failwith "Cannot convert non-unary CINT into a TRS"
   else
-    (l, List.hd rs, c)
+    Rule.create
+      (Comrule.getLeft r)
+      (List.hd (Comrule.getRights r))
+      (Comrule.getCond r)
 
 let contains cint comrule =
   (List.exists (fun comrule' -> comrule' == comrule) cint) || (List.exists (fun comrule' -> Comrule.equal comrule' comrule) cint)
 
 let rec separate cint =
   List.flatten (List.map toSep cint)
-and toSep (l, rs, c) =
-  List.map (fun r -> (l, r, c)) rs
+and toSep r =
+  List.map (fun rhs -> Rule.create (Comrule.getLeft r) rhs (Comrule.getCond r)) (Comrule.getRights r)

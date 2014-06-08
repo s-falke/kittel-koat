@@ -115,12 +115,13 @@ and create_conds_polys_bounds trs abs lowerbound =
     | r::rr -> let (c, p, b) = create_conds_polys_bounds rr abs lowerbound
                and (cn, pn, bn) = create_cond_poly_bound_one r abs lowerbound in
                  (cn::c, pn::p, bn::b)
-and create_cond_poly_bound_one (l, r, c) abs lowerbound =
-  let lpol = List.assoc (Term.getFun l) abs in
-    let lpolinst = Parapoly.instantiate lpol (getInstBin (Term.getFun l) (Term.getArgs l) 1) in
+and create_cond_poly_bound_one r abs lowerbound =
+  let (lhs, rhs, cond) = (Rule.getLeft r, Rule.getRight r, Rule.getCond r) in
+  let lpol = List.assoc (Term.getFun lhs) abs in
+    let lpolinst = Parapoly.instantiate lpol (getInstBin (Term.getFun lhs) (Term.getArgs lhs) 1) in
       (
-        c,
-        Parapoly.minus lpolinst (Parapoly.instantiate (List.assoc (Term.getFun r) abs) (getInstBin (Term.getFun r) (Term.getArgs r) 1)),
+        cond,
+        Parapoly.minus lpolinst (Parapoly.instantiate (List.assoc (Term.getFun rhs) abs) (getInstBin (Term.getFun rhs) (Term.getArgs rhs) 1)),
         Parapoly.add lpolinst ([], ([], Big_int.minus_big_int lowerbound))
       )
 and getInstBin f args i =

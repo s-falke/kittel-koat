@@ -63,7 +63,7 @@ module Make(RuleT : AbstractRule) = struct
     (string_of_int i) ^ ":" ^ (toStringG rccgl)
 
   let getInitial trs g =
-    (List.map (fun r -> if (Term.getFun (Rule.getLeft r)) = g then (r, Complexity.P Expexp.one, Expexp.one) else (r, Complexity.Unknown, Expexp.one)) trs, g, Expexp.zero)
+    (List.map (fun r -> if (Term.getFun (RuleT.getLeft r)) = g then (r, Complexity.P Expexp.one, Expexp.one) else (r, Complexity.Unknown, Expexp.one)) trs, g, Expexp.zero)
 
   let isSolved rcc =
     List.for_all (fun (_, c, _) -> c <> Complexity.Unknown) rcc

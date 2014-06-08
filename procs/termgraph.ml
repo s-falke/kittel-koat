@@ -300,10 +300,12 @@ and doChain r r' =
   else
     None
 and buildNewRule rule1 rule2 =
-  let (l, (_, args), c) = rule1
-  and ((_, args'), r, c') = Rule.renameVars (Rule.getVars rule1) rule2 in
-    let subby = getSubstitution args args' in
-      (l, Term.instantiate r subby, remdupC (c @ (Pc.instantiate c' subby)))
+  let rule2' = Rule.renameVars (Rule.getVars rule1) rule2 in
+    let subby = getSubstitution (Term.getArgs (Rule.getRight rule1)) (Term.getArgs (Rule.getLeft rule2')) in
+      Rule.create 
+        (Rule.getLeft rule1)
+	(Term.instantiate (Rule.getRight rule2') subby)
+	(remdupC ((Rule.getCond rule1) @ (Pc.instantiate (Rule.getCond rule2') subby)))
 and remdupC c =
   match c with
     | [] -> []

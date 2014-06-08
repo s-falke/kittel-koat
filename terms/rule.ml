@@ -18,59 +18,64 @@
   limitations under the License.
 *)
 
-type rule = Term.term * Term.term * Pc.cond
+type rule = { lhs : Term.term ; rhs : Term.term ; cond : Pc.cond }
+
+(* Create a rule. *)
+let create l r c = { lhs = l; rhs = r; cond = c }
 
 (* Create a string for a rule *)
-let toString (l, r, c) =
-  (Term.toString l) ^ " -> " ^ (Term.toString r) ^
-  (if c = [] then "" else " [ " ^ (Pc.toString c) ^ " ]")
+let toString r =
+  (Term.toString r.lhs) ^ " -> " ^ (Term.toString r.rhs) ^
+  (if r.cond = [] then "" else " [ " ^ (Pc.toString r.cond) ^ " ]")
 
 (* Create a string for a rule *)
-let toDotString (l, r, c) =
-  (Term.toString l) ^ " -> " ^ (Term.toString r) ^
-  (if c = [] then "" else " [ " ^ (Pc.toDotString c) ^ " ]")
+let toDotString r =
+  (Term.toString r.lhs) ^ " -> " ^ (Term.toString r.rhs) ^
+  (if r.cond = [] then "" else " [ " ^ (Pc.toDotString r.cond) ^ " ]")
 
 (* Get lhs of a rule *)
-let getLeft (l, _, _) =
-  l
+let getLeft r =
+  r.lhs
 
 (* Get rhs of a rule *)
-let getRight (_, r, _) =
-  r
+let getRight r =
+  r.rhs
 
 (* Get rhs of a rule *)
-let getRights (_, r, _) =
-  [r]
+let getRights r =
+  [r.rhs]
 
 (* Get cond of a rule *)
-let getCond (_, _, c) =
-  c
+let getCond r =
+  r.cond
 
 (* Get function symbols from both sides *)
-let getFuns (l, r, _) =
-  [Term.getFun l; Term.getFun r]
+let getFuns r =
+  [Term.getFun r.lhs; Term.getFun r.rhs]
 
 (* Get function symbol from left side *)
-let getLeftFun (l, _, _) =
-  Term.getFun l
+let getLeftFun r =
+  Term.getFun r.lhs
 
 (* Get function symbol from right side *)
-let getRightFun (_, r, _) =
-  Term.getFun r
+let getRightFun r =
+  Term.getFun r.rhs
 
 (* Get function symbols from right side *)
-let getRightFuns (_, r, _) =
-  [Term.getFun r]
+let getRightFuns r =
+  [Term.getFun r.rhs]
 
 (* Return the variables of a rule *)
-let getVars (l, r, c) =
-  Utils.remdup ((Term.getVars l) @ (Term.getVars r) @ (Pc.getVars c))
+let getVars r =
+  Utils.remdup ((Term.getVars r.lhs) @ (Term.getVars r.rhs) @ (Pc.getVars r.cond))
 
 (* Renames the variables in a rule *)
-let rec renameVars badvars (l, r, c) =
-  let vars = getVars (l, r, c) in
+let rec renameVars badvars r =
+  let vars = getVars r in
     let varmapping = createVarMapping badvars vars in
-      (Term.renameVars varmapping l, Term.renameVars varmapping r, Pc.renameVars varmapping c)
+      { lhs = Term.renameVars varmapping r.lhs;
+	rhs = Term.renameVars varmapping r.rhs;
+	cond = Pc.renameVars varmapping r.cond; }
 and createVarMapping badvars vars =
   match vars with
     | [] -> []
@@ -83,34 +88,34 @@ and getNewVarName badvars v =
     v
 
 (* Determines whether a rule is linear *)
-let isLinear (l, r, c) =
-  (Term.isLinear l) && (Term.isLinear r) && (Pc.isLinear c)
+let isLinear r =
+  (Term.isLinear r.lhs) && (Term.isLinear r.rhs) && (Pc.isLinear r.cond)
 
 (* Determines whether right-hand side of a rule is linear *)
-let isRightLinear (_, r, _) =
-  Term.isLinear r
+let isRightLinear r =
+  Term.isLinear r.rhs
 
 (* Determines whether the constraint of a rule is linear *)
-let isConstraintLinear (_, _, c) =
-  Pc.isLinear c
+let isConstraintLinear r =
+  Pc.isLinear r.cond
 
 let rec equal rule1 rule2 =
   rule1 == rule2 || equalInternal rule1 rule2
-and equalInternal (l1, r1, c1) (l2, r2, c2) =
-  (Term.equal l1 l2) && (Term.equal r1 r2) && (Pc.equal c1 c2)
+and equalInternal r1 r2 =
+  (Term.equal r1.lhs r2.lhs) && (Term.equal r1.rhs r2.rhs) && (Pc.equal r1.cond r2.cond)
 
 (* Determines whether V(r) is contained V(l) *)
-let satisfiesVarCond (l, r, _) =
-  Utils.containsAll (Term.getVars l) (Term.getVars r)
+let satisfiesVarCond r =
+  Utils.containsAll (Term.getVars r.lhs) (Term.getVars r.rhs)
 
-let rec internalize (l, r, c) =
-  let lvars = Term.getVars l in
-    let newVars = Utils.notIn lvars (Term.getVars r) in
-      let (sigma, newC) = getSubstitution newVars c lvars in
+let rec internalize r =
+  let lvars = Term.getVars r.lhs in
+    let newVars = Utils.notIn lvars (Term.getVars r.rhs) in
+      let (sigma, newC) = getSubstitution newVars r.cond lvars in
         if sigma = [] then
-          (l, r, c)
+          r
         else
-          (l, Term.instantiate r sigma, newC)
+          { lhs = r.lhs ; rhs = Term.instantiate r.rhs sigma ; cond = newC }
 and getSubstitution newVars c lvars =
   match newVars with
     | [] -> ([], c)
@@ -165,8 +170,9 @@ and remove c d =
                     d'::(remove rest d)
 
 and chainTwoRules rule1 rule2 =
-  let (l, (_, args), c) = rule1 in
-  let ((_, args'), r, c') = renameVars (getVars rule1) rule2 in
+  let (_, args) = rule1.rhs in
+  let renamedRule2 = renameVars (getVars rule1) rule2 in
+  let (_, args') = renamedRule2.rhs in
   let rec remdupC c =
     match c with
       | [] -> []
@@ -177,6 +183,8 @@ and chainTwoRules rule1 rule2 =
       | x::xx -> (getName x, List.hd args)::(getSubstitution (List.tl args) xx)
   and getName poly = List.hd (Poly.getVars poly) in
     let subby = getSubstitution args args' in
-      (l, Term.instantiate r subby, remdupC (c @ (Pc.instantiate c' subby)))
+    { lhs = rule1.lhs ;
+      rhs = Term.instantiate renamedRule2.rhs subby ;
+      cond = remdupC (rule1.cond @ (Pc.instantiate renamedRule2.cond subby)) }
 and isUnary (r : rule) =
   true

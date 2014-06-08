@@ -39,6 +39,13 @@ let rec removeAll l l' =
     | [] -> l
     | e::rest -> removeAll (remove l e) rest
 
+
+(* Removed duplicates from a list, using comparison comp *)
+let rec remdupC comp l =
+  match l with
+    | [] -> []
+    | x::xs -> x::(remdupC comp (List.filter (fun y -> not (comp x y)) xs))
+
 (* Removes the first occurence of an element from a list, using comparison comp *)
 let rec removeC comp l e =
   match l with

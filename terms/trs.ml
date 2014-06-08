@@ -33,21 +33,17 @@ let rec getArityOf f trs =
 and getFterm f trs =
   match trs with
     | [] -> failwith "internal error in Trs.getArityOp"
-    | (l, r, _)::rr -> if (Term.getFun l = f) then
-                         l
-                       else if (Term.getFun r = f) then
-                         r
-                       else
-                         getFterm f rr
+    | r::rr -> 
+	if (Term.getFun (Rule.getLeft r) = f) then
+          (Rule.getLeft r)
+        else if (Term.getFun (Rule.getRight r) = f) then
+          (Rule.getRight r)
+        else
+          getFterm f rr
 
 (* Returns all rules for a function symbol *)
 let rec getRules trs f =
-  match trs with
-    | [] -> []
-    | ((g, args), r, c)::rr -> if f = g then
-                                 ((g, args), r, c)::(getRules rr f)
-                               else
-                                 getRules rr f
+  List.filter (fun r -> Term.getFun (Rule.getLeft r) = f) trs
 
 (* Returns the function symbols of this trs *)
 let getFuns trs =

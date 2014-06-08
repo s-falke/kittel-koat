@@ -49,17 +49,17 @@ eols:
 
 rule :
 | term TO COM OPENPAR term_list CLOSEPAR
-    { ($1, $5, Pc.create []) }
+    { Comrule.create $1 $5 (Pc.create []) }
 | term TO term
-    { ($1, [$3], Pc.create []) }
+    { Comrule.create $1 [$3] (Pc.create []) }
 | term TO COM OPENPAR term_list CLOSEPAR CONSTRAINTSEP cond_list
-    { ($1, $5, Pc.create $8) }
+    { Comrule.create $1 $5 (Pc.create $8) }
 | term TO term CONSTRAINTSEP cond_list
-    { ($1, [$3], Pc.create $5) }
+    { Comrule.create $1 [$3] (Pc.create $5) }
 | term TO COM OPENPAR term_list CLOSEPAR OPENSQ cond_list CLOSESQ
-    { ($1, $5, Pc.create $8) }
+    { Comrule.create $1 $5 (Pc.create $8) }
 | term TO term OPENSQ cond_list CLOSESQ
-    { ($1, [$3], Pc.create $5) }
+    { Comrule.create $1 [$3] (Pc.create $5) }
 ;
 
 term :

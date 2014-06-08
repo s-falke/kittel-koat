@@ -66,7 +66,7 @@ and addSummary (rule, compl, cost) gsc addSizeSummaries exits vars =
         let havocedVars = Utils.removeAll (Term.getVars (Rule.getRight rule)) (Term.getVars (Rule.getLeft rule)) in
           let sizeBoundsForHavocedVars = getSizeBounds max_map havocedVars in
             let sizeBoundsConstraints = getSizeBoundsConstraints sizeBoundsForHavocedVars in
-              List.map (fun c -> ((Rule.getLeft rule, Rule.getRight rule, c), compl, cost)) sizeBoundsConstraints
+              List.map (fun c -> (Rule.create (Rule.getLeft rule) (Rule.getRight rule) c, compl, cost)) sizeBoundsConstraints
   )
 and getMaxMap csmaps =
   match csmaps with
@@ -171,7 +171,7 @@ and getEntries g pre_innerrules vars =
     List.map (getEntry lhs vars) pre_innerrules_funs
 and getEntry lhs vars f =
   let rhs = (f, List.map Poly.fromVar vars) in
-    (lhs, rhs, [])
+    Rule.create lhs rhs []
 and getAddedRVG rvgraph' t' tgraph'' =
   match rvgraph' with
     | None -> None
@@ -183,8 +183,8 @@ and getOuter outerrules innerfuns innerrules count (rcc, g, l) vars tgraph rvgra
   and varsPols' = getHavocedVars innerrules vars
   and inLoopFun = "inner_" ^ (string_of_int count) ^ "_in."
   and outLoopFun = "inner_" ^ (string_of_int count) ^ "_out." in
-    let t' = ((inLoopFun, varsPols), (outLoopFun, varsPols'), [])
-    and tskip = ((inLoopFun, varsPols), (outLoopFun, varsPols), [])
+    let t' = Rule.create (inLoopFun, varsPols) (outLoopFun, varsPols') []
+    and tskip = Rule.create (inLoopFun, varsPols) (outLoopFun, varsPols) []
     and t_pre_post = getPrePostRules innerfuns inLoopFun outLoopFun rcc in
       let t_pre_post_rules = List.map first t_pre_post in
         let tgraph' = getOuterTGraph tgraph outerrules t' tskip t_pre_post_rules in
@@ -205,20 +205,20 @@ and isPreserved rules vars var =
   else
     let idx = Utils.getIdx vars var in
       not (List.exists (isAltered idx) rules)
-and isAltered i (l, r, _) =
-  not (Poly.equal (List.nth (Term.getArgs l) i) (List.nth (Term.getArgs r) i))
+and isAltered i r =
+  not (Poly.equal (List.nth (Term.getArgs (Rule.getLeft r)) i) (List.nth (Term.getArgs (Rule.getRight r)) i))
 and getPrePostRules innerfuns inLoopFun outLoopFun rcc =
   match rcc with
     | [] -> []
-    | ((l, r, c), cc, cost)::rest -> let f = Term.getFun l
-                                     and f' = Term.getFun r
-                                     and tmp = getPrePostRules innerfuns inLoopFun outLoopFun rest in
-                                     if (not (Utils.contains innerfuns f)) && (Utils.contains innerfuns f') then
-                                       ((l, (inLoopFun, Term.getArgs r), c), cc, cost)::tmp
-                                     else if (Utils.contains innerfuns f) && (not (Utils.contains innerfuns f')) then
-                                       (((outLoopFun, Term.getArgs l), r, c), cc, cost)::tmp
-                                     else
-                                       tmp
+    | (r, cc, cost)::rest -> let f = Term.getFun (Rule.getLeft r)
+                             and f' = Term.getFun (Rule.getRight r)
+                             and tmp = getPrePostRules innerfuns inLoopFun outLoopFun rest in
+                             if (not (Utils.contains innerfuns f)) && (Utils.contains innerfuns f') then
+                               (Rule.create (Rule.getLeft r) (inLoopFun, Term.getArgs (Rule.getRight r)) (Rule.getCond r), cc, cost)::tmp
+                             else if (Utils.contains innerfuns f) && (not (Utils.contains innerfuns f')) then
+                               (Rule.create (outLoopFun, Term.getArgs (Rule.getLeft r)) (Rule.getRight r) (Rule.getCond r), cc, cost)::tmp
+                             else
+                             tmp
 and getOuterTGraph tgraph outernodes t' tskip t_pre_post_rules =
   TGraph.addNodes (TGraph.keepNodes tgraph outernodes) ([t';tskip] @ t_pre_post_rules)
 and getOuterRVGraph rvgraph outernodes t' tskip t_pre_post_rules tgraph' =

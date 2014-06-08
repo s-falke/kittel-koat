@@ -42,9 +42,9 @@ eols:
 
 rule :
 | term TO term
-    { ($1, $3, Pc.create []) }
+    { Rule.create $1 $3 (Pc.create []) }
 | term TO term OPENSQ cond_list CLOSESQ
-    { ($1, $3, Pc.create $5) }
+    { Rule.create $1 $3 (Pc.create $5) }
 ;
 
 term :

@@ -103,21 +103,21 @@ and create_poly_map_one cint f =
 
 and get_cwbs toOrient abs =
   List.map (fun r -> convert_rule_to_leqs r abs) toOrient
-and convert_rule_to_leqs (l, rs, c) abs =
-  let lpol = List.assoc (Term.getFun l) abs
-  and rpols = List.map (fun r -> List.assoc (Term.getFun r) abs) rs in
-    let lpolinst = Parapoly.instantiate lpol (Polo.getInstBin (Term.getFun l) (Term.getArgs l) 1)
-    and rpolinsts = List.map2 (fun r rpol -> Parapoly.instantiate rpol (Polo.getInstBin (Term.getFun r) (Term.getArgs r) 1)) rs rpols in
-      if List.length rs = 1 then
+and convert_rule_to_leqs r abs =
+  let lpol = List.assoc (Term.getFun (Comrule.getLeft r)) abs
+  and rpols = List.map (fun r -> List.assoc (Term.getFun r) abs) (Comrule.getRights r) in
+    let lpolinst = Parapoly.instantiate lpol (Polo.getInstBin (Term.getFun (Comrule.getLeft r)) (Term.getArgs (Comrule.getLeft r)) 1)
+    and rpolinsts = List.map2 (fun r rpol -> Parapoly.instantiate rpol (Polo.getInstBin (Term.getFun r) (Term.getArgs r) 1)) (Comrule.getRights r) rpols in
+      if List.length (Comrule.getRights r) = 1 then
         (
-          Farkaspolo.convert_constraint_to_leqs (Pc.dropNonLinearAtoms c),
+          Farkaspolo.convert_constraint_to_leqs (Pc.dropNonLinearAtoms (Comrule.getCond r)),
           [Parapoly.negate (Parapoly.minus lpolinst (List.hd rpolinsts))],
           Parapoly.add (Parapoly.negate lpolinst) ([], ([], Big_int.unit_big_int))
         )
       else
         let rights = getAllRights rpolinsts in
           (
-            Farkaspolo.convert_constraint_to_leqs (Pc.dropNonLinearAtoms c),
+            Farkaspolo.convert_constraint_to_leqs (Pc.dropNonLinearAtoms (Comrule.getCond r)),
             List.map (fun right -> Parapoly.negate (Parapoly.minus lpolinst right)) rights,
             Parapoly.add (Parapoly.negate lpolinst) ([], ([], Big_int.unit_big_int))
           )

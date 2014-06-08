@@ -18,58 +18,63 @@
   limitations under the License.
 *)
 
-type rule = Term.term * Term.term list * Pc.cond
+type rule = { lhs : Term.term ; rhss : Term.term list ; cond : Pc.cond }
+
+(* Create a comrule. *)
+let create l rs c = { lhs = l; rhss = rs; cond = c }
 
 (* Create a string for a rule *)
-let rec toString (l, rs, c) =
-  (Term.toString l) ^ " -> " ^ (toStringRhss rs) ^
-  (if c = [] then "" else " [ " ^ (Pc.toString c) ^ " ]")
+let rec toString r =
+  (Term.toString r.lhs) ^ " -> " ^ (toStringRhss r.rhss) ^
+  (if r.cond = [] then "" else " [ " ^ (Pc.toString r.cond) ^ " ]")
 and toStringRhss rs =
   "Com_" ^ (string_of_int (List.length rs)) ^ "(" ^
   String.concat ", " (List.map Term.toString rs) ^ ")"
 
 (* Create a string for a rule *)
-let toDotString (l, rs, c) =
-  (Term.toString l) ^ " -> " ^ (toStringRhss rs) ^
-  (if c = [] then "" else " [ " ^ (Pc.toDotString c) ^ " ]")
+let toDotString r =
+  (Term.toString r.lhs) ^ " -> " ^ (toStringRhss r.rhss) ^
+  (if r.cond = [] then "" else " [ " ^ (Pc.toDotString r.cond) ^ " ]")
 
 (* Get lhs of a rule *)
-let getLeft (l, _, _) =
-  l
+let getLeft r =
+  r.lhs
 
 (* Get rhs of a rule *)
-let getRights (_, rs, _) =
-  rs
+let getRights r =
+  r.rhss
 
 (* Get cond of a rule *)
-let getCond (_, _, c) =
-  c
+let getCond r =
+  r.cond
 
 (* Get function symbols from both sides *)
-let getFuns (l, rs, _) =
-  Utils.remdup ((Term.getFun l)::(List.map Term.getFun rs))
+let getFuns r =
+  Utils.remdup ((Term.getFun r.lhs)::(List.map Term.getFun r.rhss))
 
 (* Get function symbol from left side *)
-let getLeftFun (l, _, _) =
-  Term.getFun l
+let getLeftFun r =
+  Term.getFun r.lhs
 
 (* Get function symbols from right side *)
-let getRightFuns (_, rs, _) =
-  Utils.remdup (List.map Term.getFun rs)
+let getRightFuns r =
+  Utils.remdup (List.map Term.getFun r.rhss)
 
 (* Return the variables in the right-hand sides *)
-let getRightVars (_, rs, _) =
-  Utils.remdup (List.flatten (List.map Term.getVars rs))
+let getRightVars r =
+  Utils.remdup (Utils.concatMap Term.getVars r.rhss)
 
 (* Return the variables of a rule *)
-let getVars (l, rs, c) =
-  Utils.remdup ((Term.getVars l) @ (getRightVars (l, rs, c)) @ (Pc.getVars c))
+let getVars r =
+  Utils.remdup ((Term.getVars r.lhs) @ (getRightVars r) @ (Pc.getVars r.cond))
 
 (* Renames the variables in a rule *)
-let rec renameVars badvars (l, rs, c) =
-  let vars = getVars (l, rs, c) in
+let rec renameVars badvars r =
+  let vars = getVars r in
     let varmapping = createVarMapping badvars vars in
-      (Term.renameVars varmapping l, List.map (Term.renameVars varmapping) rs, Pc.renameVars varmapping c)
+      { lhs = Term.renameVars varmapping r.lhs;
+        rhss = List.map (Term.renameVars varmapping) r.rhss;
+        cond = Pc.renameVars varmapping r.cond }
 and createVarMapping badvars vars =
   match vars with
     | [] -> []
@@ -82,35 +87,40 @@ and getNewVarName badvars v =
     v
 
 (* Determines whether a rule is linear *)
-let isLinear (l, rs, c) =
-  (Term.isLinear l) && (List.for_all Term.isLinear rs) && (Pc.isLinear c)
+let isLinear r =
+  (Term.isLinear r.lhs) && (List.for_all Term.isLinear r.rhss) && (Pc.isLinear r.cond)
 
 (* Determines whether right-hand sides of a rule are linear *)
-let isRightLinear (_, rs, _) =
-  List.for_all Term.isLinear rs
+let isRightLinear r =
+  List.for_all Term.isLinear r.rhss
 
 (* Determines whether the constraint of a rule is linear *)
-let isConstraintLinear (_, _, c) =
-  Pc.isLinear c
+let isConstraintLinear r =
+  Pc.isLinear r.cond
 
 let rec equal rule1 rule2 =
   rule1 == rule2 || equalInternal rule1 rule2
-and equalInternal (l1, rs1, c1) (l2, rs2, c2) =
-  (List.length rs1) = (List.length rs2) && (Term.equal l1 l2) && (List.for_all2 Term.equal rs1 rs2) && (Pc.equal c1 c2)
+and equalInternal rule1 rule2 =
+  (List.length rule1.rhss) = (List.length rule2.rhss) 
+    && (Term.equal rule1.lhs rule2.lhs) 
+    && (List.for_all2 Term.equal rule1.rhss rule2.rhss) 
+    && (Pc.equal rule1.cond rule2.cond)
 
 (* Determines whether V(rs) is contained V(l) *)
-let satisfiesVarCond (l, rs, _) =
-  Utils.containsAll (Term.getVars l) (Utils.remdup (List.flatten (List.map Term.getVars rs)))
+let satisfiesVarCond r =
+  Utils.containsAll (Term.getVars r.lhs) (Utils.remdup (List.flatten (List.map Term.getVars r.rhss)))
 
-let rec internalize (l, rs, c) =
-  let lvars = Term.getVars l
-  and rvars = getRightVars (l, rs, c) in
+let rec internalize r =
+  let lvars = Term.getVars r.lhs
+  and rvars = getRightVars r in
     let newVars = Utils.notIn lvars rvars in
-      let (sigma, newC) = getSubstitution newVars c lvars in
+      let (sigma, newC) = getSubstitution newVars r.cond lvars in
         if sigma = [] then
-          (l, rs, c)
+          r
         else
-          (l, List.map (fun r -> Term.instantiate r sigma) rs, newC)
+          { lhs = r.lhs;
+            rhss = List.map (fun r -> Term.instantiate r sigma) r.rhss;
+            cond = newC; }
 and getSubstitution newVars c lvars =
   match newVars with
     | [] -> ([], c)
@@ -165,20 +175,20 @@ and remove c d =
                     d'::(remove rest d)
 
 (* only one rhs? *)
-let isUnary (_, rs, c) =
-  List.length rs = 1
+let isUnary r =
+  List.length r.rhss = 1
 
 (* Instantiate a rule *)
-let instantiate (l, rs, c) varmap =
-  (Term.instantiate l varmap, List.map (fun r -> Term.instantiate r varmap) rs, Pc.instantiate c varmap)
+let instantiate r varmap =
+  { lhs = Term.instantiate r.lhs varmap;
+    rhss = List.map (fun r -> Term.instantiate r varmap) r.rhss;
+    cond = Pc.instantiate r.cond varmap;}
 
 let chainTwoRules rule1 rule2 =
   if (not (isUnary rule1)) then
     failwith "Trying to chain rule1 and rule2 where rule1 is non-unary"
   else
-  let l = getLeft rule1
-  and args = Term.getArgs (List.hd (getRights rule1))
-  and c = getCond rule1
+  let args = Term.getArgs (List.hd (getRights rule1))
   and rule2' = renameVars (getVars rule1) rule2 in
   let rec remdupC c =
     match c with
@@ -190,9 +200,22 @@ let chainTwoRules rule1 rule2 =
       | x::xx -> (getName x, List.hd args)::(getSubstitution (List.tl args) xx)
   and getName poly =
     List.hd (Poly.getVars poly) in
-    let args' = Term.getArgs (getLeft rule2')
-    and rs = getRights rule2'
-    and c' = getCond rule2' in
+    let args' = Term.getArgs (getLeft rule2') in
       let subby = getSubstitution args args' in
-        (l, List.map (fun r -> Term.instantiate r subby) rs, remdupC (c @ (Pc.instantiate c' subby)))
+        { lhs = rule1.lhs;
+          rhss = List.map (fun r -> Term.instantiate r subby) rule2'.rhss;
+          cond = remdupC (rule1.cond @ (Pc.instantiate rule2'.cond subby))}
 
+
+let removeNeq r =
+  let rec removeNeqConstraint c =
+    let addIn atom cs = List.map (fun c -> atom::c) cs in
+    match c with
+    | [] -> [[]]
+    | a::rest -> let c's = removeNeqConstraint rest in
+      match a with
+      | Pc.Neq (l, r) -> (addIn (Pc.Gtr (l, r)) c's) @ (addIn (Pc.Lss (l, r)) c's)
+      | _ -> addIn a c's
+  in
+  let c's = removeNeqConstraint r.cond in
+    List.map (fun c' -> {lhs = r.lhs ; rhss = r.rhss ; cond = c' }) c's

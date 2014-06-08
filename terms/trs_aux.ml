@@ -51,12 +51,8 @@ let rec getTrs chan =
           )
 and remdup trs =
   List.map remdupRule trs
-and remdupRule (l, r, c) =
-  (l, r, remdupC c)
-and remdupC c =
-  match c with
-    | [] -> []
-    | x::xs -> x::(remdupC (List.filter (fun y -> not (Pc.equalAtom x y)) xs))
+and remdupRule r =
+  Rule.create (Rule.getLeft r) (Rule.getRight r) (Utils.remdupC Pc.equalAtom (Rule.getCond r))
 and check trs =
   match trs with
     | [] -> raise (ParseException (0, 0, "A TRS cannot be empty!"))
@@ -72,7 +68,7 @@ and check_arity_fun trs f =
 and getArities trs f =
   match trs with
     | [] -> []
-    | (l, r, _)::rr -> (getAritiesOne l f) @ (getAritiesOne r f) @ (getArities rr f)
+    | r::rr -> (getAritiesOne (Rule.getLeft r) f) @ (getAritiesOne (Rule.getRight r) f) @ (getArities rr f)
 and getAritiesOne (f, args) g =
   if f = g then
     [ List.length args ]

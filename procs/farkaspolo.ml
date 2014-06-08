@@ -49,13 +49,14 @@ let rec process trs tgraph isScc =
 (* get <= constraints *)
 and convert_rules_to_leqs trs abs lowerbound =
   List.map (fun r -> convert_rule_to_leqs r abs lowerbound) trs
-and convert_rule_to_leqs (l, r, c) abs lowerbound =
-  let lpol = List.assoc (Term.getFun l) abs
-  and rpol = List.assoc (Term.getFun r) abs in
-    let lpolinst = Parapoly.instantiate lpol (Polo.getInstBin (Term.getFun l) (Term.getArgs l) 1)
-    and rpolinst = Parapoly.instantiate rpol (Polo.getInstBin (Term.getFun r) (Term.getArgs r) 1) in
+and convert_rule_to_leqs r abs lowerbound =
+  let (lhs, rhs, cond) = (Rule.getLeft r, Rule.getRight r, Rule.getCond r) in
+  let lpol = List.assoc (Term.getFun lhs) abs
+  and rpol = List.assoc (Term.getFun rhs) abs in
+    let lpolinst = Parapoly.instantiate lpol (Polo.getInstBin (Term.getFun lhs) (Term.getArgs lhs) 1)
+    and rpolinst = Parapoly.instantiate rpol (Polo.getInstBin (Term.getFun rhs) (Term.getArgs rhs) 1) in
       (
-        convert_constraint_to_leqs (Pc.dropNonLinearAtoms c),
+        convert_constraint_to_leqs (Pc.dropNonLinearAtoms cond),
         Parapoly.negate (Parapoly.minus lpolinst rpolinst),
         Parapoly.add (Parapoly.negate lpolinst) ([], ([], lowerbound))
     )

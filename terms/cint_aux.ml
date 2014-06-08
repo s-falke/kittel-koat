@@ -60,12 +60,8 @@ and getCint chan =
 
 and remdup cint =
   List.map remdupComrule cint
-and remdupComrule (l, rs, c) =
-  (l, rs, remdupC c)
-and remdupC c =
-  match c with
-    | [] -> []
-    | x::xs -> x::(remdupC (List.filter (fun y -> not (Pc.equalAtom x y)) xs))
+and remdupComrule r =
+  Comrule.create (Comrule.getLeft r) (Comrule.getRights r) (Utils.remdupC Pc.equalAtom (Comrule.getCond r))
 
 and check cint =
   match cint with
@@ -82,7 +78,7 @@ and check_arity_fun cint f =
 and getArities cint f =
   match cint with
     | [] -> []
-    | (l, rs, _)::rr -> (getAritiesOne l f) @ (List.flatten (List.map (fun r -> getAritiesOne r f) rs)) @ (getArities rr f)
+    | r::rr -> (getAritiesOne (Comrule.getLeft r) f) @ (Utils.concatMap (fun r -> getAritiesOne r f) (Comrule.getRights r)) @ (getArities rr f)
 and getAritiesOne (f, args) g =
   if f = g then
     [ List.length args ]
@@ -122,14 +118,20 @@ and createFunMapping funs used =
                    (f, fnew)::(createFunMapping ff (fnew::used))
                  else
                    (f, f)::(createFunMapping ff used)
-and applyFunMapping mapping (l, rs, c) =
-  (applyFunMappingTerm mapping l, List.map (applyFunMappingTerm mapping) rs, c)
+and applyFunMapping mapping r =
+  Comrule.create
+    (applyFunMappingTerm mapping (Comrule.getLeft r))
+    (List.map (applyFunMappingTerm mapping) (Comrule.getRights r))
+    (Comrule.getCond r)
 and applyFunMappingTerm mapping (f, args) =
   (List.assoc f mapping, args)
-and sanitizeRule (l, rs, c) =
-  let vars = Comrule.getVars (l, rs, c) in
+and sanitizeRule r =
+  let vars = Comrule.getVars r in
     let varmapping = createVarMapping vars vars in
-      (Term.renameVars varmapping l, List.map (Term.renameVars varmapping) rs, Pc.renameVars varmapping c)
+      Comrule.create
+        (Term.renameVars varmapping (Comrule.getLeft r))
+        (List.map (fun rhs -> Term.renameVars varmapping rhs) (Comrule.getRights r))
+        (Pc.renameVars varmapping (Comrule.getCond r))
 and createVarMapping vars used =
   match vars with
     | [] -> []
@@ -158,19 +160,7 @@ and attachPrimes cand used =
     cand
 
 and removeNeq trs =
-  List.flatten (List.map removeNeqRule trs)
-and removeNeqRule (l, r, c) =
-  let c's = removeNeqConstraint c in
-    List.map (fun c' -> (l, r, c')) c's
-and removeNeqConstraint c =
-  match c with
-    | [] -> [[]]
-    | a::rest -> let c's = removeNeqConstraint rest in
-                   match a with
-                     | Pc.Neq (l, r) -> (addIn (Pc.Gtr (l, r)) c's) @ (addIn (Pc.Lss (l, r)) c's)
-                     | _ -> addIn a c's
-and addIn atom cs =
-  List.map (fun c -> atom::c) cs
+  Utils.concatMap Comrule.removeNeq trs
 
 and internalize cint =
   List.map Comrule.internalize cint
