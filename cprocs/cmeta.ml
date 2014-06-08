@@ -96,8 +96,8 @@ let rec process trs maxchaining startfun =
         Some (getComplexity tgraph globalSizeComplexities vars !todo, getProof initial !input_nums !output_nums !proofs)
 and processInner rccgltrv =
   let vars = Term.getVars (Rule.getLeft (first (List.hd (first (first rccgltrv)))))
-  and initial = (first rccgltrv, second rccgltrv, third rccgltrv, (1 + sep * (!done_inner + 1)))
-  and old_i = !i
+  and initial = (first rccgltrv, second rccgltrv, third rccgltrv, (1 + sep * (!done_inner + 1))) in
+  let old_i = !i
   and old_proofs = !proofs
   and old_input_nums = !input_nums
   and old_output_nums = !output_nums
@@ -166,7 +166,8 @@ and run proc =
           ()
         else
           match (proc rccgl tgraph rvgraph) with
-            | None -> ()
+            | None ->
+	      ()
             | Some (nrccgl, p) -> update nrccgl p ini
       )
 
@@ -189,6 +190,44 @@ and insertRVGraphIfNeeded () =
     | (rcggl, tgraph, None, ini) -> let lscs = LSC.computeLocalSizeComplexities (List.map first (first rcggl)) in
                                       todo := (rcggl, tgraph, Some (RVG.compute lscs tgraph), ini)
 
+(*
+ Heuristic:
+  guardVars(  l -> r [g] ) = Vars(g)
+  updateVars( l -> r [g] ) = Vars(r) \ { v' \in Vars(r) | v = v' \in g }
+  Natural lift to rule sets
+  Take Sub-SCC S' of S if guardVars(S) \cap updateVars(S') = \emptyset
+*)
+
+and selectSubSCC sccFuns (sccTrans : Rule.rule list) =
+  let powSet s = List.fold_left (fun state ele -> Utils.concatMap (fun s -> [s ; ele::s]) state) [[]] s in
+  let funSubsets = List.tl (powSet sccFuns) in (* First one is the empty set *)
+  let checkFunSubsetCand funSubset =
+    let transSubset = List.filter (fun rule -> Utils.contains funSubset (Rule.getLeftFun rule) && Utils.contains funSubset (Rule.getRightFun rule)) sccTrans in 
+    let (funsWithIn', funsWithOut') = List.fold_left (fun (ins, outs) rule -> ((Rule.getLeftFun rule)::ins, (Rule.getRightFun rule)::outs)) ([], []) transSubset in
+    let funsWithIn = Utils.remdup funsWithIn' in
+    let funsWithOut = Utils.remdup funsWithOut' in
+    let funNumber = List.length funSubset in
+    if (funNumber > 0) && (List.length funsWithIn = funNumber) && (List.length funsWithOut = funNumber) then (* is SCC *)
+    (
+      let outerTransSet = Utils.removeAllC Rule.equal sccTrans transSubset in
+      let outerGuardVars = Utils.remdup (Utils.concatMap (fun rule -> Pc.getVars (Rule.getCond rule)) outerTransSet) in
+      let extractUpdatedVars rule =
+        let oldNewPairs = List.combine (Term.getArgs (Rule.getLeft rule)) (Term.getArgs (Rule.getRight rule)) in
+        Utils.concatMap (fun (oldV, newV) -> if (not (Poly.equal oldV newV)) then Poly.getVars oldV else []) oldNewPairs
+      in
+      let innerUpdatedVars = Utils.remdup (Utils.concatMap extractUpdatedVars transSubset) in
+      List.exists (fun v -> Utils.contains outerGuardVars v) innerUpdatedVars
+    )
+    else false
+  in
+  Utils.tryFind checkFunSubsetCand funSubsets
+
+and selectSCC rcc sccRules =
+  if List.for_all (fun r -> not(CTRS.hasUnknownComplexity rcc r)) sccRules then
+    None
+  else
+    let sccFuns = Utils.remdup (Utils.concatMap Rule.getFuns sccRules) in
+    selectSubSCC sccFuns sccRules
 
 and getInnerFuns () =
   match !todo with
@@ -206,17 +245,36 @@ and getInnerFuns () =
                             l'
       )
 
+
+
 and doLoop () =
   doUnreachableRemoval ();
   doKnowledgePropagation ();
-  doFarkasConstant ()
+  doSeparate () ; (* doFarkasConstant () *)
 and doUnreachableRemoval () =
   run UnreachableProc.process
 and doKnowledgePropagation () =
   run KnowledgeProc.process
 and doSeparate () =
-  let l' = getInnerFuns () in
-    run_ite (Cseparate.process processInner l' true (!done_inner + 1) sep) doLoop doFarkasConstant
+  match !todo with
+    | (rccgl, tgraph, _, _) ->
+      (
+        let sccs = TGraph.getNontrivialSccs tgraph in
+        let rec findSubSCC rcc sccs =
+	  match sccs with
+	    | [] -> None
+	    | scc::restSCCs ->
+		match selectSCC rcc scc with
+		  | Some innerFuns -> Some innerFuns
+		  | None -> findSubSCC rcc restSCCs
+        in
+	match findSubSCC (first rccgl) sccs with
+	  | Some innerFuns -> 
+	      (
+	      run_ite (Cseparate.process processInner innerFuns true (!done_inner + 1) sep) doLoop doFarkasConstant
+	      )
+	  | None -> doFarkasConstant ()
+      )
 and doFarkasConstant () =
   run_ite (Cfarkaspolo.process false false 0) doLoop doFarkasConstantSizeBound
 and doFarkasConstantSizeBound () =

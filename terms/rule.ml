@@ -55,6 +55,10 @@ let getLeftFun (l, _, _) =
   Term.getFun l
 
 (* Get function symbol from right side *)
+let getRightFun (_, r, _) =
+  Term.getFun r
+
+(* Get function symbols from right side *)
 let getRightFuns (_, r, _) =
   [Term.getFun r]
 

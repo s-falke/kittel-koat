@@ -37,13 +37,15 @@ let rec process innerprover l' addSizeSummaries sep sepNumberMultiplier (rcc, g,
       let tmp = split (rcc, g, l) l' (sep * sepNumberMultiplier) vars tgraph rvgraph in
         match tmp with
           | None -> None
-          | Some (inner, outer, exits) -> let subproof = innerprover inner in
-                                          (
-                                            match subproof with
-                                              | None -> None
-                                              | Some (compl, gsc, proof) -> let realouter = fixLoopSummary outer compl gsc addSizeSummaries exits vars in
-                                                                              Some (realouter, fun ini outi -> getProof sep sepNumberMultiplier ini outi inner proof realouter)
-                                          )
+          | Some (inner, outer, exits) -> 
+	      let subproof = innerprover inner in
+              (
+                match subproof with
+                  | None -> None
+                  | Some (compl, gsc, proof) -> 
+		      let realouter = fixLoopSummary outer compl gsc addSizeSummaries exits vars in
+                      Some (realouter, fun ini outi -> getProof sep sepNumberMultiplier ini outi inner proof realouter)
+              )
   )
 and fixLoopSummary ((rcc, g, l), tgraph, rvgraph) compl gsc addSizeSummaries exits vars =
   let firstRCC = List.hd rcc in

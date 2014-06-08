@@ -39,6 +39,21 @@ let rec removeAll l l' =
     | [] -> l
     | e::rest -> removeAll (remove l e) rest
 
+(* Removes the first occurence of an element from a list, using comparison comp *)
+let rec removeC comp l e =
+  match l with
+    | [] -> []
+    | x::xs -> if comp x e then
+                 xs
+               else
+                 x::(removeC comp xs e)
+
+(* Removes the first occurence of each element from a list from another list, using comparison comp *)
+let rec removeAllC comp l l' =
+  match l' with
+    | [] -> l
+    | e::rest -> removeAllC comp (removeC comp l e) rest
+
 (* Get a list containing the integers from i through n *)
 let rec getList i n =
   if i > n then
@@ -152,3 +167,11 @@ and getIdxAux l e i =
                     i
                   else
                     getIdxAux rest e (i + 1)
+
+let concatMap f l =
+  List.fold_right (fun v acc -> (f v) @ acc) l []
+
+let rec tryFind f l =
+  match l with
+  | e::rest -> if f e then Some e else tryFind f rest
+  | []      -> None
