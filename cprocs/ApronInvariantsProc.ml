@@ -295,7 +295,7 @@ let process (rcc, g, l) tgraph rvgraph =
     None
   else
     (
-      let man = Oct.manager_alloc () in
+      let man = Box.manager_alloc () in
       match add_invariants man rcc g with
       | None ->
         None

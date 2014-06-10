@@ -47,13 +47,12 @@ let rec process innerprover l' addSizeSummaries sep sepNumberMultiplier (rcc, g,
                       Some (realouter, fun ini outi -> getProof sep sepNumberMultiplier ini outi inner proof realouter)
               )
   )
-and fixLoopSummary ((rcc, g, l), tgraph, rvgraph) compl gsc addSizeSummaries exits vars =
-  let firstRCC = List.hd rcc in
-    let fixedFirstRCC = fixWeight firstRCC compl in
-      let summaryFixedFirstRCC = addSummary fixedFirstRCC gsc addSizeSummaries exits vars in
-        let tgraph' = TGraph.addNodes (TGraph.removeNodes tgraph [first firstRCC]) (List.map first summaryFixedFirstRCC) in
-          let rvgraph' = getFixedRVGraph rvgraph firstRCC summaryFixedFirstRCC tgraph' in
-            ((summaryFixedFirstRCC @ (List.tl rcc), g, l), tgraph', rvgraph')
+and fixLoopSummary ((summaryTransTemplate, weightTrans, (rcc, g, l)), tgraph, rvgraph) compl gsc addSizeSummaries exits vars =
+  let weightTrans = fixWeight weightTrans compl in
+  let summaryTranss = addSummary summaryTransTemplate gsc addSizeSummaries exits vars in
+  let tgraph' = TGraph.addNodes (TGraph.removeNodes tgraph [first summaryTransTemplate]) (List.map first summaryTranss) in
+  let rvgraph' = getFixedRVGraph rvgraph summaryTransTemplate summaryTranss tgraph' in
+  (((weightTrans :: summaryTranss) @ rcc, g, l), tgraph', rvgraph')
 and fixWeight (r, c, _) compl =
   (r, c, Complexity.getExpexp compl)
 and addSummary (rule, compl, cost) gsc addSizeSummaries exits vars =
@@ -179,18 +178,29 @@ and getAddedRVG rvgraph' t' tgraph'' =
                     Some (RVG.addNodes rvg newRulesWithLSCs tgraph'')
 
 and getOuter outerrules innerfuns innerrules count (rcc, g, l) vars tgraph rvgraph =
-  let varsPols = List.map Poly.fromVar vars
-  and varsPols' = getHavocedVars innerrules vars
-  and inLoopFun = "inner_" ^ (string_of_int count) ^ "_in."
-  and outLoopFun = "inner_" ^ (string_of_int count) ^ "_out." in
-    let t' = Rule.create (inLoopFun, varsPols) (outLoopFun, varsPols') []
-    and tskip = Rule.create (inLoopFun, varsPols) (outLoopFun, varsPols) []
-    and t_pre_post = getPrePostRules innerfuns inLoopFun outLoopFun rcc in
-      let t_pre_post_rules = List.map first t_pre_post in
-        let tgraph' = getOuterTGraph tgraph outerrules t' tskip t_pre_post_rules in
-          let rvgraph' = getOuterRVGraph rvgraph outerrules t' tskip t_pre_post_rules tgraph'
-          and rules' = [(t', Complexity.Unknown, Expexp.zero); (tskip, Complexity.Unknown, Expexp.zero)] @ t_pre_post @ (get_only rcc outerrules) in
-            ((rules', g, l), tgraph', rvgraph')
+  let varsPols = List.map Poly.fromVar vars in
+  let varsPols' = getHavocedVars innerrules vars in
+  let inLoopFun = "inner_" ^ (string_of_int count) ^ "_in." in 
+  let tmpFun = "inner_" ^ (string_of_int count) ^ "_compl." in 
+  let outLoopFun = "inner_" ^ (string_of_int count) ^ "_out." in
+    (* Difference from paper: 
+       Instead of t' = (_in., _, _out.) with cost (cost of separated), we
+       create two transitions here:
+       - costTrans, which we will later fix up to have the
+       cost of the separated SCC
+       - summaryTransTemplate, which will later be fixed to have a label
+       summarizing the change to values. *)
+  let costTrans = Rule.create (inLoopFun, varsPols) (tmpFun, varsPols) [] in
+  let summaryTransTemplate = Rule.create (tmpFun, varsPols) (outLoopFun, varsPols') [] in
+  let tskip = Rule.create (inLoopFun, varsPols) (outLoopFun, varsPols) [] in
+  let t_pre_post = getPrePostRules innerfuns inLoopFun outLoopFun rcc in
+  let t_pre_post_rules = List.map first t_pre_post in
+  let tgraph' = getOuterTGraph tgraph outerrules [tskip ; costTrans ; summaryTransTemplate] t_pre_post_rules in
+  let rvgraph' = getOuterRVGraph rvgraph outerrules [tskip ; costTrans ; summaryTransTemplate] t_pre_post_rules tgraph' in
+  let outerRules' = ((tskip, Complexity.Unknown, Expexp.zero) :: t_pre_post) @ (get_only rcc outerrules) in
+  (((summaryTransTemplate, Complexity.Unknown, Expexp.zero),
+    (costTrans, Complexity.Unknown, Expexp.zero),
+    (outerRules', g, l)), tgraph', rvgraph')
 and getHavocedVars innerrules vars =
   let preserved = List.filter (isPreserved innerrules vars) vars in
     List.map Poly.fromVar (List.map (getHavocedVar preserved) vars)
@@ -219,12 +229,12 @@ and getPrePostRules innerfuns inLoopFun outLoopFun rcc =
                                (Rule.create (outLoopFun, Term.getArgs (Rule.getLeft r)) (Rule.getRight r) (Rule.getCond r), cc, cost)::tmp
                              else
                              tmp
-and getOuterTGraph tgraph outernodes t' tskip t_pre_post_rules =
-  TGraph.addNodes (TGraph.keepNodes tgraph outernodes) ([t';tskip] @ t_pre_post_rules)
-and getOuterRVGraph rvgraph outernodes t' tskip t_pre_post_rules tgraph' =
+and getOuterTGraph tgraph outernodes addedTrans t_pre_post_rules =
+  TGraph.addNodes (TGraph.keepNodes tgraph outernodes) (addedTrans @ t_pre_post_rules)
+and getOuterRVGraph rvgraph outernodes addedTrans t_pre_post_rules tgraph' =
   match rvgraph with
     | None -> None
-    | Some rvg -> let newRulesWithLSCs = LSC.computeLocalSizeComplexities ([t';tskip] @ t_pre_post_rules) in
+    | Some rvg -> let newRulesWithLSCs = LSC.computeLocalSizeComplexities (addedTrans @ t_pre_post_rules) in
                     Some (RVG.addNodes (RVG.keepNodes rvg outernodes) newRulesWithLSCs tgraph')
 
 and getNewRVG rvgraph keepnodes =
