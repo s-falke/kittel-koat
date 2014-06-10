@@ -105,7 +105,7 @@ and renameAtom varmapping atom =
 
 (* Get the variables in a constraint *)
 let rec getVars f =
-  Utils.remdup (List.flatten (List.map getVarsAtom f))
+  Utils.remdup (Utils.concatMap getVarsAtom f)
 and getVarsAtom atom =
   match atom with
     | Equ (l, r) -> (Poly.getVars l) @ (Poly.getVars r)

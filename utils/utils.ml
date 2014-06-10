@@ -89,6 +89,9 @@ let containsAll l l' =
 let containsOne l l' =
   List.exists (contains l) l'
 
+let rec containsC c l e =
+  List.exists (fun t -> c t e) l
+
 (* Get last element of l *)
 let rec last l =
   match l with

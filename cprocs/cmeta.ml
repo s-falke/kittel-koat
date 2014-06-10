@@ -18,6 +18,8 @@
   limitations under the License.
 *)
 
+open ApronInvariantsProc
+
 module CTRS = Ctrs.Make(Rule)
 module RVG = Rvgraph.Make(Rule)
 module LSC = LocalSizeComplexity.Make(Rule)
@@ -86,7 +88,7 @@ let rec process trs maxchaining startfun =
         ChainProc.done_chaining := 0;
         run UnsatProc.process;
         run Cleaf.process;
-        doLoop ();
+        doInitial ();
         proofs := List.rev !proofs;
         input_nums := List.rev !input_nums;
         output_nums := List.rev !output_nums;
@@ -111,7 +113,7 @@ and processInner rccgltrv =
     todo := initial;
     ChainProc.done_chaining := 0;
     incr done_inner;
-    doLoop ();
+    doInitial ();
     proofs := List.rev !proofs;
     input_nums := List.rev (List.map (fun i -> i + sep * !done_inner) !input_nums);
     output_nums := List.rev (List.map (fun i -> i + sep * !done_inner) !output_nums);
@@ -246,11 +248,14 @@ and getInnerFuns () =
       )
 
 
-
+and doInitial () =
+  doLoop ();
 and doLoop () =
   doUnreachableRemoval ();
   doKnowledgePropagation ();
   doSeparate () ; (* doFarkasConstant () *)
+and doApronInvariants () =
+  run ApronInvariantsProc.process
 and doUnreachableRemoval () =
   run UnreachableProc.process
 and doKnowledgePropagation () =
@@ -271,10 +276,13 @@ and doSeparate () =
 	match findSubSCC (first rccgl) sccs with
 	  | Some innerFuns -> 
 	      (
-	      run_ite (Cseparate.process processInner innerFuns true (!done_inner + 1) sep) doLoop doFarkasConstant
+	      run_ite (Cseparate.process processInner innerFuns true (!done_inner + 1) sep) doSeparationCleanup doFarkasConstant
 	      )
 	  | None -> doFarkasConstant ()
       )
+and doSeparationCleanup () =
+  doApronInvariants () ;
+  doLoop () ;  
 and doFarkasConstant () =
   run_ite (Cfarkaspolo.process false false 0) doLoop doFarkasConstantSizeBound
 and doFarkasConstantSizeBound () =

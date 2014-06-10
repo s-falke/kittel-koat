@@ -1,5 +1,5 @@
-LIBPATH=-cflags -I,+ocamlgraph -lflags -I,+ocamlgraph
-LIBS=-libs graph,unix,nums,str
+LIBPATH=-cflags -I,+ocamlgraph -cflags -I,+apron -lflags -I,+ocamlgraph -lflags -I,+apron
+LIBS=-libs graph,unix,nums,str,bigarray,gmp,apron,boxMPQ,octD
 OPTS=-cflags -warn-error,+a
 
 default: kittel koat

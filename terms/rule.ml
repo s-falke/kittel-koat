@@ -188,3 +188,38 @@ and chainTwoRules rule1 rule2 =
       cond = remdupC (rule1.cond @ (Pc.instantiate renamedRule2.cond subby)) }
 and isUnary (r : rule) =
   true
+
+(* Rename variables on lhs to X_1, ..., X_N, on rhs to X_1', ..., X_M', and in cond to Y_1 ... Y_K *)
+let standardize rule =
+  let polyGetName p = List.hd (Poly.getVars p) in
+  let (_, lhsArgs, lhsSubst) =
+    List.fold_left
+      (fun (i, args, subst) v -> let newV = Poly.fromVar ("X_" ^ string_of_int i) in (i + 1, args @ [newV], (polyGetName v, newV) :: subst))
+      (1, [], [])
+      (Term.getArgs rule.lhs) in
+  let (_, rhsArgs, rhsCond, rhsSubst) =
+    List.fold_left
+      (fun (i, args, cond, subst) a ->
+        let newV = Poly.fromVar ("X_" ^ string_of_int i ^ "'") in
+        (* Do not introduce equality when this is just a var, we'll just replace it by its new name. *)
+        if Poly.isVar a then
+          if Utils.containsC Poly.equal (Term.getArgs rule.lhs) a then (* if it's a lhs var, we need it. *)
+            (i + 1, args @ [newV], (Pc.Equ(a, newV)) :: cond, (polyGetName a, newV) :: subst)
+          else
+            (i + 1, args @ [newV], cond, (polyGetName a, newV) :: subst)
+        else
+          (i + 1, args @ [newV], (Pc.Equ(a, newV)) :: cond, subst))
+      (1, [], [], [])
+      (Term.getArgs rule.rhs) in
+  let freshVars =
+    Utils.removeAll
+      (Utils.remdup ((Pc.getVars rule.cond) @ (Term.getVars rule.rhs)))
+      ((Term.getVars rule.lhs) @ (List.map fst rhsSubst)) in
+  let condSubst =
+    List.mapi
+      (fun i v -> let newV = Poly.fromVar ("Y_" ^ string_of_int i) in (v, newV))
+      freshVars in
+  { lhs = (Term.getFun rule.lhs, lhsArgs) ;
+    rhs = (Term.getFun rule.rhs, rhsArgs) ;
+    cond = Pc.instantiate (Pc.instantiate (rule.cond @ rhsCond) (lhsSubst @ rhsSubst)) condSubst ;
+  }

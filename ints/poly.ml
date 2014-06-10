@@ -85,11 +85,11 @@ and get_constant monolist accu =
                        get_constant l (accu @ [(c, mon)])
 
 (* Returns a variable as a polynomial *)
-let fromVar x =
-  ([(Big_int.unit_big_int, [(x, 1)])], Big_int.zero_big_int)
-
 let fromVarPower x i =
   ([(Big_int.unit_big_int, [(x, i)])], Big_int.zero_big_int)
+
+let fromVar x =
+  fromVarPower x 1
 
 (* Return "zero" as a polynomial *)
 let zero =
@@ -303,7 +303,7 @@ let rec pow p d =
 
 (* Instantiates variables in a polynomial *)
 let rec instantiate (poly, c) bindings =
-  let (p, c') = List.fold_left add ([], Big_int.zero_big_int) (List.map (fun mmon -> instantiate_monomial mmon bindings ([], Big_int.unit_big_int)) poly) in
+  let (p, c') = List.fold_left add zero (List.map (fun mmon -> instantiate_monomial mmon bindings one) poly) in
     (p, Big_int.add_big_int c c')
 and instantiate_monomial (c, mon) bindings accu =
   match mon with
@@ -312,7 +312,7 @@ and instantiate_monomial (c, mon) bindings accu =
     | (x, p)::l -> instantiate_monomial (c, (x, p - 1)::l) bindings (mult accu (safeAssoc x bindings))
 and safeAssoc x bindings =
   match bindings with
-    | [] -> ([(Big_int.unit_big_int, [(x, 1)])], Big_int.zero_big_int)
+    | [] -> fromVar x
     | (y, p)::rest -> if x == y || x = y then
                         p
                       else
