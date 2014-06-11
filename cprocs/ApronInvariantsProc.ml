@@ -210,7 +210,7 @@ let compute_invariants man rules startFun =
           raise (Invalid_argument "Rule with differing lhs/rhs arities."); (* check *)
         let conss = Rule.getCond rule in
         let consArray = Tcons1.array_make fullEnv (List.length conss) in
-        List.iteri (fun i c -> Tcons1.array_set consArray i (atom_to_tcons1 fullEnv varMap c)) conss;
+        Utils.iteri (fun i c -> Tcons1.array_set consArray i (atom_to_tcons1 fullEnv varMap c)) conss;
         FunMap.add f ((consArray, dstF)::(findWithDef f [] acc)) acc)
       FunMap.empty
       rules in
@@ -263,7 +263,7 @@ let add_invariants man rcc startFun =
             let inv = abstr1_to_pc man (FunMap.find defSym funToAbstrVal) in
 
             (* Map from std names to actually used names: *)
-            let subst = List.mapi (fun i v -> ("X_" ^ (string_of_int (i+1)), v)) (Term.getArgs lhs) in
+            let subst = Utils.mapi (fun i v -> ("X_" ^ (string_of_int (i+1)), v)) (Term.getArgs lhs) in
             let inv = Pc.instantiate inv subst in
 
             let newRule = Rule.create lhs (Rule.getRight rule) (Utils.remdupC Pc.equalAtom (inv@(Rule.getCond rule))) in

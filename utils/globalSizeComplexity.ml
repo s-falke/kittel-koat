@@ -239,12 +239,12 @@ module Make(RuleT : AbstractRule) = struct
   (** Extract mapping for variables X_1 .. X_{length vars} to their
       global size complexity after using the j-th rhs of rule r *)
   let extractSizeMapForRule globalSizeComplexities r rhsIdx vars =
-    List.mapi (fun i _ -> "X_" ^ (string_of_int (i + 1)), findEntry globalSizeComplexities r rhsIdx i vars) vars
+    Utils.mapi (fun i _ -> "X_" ^ (string_of_int (i + 1)), findEntry globalSizeComplexities r rhsIdx i vars) vars
 
   (** Extract mapping for variables in vars to their
       global size complexity after using the j-th rhs of rule r *)
   let extractSizeMapForRuleForVars globalSizeComplexities r rhsIdx vars =
-    List.mapi (fun i _ -> List.nth vars i, findEntry globalSizeComplexities r rhsIdx i vars) vars
+    Utils.mapi (fun i _ -> List.nth vars i, findEntry globalSizeComplexities r rhsIdx i vars) vars
 
   (** Pretty-print list of (rule, rhs-num, arg-num, size complexity) tuples, where complexities are represented by their classes *)
   let rec dumpGSCs ruleWithGSCs =
@@ -260,7 +260,7 @@ module Make(RuleT : AbstractRule) = struct
   let getSizeComplexitiesForRule rule sizeComplexities =
     (** Get list of entries, one for each argument on the right hand side *)
     let getSizeComplexitiesForRule' rule sizeComplexities rhsIdx (_, rhsArgs) =
-      List.mapi (fun varIdx _ -> findEntry sizeComplexities rule rhsIdx varIdx) rhsArgs
+      Utils.mapi (fun varIdx _ -> findEntry sizeComplexities rule rhsIdx varIdx) rhsArgs
     in
     Utils.mapiFlat (getSizeComplexitiesForRule' rule sizeComplexities) (RuleT.getRights rule)
 
@@ -269,7 +269,7 @@ module Make(RuleT : AbstractRule) = struct
     String.concat "\n"
       (Utils.mapFlat (fun (rule, _, _) ->
         Utils.mapiFlat (fun rhsIdx _ ->
-          List.mapi (fun varIdx _ -> 
+          Utils.mapi (fun varIdx _ -> 
             Printf.sprintf "\tS(%S, %i-%i) = %s"
               (RuleT.toString rule) rhsIdx varIdx (Complexity.toString (findEntry gsc rule rhsIdx varIdx vars)))
             vars)

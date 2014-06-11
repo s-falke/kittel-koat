@@ -227,7 +227,7 @@ let standardize rule =
       (Utils.remdup ((Pc.getVars rule.cond) @ (Term.getVars rule.rhs)))
       ((Term.getVars rule.lhs) @ (List.map fst rhsSubst)) in
   let condSubst =
-    List.mapi
+    Utils.mapi
       (fun i v -> let newV = Poly.fromVar ("Y_" ^ string_of_int i) in (v, newV))
       freshVars in
   { lhs = (Term.getFun rule.lhs, lhsArgs) ;

@@ -160,6 +160,22 @@ let rec mapFlat f l =
     | []    -> []
     | x::xs -> (f x) @ (mapFlat f xs)
 
+let iteri f l =
+  let rec iteri' i f l =
+    match l with
+      | []    -> ()
+      | x::xs -> f i x ; (iteri' (i+1) f xs)
+  in
+  iteri' 0 f l
+
+let mapi f l =
+  let rec mapi' i f l =
+    match l with
+      | []    -> []
+      | x::xs -> (f i x) :: (mapi' (i+1) f xs)
+  in
+  mapi' 0 f l
+
 let mapiFlat f l =
   let rec mapiFlat' i f l =
     match l with
