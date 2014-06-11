@@ -94,7 +94,7 @@ let rec process trs maxchaining startfun =
         output_nums := List.rev !output_nums;
         insertRVGraphIfNeeded ();
         let (rccgl, tgraph, rvgraph, _) = !todo in
-        let globalSizeComplexities = GSC.computeGlobalSizeComplexities (Utils.unboxOption rvgraph) (first rccgl) (second rccgl) vars in
+        let globalSizeComplexities = GSC.compute (Utils.unboxOption rvgraph) (first rccgl) (second rccgl) vars in
         Some (getComplexity tgraph globalSizeComplexities vars !todo, getProof initial !input_nums !output_nums !proofs)
 and processInner rccgltrv =
   let vars = Term.getVars (Rule.getLeft (first (List.hd (first (first rccgltrv)))))
@@ -119,7 +119,7 @@ and processInner rccgltrv =
     output_nums := List.rev (List.map (fun i -> i + sep * !done_inner) !output_nums);
     insertRVGraphIfNeeded ();
     let (rccgl, tgraph, rvgraph, _) = !todo in
-    let globalSizeComplexities = GSC.computeGlobalSizeComplexities (Utils.unboxOption rvgraph) (first rccgl) (second rccgl) vars in
+    let globalSizeComplexities = GSC.compute (Utils.unboxOption rvgraph) (first rccgl) (second rccgl) vars in
     let res = Some (getComplexity tgraph globalSizeComplexities vars !todo, globalSizeComplexities, getProof initial !input_nums !output_nums !proofs) in
     ChainProc.done_chaining := old_done_chaining;
     todo := old_todo;

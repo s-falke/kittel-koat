@@ -87,7 +87,7 @@ let rec process cint maxchaining startfun =
         let (rccl, tgraph, rvgraph, _) = !todo in
         let rvgraph = Utils.unboxOption rvgraph in
         (* let tmp2 : ((int * int) * (LSC.localcomplexity * int list)) = snd (snd ((snd rvgraph).(0))) in *)
-        let globalSizeComplexities = GSC.computeGlobalSizeComplexities rvgraph (first rccl) (second rccl) vars in
+        let globalSizeComplexities = GSC.compute rvgraph (first rccl) (second rccl) vars in
         Some (getComplexity tgraph globalSizeComplexities vars !todo, getProof initial !input_nums !output_nums !proofs)
 and getComplexity tgraph globalSizeComplexities vars (rccgl, _, _, _) =
   Complexity.add (addComplexities tgraph globalSizeComplexities vars (first rccgl)) (Complexity.P (third rccgl))

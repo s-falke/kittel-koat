@@ -39,7 +39,7 @@ let rec process degree useSizeComplexities (rcc, g, l) tgraph rvgraph =
   else
   (
     let vars = Cfarkaspolo.getVars rcc in
-      let globalSizeComplexities = if useSizeComplexities then GSC.computeGlobalSizeComplexities (Utils.unboxOption rvgraph) rcc g vars else [] in
+      let globalSizeComplexities = if useSizeComplexities then GSC.compute (Utils.unboxOption rvgraph) rcc g vars else GSC.empty in
         Polo.count := 1;
         let r = List.map first rcc
         and s = (List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc)) in

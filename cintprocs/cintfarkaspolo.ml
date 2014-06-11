@@ -45,7 +45,7 @@ let rec process useSizeComplexities degree (rcc, g, l) tgraph rvgraph =
   else
   (
     let vars = getVars rcc in
-      let globalSizeComplexities = if useSizeComplexities then GSC.computeGlobalSizeComplexities (Utils.unboxOption rvgraph) rcc g vars else [] in
+      let globalSizeComplexities = if useSizeComplexities then GSC.compute (Utils.unboxOption rvgraph) rcc g vars else GSC.empty in
         let r = List.map first rcc
         and s = if useSizeComplexities then (constructAllS (getS4SizeComplexities tgraph rcc)) else [(List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc))] in
           doLoop useSizeComplexities degree (rcc, g, l) tgraph rvgraph vars globalSizeComplexities r s

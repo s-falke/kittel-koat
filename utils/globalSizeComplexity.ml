@@ -7,81 +7,30 @@ module Make(RuleT : AbstractRule) = struct
   module CTRS = Ctrs.Make(RuleT)
   module G = Graph.Persistent.Digraph.Concrete(Tgraph.Int)
 
-  (* computes global size complexities for result variables *)
-  let rec computeGlobalSizeComplexities rvgraph rc g vars =
-    let condensed = RVG.condense rvgraph in
-      let topo = RVG.getNodesInTopologicalOrder condensed in
-        let sccs_with_gsb = attachGlobalSizeComplexities topo condensed rc g rvgraph vars in
-          List.rev (List.flatten (List.map (fun (scc, gsb) -> List.map (fun (rule, ((i, j), _)) -> (rule, ((i, j), gsb))) scc) sccs_with_gsb))
-  and attachGlobalSizeComplexities topo condensed rc g rvgraph vars =
-    attachGlobalSizeComplexitiesAux topo condensed rc g rvgraph vars []
-  and attachGlobalSizeComplexitiesAux topo condensed rc g rvgraph vars accu =
-    match topo with
-      | [] -> accu
-      | (scc, trivial)::rest -> let gsb = computeGlobalSizeBound scc trivial condensed rc g rvgraph vars accu in
-                                  attachGlobalSizeComplexitiesAux rest condensed rc g rvgraph vars ((scc, gsb)::accu)
-  and computeGlobalSizeBound scc trivial condensed rc g rvgraph vars accu =
-    let hasStartNode = List.exists (fun f -> f = g) (getSccLeftFuns scc) in
-      if trivial then
-        let lsc = getLSC (List.hd scc) in
-          if hasStartNode then
-            lsc
-          else
-            let preds = RVG.getPreds rvgraph scc in
-              if preds = [] then
-                lsc
-              else
-                let sortedPreds = sortPreds preds (snd lsc) in
-                  let plugins = getPlugins sortedPreds vars accu
-                  and outer = LSC.toSmallestComplexity lsc vars
-                  and activeVars = List.map (List.nth vars) (snd lsc) in
-                    let plugged = List.map (plug_them_in outer activeVars) plugins in
-                      LSC.listMax (List.map (fun x -> c2lsc x vars) plugged) vars
-      else
-        gscForNonTrivialScc scc condensed rc rvgraph vars accu
-  and sortPreds preds deps =
-    sortPredsAux preds deps (getEmptyLists (List.length deps))
-  and sortPredsAux preds deps ret =
-    match preds with
-      | [] -> ret
-      | p::rest -> sortPredsAux rest deps (insertInRet deps ret p)
-  and insertInRet deps ret p =
-    match deps with
-      | [] -> failwith "internal error in Crvgraph.insertInRet"
-      | d::rest -> if d = snd (fst (snd p)) then
-                     (p::(List.hd ret))::(List.tl ret)
-                   else
-                     (List.hd ret)::(insertInRet rest (List.tl ret) p)
-  and getEmptyLists n =
-    if n <= 0 then
-      []
-    else
-      []::(getEmptyLists (n - 1))
-  and getPlugins sortedPreds vars accu =
-    match sortedPreds with
-      | [] -> []
-      | [x] -> List.map (fun y -> [LSC.toSmallestComplexity (getGSCForOne accu y) vars]) x
-      | x::rest -> let tmp = getPlugins rest vars accu in
-                     List.flatten (List.map (fun y -> insertIntoAll (LSC.toSmallestComplexity (getGSCForOne accu y) vars) tmp) x)
-  and insertIntoAll y tmp =
-    match tmp with
-      | [] -> []
-      | z::rest -> (y::z)::(insertIntoAll y rest)
-  and plug_them_in outer vars plugin =
-    let compose = Complexity.apply (getPol outer) (getBinding vars plugin) in
-      compose
-  and getBinding vars plugin =
-    List.map2 (fun x y -> (x, y)) vars plugin
-  and c2lsc c vars =
+  module RVMap = 
+    Map.Make(
+      struct type t = RuleT.rule * (int * int)
+      let compare (r1, (rhsIdx1, varIdx1)) (r2, (rhsIdx2, varIdx2)) = 
+        let rComp = compare rhsIdx1 rhsIdx2 in
+        if rComp <> 0 then
+          rComp
+        else 
+          let vComp = compare varIdx1 varIdx2 in
+            if vComp <> 0 then
+              vComp
+            else
+              RuleT.compare r1 r2
+    end)
+
+  let getLSC (_, (_, lsc)) =
+    lsc
+
+  let rec c2lsc c vars =
     LSC.complexity2localcomplexity c vars
-  and getSccLeftFuns  scc =
-    List.map (fun (rule, _) -> Term.getFun (RuleT.getLeft rule)) scc
   and getPol c =
     match c with
       | Complexity.P p -> p
       | Complexity.Unknown -> failwith "Internal error in Crvgraph.getPol"
-  and getLSC (_, (_, lsc)) =
-    lsc
 
   and gscForNonTrivialScc scc condensed rc rvgraph vars accu =
     if List.exists isTooBig scc then
@@ -220,29 +169,82 @@ module Make(RuleT : AbstractRule) = struct
   and getSccsNums nodesa nums =
     List.map (fun i -> (fst (snd nodesa.(i)))) nums
 
-  (** Find bound for the i-th variable in the j-th rhs of rule r *)
-  let rec findFullEntry globalSizeComplexities rule j i =
-    match globalSizeComplexities with
-      | [] -> failwith "Did not find entry!"
-      | (rule', ((j', i'), c))::rest -> if (j' = j) && (i' = i) && (RuleT.equal rule rule') then
-                                   (rule', ((j', i'), c))
-                                 else
-                                   findFullEntry rest rule j i
+  let collectPreds preds activeVarIdxs =
+    let rec insertInRet activeVarIdxs ret p =
+      match activeVarIdxs with
+      | [] -> failwith "internal error in Crvgraph.insertInRet"
+      | varNum::rest -> if varNum = snd (fst (snd p)) then
+          (p::(List.hd ret))::(List.tl ret)
+        else
+          (List.hd ret)::(insertInRet rest (List.tl ret) p) in
+    let rec getNEmptyLists' n res=
+      if n <= 0 then
+        res
+      else
+        getNEmptyLists' (n - 1) ([]::res) in
+    List.fold_left (fun ret p -> insertInRet activeVarIdxs ret p) (getNEmptyLists' (List.length activeVarIdxs) []) preds
+
+  let rec getPredVarBounds collectedPreds vars accu =
+    let insertIntoAll y tmp = List.fold_right (fun e acc -> (y::e)::acc) tmp [] in
+    match collectedPreds with
+      | [] -> []
+      | [x] -> List.map (fun y -> [LSC.toSmallestComplexity (getGSCForOne accu y) vars]) x
+      | x::rest -> let tmp = getPredVarBounds rest vars accu in
+                   Utils.concatMap (fun y -> insertIntoAll (LSC.toSmallestComplexity (getGSCForOne accu y) vars) tmp) x
+
+  (** computes global size bound for one SCC in the RVG *)
+  let computeGlobalSizeBound scc trivial condensed rc startFun rvgraph vars accu =
+    if trivial then 
+      let lsc = getLSC (List.hd scc) in
+      let leftFuns = List.map (fun (rule, _) -> Term.getFun (RuleT.getLeft rule)) scc in
+      (* TACAS'14, Thm. 9, case trivial SCC { \alpha } with \alpha = |t, v'|. *)
+      if List.exists (fun f -> f = startFun) leftFuns then
+        lsc
+      else
+        let preds = RVG.getPreds rvgraph scc in
+        if preds = [] then
+          lsc
+        else
+          (* max { S_l(\alpha)(S(t', v_1'), ..., S(t', v_n')) | t' \in pre(t) } *)
+          let activeVarIdxs = snd lsc in
+          let activeVars = List.map (List.nth vars) activeVarIdxs in
+          let allPredVarBounds = getPredVarBounds (collectPreds preds activeVarIdxs) vars accu in
+          let lsc_alpha = getPol (LSC.toSmallestComplexity lsc vars) in
+          LSC.listMax (List.map (fun predVarBounds -> c2lsc (Complexity.apply lsc_alpha (List.combine activeVars predVarBounds)) vars) allPredVarBounds) vars
+      else
+        gscForNonTrivialScc scc condensed rc rvgraph vars accu
+
+  (** computes global size complexities for all result variables *)
+  let compute rvgraph rc g vars =
+    let condensed = RVG.condense rvgraph in
+    let topo = RVG.getNodesInTopologicalOrder condensed in
+    let sccs_with_gsb = 
+      List.fold_left 
+        (fun acc (scc, trivial) ->
+          (scc, computeGlobalSizeBound scc trivial condensed rc g rvgraph vars acc)::acc) [] topo in
+    List.fold_left
+      (fun acc (scc, gsc) -> 
+        List.fold_left 
+          (fun acc (rule, ((rhsIdx, varIdx), _)) -> RVMap.add (rule, (rhsIdx, varIdx)) gsc acc)
+          acc scc)
+      RVMap.empty sccs_with_gsb
+
+  let empty =
+    RVMap.empty
 
   (** Find bound for the i-th variable in the j-th rhs of rule r *)
-  let rec findEntry globalSizeComplexities rule j i vars =
-    let (_, (_, c)) = findFullEntry globalSizeComplexities rule j i in
-    LSC.toSmallestComplexity c vars
+  let findEntry globalSizeComplexities rule rhsIdx varIdx vars =
+    LSC.toSmallestComplexity (RVMap.find (rule, (rhsIdx, varIdx)) globalSizeComplexities) vars
 
   (** Extract mapping for variables X_1 .. X_{length vars} to their
       global size complexity after using the j-th rhs of rule r *)
-  let extractSizeMapForRule globalSizeComplexities r j vars =
-    List.mapi (fun i _ -> "X_" ^ (string_of_int (i + 1)), findEntry globalSizeComplexities r j i vars) vars
+  let extractSizeMapForRule globalSizeComplexities r rhsIdx vars =
+    List.mapi (fun i _ -> "X_" ^ (string_of_int (i + 1)), findEntry globalSizeComplexities r rhsIdx i vars) vars
 
   (** Extract mapping for variables in vars to their
       global size complexity after using the j-th rhs of rule r *)
-  let extractSizeMapForRuleForVars globalSizeComplexities r j vars =
-    List.mapi (fun i _ -> List.nth vars i, findEntry globalSizeComplexities r j i vars) vars
+  let extractSizeMapForRuleForVars globalSizeComplexities r rhsIdx vars =
+    List.mapi (fun i _ -> List.nth vars i, findEntry globalSizeComplexities r rhsIdx i vars) vars
 
   (** Pretty-print list of (rule, rhs-num, arg-num, size complexity) tuples, where complexities are represented by their classes *)
   let rec dumpGSCs ruleWithGSCs =
@@ -254,23 +256,23 @@ module Make(RuleT : AbstractRule) = struct
     in
     String.concat "\n" (List.map dumpOneGSC ruleWithGSCs)
 
-  (** Pretty-print list of (rule, rhs-num, arg-num, size complexity) tuples. *)
-  let dumpGSCsAsComplexities ruleWithGSCs vars =
-    let dumpOneGSCAsComplexity vars (rule, ((i, j), c)) =
-      "\tS(" ^ (RuleT.toString rule) ^ ", " ^ (string_of_int i) ^ "-" ^ (string_of_int j) ^ ") = " ^ (Complexity.toString (LSC.toSmallestComplexity c vars))
-    in
-    String.concat "\n" (List.map (dumpOneGSCAsComplexity vars) ruleWithGSCs)
-
   (** Get list of entries (each a list for each argument) for each right hand side *)
   let getSizeComplexitiesForRule rule sizeComplexities =
     (** Get list of entries, one for each argument on the right hand side *)
-    let getSizeComplexitiesForRule' rule sizeComplexities j (_, rhsArgs) =
-      List.mapi (fun i _ -> findFullEntry sizeComplexities rule j i) rhsArgs
+    let getSizeComplexitiesForRule' rule sizeComplexities rhsIdx (_, rhsArgs) =
+      List.mapi (fun varIdx _ -> findEntry sizeComplexities rule rhsIdx varIdx) rhsArgs
     in
     Utils.mapiFlat (getSizeComplexitiesForRule' rule sizeComplexities) (RuleT.getRights rule)
 
-  (** Print out pretty-printed size complexities for variables vars in rules rcc *)
-  let printSizeComplexities rcc sizeComplexities vars =
-    let sortedSizeComplexities = Utils.mapFlat (fun (rule, _, _) -> getSizeComplexitiesForRule rule sizeComplexities) rcc in
-    dumpGSCsAsComplexities sortedSizeComplexities vars
+  (** Pretty-print list of (rule, rhs-num, arg-num, size complexity) tuples. *)
+  let printSizeComplexities rcc gsc vars =
+    String.concat "\n"
+      (Utils.mapFlat (fun (rule, _, _) ->
+        Utils.mapiFlat (fun rhsIdx _ ->
+          List.mapi (fun varIdx _ -> 
+            Printf.sprintf "\tS(%S, %i-%i) = %s"
+              (RuleT.toString rule) rhsIdx varIdx (Complexity.toString (findEntry gsc rule rhsIdx varIdx vars)))
+            vars)
+          (RuleT.getRights rule))
+         rcc)
 end
