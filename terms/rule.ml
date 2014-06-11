@@ -74,8 +74,8 @@ let rec renameVars badvars r =
   let vars = getVars r in
     let varmapping = createVarMapping badvars vars in
       { lhs = Term.renameVars varmapping r.lhs;
-	rhs = Term.renameVars varmapping r.rhs;
-	cond = Pc.renameVars varmapping r.cond; }
+        rhs = Term.renameVars varmapping r.rhs;
+        cond = Pc.renameVars varmapping r.cond; }
 and createVarMapping badvars vars =
   match vars with
     | [] -> []

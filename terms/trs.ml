@@ -33,8 +33,8 @@ let rec getArityOf f trs =
 and getFterm f trs =
   match trs with
     | [] -> failwith "internal error in Trs.getArityOp"
-    | r::rr -> 
-	if (Term.getFun (Rule.getLeft r) = f) then
+    | r::rr ->
+        if (Term.getFun (Rule.getLeft r) = f) then
           (Rule.getLeft r)
         else if (Term.getFun (Rule.getRight r) = f) then
           (Rule.getRight r)

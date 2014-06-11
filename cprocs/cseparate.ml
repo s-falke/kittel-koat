@@ -37,13 +37,13 @@ let rec process innerprover l' addSizeSummaries sep sepNumberMultiplier (rcc, g,
       let tmp = split (rcc, g, l) l' (sep * sepNumberMultiplier) vars tgraph rvgraph in
         match tmp with
           | None -> None
-          | Some (inner, outer, exits) -> 
-	      let subproof = innerprover inner in
+          | Some (inner, outer, exits) ->
+              let subproof = innerprover inner in
               (
                 match subproof with
                   | None -> None
-                  | Some (compl, gsc, proof) -> 
-		      let realouter = fixLoopSummary outer compl gsc addSizeSummaries exits vars in
+                  | Some (compl, gsc, proof) ->
+                      let realouter = fixLoopSummary outer compl gsc addSizeSummaries exits vars in
                       Some (realouter, fun ini outi -> getProof sep sepNumberMultiplier ini outi inner proof realouter)
               )
   )
@@ -180,10 +180,10 @@ and getAddedRVG rvgraph' t' tgraph'' =
 and getOuter outerrules innerfuns innerrules count (rcc, g, l) vars tgraph rvgraph =
   let varsPols = List.map Poly.fromVar vars in
   let varsPols' = getHavocedVars innerrules vars in
-  let inLoopFun = "inner_" ^ (string_of_int count) ^ "_in." in 
-  let tmpFun = "inner_" ^ (string_of_int count) ^ "_compl." in 
+  let inLoopFun = "inner_" ^ (string_of_int count) ^ "_in." in
+  let tmpFun = "inner_" ^ (string_of_int count) ^ "_compl." in
   let outLoopFun = "inner_" ^ (string_of_int count) ^ "_out." in
-    (* Difference from paper: 
+    (* Difference from paper:
        Instead of t' = (_in., _, _out.) with cost (cost of separated), we
        create two transitions here:
        - costTrans, which we will later fix up to have the

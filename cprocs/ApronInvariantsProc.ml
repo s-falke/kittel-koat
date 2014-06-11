@@ -206,7 +206,7 @@ let compute_invariants man rules startFun =
       (fun acc rule ->
         let f = Term.getFun (Rule.getLeft rule) in
         let dstF = Term.getFun (Rule.getRight rule) in
-        if Term.getArity (Rule.getLeft rule) <> Term.getArity(Rule.getRight rule) then 
+        if Term.getArity (Rule.getLeft rule) <> Term.getArity(Rule.getRight rule) then
           raise (Invalid_argument "Rule with differing lhs/rhs arities."); (* check *)
         let conss = Rule.getCond rule in
         let consArray = Tcons1.array_make fullEnv (List.length conss) in

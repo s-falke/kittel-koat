@@ -168,8 +168,7 @@ and run proc =
           ()
         else
           match (proc rccgl tgraph rvgraph) with
-            | None ->
-	      ()
+            | None -> ()
             | Some (nrccgl, p) -> update nrccgl p ini
       )
 
@@ -204,7 +203,7 @@ and selectSubSCC sccFuns (sccTrans : Rule.rule list) =
   let powSet s = List.fold_left (fun state ele -> Utils.concatMap (fun s -> [s ; ele::s]) state) [[]] s in
   let funSubsets = List.tl (powSet sccFuns) in (* First one is the empty set *)
   let checkFunSubsetCand funSubset =
-    let transSubset = List.filter (fun rule -> Utils.contains funSubset (Rule.getLeftFun rule) && Utils.contains funSubset (Rule.getRightFun rule)) sccTrans in 
+    let transSubset = List.filter (fun rule -> Utils.contains funSubset (Rule.getLeftFun rule) && Utils.contains funSubset (Rule.getRightFun rule)) sccTrans in
     let (funsWithIn', funsWithOut') = List.fold_left (fun (ins, outs) rule -> ((Rule.getLeftFun rule)::ins, (Rule.getRightFun rule)::outs)) ([], []) transSubset in
     let funsWithIn = Utils.remdup funsWithIn' in
     let funsWithOut = Utils.remdup funsWithOut' in
@@ -266,23 +265,23 @@ and doSeparate () =
       (
         let sccs = TGraph.getNontrivialSccs tgraph in
         let rec findSubSCC rcc sccs =
-	  match sccs with
-	    | [] -> None
-	    | scc::restSCCs ->
-		match selectSCC rcc scc with
-		  | Some innerFuns -> Some innerFuns
-		  | None -> findSubSCC rcc restSCCs
+          match sccs with
+            | [] -> None
+            | scc::restSCCs ->
+                match selectSCC rcc scc with
+                  | Some innerFuns -> Some innerFuns
+                  | None -> findSubSCC rcc restSCCs
         in
-	match findSubSCC (first rccgl) sccs with
-	  | Some innerFuns -> 
-	      (
-	      run_ite (Cseparate.process processInner innerFuns true (!done_inner + 1) sep) doSeparationCleanup doFarkasConstant
-	      )
-	  | None -> doFarkasConstant ()
+        match findSubSCC (first rccgl) sccs with
+          | Some innerFuns ->
+              (
+               run_ite (Cseparate.process processInner innerFuns true (!done_inner + 1) sep) doSeparationCleanup doFarkasConstant
+              )
+          | None -> doFarkasConstant ()
       )
 and doSeparationCleanup () =
   doApronInvariants () ;
-  doLoop () ;  
+  doLoop () ;
 and doFarkasConstant () =
   run_ite (Cfarkaspolo.process false false 0) doLoop doFarkasConstantSizeBound
 and doFarkasConstantSizeBound () =
