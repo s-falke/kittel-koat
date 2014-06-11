@@ -24,6 +24,8 @@ module LSC = LocalSizeComplexity.Make(Rule)
 module GSC = GlobalSizeComplexity.Make(Rule)
 module TGraph = Tgraph.Make(Rule)
 
+let sep_var_suffix = "_sep"
+
 let first (x, _, _) =
   x
 
@@ -82,7 +84,7 @@ and maxThemAux x c y c' =
 and getSizeBounds max_map havocedVars =
   List.map (fun v -> (v, getSizeBound max_map v)) havocedVars
 and getSizeBound max_map v =
-  let real_v = String.sub v 0 ((String.length v) - 1) in
+  let real_v = String.sub v 0 ((String.length v) - (String.length sep_var_suffix)) in
     List.assoc real_v max_map
 and getSizeBoundsConstraints sizeBounds =
   let plainConstraint = List.flatten (getPlainConstraint sizeBounds) in
@@ -157,7 +159,7 @@ and getExitRules rules innerrules tgraph =
       List.filter (fun innerrule -> List.exists (fun succ -> TGraph.hasEdge tgraph innerrule succ) outer_succs) innerrules
 
 and getInner innerrules pre_innerrules count (rcc, g, l) vars tgraph rvgraph =
-  let startfun = "inner_" ^ (string_of_int count) ^ "_start." in
+  let startfun = "inner_" ^ (string_of_int count) ^ "_start_sep" in
     let entries = getEntries startfun pre_innerrules vars
     and tgraph' = TGraph.keepNodes tgraph innerrules
     and rvgraph' = getNewRVG rvgraph innerrules in
@@ -180,9 +182,9 @@ and getAddedRVG rvgraph' t' tgraph'' =
 and getOuter outerrules innerfuns innerrules count (rcc, g, l) vars tgraph rvgraph =
   let varsPols = List.map Poly.fromVar vars in
   let varsPols' = getHavocedVars innerrules vars in
-  let inLoopFun = "inner_" ^ (string_of_int count) ^ "_in." in 
-  let tmpFun = "inner_" ^ (string_of_int count) ^ "_compl." in 
-  let outLoopFun = "inner_" ^ (string_of_int count) ^ "_out." in
+  let inLoopFun = "inner_" ^ (string_of_int count) ^ "_in_sep" in 
+  let tmpFun = "inner_" ^ (string_of_int count) ^ "_compl_sep" in 
+  let outLoopFun = "inner_" ^ (string_of_int count) ^ "_out_sep" in
     (* Difference from paper: 
        Instead of t' = (_in., _, _out.) with cost (cost of separated), we
        create two transitions here:
@@ -208,7 +210,7 @@ and getHavocedVar preserved var =
   if Utils.contains preserved var then
     var
   else
-    (var ^ ".")
+    (var ^ sep_var_suffix)
 and isPreserved rules vars var =
   if rules = [] then
     true
