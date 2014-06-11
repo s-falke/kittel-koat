@@ -4,6 +4,7 @@ Requirements:
   OCamlgraph (reasonably recent version; I use version 1.8.3)
   One or more of the following SMT-solvers:
     yices, yices2, z3, cvc4, mathsat5
+  For koat: APRON
 
 Build instructions:
 -------------------
@@ -11,5 +12,6 @@ Build instructions:
   "make koat" builds the complexity analysis backend "koat.native"
   "make convert" builds "convert.native" which converts Simple programs to C
 
-  You might need to modify the LIBPATH-line in the Makefile to ensure
-  that OCamlgraph is found (the "-I,+ocamlgraph" parts).
+  You might need to modify the KITTEL_LIBPATH and KOAT_LIBPATH lines in the
+  Makefile to ensure that OCamlgraph and/or APRON is found (the
+  "-I,+ocamlgraph" resp. "-I,+apron" parts).

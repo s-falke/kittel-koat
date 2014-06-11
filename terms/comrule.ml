@@ -121,9 +121,9 @@ let isConstraintLinear r =
 let rec equal rule1 rule2 =
   rule1 == rule2 || equalInternal rule1 rule2
 and equalInternal rule1 rule2 =
-  (List.length rule1.rhss) = (List.length rule2.rhss) 
-    && (Term.equal rule1.lhs rule2.lhs) 
-    && (List.for_all2 Term.equal rule1.rhss rule2.rhss) 
+  (List.length rule1.rhss) = (List.length rule2.rhss)
+    && (Term.equal rule1.lhs rule2.lhs)
+    && (List.for_all2 Term.equal rule1.rhss rule2.rhss)
     && (Pc.equal rule1.cond rule2.cond)
 
 (* Determines whether V(rs) is contained V(l) *)
