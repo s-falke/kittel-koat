@@ -1,0 +1,7 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS l0))
+(VAR x y)
+(RULES
+  l0(x, r) -> l1(x, -1)
+  l1(x, r) -> Com_2(l1(x', r+1), l1(x', r+1)) [ x > 0 /\ 2*x' + mod = x /\ mod >= 0 /\ mod < 2]
+)
