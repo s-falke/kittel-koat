@@ -1,6 +1,7 @@
 module type AbstractRule =
   sig
     type rule
+    val compare: rule -> rule -> int
     val toString: rule -> string
     val toDotString: rule -> string
     val getLeft: rule -> Term.term

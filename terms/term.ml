@@ -18,12 +18,28 @@
   limitations under the License.
 *)
 
-type term = string * (Poly.poly list)
+type funSym = string
+type term = funSym * (Poly.poly list)
 
 (* Create term from what the parser gives *)
 let create f arglist =
   let args = List.map Poly.construct_poly arglist in
     (f, args)
+
+let compare (f1, as1) (f2, as2) =
+  let fComp = String.compare f1 f2 in
+  if fComp <> 0 then
+    fComp
+  else
+    let aNum1 = List.length as1 in
+    let aNum2 = List.length as2 in
+    if aNum1 < aNum2 then
+      -1
+    else if aNum1 > aNum2 then
+      1
+    else
+      List.fold_left2
+        (fun acc a1 a2 -> if acc <> 0 then acc else Poly.compare a1 a2) 0 as1 as2
 
 (* Create a string for a term *)
 let toString (f, args) =

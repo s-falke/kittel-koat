@@ -31,6 +31,26 @@ and toStringRhss rs =
   "Com_" ^ (string_of_int (List.length rs)) ^ "(" ^
   String.concat ", " (List.map Term.toString rs) ^ ")"
 
+let compare r1 r2 =
+  let lComp = Term.compare r1.lhs r2.lhs in
+  if lComp <> 0 then
+    lComp
+  else    
+    let rhsNum1 = List.length r1.rhss in
+    let rhsNum2 = List.length r2.rhss in
+    if rhsNum1 < rhsNum2 then
+      -1
+    else if rhsNum1 > rhsNum2 then
+      1
+    else
+      let rhsComp =
+        List.fold_left2
+          (fun acc t1 t2 -> if acc <> 0 then acc else Term.compare t1 t2) 0 r1.rhss r2.rhss in
+      if rhsComp <> 0 then
+        rhsComp
+      else
+        Pc.compare r1.cond r2.cond
+
 (* Create a string for a rule *)
 let toDotString r =
   (Term.toString r.lhs) ^ " -> " ^ (toStringRhss r.rhss) ^

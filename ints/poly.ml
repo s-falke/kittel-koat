@@ -18,8 +18,10 @@
   limitations under the License.
 *)
 
+type var = string
+
 (* A monomial, i.e., a product of powers *)
-type monomial = (string * int) list
+type monomial = (var * int) list
 
 (* A polynomial, i.e., a linear combination of monomials *)
 type poly = (Big_int.big_int * monomial) list * Big_int.big_int
@@ -38,6 +40,49 @@ and equalMonoList m1 m2 =
   (m1 == m2) || ((List.length m1 = List.length m2) && (List.for_all2 (fun vp1 vp2 -> (vp1 == vp2) || (equalVarPower vp1 vp2)) m1 m2))
 and equalVarPower (x, p) (x', p') =
   (p = p') && (x == x' || x = x')
+
+let compareMonomial m1 m2 =
+  let mNum1 = List.length m1 in
+  let mNum2 = List.length m2 in
+  if mNum1 < mNum2 then
+    -1
+  else if mNum1 > mNum2 then
+    1
+  else
+    List.fold_left2
+      (fun acc (v1, e1) (v2, e2) -> 
+        if acc <> 0 then 
+          acc 
+        else 
+          if e1 < e2 then 
+            -1
+          else if e1 > e2 then
+            1
+          else 
+            String.compare v1 v2) 0 m1 m2
+
+let compare (ss1, const1) (ss2, const2) =
+  let cComp = Big_int.compare_big_int const1 const2 in
+  if cComp <> 0 then
+    cComp
+  else
+    let sNum1 = List.length ss1 in
+    let sNum2 = List.length ss2 in
+    if sNum1 < sNum2 then
+      -1
+    else if sNum1 > sNum2 then
+      1
+    else
+      List.fold_left2
+        (fun acc (coeff1, m1) (coeff2, m2) -> 
+          if acc <> 0 then 
+            acc 
+          else
+            let cComp = Big_int.compare_big_int coeff1 coeff2 in
+            if cComp <> 0 then
+              cComp
+            else
+              compareMonomial m1 m2) 0 ss1 ss2
 
 (* Construct a polynomial from list of monomials produced by parser *)
 let rec construct_poly monolist =

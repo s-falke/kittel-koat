@@ -72,6 +72,66 @@ and toStringAtom a =
     | Leq (l, r) -> (Poly.toString l) ^ " <= " ^ (Poly.toString r)
     | Lss (l, r) -> (Poly.toString l) ^ " < " ^ (Poly.toString r)
 
+let compareAtom a1 a2 =
+  let t (l1, l2) (r1, r2) =
+    let lComp = Poly.compare l1 l2 in
+    if lComp <> 0 then
+      lComp
+    else
+      Poly.compare r1 r2 in
+  match a1 with
+  | Equ (l1, r1) ->
+    (
+      match a2 with
+      | Equ (l2, r2) -> t (l1, l2) (r1, r2)
+      | _ -> -1
+    )
+  | Neq (l1, r1) ->
+    (
+      match a2 with
+      | Equ _ -> 1
+      | Neq (l2, r2) -> t (l1, l2) (r1, r2)
+      | _ -> -1
+    )
+  | Geq (l1, r1) ->
+    (
+      match a2 with
+      | Equ _ | Neq _ -> 1
+      | Geq (l2, r2) -> t (l1, l2) (r1, r2)
+      | _ -> -1
+    )
+  | Gtr (l1, r1) ->
+    (
+      match a2 with
+      | Equ _ | Neq _ | Geq _ -> 1
+      | Gtr (l2, r2) -> t (l1, l2) (r1, r2)
+      | _ -> -1
+    )
+  | Leq (l1, r1) ->
+    (
+      match a2 with
+      | Equ _ | Neq _ | Geq _ | Gtr _ -> 1
+      | Leq (l2, r2) -> t (l1, l2) (r1, r2)
+      | _ -> -1
+    )
+  | Lss (l1, r1) ->
+    (
+      match a2 with
+      | Equ _ | Neq _ | Geq _ | Gtr _ | Leq _ -> 1
+      | Lss (l2, r2) -> t (l1, l2) (r1, r2)
+    )
+
+let compare pc1 pc2 =
+  let pcNum1 = List.length pc1 in
+  let pcNum2 = List.length pc2 in
+  if pcNum1 < pcNum2 then
+    -1
+  else if pcNum1 > pcNum2 then
+    1
+  else
+    List.fold_left2
+      (fun acc a1 a2 -> if acc <> 0 then acc else compareAtom a1 a2) 0 pc1 pc2
+
 (* Create a string from a PC constraint *)
 let toDotString cond =
   String.concat " && " (List.map toStringAtom cond)

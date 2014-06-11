@@ -33,6 +33,17 @@ let toDotString r =
   (Term.toString r.lhs) ^ " -> " ^ (Term.toString r.rhs) ^
   (if r.cond = [] then "" else " [ " ^ (Pc.toDotString r.cond) ^ " ]")
 
+let compare r1 r2 =
+  let lComp = Term.compare r1.lhs r2.lhs in
+  if lComp <> 0 then
+    lComp
+  else
+    let rComp = Term.compare r1.rhs r2.rhs in
+    if rComp <> 0 then
+      rComp
+    else
+      Pc.compare r1.cond r2.cond
+
 (* Get lhs of a rule *)
 let getLeft r =
   r.lhs
@@ -186,7 +197,7 @@ and chainTwoRules rule1 rule2 =
     { lhs = rule1.lhs ;
       rhs = Term.instantiate renamedRule2.rhs subby ;
       cond = remdupC (rule1.cond @ (Pc.instantiate renamedRule2.cond subby)) }
-and isUnary (r : rule) =
+and isUnary r =
   true
 
 (* Rename variables on lhs to X_1, ..., X_N, on rhs to X_1', ..., X_M', and in cond to Y_1 ... Y_K *)
