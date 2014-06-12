@@ -216,7 +216,7 @@ let compute_invariants man rules startFun =
       rules in
 
   (* Stack format: (fun with changed val, list of funs seen since last widening *)
-  let stack = ref [(startFun, [])] in
+  let stack = ref [(startFun, [startFun])] in
 
   (* Prepare abstract values for all symbols: Everything is empty, only start value allows everything *)
   let funToAbstrVal = (FunMap.fold (fun key _ acc -> FunMap.add key (Abstract1.bottom man onlyPreEnv) acc) funToConsDst FunMap.empty) in
@@ -231,19 +231,19 @@ let compute_invariants man rules startFun =
         let newAbstrVal = applyTrans man fullEnv onlyPostEnv curAbstrVal preVars postVars consArray in
         let dstAbstrVal = FunMap.find dstFun !funToAbstrVal in
         Abstract1.join_with man newAbstrVal dstAbstrVal;
-        let resAbstrVal =
+        let (newHistory, resAbstrVal) =
           if Utils.contains history dstFun then
             (* We are repeating ourselves and start to get boring. Widen! *)
-            Abstract1.widening man dstAbstrVal newAbstrVal
+            ([dstFun], Abstract1.widening man dstAbstrVal newAbstrVal)
           else
-            newAbstrVal
+            (dstFun::history, newAbstrVal)
         in
         (*Printf.printf "New invariant for '%s':\n" dstFun; print_abstr_val man resAbstrVal; (* DEBUG *) *)
         funToAbstrVal := FunMap.add dstFun resAbstrVal !funToAbstrVal;
 
         (* If we changed the dst abstr value, we need to reprocess all outgoing transitions from there *)
         if not(Abstract1.is_eq man dstAbstrVal resAbstrVal) then
-            stack := (dstFun, f::history)::!stack
+            stack := (dstFun, newHistory)::!stack
       )
       (findWithDef f [] funToConsDst)
   done;
