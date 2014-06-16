@@ -88,11 +88,11 @@ let rec speclist =
   [
     ("-combine", Arg.String (fun s -> combine := stringToCombine s print_usage), "      - Set the combination method for Simple programs (statements/controlpoints/ifs-loops/loops)");
     ("--combine", Arg.String (fun s -> combine := stringToCombine s print_usage), "");
-    ("-timeout", Arg.Set_float timeout, "      - Set the timeout (seconds)");
+    ("-timeout", Arg.Set_float timeout, Printf.sprintf "      - Set the timeout (seconds, 0 = no timeout) [default %.2f]" !timeout);
     ("--timeout", Arg.Set_float timeout, "");
     ("-smt-solver", Arg.String (fun s -> Smt.setSolver (checkSmtSolver s print_usage)), "   - Set the SMT solver (yices/yices2/z3/cvc4/mathsat5)");
     ("--smt-solver", Arg.String (fun s -> Smt.setSolver (checkSmtSolver s print_usage)), "");
-    ("-max-chaining", Arg.Set_int maxchaining, " - Set the maximum  number the chaining processor is applied");
+    ("-max-chaining", Arg.Set_int maxchaining, Printf.sprintf " - Set maximum for chaining processor applications [default %i]" !maxchaining);
     ("--max-chaining", Arg.Set_int maxchaining, "");
     ("-disable-proof", Arg.Set disableproof, "- Disable proof output");
     ("--disable-proof", Arg.Set disableproof, "");
