@@ -151,48 +151,42 @@ let abstr1_to_pc man abstrVal =
 let print_abstr_val man abstrVal =
   List.iter (fun pc -> Printf.printf " %s\n" (Pc.toStringAtom pc)) (abstr1_to_pc man abstrVal)
 
-let applyTrans man fullEnv onlyPostEnv abstrVal preVars postVars consArray =
+let applyTrans man curAbstrVal consArray ruleEnv dstPostEnv dstEnv =
   (* Extend abstract value to the full environment: *)
-  let newAbstrVal = Abstract1.change_environment man abstrVal fullEnv false in
+  let newAbstrVal = Abstract1.change_environment man curAbstrVal ruleEnv false in
 
   (* Create a new abstract value using the constraint *)
   Abstract1.meet_tcons_array_with man newAbstrVal consArray;
 
   (* First restrict to post-vars, then rename those to pre-vars *)
-  Abstract1.change_environment_with man newAbstrVal onlyPostEnv false;
-  Abstract1.rename_array_with man newAbstrVal postVars preVars;
+  Abstract1.change_environment_with man newAbstrVal dstPostEnv false;
+  let dstPostVars = fst (Environment.vars dstPostEnv) in
+  let dstPreVars = fst (Environment.vars dstEnv) in
+  Abstract1.rename_array_with man newAbstrVal dstPostVars dstPreVars;
   newAbstrVal
-
 
 let array_exists p a =
   Array.fold_left (fun acc e -> acc || p e) false a
 
-let compute_invariants man rules startFun =
-  (* Compute standardized rules, colllect all variables, prepare environments *)
-  let (rules, vars) =
-    List.fold_left
-      (fun (rules, vars) rule ->
-        let rule = (Rule.standardize rule) in
-        (rule::rules, (Rule.getVars rule)@vars))
-      ([], [])
-      rules in
-  (* List.iter (fun r -> Printf.printf "Std. rule: %s\n" (Rule.toString r)) rules; (* DEBUG *) *)
+let compute_invariants man rules startFuns =
+  (* Compute standardized rules, prepare one environment for each function symbol, and a combined one for each pair of rules *)
+  let rules = List.map Rule.standardize rules in
 
-  let vars = Utils.remdup vars in
-  let (fullEnv, varMap) = mk_env vars in
-  let (preVars, postVars) =
-    ((Array.of_list (List.map (a_var varMap) (Term.getVars (Rule.getLeft (List.hd rules))))),
-     (Array.of_list (List.map (a_var varMap) (Term.getVars (Rule.getRight (List.hd rules)))))) in
-  let (onlyPreEnv, onlyPostEnv) =
-    let (intVars, _) = Environment.vars fullEnv in
-    let (notPre, notPost) =
-      Array.fold_left
-        (fun (notPre, notPost) v ->
-          let notPre = if array_exists (fun e -> Var.compare v e = 0) preVars then notPre else v::notPre in
-          let notPost = if array_exists (fun e -> Var.compare v e = 0) postVars then notPost else v::notPost in
-          (notPre, notPost)
-        ) ([], []) intVars in
-    (Environment.remove fullEnv (Array.of_list notPre), Environment.remove fullEnv (Array.of_list notPost)) in
+  (* Prepare environments for each function symbol *)
+  let funToPreVarsEnv = 
+    List.fold_left
+      (fun acc rule ->
+        let lhs = Rule.getLeft rule in
+        let (lhsFun, lhsVars) = (Term.getFun lhs, Term.getVars lhs) in
+        if not(FunMap.mem lhsFun acc) then
+          let lhsEnv = mk_env lhsVars in
+          FunMap.add lhsFun lhsEnv acc;
+        else
+          acc)
+      FunMap.empty
+      rules
+  in
+
   let findWithDef key def map =
     if FunMap.mem key map then
       FunMap.find key map
@@ -200,103 +194,150 @@ let compute_invariants man rules startFun =
       def
   in
 
-  (* Construct map from function symbol to outgoing rules, as (converted conditions, destination function symbol) list *)
-  let funToConsDst =
+  (* Construct map from function symbol to outgoing rules, as (conditions, destination function symbol) list *)
+  let funToOutgoingConstraintEnvs =
     List.fold_left
       (fun acc rule ->
-        let f = Term.getFun (Rule.getLeft rule) in
-        let dstF = Term.getFun (Rule.getRight rule) in
-        if Term.getArity (Rule.getLeft rule) <> Term.getArity(Rule.getRight rule) then 
-          raise (Invalid_argument "Rule with differing lhs/rhs arities."); (* check *)
-        let conss = Rule.getCond rule in
-        let consArray = Tcons1.array_make fullEnv (List.length conss) in
-        List.iteri (fun i c -> Tcons1.array_set consArray i (atom_to_tcons1 fullEnv varMap c)) conss;
-        FunMap.add f ((consArray, dstF)::(findWithDef f [] acc)) acc)
+        let lhsFun = Term.getFun (Rule.getLeft rule) in
+        let rhsFun = Term.getFun (Rule.getRight rule) in
+        let (lhsEnv, lhsVarMap) = FunMap.find lhsFun funToPreVarsEnv in
+        let newRuleVars = Utils.removeAll (Rule.getVars rule) (Term.getVars (Rule.getLeft rule)) in
+        let (ruleEnv, ruleVarMap) = extend_env lhsEnv lhsVarMap newRuleVars in
+        let (dstPostEnv, _) = mk_env (Term.getVars (Rule.getRight rule)) in
+        let condAtoms = Rule.getCond rule in
+        let consArray = Tcons1.array_make ruleEnv (List.length condAtoms) in
+        List.iteri (fun i c -> Tcons1.array_set consArray i (atom_to_tcons1 ruleEnv ruleVarMap c)) condAtoms;
+        FunMap.add lhsFun ((ruleEnv, consArray, rhsFun, dstPostEnv)::(findWithDef lhsFun [] acc)) acc)
       FunMap.empty
       rules in
 
   (* Stack format: (fun with changed val, list of funs seen since last widening *)
-  let stack = ref [(startFun, [startFun])] in
+  let stack = ref (List.map (fun startFun -> (startFun, [startFun])) startFuns) in
 
   (* Prepare abstract values for all symbols: Everything is empty, only start value allows everything *)
-  let funToAbstrVal = (FunMap.fold (fun key _ acc -> FunMap.add key (Abstract1.bottom man onlyPreEnv) acc) funToConsDst FunMap.empty) in
-  let funToAbstrVal = ref (FunMap.add startFun (Abstract1.top man onlyPreEnv) funToAbstrVal) in
+  let funToAbstrVal = (FunMap.fold (fun key _ acc -> FunMap.add key (Abstract1.bottom man (fst (FunMap.find key funToPreVarsEnv))) acc) funToOutgoingConstraintEnvs FunMap.empty) in
+  let funToAbstrVal = ref (List.fold_left (fun acc startFun -> FunMap.add startFun (Abstract1.top man (fst (FunMap.find startFun funToPreVarsEnv))) acc) funToAbstrVal startFuns) in
 
   while List.length !stack > 0 do
     let (f, history) = List.hd !stack in
     stack := List.tl !stack;
     let curAbstrVal = FunMap.find f !funToAbstrVal in
     List.iter
-      (fun (consArray, dstFun) ->
-        let newAbstrVal = applyTrans man fullEnv onlyPostEnv curAbstrVal preVars postVars consArray in
-        let dstAbstrVal = FunMap.find dstFun !funToAbstrVal in
-        Abstract1.join_with man newAbstrVal dstAbstrVal;
-        let (newHistory, resAbstrVal) =
-          if Utils.contains history dstFun then
+      (fun (ruleEnv, consArray, dstFun, dstPostEnv) ->
+        let oldDstAbstrVal = FunMap.find dstFun !funToAbstrVal in
+        let newDstAbstrVal = applyTrans man curAbstrVal consArray ruleEnv dstPostEnv (Abstract1.env oldDstAbstrVal) in
+
+       Abstract1.join_with man newDstAbstrVal oldDstAbstrVal;
+       let (newHistory, resAbstrVal) =
+         if Utils.contains history dstFun then
             (* We are repeating ourselves and start to get boring. Widen! *)
-            ([dstFun], Abstract1.widening man dstAbstrVal newAbstrVal)
-          else
-            (dstFun::history, newAbstrVal)
-        in
+           ([dstFun], Abstract1.widening man oldDstAbstrVal newDstAbstrVal)
+         else
+           (dstFun::history, newDstAbstrVal)
+       in
         (*Printf.printf "New invariant for '%s':\n" dstFun; print_abstr_val man resAbstrVal; (* DEBUG *) *)
-        funToAbstrVal := FunMap.add dstFun resAbstrVal !funToAbstrVal;
+       funToAbstrVal := FunMap.add dstFun resAbstrVal !funToAbstrVal;
 
         (* If we changed the dst abstr value, we need to reprocess all outgoing transitions from there *)
-        if not(Abstract1.is_eq man dstAbstrVal resAbstrVal) then
-            stack := (dstFun, newHistory)::!stack
+       if not(Abstract1.is_eq man newDstAbstrVal resAbstrVal) then
+         stack := (dstFun, newHistory)::!stack
       )
-      (findWithDef f [] funToConsDst)
+      (findWithDef f [] funToOutgoingConstraintEnvs)
   done;
   !funToAbstrVal
 
-let add_invariants man rcc startFun =
-  let rules = List.map CTRS.getRule rcc in
-  let funToAbstrVal = compute_invariants man rules startFun in
-  if FunMap.exists (fun _ aV -> not(Abstract1.is_top man aV)) funToAbstrVal then
-    Some
-      (funToAbstrVal,
-       (List.map
-          (fun r ->
-            let rule = CTRS.getRule r in
-            let lhs = Rule.getLeft rule in
-            let defSym = Term.getFun lhs in
-            let inv = abstr1_to_pc man (FunMap.find defSym funToAbstrVal) in
+let pp_invariants man funToInv =
+  FunMap.fold
+    (fun k aV acc ->
+      if not(Abstract1.is_top man aV) then
+        Printf.sprintf "%s  For symbol %s: %s\n" acc k (Pc.toString (abstr1_to_pc man aV))
+      else
+        acc
+    ) funToInv ""
+
+let process_kittel startFuns trs =
+  let add_invariants man rules startFuns =
+    let funToAbstrVal = compute_invariants man rules startFuns in
+    if FunMap.exists (fun _ aV -> not(Abstract1.is_top man aV)) funToAbstrVal then
+      Some
+        (funToAbstrVal,
+         (List.map
+            (fun rule ->
+              let lhs = Rule.getLeft rule in
+              let defSym = Term.getFun lhs in
+              let inv = abstr1_to_pc man (FunMap.find defSym funToAbstrVal) in
+
+              (* Map from std names to actually used names: *)
+              let subst = List.mapi (fun i v -> ("X_" ^ (string_of_int (i+1)), v)) (Term.getArgs lhs) in
+              let inv = Pc.instantiate inv subst in
+
+              Rule.create lhs (Rule.getRight rule) (Utils.remdupC Pc.equalAtom (inv@(Rule.getCond rule))))
+            rules)
+        )
+    else
+      None
+  in
+
+  let get_proof man newRules funToInv i alli =
+    let open Printf in
+    let invList = pp_invariants man funToInv in
+    sprintf
+      "Applied AI with '%s' on problem %i to obtain the following invariants:\n%s\n\nThis yielded the following problem:\n%s"
+      (Manager.get_library man)
+      i
+      invList
+      (Trs.toStringPrefix "\t" newRules)
+  in
+
+  let man = Box.manager_alloc () in
+  match add_invariants man trs startFuns with
+  | None -> None
+  | Some (funToInv, newRules) ->
+    Some ((newRules, Termgraph.compute newRules, false), get_proof man newRules funToInv)
+
+let process_koat (rcc, g, l) tgraph rvgraph =
+  let add_invariants man rules startFun =
+    let funToAbstrVal = compute_invariants man rules startFun in
+    if FunMap.exists (fun _ aV -> not(Abstract1.is_top man aV)) funToAbstrVal then
+      Some
+        (funToAbstrVal,
+         (List.map
+            (fun r ->
+              let rule = CTRS.getRule r in
+              let lhs = Rule.getLeft rule in
+              let defSym = Term.getFun lhs in
+              let inv = abstr1_to_pc man (FunMap.find defSym funToAbstrVal) in
 
             (* Map from std names to actually used names: *)
-            let subst = List.mapi (fun i v -> ("X_" ^ (string_of_int (i+1)), v)) (Term.getArgs lhs) in
-            let inv = Pc.instantiate inv subst in
+              let subst = List.mapi (fun i v -> ("X_" ^ (string_of_int (i+1)), v)) (Term.getArgs lhs) in
+              let inv = Pc.instantiate inv subst in
 
-            let newRule = Rule.create lhs (Rule.getRight rule) (Utils.remdupC Pc.equalAtom (inv@(Rule.getCond rule))) in
-            (newRule, CTRS.getRuleComplexity r, CTRS.getRuleCost r))
-          rcc)
-      )
-  else
-    None
+              let newRule = Rule.create lhs (Rule.getRight rule) (Utils.remdupC Pc.equalAtom (inv@(Rule.getCond rule))) in
+              (newRule, CTRS.getRuleComplexity r, CTRS.getRuleCost r))
+            rcc)
+        )
+    else
+      None
+  in
 
-let get_proof man funToInv nrccgl ini outi =
-  let open Printf in
-  let invList =
-    FunMap.fold
-      (fun k aV acc ->
-        if not(Abstract1.is_top man aV) then
-          sprintf "%s  For symbol %s: %s\n" acc k (Pc.toString (abstr1_to_pc man aV))
-        else
-          acc
-      ) funToInv "" in
-  sprintf
-    "Applied AI with '%s' on problem %i to obtain the following invariants:\n%s\n\nThis yielded the following problem:\n%s"
-    (Manager.get_library man)
-    ini
-    invList
-    (CTRS.toStringGNumber nrccgl outi)
+  let get_proof man funToInv nrccgl ini outi =
+    let open Printf in
+    let invList = pp_invariants man funToInv in
+    sprintf
+      "Applied AI with '%s' on problem %i to obtain the following invariants:\n%s\n\nThis yielded the following problem:\n%s"
+      (Manager.get_library man)
+      ini
+      invList
+      (CTRS.toStringGNumber nrccgl outi)
+  in
 
-let process (rcc, g, l) tgraph rvgraph =
   if CTRS.isSolved rcc then
     None
   else
     (
       let man = Box.manager_alloc () in
-      match add_invariants man rcc g with
+      let rules = List.map CTRS.getRule rcc in
+      match add_invariants man rules [g] with
       | None ->
         None
       | Some (funToInv, newRcc) ->
@@ -304,4 +345,3 @@ let process (rcc, g, l) tgraph rvgraph =
         let nrccgl = (newRcc, g, l) in
         Some ((nrccgl, TGraph.compute rules, None), get_proof man funToInv nrccgl)
     )
-
