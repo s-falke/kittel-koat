@@ -221,28 +221,30 @@ let compute_invariants man rules startFuns =
   while List.length !stack > 0 do
     let (f, history) = List.hd !stack in
     stack := List.tl !stack;
-    let curAbstrVal = FunMap.find f !funToAbstrVal in
-    List.iter
-     (fun (ruleEnv, consArray, dstFun, dstPostEnv) ->
-        let oldDstAbstrVal = FunMap.find dstFun !funToAbstrVal in
-        let newDstAbstrVal = applyTrans man curAbstrVal consArray ruleEnv dstPostEnv (Abstract1.env oldDstAbstrVal) in
+    if FunMap.mem f !funToAbstrVal then
+      let curAbstrVal = FunMap.find f !funToAbstrVal in
+      List.iter
+        (fun (ruleEnv, consArray, dstFun, dstPostEnv) ->
+          if FunMap.mem dstFun !funToAbstrVal then
+            let oldDstAbstrVal = FunMap.find dstFun !funToAbstrVal in
+            let newDstAbstrVal = applyTrans man curAbstrVal consArray ruleEnv dstPostEnv (Abstract1.env oldDstAbstrVal) in
 
-       Abstract1.join_with man newDstAbstrVal oldDstAbstrVal;
-       let (newHistory, resAbstrVal) =
-         if Utils.contains history dstFun then
-            (* We are repeating ourselves and start to get boring. Widen! *)
-           ([dstFun], Abstract1.widening man oldDstAbstrVal newDstAbstrVal)
-         else
-           (dstFun::history, newDstAbstrVal)
-       in
-        (*Printf.printf "New invariant for '%s':\n" dstFun; print_abstr_val man resAbstrVal; (* DEBUG *) *)
-       funToAbstrVal := FunMap.add dstFun resAbstrVal !funToAbstrVal;
+            Abstract1.join_with man newDstAbstrVal oldDstAbstrVal;
+            let (newHistory, resAbstrVal) =
+              if Utils.contains history dstFun then
+              (* We are repeating ourselves and start to get boring. Widen! *)
+                ([dstFun], Abstract1.widening man oldDstAbstrVal newDstAbstrVal)
+              else
+                (dstFun::history, newDstAbstrVal)
+            in
+            (* Printf.printf "New invariant for '%s':\n" dstFun; print_abstr_val man resAbstrVal; (* DEBUG *) *)
+            funToAbstrVal := FunMap.add dstFun resAbstrVal !funToAbstrVal;
 
-        (* If we changed the dst abstr value, we need to reprocess all outgoing transitions from there *)
-      if not(Abstract1.is_eq man newDstAbstrVal resAbstrVal) then
-         stack := (dstFun, newHistory)::!stack
-      )
-      (findWithDef f [] funToOutgoingConstraintEnvs)
+          (* If we changed the dst abstr value, we need to reprocess all outgoing transitions from there *)
+            if not(Abstract1.is_eq man oldDstAbstrVal resAbstrVal) then
+              stack := (dstFun, newHistory)::!stack
+        )
+        (findWithDef f [] funToOutgoingConstraintEnvs)
   done;
   !funToAbstrVal
 
