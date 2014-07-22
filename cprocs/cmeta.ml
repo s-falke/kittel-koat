@@ -254,7 +254,7 @@ and doLoop () =
   doKnowledgePropagation ();
   doSeparate () ; (* doFarkasConstant () *)
 and doApronInvariants () =
-  run ApronInvariantsProc.process
+  run ApronInvariantsProc.process_koat
 and doUnreachableRemoval () =
   run UnreachableProc.process
 and doKnowledgePropagation () =

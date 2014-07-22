@@ -32,11 +32,11 @@ exception Timeout
 let handle_sigalrm signo =
   raise Timeout
 
-let timed_run f arg1 arg2 tsecs defaultval =
+let timed_run f arg1 arg2 arg3 tsecs defaultval =
   let oldsig = Sys.signal Sys.sigalrm (Sys.Signal_handle handle_sigalrm) in
     try
       set_timer tsecs;
-      let res = f arg1 arg2 in
+      let res = f arg1 arg2 arg3 in
         set_timer 0.0;
         Sys.set_signal Sys.sigalrm oldsig;
         res
@@ -54,8 +54,9 @@ let filename = ref ""
 let timeout = ref 0.0
 let maxchaining = ref max_int
 let disableproof = ref false
+let startFuns = ref None
 
-let usage = "usage: " ^ Sys.argv.(0) ^ " [-combine <method>] [-timeout <float>] [-smt-solver <solver>] [-max-chaining <int>] [-disable-proof] <filename>"
+let usage = "usage: " ^ Sys.argv.(0) ^ " <filename>"
 
 let stringToCombine s printer =
   if s = "statements" then
@@ -96,6 +97,8 @@ let rec speclist =
     ("--max-chaining", Arg.Set_int maxchaining, "");
     ("-disable-proof", Arg.Set disableproof, "- Disable proof output");
     ("--disable-proof", Arg.Set disableproof, "");
+    ("-start-fun", Arg.String (fun s -> startFuns := Some (Str.split (Str.regexp " *, *") s)), "    - Set start symbols (comma-separated). Will compute invariants starting from there.");
+    ("--start-fun", Arg.String (fun s -> startFuns := Some (Str.split (Str.regexp " *, *") s)), "");
     ("-help", Arg.Unit (fun () -> print_usage (); exit 1), "         - Display this list of options");
     ("--help", Arg.Unit (fun () -> print_usage (); exit 1), "");
     ("-version", Arg.Unit (fun () -> Printf.printf "KITTeL\nCopyright 2010-2014 Stephan Falke\nVersion %s\n" Git_sha1.git_sha1; exit 1), "      - Display the version of this program");
@@ -118,7 +121,7 @@ let main () =
     let tt = Parser.parseTrs !filename !combine in
       Smt.smt_time := 0.0;
       let start = Unix.gettimeofday () in
-        match (if !timeout = 0.0 then (Meta.process tt !maxchaining) else (timed_run Meta.process tt !maxchaining !timeout None)) with
+        match (if !timeout = 0.0 then (Meta.process tt !startFuns !maxchaining) else (timed_run Meta.process tt !startFuns !maxchaining !timeout None)) with
           | None ->
             (
               if not !disableproof then

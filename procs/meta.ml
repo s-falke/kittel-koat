@@ -24,12 +24,28 @@ let output_nums = ref []
 let input_nums = ref []
 let todo = ref []
 
-let rec process trs maxchaining =
+let rec process trs startFuns maxchaining =
   i := 1;
   proofs := [];
   input_nums := [];
   output_nums := [];
-  todo := [((trs, Termgraph.compute trs, false), 1)];
+  (* If we have start function symbols, we can generate invariants as first step (it becomes unsound the second we start manipulating the TRS!) *)
+  (
+    match startFuns with
+    | None ->
+      todo := [((trs, Termgraph.compute trs, false), 1)]
+    | Some startFuns ->
+      match ApronInvariantsProc.process_kittel startFuns trs with
+      | None ->
+        todo := [((trs, Termgraph.compute trs, false), 1)];
+      | Some ((newTrs, tgraph, _), get_proof) ->
+        todo := [((newTrs, tgraph, false), 2)];
+        input_nums := [1];
+        output_nums := [[2]];
+        i := 2;
+        proofs := [get_proof];
+  );
+
   Chain.max_chaining := maxchaining;
   Chain.done_chaining := 0;
   run Unsat.process;
