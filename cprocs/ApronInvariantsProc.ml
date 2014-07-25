@@ -286,11 +286,11 @@ let process_kittel startFuns trs =
     let open Printf in
     let invList = pp_invariants man funToInv in
     sprintf
-      "Applied AI with '%s' on problem %i to obtain the following invariants:\n%s\n\nThis yielded the following problem:\n%s"
+      "Applied AI with '%s' on problem %i to obtain the following invariants:\n%s\nThis yields the following problem:\n%s"
       (Manager.get_library man)
       i
       invList
-      (Trs.toStringPrefix "\t" newRules)
+      (Procs.getStringSccs alli [newRules])
   in
 
   let man = Box.manager_alloc () in
