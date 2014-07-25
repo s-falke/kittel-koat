@@ -93,11 +93,11 @@ let rec speclist =
     ("--timeout", Arg.Set_float timeout, "");
     ("-smt-solver", Arg.String (fun s -> Smt.setSolver (checkSmtSolver s print_usage)), "   - Set the SMT solver (yices/yices2/z3/cvc4/mathsat5)");
     ("--smt-solver", Arg.String (fun s -> Smt.setSolver (checkSmtSolver s print_usage)), "");
-    ("-max-chaining", Arg.Set_int maxchaining, Printf.sprintf " - Set maximum for chaining processor applications [default %i]" !maxchaining);
+    ("-max-chaining", Arg.Set_int maxchaining, Printf.sprintf " - Set the maximum number of chaining processor applications [default %i]" !maxchaining);
     ("--max-chaining", Arg.Set_int maxchaining, "");
     ("-disable-proof", Arg.Set disableproof, "- Disable proof output");
     ("--disable-proof", Arg.Set disableproof, "");
-    ("-start-fun", Arg.String (fun s -> startFuns := Some (Str.split (Str.regexp " *, *") s)), "    - Set start symbols (comma-separated) for invariant computation");
+    ("-start-fun", Arg.String (fun s -> startFuns := Some (Str.split (Str.regexp " *, *") s)), "    - Set the start symbols (comma-separated) for invariant computation");
     ("--start-fun", Arg.String (fun s -> startFuns := Some (Str.split (Str.regexp " *, *") s)), "");
     ("-help", Arg.Unit (fun () -> print_usage (); exit 1), "         - Display this list of options");
     ("--help", Arg.Unit (fun () -> print_usage (); exit 1), "");
