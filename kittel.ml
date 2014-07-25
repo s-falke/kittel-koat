@@ -97,7 +97,7 @@ let rec speclist =
     ("--max-chaining", Arg.Set_int maxchaining, "");
     ("-disable-proof", Arg.Set disableproof, "- Disable proof output");
     ("--disable-proof", Arg.Set disableproof, "");
-    ("-start-fun", Arg.String (fun s -> startFuns := Some (Str.split (Str.regexp " *, *") s)), "    - Set start symbols (comma-separated). Will compute invariants starting from there.");
+    ("-start-fun", Arg.String (fun s -> startFuns := Some (Str.split (Str.regexp " *, *") s)), "    - Set start symbols (comma-separated) for invariant computation");
     ("--start-fun", Arg.String (fun s -> startFuns := Some (Str.split (Str.regexp " *, *") s)), "");
     ("-help", Arg.Unit (fun () -> print_usage (); exit 1), "         - Display this list of options");
     ("--help", Arg.Unit (fun () -> print_usage (); exit 1), "");
