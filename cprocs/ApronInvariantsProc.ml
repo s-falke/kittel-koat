@@ -18,6 +18,8 @@
   limitations under the License.
 *)
 
+IFDEF HAVE_APRON THEN
+
 open Apron
 
 module CTRS = Ctrs.Make(Rule)
@@ -347,3 +349,5 @@ let process_koat (rcc, g, l) tgraph rvgraph =
         let nrccgl = (newRcc, g, l) in
         Some ((nrccgl, TGraph.compute rules, None), get_proof man funToInv nrccgl)
     )
+
+END

@@ -18,7 +18,9 @@
   limitations under the License.
 *)
 
+IFDEF HAVE_APRON THEN
 open ApronInvariantsProc
+END
 
 module CTRS = Ctrs.Make(Rule)
 module RVG = Rvgraph.Make(Rule)
@@ -254,7 +256,11 @@ and doLoop () =
   doKnowledgePropagation ();
   doSeparate () ; (* doFarkasConstant () *)
 and doApronInvariants () =
+IFDEF HAVE_APRON THEN
   run ApronInvariantsProc.process_koat
+ELSE
+  ()
+END
 and doUnreachableRemoval () =
   run UnreachableProc.process
 and doKnowledgePropagation () =

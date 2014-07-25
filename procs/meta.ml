@@ -24,28 +24,33 @@ let output_nums = ref []
 let input_nums = ref []
 let todo = ref []
 
+IFDEF HAVE_APRON THEN
+let setInitialProblem trs startFuns =
+  (* If we have start function symbols, we can generate invariants as first step (it becomes unsound the second we start manipulating the TRS!) *)
+  match startFuns with
+  | None ->
+    todo := [((trs, Termgraph.compute trs, false), 1)]
+  | Some startFuns ->
+    match ApronInvariantsProc.process_kittel startFuns trs with
+    | None ->
+      todo := [((trs, Termgraph.compute trs, false), 1)];
+    | Some ((newTrs, tgraph, _), get_proof) ->
+      todo := [((newTrs, tgraph, false), 2)];
+      input_nums := [1];
+      output_nums := [[2]];
+      i := 2;
+      proofs := [get_proof];
+ELSE
+let setInitialProblem trs _ =
+  todo := [((trs, Termgraph.compute trs, false), 1)];
+END
+
 let rec process trs startFuns maxchaining =
   i := 1;
   proofs := [];
   input_nums := [];
   output_nums := [];
-  (* If we have start function symbols, we can generate invariants as first step (it becomes unsound the second we start manipulating the TRS!) *)
-  (
-    match startFuns with
-    | None ->
-      todo := [((trs, Termgraph.compute trs, false), 1)]
-    | Some startFuns ->
-      match ApronInvariantsProc.process_kittel startFuns trs with
-      | None ->
-        todo := [((trs, Termgraph.compute trs, false), 1)];
-      | Some ((newTrs, tgraph, _), get_proof) ->
-        todo := [((newTrs, tgraph, false), 2)];
-        input_nums := [1];
-        output_nums := [[2]];
-        i := 2;
-        proofs := [get_proof];
-  );
-
+  setInitialProblem trs startFuns;
   Chain.max_chaining := maxchaining;
   Chain.done_chaining := 0;
   run Unsat.process;

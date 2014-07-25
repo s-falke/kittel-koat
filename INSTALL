@@ -4,7 +4,8 @@ Requirements:
   OCamlgraph (reasonably recent version; I use version 1.8.3)
   One or more of the following SMT-solvers:
     yices, yices2, z3, cvc4, mathsat5
-  For koat: APRON
+  Optionally: APRON (if you don't have APRON, set "HAVE_APRON" to
+  "false" in the Makefile. This will disable invariant generation).
 
 Build instructions:
 -------------------

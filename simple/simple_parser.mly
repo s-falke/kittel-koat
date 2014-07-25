@@ -7,7 +7,7 @@
 */
 
 %token <string> IDENT INFIX INT
-%token COLON SEMI COMMA OPENPAR CLOSEPAR EOL ASSIGN EQU EOF GEQ GTR LEQ LSS AND TIMES SKIP HALT ASSUME RANDOM IF THEN ELSE ENDIF WHILE DO DONE TRUE FALSE BRANDOM BEGIN END INTT VAR OR NOT PROC RETURNS
+%token COLON SEMI COMMA OPENPAR CLOSEPAR EOL ASSIGN EQU EOF GEQ GTR LEQ LSS AND TIMES SKIP HALT ASSUME RANDOM IF TTHEN EELSE EENDIF WHILE DO DONE TRUE FALSE BRANDOM BEGIN EEND INTT VAR OR NOT PROC RETURNS
 
 %left INFIX
 %left TIMES
@@ -19,13 +19,13 @@
 %%
 
 program:
-| VAR vars_decl SEMI BEGIN statement_list END
+| VAR vars_decl SEMI BEGIN statement_list EEND
     { ([], $2, $5) }
-| proc_def_list VAR vars_decl SEMI BEGIN statement_list END
+| proc_def_list VAR vars_decl SEMI BEGIN statement_list EEND
     { ($1, $3, $6) }
-| BEGIN statement_list END
+| BEGIN statement_list EEND
     { ([], [], $2) }
-| proc_def_list BEGIN statement_list END
+| proc_def_list BEGIN statement_list EEND
     { ($1, [], $3) }
 ;
 
@@ -37,13 +37,13 @@ proc_def_list:
 ;
 
 proc_def:
-| PROC IDENT OPENPAR vars_decl CLOSEPAR RETURNS OPENPAR CLOSEPAR BEGIN statement_list END
+| PROC IDENT OPENPAR vars_decl CLOSEPAR RETURNS OPENPAR CLOSEPAR BEGIN statement_list EEND
     { ($2, $4, None, [], $10) }
-| PROC IDENT OPENPAR vars_decl CLOSEPAR RETURNS OPENPAR CLOSEPAR VAR vars_decl SEMI BEGIN statement_list END
+| PROC IDENT OPENPAR vars_decl CLOSEPAR RETURNS OPENPAR CLOSEPAR VAR vars_decl SEMI BEGIN statement_list EEND
     { ($2, $4, None, $10, $13) }
-| PROC IDENT OPENPAR vars_decl CLOSEPAR RETURNS OPENPAR var_decl CLOSEPAR BEGIN statement_list END
+| PROC IDENT OPENPAR vars_decl CLOSEPAR RETURNS OPENPAR var_decl CLOSEPAR BEGIN statement_list EEND
     { ($2, $4, Some $8, [], $11) }
-| PROC IDENT OPENPAR vars_decl CLOSEPAR RETURNS OPENPAR var_decl CLOSEPAR VAR vars_decl SEMI BEGIN statement_list END
+| PROC IDENT OPENPAR vars_decl CLOSEPAR RETURNS OPENPAR var_decl CLOSEPAR VAR vars_decl SEMI BEGIN statement_list EEND
     { ($2, $4, Some $8, $11, $14) }
 ;
 
@@ -77,9 +77,9 @@ statement:
     { Simple.Random $1 }
 | IDENT ASSIGN poly SEMI
     { Simple.Assign ($1, Poly.construct_poly $3) }
-| IF OPENPAR bexpr CLOSEPAR THEN statement_list ELSE statement_list ENDIF SEMI
+| IF OPENPAR bexpr CLOSEPAR TTHEN statement_list EELSE statement_list EENDIF SEMI
     { Simple.ITE ($3, $6, $8) }
-| IF OPENPAR bexpr CLOSEPAR THEN statement_list ENDIF SEMI
+| IF OPENPAR bexpr CLOSEPAR TTHEN statement_list EENDIF SEMI
     { Simple.ITE ($3, $6, [Simple.Skip]) }
 | WHILE OPENPAR bexpr CLOSEPAR DO statement_list DONE SEMI
     { Simple.While ($3, $6) }
