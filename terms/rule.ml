@@ -27,6 +27,8 @@ let create l r c = { lhs = l; rhs = r; cond = c }
 let toString r =
   (Term.toString r.lhs) ^ " -> " ^ (Term.toString r.rhs) ^
   (if r.cond = [] then "" else " [ " ^ (Pc.toString r.cond) ^ " ]")
+let listToStringPrefix prefix rules =
+  String.concat "\n" (List.map (fun r -> prefix ^ toString r) rules)
 
 (* Create a string for a rule *)
 let toDotString r =

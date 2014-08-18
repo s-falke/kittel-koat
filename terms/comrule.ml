@@ -30,6 +30,8 @@ let rec toString r =
 and toStringRhss rs =
   "Com_" ^ (string_of_int (List.length rs)) ^ "(" ^
   String.concat ", " (List.map Term.toString rs) ^ ")"
+and listToStringPrefix prefix rules =
+  String.concat "\n" (List.map (fun r -> prefix ^ toString r) rules)
 
 let compare r1 r2 =
   let lComp = Term.compare r1.lhs r2.lhs in
