@@ -279,6 +279,7 @@ and doSeparate () =
   in
   match findSubSCC ctrsobl sccs with
   | Some innerFuns ->
+    Log.debug (Printf.sprintf "Looking at problem\n%s\nDecided to split innerFuns [%s]" (CTRSObl.toString ctrsobl) (String.concat ", " innerFuns));
     run_ite (Cseparate.process processInner innerFuns true !done_inner sep) doSeparationCleanup doFarkasConstant
   | None -> 
     doFarkasConstant ()

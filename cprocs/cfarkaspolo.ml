@@ -94,8 +94,6 @@ and doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSi
           let model' = Polo.fix_model model (params @ isMINsVars) in
           let conc = get_concrete_poly abs isMINs model' in
           let c = getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities in
-          if Log.do_debug () then
-            Log.debug ("Found the following PRF:\n" ^ (pol_to_string conc));
           let nctrsobl = 
             if useMinimal then 
               annotateMinimal ctrsobl s boundUseMinimal strictUseMinimal strictRhsMin model' c
@@ -107,6 +105,8 @@ and doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSi
             doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities (List.tl allS)
           else
             (
+              if Log.do_debug () then
+                Log.debug ("Found the following PRF:\n" ^ (pol_to_string conc));
               Log.log (Printf.sprintf "PRF synthesis successful, proven complexity %s." (Complexity.toString c));
               Some ((nctrsobl, tgraph, rvgraph), getProof ctrsobl nctrsobl conc useSizeComplexities globalSizeComplexities toOrient)
             )

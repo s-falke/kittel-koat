@@ -46,6 +46,7 @@ let rec process innerprover innerFuns addSizeSummaries sepId sepOblIdMultiplier 
         Log.log (Printf.sprintf "Separating into subproblems, inner problem using locations [%s]." (String.concat ", " innerFuns));
         let freshOblId = (sepId * sepOblIdMultiplier) in
         let (outerRules, entryRules, innerRules, exitRules) = splitRules ctrsobl innerFuns in
+        Log.debug (Printf.sprintf "Inner rules that are separated out:\n  %s" (Rule.listToStringPrefix "  " innerRules));
         let (innerObl, innerTGraph, innerRVGraph) = getInnerObligation ctrsobl entryRules innerRules freshOblId tgraph rvgraph in
         let subproof = innerprover innerObl innerTGraph innerRVGraph in
         match subproof with

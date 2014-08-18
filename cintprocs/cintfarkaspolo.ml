@@ -48,6 +48,7 @@ let rec process useSizeComplexities degree ctrsobl tgraph rvgraph =
     None
   else
   (
+    Log.log (Printf.sprintf "Trying linear PRF (Farkas-based) processor for degree %i (%s size bounds)..." degree (if useSizeComplexities then "with" else "without"));
     let globalSizeComplexities = if useSizeComplexities then GSC.compute ctrsobl (Utils.unboxOption rvgraph) else GSC.empty in
     let s = if useSizeComplexities then (Utils.powSet (getS4SizeComplexities tgraph ctrsobl)) else [CTRSObl.getUnknownComplexityRules ctrsobl] in
     doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities s
