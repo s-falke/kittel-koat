@@ -178,7 +178,7 @@ and getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities
     Complexity.listAdd (List.map (getTerm conc ctrsobl pre_toOrient globalSizeComplexities vars) funs_toOrient)
   else
     let pol_start = List.assoc ctrsobl.ctrs.startFun conc in
-    let varBindings = List.mapi (fun i v -> ("X_" ^ (string_of_int i), Expexp.fromVar v)) vars in
+    let varBindings = List.mapi (fun i v -> ("X_" ^ (string_of_int (i + 1)), Expexp.fromVar v)) vars in
     Complexity.P (Expexp.abs (Expexp.instantiate (Expexp.fromPoly pol_start) varBindings))
 and getTerm conc ctrsobl pre_toOrient globalSizeComplexities vars f =
   let getTermForPreComrule f pol_f ctrsobl globalSizeComplexities vars prerule =
