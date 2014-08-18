@@ -47,8 +47,6 @@ let rec process useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph =
     doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities s
   )
 and doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities allS =
-  let ctrs = ctrsobl.ctrs in
-  let rules = ctrs.rules in
   if allS = [] then
     None
   else
@@ -56,36 +54,36 @@ and doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSi
     let s = List.hd allS in
     Farkaspolo.lambda_count := 0;
     Farkaspolo.all_lambdas := [];
-    let toOrient = if useSizeComplexities then s else rules in
+    let toOrient = if useSizeComplexities then s else ctrsobl.ctrs.rules in
     if toOrient = [] then
       doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities (List.tl allS)
     else
       let (abs, params) = Polo.create_poly_map degree toOrient in
       let (isMINs, isMINsVars) = if useMinimal then (create_is_mins toOrient) else ([], []) in
-      let cwbs = Farkaspolo.convert_rules_to_leqs toOrient abs Big_int.unit_big_int in
-      let cwbs_for_unknowns = getOnlyFor cwbs toOrient s in
-      let weak = List.map Farkaspolo.getWeak cwbs in
-      Log.debug "Weak constraints:";
-      List.iter (fun c -> Log.debug (Pc.toString c)) weak;
-      let weakRhsMin = if useMinimal then (List.map (getRhsMin isMINs) toOrient) else [] in
-      let bound = List.map Farkaspolo.getBound cwbs_for_unknowns in
-      Log.debug "Bound constraints:";
-      List.iter (fun c -> Log.debug (Pc.toString c)) bound;
-      let weakUseMinimal = if useMinimal then List.map2 (addNeitherMin isMINs) weak toOrient else [] in
-      let boundUseMinimal = if useMinimal then List.map2 (addLhsNotMin isMINs) bound s else [] in
-      let strictDecrease = List.map Farkaspolo.getStrict (getOnlyFor weak toOrient s) in
-      let strictRhsNotMin = if useMinimal then (List.map (fun rule -> [getRhsNotMin isMINs rule]) s) else [] in
-      let strictRhsMin = if useMinimal then (List.map (fun rule -> [getRhsMin isMINs rule]) s) else [] in
-      let strict = if useMinimal then [] else (Farkaspolo.combine bound strictDecrease) in
-      Log.debug "Strict decrease:";
-      List.iter (fun c -> Log.debug (Pc.toString c)) strictDecrease;
-      let strictUseMinimal = if useMinimal then (Farkaspolo.combine strictDecrease strictRhsNotMin) else [] in
+      let cwbs_with_rules = List.map (fun r -> (r, Farkaspolo.convert_rule_to_leqs r abs Big_int.unit_big_int)) toOrient in
+      let cwbs_for_unknowns_with_rules = getOnlyFor cwbs_with_rules toOrient s in
+      let weak_with_rules = List.map (fun (r, cwb) -> (r, Farkaspolo.getWeak cwb)) cwbs_with_rules in
+      let weakRhsMin_with_rules = if useMinimal then (List.map (fun r -> (r, (getRhsMin isMINs r))) toOrient) else [] in
+      let bound_with_rules = List.map (fun (r, cwb) -> (r, Farkaspolo.getBound cwb)) cwbs_for_unknowns_with_rules in
+      let weakUseMinimal_with_rules = if useMinimal then List.map2 (fun (r, w) tO -> (r, addNeitherMin isMINs w tO)) weak_with_rules toOrient else [] in
+      let boundUseMinimal_with_rules = if useMinimal then List.map2 (fun (r, w) s -> (r, addLhsNotMin isMINs w s)) bound_with_rules s else [] in
+      let strictDecrease_with_rules = List.map (fun (r, w) -> (r, Farkaspolo.getStrict w)) (getOnlyFor weak_with_rules toOrient s) in
+      let strictRhsNotMin_with_rules = if useMinimal then (List.map (fun rule -> (rule, [getRhsNotMin isMINs rule])) s) else [] in
+      let strictRhsMin_with_rules = if useMinimal then (List.map (fun rule -> (rule, [getRhsMin isMINs rule])) s) else [] in
+      let strictAndBounded_with_rules = 
+        if useMinimal then [] 
+        else 
+          List.map2 (fun (rS, s) (rB, b) -> assert(Rule.equal rB rS); (rS, b @ s)) strictDecrease_with_rules bound_with_rules  in
+      let strictAndNoMin_with_rules =
+        if useMinimal then 
+          List.map2 (fun (rS, s) (rB, b) -> assert(Rule.equal rB rS); (rS, b @ s)) strictDecrease_with_rules strictRhsNotMin_with_rules
+        else [] in
       let allparams = params @ !Farkaspolo.all_lambdas @ isMINsVars in
       let res = 
         if useMinimal then 
-          Smt.isSatisfiableFarkasPoloMinimal (getMinRestrictions isMINsVars) (getMinImplications isMINs abs) weakUseMinimal weakRhsMin boundUseMinimal strictUseMinimal strictRhsMin allparams
+          Smt.isSatisfiableFarkasPoloMinimal (getMinRestrictions isMINsVars) (getMinImplications isMINs abs) (List.map snd weakUseMinimal_with_rules) (List.map snd weakRhsMin_with_rules) (List.map snd boundUseMinimal_with_rules) (List.map snd strictAndNoMin_with_rules) (List.map snd strictRhsMin_with_rules) allparams
         else 
-          Smt.isSatisfiableFarkasPolo (List.flatten weak) strict allparams
+          Smt.isSatisfiableFarkasPolo (Utils.concatMap snd weak_with_rules) (List.map snd strictAndBounded_with_rules) allparams
       in
       match res with
       | None -> None
@@ -96,9 +94,9 @@ and doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSi
           let c = getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities in
           let nctrsobl = 
             if useMinimal then 
-              annotateMinimal ctrsobl s boundUseMinimal strictUseMinimal strictRhsMin model' c
+              annotateMinimal ctrsobl boundUseMinimal_with_rules strictAndNoMin_with_rules strictRhsMin_with_rules model' c
             else 
-              annotate ctrsobl s strict model' c
+              annotate ctrsobl strictAndBounded_with_rules model' c
           in
           if CTRSObl.haveSameComplexities ctrsobl nctrsobl then 
             (* Try next variant of S *)
@@ -224,32 +222,33 @@ and isStrict strictVar model =
     Pc.isTrue strictVar model
   with
   | Not_found -> false
-and annotate ctrsobl s strict model d =
+and annotate ctrsobl strictAndBounded_with_rules model d =
   let newComplexity =
     List.fold_left 
-      (fun newComplexity (rule, strictVar) -> 
-        if isStrict strictVar model && CTRSObl.hasUnknownComplexity ctrsobl rule then 
+      (fun newComplexity (rule, strictAndBounded) -> 
+        if isStrict strictAndBounded model && CTRSObl.hasUnknownComplexity ctrsobl rule then 
           RuleMap.add rule d newComplexity
         else
           newComplexity)
       ctrsobl.complexity
-      (List.combine s strict)
+      strictAndBounded_with_rules
   in
   { ctrs = ctrsobl.ctrs ; cost = ctrsobl.cost ; complexity = newComplexity ; leafCost = ctrsobl.leafCost }
 
-and annotateMinimal ctrsobl s bounds stricts rhsmins model d =
+and annotateMinimal ctrsobl boundUseMinimal_with_rules strictAndNoMin_with_rules strictRhsMin_with_rules model d =
   let isStrictMinimal bound strict rhsminimal model =
     (isStrict bound model) && ((isStrict strict model) || (isStrict rhsminimal model))
   in
   let newComplexity =
     List.fold_left 
-      (fun newComplexity (rule, boundVar, strictVar, rhsMinVar) -> 
-        if isStrictMinimal boundVar strictVar rhsMinVar model && CTRSObl.hasUnknownComplexity ctrsobl rule then 
-          RuleMap.add rule d newComplexity
+      (fun newComplexity ((rB, boundVar), (rS, strictVar), (rM, rhsMinVar)) -> 
+        assert (Rule.equal rB rS && Rule.equal rS rM);
+        if isStrictMinimal boundVar strictVar rhsMinVar model && CTRSObl.hasUnknownComplexity ctrsobl rB then 
+          RuleMap.add rB d newComplexity
         else
           newComplexity)
       ctrsobl.complexity
-      (Utils.combine4 s bounds stricts rhsmins)
+      (Utils.combine3 boundUseMinimal_with_rules strictAndNoMin_with_rules strictRhsMin_with_rules)
   in
   { ctrs = ctrsobl.ctrs ; cost = ctrsobl.cost ; complexity = newComplexity ; leafCost = ctrsobl.leafCost }
 

@@ -28,19 +28,14 @@ module TGraph = Tgraph.Make(Comrule)
 open CTRSObl
 open CTRS
 
-let rec getOnlyFor xx r s =
-  match xx with
+let rec getOnlyFor x_with_rules r s =
+  match x_with_rules with
     | [] -> []
     | x::xs -> let rule = List.hd r in
-                 if (Utils.containsP Comrule.equal s rule) then
-                   x::(getOnlyFor xs (List.tl r) s)
-                 else
-                   getOnlyFor xs (List.tl r) s
-
-let first (x, _, _) =
-  x
-and second (_, c, _) =
-  c
+                   if (Utils.containsP Comrule.equal s rule) then
+                     x::(getOnlyFor xs (List.tl r) s)
+                   else
+                     getOnlyFor xs (List.tl r) s
 
 (* Find a polynomial interpretation *)
 let rec process useSizeComplexities degree ctrsobl tgraph rvgraph =
@@ -53,44 +48,51 @@ let rec process useSizeComplexities degree ctrsobl tgraph rvgraph =
     let s = if useSizeComplexities then (Utils.powSet (getS4SizeComplexities tgraph ctrsobl)) else [CTRSObl.getUnknownComplexityRules ctrsobl] in
     doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities s
   )
-and constructAllS s =
-  List.fold_right (fun e rest -> Utils.mapFlat (fun l -> [e::l; l]) rest) s [[]]
 and doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities allS =
-  let ctrs = ctrsobl.ctrs in
-  let rules = ctrs.rules in
   if allS = [] then
     None
   else
     let s = List.hd allS in
     Farkaspolo.lambda_count := 0;
     Farkaspolo.all_lambdas := [];
-    let toOrient = if useSizeComplexities then s else rules in
+    let toOrient = if useSizeComplexities then s else ctrsobl.ctrs.rules in
     if toOrient = [] then
       doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities (List.tl allS)
     else
-      let (abs, params) = create_poly_map toOrient in
-      let cwbs = get_cwbs toOrient abs in
-      let cwbs_for_unknowns = getOnlyFor cwbs toOrient s in
-      let weak = List.map getAllWeak cwbs in
-      let bound = List.map getAllBound cwbs_for_unknowns in
-      let strictDecrease = List.map getAllStrict (getOnlyFor weak toOrient s) in
-      let strict = Farkaspolo.combine bound (List.map List.flatten strictDecrease) in
-      let allparams = params @ !Farkaspolo.all_lambdas in
-      let res = Smt.isSatisfiableFarkasPolo (List.flatten (List.flatten weak)) strict allparams in
-      match res with
-      | None -> None
-      | Some model ->
-        (
+      (
+        let (abs, params) = create_poly_map toOrient in
+        let cwbs_with_rules = get_cwbs toOrient abs in
+        let cwbs_with_rules_for_unknowns = getOnlyFor cwbs_with_rules toOrient s in
+        let weak_with_rules = List.map getAllWeak cwbs_with_rules in
+        let bound_with_rules = List.map getAllBound cwbs_with_rules_for_unknowns in
+        let strictDecrease_with_rules = List.map getAllStrict (getOnlyFor weak_with_rules toOrient s) in
+        let boundedAndStrict_with_rules =
+          List.map2 
+          (fun (rB, b) (rS, ss) ->
+            assert(Comrule.equal rB rS);
+            (rB, b @ (List.flatten ss)))
+            bound_with_rules strictDecrease_with_rules
+        in
+        let allparams = params @ !Farkaspolo.all_lambdas in
+        let res = Smt.isSatisfiableFarkasPolo (List.flatten (Utils.concatMap snd weak_with_rules)) (List.map snd boundedAndStrict_with_rules) allparams in
+        match res with
+        | None -> None
+        | Some model ->
           let model' = Polo.fix_model model params in
           let conc = Polo.get_concrete_poly abs model' in
           let c = getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities in
-          let nctrsobl = annotate ctrsobl s strict model' c in
+          let nctrsobl = annotate ctrsobl boundedAndStrict_with_rules model' c in
           if CTRSObl.haveSameComplexities ctrsobl nctrsobl then 
             (* Try next variant of S *)
             doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities (List.tl allS)
           else
-            Some ((nctrsobl, tgraph, rvgraph), fun ini outi -> getProof ini outi ctrsobl nctrsobl conc useSizeComplexities globalSizeComplexities toOrient)
-        )
+            (
+              if Log.do_debug () then
+                Log.debug ("Found the following PRF:\n" ^ (pol_to_string conc));
+              Log.log (Printf.sprintf "PRF synthesis successful, proven complexity %s." (Complexity.toString c));
+              Some ((nctrsobl, tgraph, rvgraph), fun ini outi -> getProof ini outi ctrsobl nctrsobl conc useSizeComplexities globalSizeComplexities toOrient)
+            )
+      )
 
 (* set up parametric polynomials *)
 and create_poly_map cint =
@@ -101,7 +103,7 @@ and create_poly_map_one cint f =
   (f, Polo.getPoly 1 (Cint.getArityOf f cint) f)
 
 and get_cwbs toOrient abs =
-  List.map (fun r -> convert_rule_to_leqs r abs) toOrient
+  List.map (fun r -> (r, convert_rule_to_leqs r abs)) toOrient
 and convert_rule_to_leqs r abs =
   let lpol = List.assoc (Term.getFun (Comrule.getLeft r)) abs
   and rpols = List.map (fun r -> List.assoc (Term.getFun r) abs) (Comrule.getRights r) in
@@ -134,14 +136,14 @@ and addMeIn rpolinst tmp =
   (List.map (fun list -> ([], ([], Big_int.zero_big_int))::list) tmp) @
   (List.map (fun list -> rpolinst::list) tmp)
 
-and getAllWeak (c, ws, b) =
-  List.map (fun w -> Farkaspolo.getWeak (c, w, b)) ws
+and getAllWeak (r, (c, ws, b)) : (Comrule.rule * Pc.atom list list) =
+  (r, List.map (fun w -> Farkaspolo.getWeak (c, w, b)) ws)
 
-and getAllBound (c, ws, b) =
-  Farkaspolo.getBound (c, List.hd ws, b)
+and getAllBound (r, (c, ws, b)) =
+  (r, Farkaspolo.getBound (c, List.hd ws, b))
 
-and getAllStrict ws =
-  List.map Farkaspolo.getStrict ws
+and getAllStrict (r, ws)  =
+  (r, List.map Farkaspolo.getStrict ws)
 
 and getS4SizeComplexities tgraph ctrsobl =
   let rec removeRulesWithUnknownPreds tgraph ctrsobl unknowns =
@@ -200,17 +202,16 @@ and getTerm conc ctrsobl pre_toOrient globalSizeComplexities vars f =
   let pol_f = List.assoc f conc in
   Complexity.listAdd (List.map (getTermForPreComrule f pol_f ctrsobl globalSizeComplexities vars) t_f)
 
-
-and annotate ctrsobl s strict model d =
+and annotate ctrsobl boundedAndStrictConstraints_with_rules model d =
   let newComplexity =
     List.fold_left 
-      (fun newComplexity (rule, strictVar) -> 
-        if Cfarkaspolo.isStrict strictVar model && CTRSObl.hasUnknownComplexity ctrsobl rule then 
+      (fun newComplexity (rule, isBoundedAndStrictConstraint) -> 
+        if Cfarkaspolo.isStrict isBoundedAndStrictConstraint model && CTRSObl.hasUnknownComplexity ctrsobl rule then 
           CTRSObl.RuleMap.add rule d newComplexity
         else
           newComplexity)
       ctrsobl.complexity
-      (List.combine s strict)
+      boundedAndStrictConstraints_with_rules
   in
   { ctrs = ctrsobl.ctrs ; cost = ctrsobl.cost ; complexity = newComplexity ; leafCost = ctrsobl.leafCost }
 
