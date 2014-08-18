@@ -39,7 +39,7 @@ module ChainProc = ComplexityChainProc.Make(Rule)
 let sep = 10000
 
 let i = ref 1
-let done_inner = ref 0
+let done_inner = ref 1
 let proofs = ref []
 let output_nums = ref []
 let input_nums = ref []
@@ -94,7 +94,7 @@ let rec process trs maxchaining startfun =
         Some (getOverallCost tgraph globalSizeComplexities vars !todo, getProof initial !input_nums !output_nums !proofs)
 and processInner ctrsobl tgraph rvgraph =
   let vars = CTRS.getVars ctrsobl.ctrs in
-  let initial = (ctrsobl, tgraph, rvgraph, (1 + sep * (!done_inner + 1))) in
+  let initial = (ctrsobl, tgraph, rvgraph, (1 + sep * !done_inner)) in
   let old_i = !i
   and old_proofs = !proofs
   and old_input_nums = !input_nums
@@ -108,11 +108,11 @@ and processInner ctrsobl tgraph rvgraph =
     output_nums := [];
     todo := initial;
     ChainProc.done_chaining := 0;
-    incr done_inner;
     doInitial ();
     proofs := List.rev !proofs;
     input_nums := List.rev (List.map (fun i -> i + sep * !done_inner) !input_nums);
     output_nums := List.rev (List.map (fun i -> i + sep * !done_inner) !output_nums);
+    incr done_inner;
     insertRVGraphIfNeeded ();
     let (ctrsobl, tgraph, rvgraph, _) = !todo in
     let globalSizeComplexities = GSC.compute ctrsobl (Utils.unboxOption rvgraph) in
@@ -279,7 +279,7 @@ and doSeparate () =
   in
   match findSubSCC ctrsobl sccs with
   | Some innerFuns ->
-    run_ite (Cseparate.process processInner innerFuns true (!done_inner + 1) sep) doSeparationCleanup doFarkasConstant
+    run_ite (Cseparate.process processInner innerFuns true !done_inner sep) doSeparationCleanup doFarkasConstant
   | None -> 
     doFarkasConstant ()
 and doSeparationCleanup () =
