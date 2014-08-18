@@ -231,7 +231,20 @@ let compute_invariants man rules startFuns =
             let oldDstAbstrVal = FunMap.find dstFun !funToAbstrVal in
             let newDstAbstrVal = applyTrans man curAbstrVal consArray ruleEnv dstPostEnv (Abstract1.env oldDstAbstrVal) in
 
+            (* (* DEBUG *)
+            Printf.printf "Processing transition from %s to %s, with the following constraints:\n" f dstFun;
+            Tcons1.array_print Format.std_formatter consArray;
+            Printf.printf "\n Current abstract value at %s: %s\n" f (Pc.toString (abstr1_to_pc man curAbstrVal));
+            Printf.printf "  Old abstract value at %s: %s\n" dstFun (Pc.toString (abstr1_to_pc man oldDstAbstrVal));
+            Printf.printf "  New abstract value at %s: %s\n" dstFun (Pc.toString (abstr1_to_pc man newDstAbstrVal));
+            *)
+
             Abstract1.join_with man newDstAbstrVal oldDstAbstrVal;
+
+            (* (* DEBUG *)
+            Printf.printf "  Joined abstract value at %s: %s\n" dstFun (Pc.toString (abstr1_to_pc man newDstAbstrVal));
+            *)
+
             let (newHistory, resAbstrVal) =
               if Utils.contains history dstFun then
               (* We are repeating ourselves and start to get boring. Widen! *)
@@ -242,7 +255,7 @@ let compute_invariants man rules startFuns =
             (* Printf.printf "New invariant for '%s':\n" dstFun; print_abstr_val man resAbstrVal; (* DEBUG *) *)
             funToAbstrVal := FunMap.add dstFun resAbstrVal !funToAbstrVal;
 
-          (* If we changed the dst abstr value, we need to reprocess all outgoing transitions from there *)
+            (* If we changed the dst abstr value, we need to reprocess all outgoing transitions from there *)
             if not(Abstract1.is_eq man oldDstAbstrVal resAbstrVal) then
               stack := (dstFun, newHistory)::!stack
         )
