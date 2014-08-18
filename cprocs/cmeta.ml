@@ -199,7 +199,7 @@ and insertRVGraphIfNeeded () =
   Take Sub-SCC S' of S if guardVars(S) \cap updateVars(S') = \emptyset
 *)
 
-and selectSubSCC sccFuns (sccTrans : Rule.rule list) =
+and selectSubSCC ctrsobl sccFuns (sccTrans : Rule.rule list) =
   let funSubsets = List.tl (Utils.powSet sccFuns) in (* First one is the empty set *)
   let checkFunSubsetCand funSubset =
     let transSubset = List.filter (fun rule -> Utils.contains funSubset (Rule.getLeftFun rule) && Utils.contains funSubset (Rule.getRightFun rule)) sccTrans in
@@ -207,16 +207,54 @@ and selectSubSCC sccFuns (sccTrans : Rule.rule list) =
     let funsWithIn = Utils.remdup funsWithIn' in
     let funsWithOut = Utils.remdup funsWithOut' in
     let funNumber = List.length funSubset in
+    
     if (funNumber > 0) && (List.length funsWithIn = funNumber) && (List.length funsWithOut = funNumber) then (* is SCC *)
     (
-      let outerTransSet = Utils.removeAllC Rule.equal sccTrans transSubset in
-      let outerGuardVars = Utils.remdup (Utils.concatMap (fun rule -> Pc.getVars (Rule.getCond rule)) outerTransSet) in
-      let extractUpdatedVars rule =
-        let oldNewPairs = List.combine (Term.getArgs (Rule.getLeft rule)) (Term.getArgs (Rule.getRight rule)) in
-        Utils.concatMap (fun (oldV, newV) -> if (not (Poly.equal oldV newV)) then Poly.getVars oldV else []) oldNewPairs
+      (* We want to avoid the case where we have locations in the scc which
+         are only reachable from the chosen subset, and only lead back to the
+         chosen subset. As example, consider this (simplified) problem appearing
+         in cexamples/ex16.koat:
+         s         -> bb4
+         bb4       -> i_1_in
+         i_1_in    -> i_1_compl
+         i_1_in    -> i_1_out
+         i_1_compl -> i_1_out
+         i_1_out   -> bb4
+         Here, i_1_compl 
+         Without this check, we split out [b_4, i_1_in, i_1_out] here (with
+         surrounded i_1_compl), which leads to an endless sequence of splits.
+         TODO: Actually, this check should be extended to sequences of
+         transitions, but I haven't seen a problem like this yet.
+      *)
+      let hasSurroundedFun ctrsobl subSCCFuns =
+        let hasExternalTrans ctrsobl subSCCFuns funSym =
+          List.exists
+            (fun r -> 
+              let rLhsFun = Rule.getLeftFun r in
+              let rRhsFun = Rule.getRightFun r in
+              if rRhsFun = funSym then
+                not(Utils.contains subSCCFuns rLhsFun) (* Incoming rule comes from outside the subSCC *)
+              else if rLhsFun = funSym then
+                not(Utils.contains subSCCFuns rRhsFun) (* Outgoing rule goes out of the subSCC *)
+              else
+                false)
+            ctrsobl.ctrs.rules
+        in
+        let allFuns = Utils.remdup (Utils.concatMap (fun r -> [Rule.getLeftFun r; Rule.getRightFun r]) ctrsobl.ctrs.rules) in
+        let outsideFuns = Utils.remove (Utils.removeAll allFuns subSCCFuns) ctrsobl.ctrs.startFun in
+        List.exists (fun f -> not(hasExternalTrans ctrsobl subSCCFuns f)) outsideFuns
       in
-      let innerUpdatedVars = Utils.remdup (Utils.concatMap extractUpdatedVars transSubset) in
-      List.exists (fun v -> Utils.contains outerGuardVars v) innerUpdatedVars
+      if not(hasSurroundedFun ctrsobl funSubset) then
+        let outerTransSet = Utils.removeAllC Rule.equal sccTrans transSubset in
+        let outerGuardVars = Utils.remdup (Utils.concatMap (fun rule -> Pc.getVars (Rule.getCond rule)) outerTransSet) in
+        let extractUpdatedVars rule =
+          let oldNewPairs = List.combine (Term.getArgs (Rule.getLeft rule)) (Term.getArgs (Rule.getRight rule)) in
+          Utils.concatMap (fun (oldV, newV) -> if (not (Poly.equal oldV newV)) then Poly.getVars oldV else []) oldNewPairs
+        in
+        let innerUpdatedVars = Utils.remdup (Utils.concatMap extractUpdatedVars transSubset) in
+        List.exists (fun v -> Utils.contains outerGuardVars v) innerUpdatedVars
+      else
+        false
     )
     else false
   in
@@ -227,24 +265,7 @@ and selectSCC ctrsobl sccRules =
     None
   else
     let sccFuns = Utils.remdup (Utils.concatMap Rule.getFuns sccRules) in
-    selectSubSCC sccFuns sccRules
-
-and getInnerFuns () =
-  match !todo with
-    | (ctrsobl, tgraph, _, _) ->
-      (
-        let sccs = TGraph.getNontrivialSccs tgraph in
-        match sccs with
-        | [] -> []
-        | [_] -> []
-        | scc::_ -> 
-          let l' = Utils.remdup (List.flatten (List.map Rule.getFuns scc))
-          and allfuns = Utils.remdup (List.flatten (List.map Rule.getFuns ctrsobl.ctrs.rules)) in
-          if (List.length l') = (List.length allfuns) then
-            []
-          else
-            l'
-      )
+    selectSubSCC ctrsobl sccFuns sccRules
 
 and doInitial () =
   doInitialCleaning ();
