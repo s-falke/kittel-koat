@@ -20,6 +20,21 @@
 
 open AbstractRule
 
+module RV = struct
+  module Make(RuleT : AbstractRule) = struct
+    type t = RuleT.rule * Poly.var
+    let compare (r1, v1) (r2, v2) =
+      let vComp = String.compare v1 v2 in
+      if vComp <> 0 then
+        vComp
+      else
+        RuleT.compare r1 r2
+
+    let equal (r1, v1) (r2, v2) =
+      v1 = v2 && RuleT.equal r1 r2
+  end
+end
+
 module Make (RuleT : AbstractRule) = struct
   module G = Graph.Persistent.Digraph.Concrete(Tgraph.Int)
   module SCC = Graph.Components.Make(G)
@@ -27,6 +42,15 @@ module Make (RuleT : AbstractRule) = struct
   module LSC = LocalSizeComplexity.Make(RuleT)
   module CTRS = Ctrs.Make(RuleT)
   module TGraph = Tgraph.Make(RuleT)
+
+  module RV = RV.Make(RuleT)
+
+  module RVMap = 
+    Map.Make(struct 
+      type t = RV.t
+      let compare = RV.compare 
+    end)
+
 
   let rec toDot (g, rva) =
     "digraph koat {\n" ^
@@ -224,6 +248,13 @@ module Make (RuleT : AbstractRule) = struct
   and addToArray rva news =
     let rva' = Array.init (List.length news) (fun i -> List.nth news i) in
       Array.append rva rva'
+
+  and updateOptionRVGraph rvgraph toRemove toAdd updatedTGraph =
+    match rvgraph with
+    | None -> None
+    | Some rvg -> 
+      let toAddWithLSCs = LSC.computeLocalSizeComplexities toAdd in
+      Some (addNodes (removeNodes rvg toRemove) toAddWithLSCs updatedTGraph)
 
   (* only keep certain nodes *)
   let rec keepNodes (g, rva) rules =

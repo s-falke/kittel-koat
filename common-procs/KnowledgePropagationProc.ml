@@ -21,52 +21,42 @@
 open AbstractRule
 
 module Make (RuleT : AbstractRule) = struct
-  module CTRS = Ctrs.Make(RuleT)
   module TGraph = Tgraph.Make(RuleT)
+  module CTRSObl = Ctrsobl.Make(RuleT)
+  module CTRS = CTRSObl.CTRS
+  open CTRSObl
+  open CTRS
 
   (* Remove subsumed rules *)
-  let rec process (rcc, g, l) tgraph rvgraph =
-    if CTRS.isSolved rcc then
+  let rec process ctrsobl tgraph rvgraph =
+    if CTRSObl.isSolved ctrsobl then
       None
     else
     (
-      let s = (List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc))
-      and k = (List.map first (List.filter (fun (_, c, _) -> c <> Complexity.Unknown) rcc)) in
-        let subsumed = List.rev (TGraph.computeSubsumed tgraph s k) in
-          if subsumed = [] then
-            None
-          else
-            let nrcc = update rcc subsumed tgraph
-            and ng = g
-            and nl = l
-            and ntgraph = tgraph
-            and nrvgraph = rvgraph in
-              Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g, l) (nrcc, ng, nl))
+      let s = CTRSObl.getUnknownComplexityRules ctrsobl in
+      let k = CTRSObl.getKnownComplexityRules ctrsobl in
+      let subsumed = List.rev (TGraph.computeSubsumed tgraph s k) in
+      if subsumed = [] then
+        None
+      else
+        let nctrsobl = propagateComplexities ctrsobl subsumed tgraph in
+        Some ((nctrsobl, tgraph, rvgraph), getProof nctrsobl)
     )
 
-  and first (x, _, _) =
-    x
+  and propagateComplexities ctrsobl subsumed tgraph =
+    let updateOneSubsumedRule tgraph complexities rule =
+      let pre = TGraph.getPreds tgraph [rule] in
+      let preComplexitiesSum = Complexity.listAdd (List.map (fun r -> CTRS.RuleMap.find r complexities) pre) in
+      CTRS.RuleMap.add rule preComplexitiesSum complexities
+    in
+    { ctrs = ctrsobl.ctrs 
+    ; cost = ctrsobl.cost
+    ; complexity = List.fold_left (updateOneSubsumedRule tgraph) ctrsobl.complexity subsumed
+    ; leafCost = ctrsobl.leafCost }
 
-  and update rcc subsumed tgraph =
-    match subsumed with
-      | [] -> rcc
-      | rule::rest -> update (updateOne rcc rule tgraph) rest tgraph
-  and updateOne rcc rule tgraph =
-    let pre = TGraph.getPreds tgraph [rule] in
-      updateComplexity rcc rule (getSum rcc pre)
-  and updateComplexity rcc rule d =
-    match rcc with
-      | [] -> []
-      | (r, c, c')::rest -> if RuleT.equal r rule then
-                              (r, d, c')::rest
-                            else
-                              (r, c, c')::(updateComplexity rest rule d)
-  and getSum rcc pre =
-    Complexity.listAdd (List.map (CTRS.getComplexity rcc) pre)
-
-  and getProof ini outi rccgl nrccgl =
+  and getProof nctrsobl ini outi=
     "Repeatedly propagating knowledge in problem " ^
     (string_of_int ini) ^
     " produces the following problem:\n" ^
-    (CTRS.toStringGNumber nrccgl outi)
+    (CTRSObl.toStringNumber nctrsobl outi)
 end

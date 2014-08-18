@@ -20,73 +20,23 @@
 
 open AbstractRule
 
-type rulecost = Expexp.expexp (* Was: Big_int.big_int *)
-
 module Make(RuleT : AbstractRule) = struct
-  type cRule = RuleT.rule * Complexity.complexity * rulecost
-  type cTRS = cRule list
+  module RuleMap = 
+    Map.Make(struct 
+      type t = RuleT.rule
+      let compare = RuleT.compare 
+    end)
 
-  let getRule ((r, _, _) : cRule) = r
-  and getRuleComplexity ((_, compl, _) : cRule) = compl
-  and getRuleCost ((_, _, cost) : cRule) = cost
+  let removeRulesFromMap ruleMap rules =
+    List.fold_left (fun newMap rule -> RuleMap.remove rule newMap) ruleMap rules
 
-  let rec toStringPrefix prefix rcc =
-    prefix ^ "T:\n" ^
-    (
-      if rcc = [] then
-        "(none)"
-      else
-        let cstrings = List.map (fun anrcc -> "(" ^ (Complexity.toString (getRuleComplexity anrcc)) ^ ", " ^ (Expexp.toString (getRuleCost anrcc)) ^ ")") rcc in
-          let cstringlens = List.map String.length cstrings in
-            let maxlen = List.fold_left max 1 cstringlens in
-              (String.concat "\n" (List.map2 (toStringPrefixOne (prefix ^ "\t") maxlen) rcc cstrings))
-    )
-  and toStringPrefixOne prefix maxlen anrcc cstring =
-    let pad = String.make (maxlen - (String.length cstring) + 4) ' ' in
-    prefix ^ cstring ^ pad ^ (RuleT.toString (getRule anrcc))
-  and toString rcg =
-    toStringPrefix "\t" rcg
+  type t = { rules : RuleT.rule list ;
+             startFun : Term.funSym ;
+           }
 
-  let first (r, _, _) =
-    r
-  and second (_, c, _) =
-    c
-  and third (_, _, c) =
-    c
-  let rec toStringGPrefix prefix rccgl =
-    (toStringPrefix prefix (first rccgl)) ^ "\n" ^
-    prefix ^ "start location:\n" ^ prefix ^ "\t" ^ (second rccgl) ^ "\n" ^
-    prefix ^ "leaf cost:\n" ^ prefix ^ "\t" ^ (Expexp.toString (third rccgl))
-  and toStringG rccgl =
-    toStringGPrefix "\t" rccgl
-  and toStringGNumber rccgl i =
-    (string_of_int i) ^ ":" ^ (toStringG rccgl)
+  let contains ctrs rule =
+    Utils.containsC (fun r e -> RuleT.equal r e) ctrs.rules rule
 
-  let getInitial trs g =
-    (List.map (fun r -> if (Term.getFun (RuleT.getLeft r)) = g then (r, Complexity.P Expexp.one, Expexp.one) else (r, Complexity.Unknown, Expexp.one)) trs, g, Expexp.zero)
-
-  let isSolved rcc =
-    List.for_all (fun (_, c, _) -> c <> Complexity.Unknown) rcc
-
-  let rec getComplexity (rcc : cTRS) rule =
-    match rcc with
-      | [] -> failwith "Internal error in cTRS.getComplexity"
-      | (r, c, _)::rest -> if RuleT.equal r rule then
-                             c
-                           else
-                             getComplexity rest rule
-
-  let rec getCost (rcc : cTRS) rule =
-    match rcc with
-      | [] -> failwith "Internal error in cTRS.getCost"
-      | (r, _, c)::rest -> if RuleT.equal r rule then
-                             c
-                           else
-                             getCost rest rule
-
-  let contains (trs : cTRS) rule =
-    (List.exists (fun rule' -> RuleT.equal (first rule') rule) trs)
-
-  let hasUnknownComplexity rcc r =
-    getComplexity rcc r = Complexity.Unknown
+  let getVars ctrs =
+    Term.getVars (RuleT.getLeft (List.hd ctrs.rules))
 end

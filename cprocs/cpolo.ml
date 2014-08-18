@@ -18,11 +18,14 @@
   limitations under the License.
 *)
 
-module CTRS = Ctrs.Make(Rule)
 module RVG = Rvgraph.Make(Rule)
 module LSC = LocalSizeComplexity.Make(Rule)
 module GSC = GlobalSizeComplexity.Make(Rule)
 module TGraph = Tgraph.Make(Rule)
+module CTRSObl = Ctrsobl.Make(Rule)
+module CTRS = CTRSObl.CTRS
+open CTRSObl
+open CTRS
 
 let rec getSubset r s set =
   match r with
@@ -33,59 +36,49 @@ let rec getSubset r s set =
                   (getSubset rr s (List.tl set))
 
 (* Find a polynomial interpretation *)
-let rec process degree useSizeComplexities (rcc, g, l) tgraph rvgraph =
-  if CTRS.isSolved rcc then
+let rec process degree useSizeComplexities ctrsobl tgraph rvgraph =
+  if CTRSObl.isSolved ctrsobl then
     None
   else
-  (
-    let vars = Cfarkaspolo.getVars rcc in
-      let globalSizeComplexities = if useSizeComplexities then GSC.compute (Utils.unboxOption rvgraph) rcc g vars else GSC.empty in
-        Polo.count := 1;
-        let r = List.map first rcc
-        and s = (List.map first (List.filter (fun (_, c, _) -> c = Complexity.Unknown) rcc)) in
-          let toOrient = if useSizeComplexities then s else r in
-            let (abs, params) = Polo.create_poly_map degree toOrient in
-              let (conds, polys, bounds) = Polo.create_conds_polys_bounds toOrient abs Big_int.unit_big_int in
-                let polyst = List.map2 Polo.transform_poly polys conds
-                and boundst = List.map2 Polo.transform_poly (getSubset toOrient s bounds) (getSubset toOrient s conds) in
-                  let polyconditions = Polo.get_absolute_positive polyst
-                  and boundconditions = Polo.get_absolute_positive boundst in
-                    let polystrict = Polo.getGtrForConstant (getSubset toOrient s polyconditions) in
-                      match Polo.has_solution polyconditions polystrict boundconditions params with
-                        | None -> None
-                        | Some model ->
-                          (
-                            let model' = Polo.fix_model model params in
-                              let conc = List.map (fun (f, pol) -> (f, Some pol)) (Polo.get_concrete_poly abs model') in
-                                let c = Cfarkaspolo.getC useSizeComplexities tgraph conc rcc g toOrient globalSizeComplexities vars in
-                                  let nrcc = annotate rcc s polystrict boundconditions model' c
-                                  and ng = g
-                                  and nl = l
-                                  and ntgraph = tgraph
-                                  and nrvgraph = rvgraph in
-                                    if Cfarkaspolo.equal rcc nrcc then
-                                      None
-                                    else
-                                      Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> Cfarkaspolo.getProof ini outi (rcc, g, l) (nrcc, ng, nl) conc useSizeComplexities globalSizeComplexities toOrient vars)
-                          )
-  )
+    (
+      let globalSizeComplexities = if useSizeComplexities then GSC.compute ctrsobl (Utils.unboxOption rvgraph) else GSC.empty in
+      Polo.count := 1;
+      let s = CTRSObl.getUnknownComplexityRules ctrsobl in
+      let toOrient = if useSizeComplexities then s else ctrsobl.ctrs.rules in
+      let (abs, params) = Polo.create_poly_map degree toOrient in
+      let (conds, polys, bounds) = Polo.create_conds_polys_bounds toOrient abs Big_int.unit_big_int in
+      let polyst = List.map2 Polo.transform_poly polys conds in
+      let boundst = List.map2 Polo.transform_poly (getSubset toOrient s bounds) (getSubset toOrient s conds) in
+      let polyconditions = Polo.get_absolute_positive polyst in
+      let boundconditions = Polo.get_absolute_positive boundst in
+      let polystrict = Polo.getGtrForConstant (getSubset toOrient s polyconditions) in
+      match Polo.has_solution polyconditions polystrict boundconditions params with
+      | None -> None
+      | Some model ->
+        (
+          let model' = Polo.fix_model model params in
+          let conc = List.map (fun (f, pol) -> (f, Some pol)) (Polo.get_concrete_poly abs model') in
+          let c = Cfarkaspolo.getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities in
+          let nctrsobl = annotate ctrsobl s polystrict boundconditions model' c in
+          if CTRSObl.haveSameComplexities ctrsobl nctrsobl then 
+            None
+          else
+            Some ((nctrsobl, tgraph, rvgraph), Cfarkaspolo.getProof ctrsobl nctrsobl conc useSizeComplexities globalSizeComplexities toOrient)
+        )
+    )
 
-and first (x, _, _) =
-  x
-and second (_, c, _) =
-  c
-and third (_, _, c) =
-  c
-
-and annotate rcc s polystrict boundconditions model d =
-  match rcc with
-    | [] -> []
-    | (rule, c, c')::rest -> if s <> [] && Rule.equal rule (List.hd s) && c = Complexity.Unknown then
-                               if isStrictlySmaller (List.hd polystrict) (List.hd boundconditions) model then
-                                 (rule, d, c')::(annotate rest (List.tl s) (List.tl polystrict) (List.tl boundconditions) model d)
-                               else
-                                 (rule, c, c')::(annotate rest (List.tl s) (List.tl polystrict) (List.tl boundconditions) model d)
-                             else
-                               (rule, c, c')::(annotate rest s polystrict boundconditions model d)
-and isStrictlySmaller strictcond boundcond model =
-  (List.exists (fun c -> Pc.isTrue c model) strictcond) && (List.exists (fun c -> Pc.isTrue c model) boundcond)
+and annotate ctrsobl s polystrict boundconditions model d =
+  let isStrictlySmaller strictcond boundcond model =
+    (List.exists (fun c -> Pc.isTrue c model) strictcond) && (List.exists (fun c -> Pc.isTrue c model) boundcond)
+  in
+  let newComplexity =
+    List.fold_left 
+      (fun newComplexity (rule, strictVar, boundVar) -> 
+        if isStrictlySmaller strictVar boundVar model && CTRSObl.hasUnknownComplexity ctrsobl rule then 
+          RuleMap.add rule d newComplexity
+        else
+          newComplexity)
+      ctrsobl.complexity
+      (Utils.combine3 s polystrict boundconditions)
+  in
+  { ctrs = ctrsobl.ctrs ; complexity = newComplexity ; cost = ctrsobl.cost; leafCost = ctrsobl.leafCost }

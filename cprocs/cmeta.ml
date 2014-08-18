@@ -22,11 +22,14 @@ IFDEF HAVE_APRON THEN
 open ApronInvariantsProc
 END
 
-module CTRS = Ctrs.Make(Rule)
 module RVG = Rvgraph.Make(Rule)
 module LSC = LocalSizeComplexity.Make(Rule)
 module GSC = GlobalSizeComplexity.Make(Rule)
 module TGraph = Tgraph.Make(Rule)
+module CTRSObl = Ctrsobl.Make(Rule)
+module CTRS = CTRSObl.CTRS
+open CTRSObl
+open CTRS
 
 module KnowledgeProc = KnowledgePropagationProc.Make(Rule)
 module UnreachableProc = DeleteUnreachableProc.Make(Rule)
@@ -40,23 +43,16 @@ let done_inner = ref 0
 let proofs = ref []
 let output_nums = ref []
 let input_nums = ref []
-let todo = ref (([], "", Expexp.zero), (TGraph.G.empty, Array.of_list []), None, 0)
-
-let first (x, _, _) =
-  x
-and second (_, y, _) =
-  y
-and third (_, _, z) =
-  z
+let todo = ref (CTRSObl.getInitialObl [] "", (TGraph.G.empty, Array.of_list []), None, 0)
 
 let rec check trs =
   if trs = [] then
     raise (Cint_aux.ParseException (0, 0, "Error: Cannot handle empty CINT!"))
   else
     let first = List.hd trs in
-      let arity = Term.getArity (Rule.getLeft first)
-      and lvars = Term.getVars (Rule.getLeft first) in
-        checkRules arity lvars trs
+    let arity = Term.getArity (Rule.getLeft first)
+    and lvars = Term.getVars (Rule.getLeft first) in
+    checkRules arity lvars trs
 and checkRules arity lvars trs =
   match trs with
     | [] -> ()
@@ -80,7 +76,7 @@ let rec process trs maxchaining startfun =
   let tgraph = TGraph.compute trs in
     checkStartCondition tgraph trs startfun;
     let rvgraph = None in
-      let initial = (CTRS.getInitial trs startfun, tgraph, rvgraph, 1) in
+      let initial = (CTRSObl.getInitialObl trs startfun, tgraph, rvgraph, 1) in
         i := 1;
         proofs := [];
         input_nums := [];
@@ -88,19 +84,17 @@ let rec process trs maxchaining startfun =
         todo := initial;
         ChainProc.max_chaining := maxchaining;
         ChainProc.done_chaining := 0;
-        run UnsatProc.process;
-        run Cleaf.process;
         doInitial ();
         proofs := List.rev !proofs;
         input_nums := List.rev !input_nums;
         output_nums := List.rev !output_nums;
         insertRVGraphIfNeeded ();
-        let (rccgl, tgraph, rvgraph, _) = !todo in
-        let globalSizeComplexities = GSC.compute (Utils.unboxOption rvgraph) (first rccgl) (second rccgl) vars in
-        Some (getComplexity tgraph globalSizeComplexities vars !todo, getProof initial !input_nums !output_nums !proofs)
-and processInner rccgltrv =
-  let vars = Term.getVars (Rule.getLeft (first (List.hd (first (first rccgltrv)))))
-  and initial = (first rccgltrv, second rccgltrv, third rccgltrv, (1 + sep * (!done_inner + 1))) in
+        let (ctrsobl, tgraph, rvgraph, _) = !todo in
+        let globalSizeComplexities = GSC.compute ctrsobl (Utils.unboxOption rvgraph) in
+        Some (getOverallCost tgraph globalSizeComplexities vars !todo, getProof initial !input_nums !output_nums !proofs)
+and processInner ctrsobl tgraph rvgraph =
+  let vars = CTRS.getVars ctrsobl.ctrs in
+  let initial = (ctrsobl, tgraph, rvgraph, (1 + sep * (!done_inner + 1))) in
   let old_i = !i
   and old_proofs = !proofs
   and old_input_nums = !input_nums
@@ -120,9 +114,9 @@ and processInner rccgltrv =
     input_nums := List.rev (List.map (fun i -> i + sep * !done_inner) !input_nums);
     output_nums := List.rev (List.map (fun i -> i + sep * !done_inner) !output_nums);
     insertRVGraphIfNeeded ();
-    let (rccgl, tgraph, rvgraph, _) = !todo in
-    let globalSizeComplexities = GSC.compute (Utils.unboxOption rvgraph) (first rccgl) (second rccgl) vars in
-    let res = Some (getComplexity tgraph globalSizeComplexities vars !todo, globalSizeComplexities, getProof initial !input_nums !output_nums !proofs) in
+    let (ctrsobl, tgraph, rvgraph, _) = !todo in
+    let globalSizeComplexities = GSC.compute ctrsobl (Utils.unboxOption rvgraph) in
+    let res = Some (getOverallCost tgraph globalSizeComplexities vars !todo, globalSizeComplexities, getProof initial !input_nums !output_nums !proofs) in
     ChainProc.done_chaining := old_done_chaining;
     todo := old_todo;
     output_nums := old_output_nums;
@@ -130,68 +124,72 @@ and processInner rccgltrv =
     proofs := old_proofs;
     i := old_i;
     res
-and getComplexity tgraph globalSizeComplexities vars (rccgl, _, _, _) =
-  Complexity.add (addComplexities tgraph globalSizeComplexities vars (first rccgl) (second rccgl)) (Complexity.P (third rccgl))
-and addComplexities tgraph globalSizeComplexities vars rcc g =
-  Complexity.listAdd (List.map (getOneComplexity tgraph globalSizeComplexities vars g) rcc)
-and getOneComplexity tgraph globalSizeComplexities vars g (rule, complexity, cost) =
-  if (Term.getFun (Rule.getLeft rule)) = g then
-    Complexity.mult complexity (Complexity.P cost)
-  else
-    let preRules = TGraph.getPreds tgraph [rule] in
-    let getCostPerPreRule globalSizeComplexities vars preRule =
-      let csmap = GSC.extractSizeMapForRuleForVars globalSizeComplexities preRule 0 vars in
-      Complexity.apply cost csmap
-    in
-      Complexity.mult complexity (Complexity.sup (List.map (getCostPerPreRule globalSizeComplexities vars) preRules))
-and getProof (rccg, _, _, i) inums onums theproofs =
+and getOverallCost tgraph globalSizeComplexities vars (ctrsobl, _, _, _) =
+  let getCostForRule tgraph globalSizeComplexities vars rule =
+    let ruleCost = CTRSObl.getCost ctrsobl rule in
+    let ruleComplexity = CTRSObl.getComplexity ctrsobl rule in
+    if Expexp.isConst ruleCost then
+      Complexity.mult ruleComplexity (Complexity.P ruleCost)
+    else
+      (
+        let preRules = TGraph.getPreds tgraph [rule] in
+        let getCostPerPreRule ruleCost globalSizeComplexities vars preRule =
+          let csmap = GSC.extractSizeMapForRuleForVars globalSizeComplexities preRule 0 vars in
+          Complexity.apply ruleCost csmap
+        in
+        Complexity.mult ruleComplexity (Complexity.sup (List.map (getCostPerPreRule ruleCost globalSizeComplexities vars) preRules))
+      ) in
+  let ruleCosts = (Complexity.listAdd (List.map (getCostForRule tgraph globalSizeComplexities vars) ctrsobl.ctrs.rules)) in
+  Complexity.add 
+    ruleCosts
+    (Complexity.P ctrsobl.leafCost)
+and getProof (ctrsobl, _, _, i) inums onums theproofs =
   fun () -> "Initial complexity problem:\n" ^ (string_of_int i) ^ ":" ^
-            (CTRS.toStringG rccg) ^
+            (CTRSObl.toString ctrsobl) ^
             (attachProofs inums onums theproofs)
 and attachProofs inums onums tproofs =
   match inums with
     | [] -> ""
     | i::is -> "\n\n" ^ ((List.hd tproofs) i (List.hd onums)) ^ (attachProofs is (List.tl onums) (List.tl tproofs))
-and update nrccgl p ini =
+and update (ctrsobl, tgraph, rvgraph) p ini =
   let outi = !i + 1 in
-    todo := attachNumber nrccgl outi;
+    todo := (ctrsobl, tgraph, rvgraph, outi);
     i := outi;
     proofs := p::!proofs;
     input_nums := ini::!input_nums;
     output_nums := outi::!output_nums
-and attachNumber ((nrc, ng, nl), ntgraph, nrvgraph) i =
-  ((nrc, ng, nl), ntgraph, nrvgraph, i)
 
 and run proc =
   match !todo with
-    | (rccgl, tgraph, rvgraph, ini) ->
+    | (ctrsobl, tgraph, rvgraph, ini) ->
       (
-        if CTRS.isSolved (first rccgl) then
+        if CTRSObl.isSolved ctrsobl then
           ()
         else
-          match (proc rccgl tgraph rvgraph) with
+          match (proc ctrsobl tgraph rvgraph) with
             | None -> ()
-            | Some (nrccgl, p) -> update nrccgl p ini
+            | Some (newData, p) -> update newData p ini
       )
 
 and run_ite proc1 proc2 proc3 =
   match !todo with
-    | (rccgl, tgraph, rvgraph, ini) ->
+    | (ctrsobl, tgraph, rvgraph, ini) ->
       (
-        if CTRS.isSolved (first rccgl) then
+        if CTRSObl.isSolved ctrsobl then
           ()
         else
-          match (proc1 rccgl tgraph rvgraph) with
+          match (proc1 ctrsobl tgraph rvgraph) with
             | None -> proc3 ()
-            | Some (nrccgl, p) -> update nrccgl p ini;
-                                  proc2 ()
+            | Some (newData, p) -> update newData p ini;
+                                   proc2 ()
       )
 
 and insertRVGraphIfNeeded () =
   match !todo with
     | (_, _, Some _, _) -> ()
-    | (rcggl, tgraph, None, ini) -> let lscs = LSC.computeLocalSizeComplexities (List.map first (first rcggl)) in
-                                      todo := (rcggl, tgraph, Some (RVG.compute lscs tgraph), ini)
+    | (ctrsobl, tgraph, None, ini) ->
+      let lscs = LSC.computeLocalSizeComplexities ctrsobl.ctrs.rules in
+      todo := (ctrsobl, tgraph, Some (RVG.compute lscs tgraph), ini)
 
 (*
  Heuristic:
@@ -225,8 +223,8 @@ and selectSubSCC sccFuns (sccTrans : Rule.rule list) =
   in
   Utils.tryFind checkFunSubsetCand funSubsets
 
-and selectSCC rcc sccRules =
-  if List.for_all (fun r -> not(CTRS.hasUnknownComplexity rcc r)) sccRules then
+and selectSCC ctrsobl sccRules =
+  if List.for_all (fun r -> not(CTRSObl.hasUnknownComplexity ctrsobl r)) sccRules then
     None
   else
     let sccFuns = Utils.remdup (Utils.concatMap Rule.getFuns sccRules) in
@@ -234,23 +232,27 @@ and selectSCC rcc sccRules =
 
 and getInnerFuns () =
   match !todo with
-    | (rccgl, tgraph, _, _) ->
+    | (ctrsobl, tgraph, _, _) ->
       (
         let sccs = TGraph.getNontrivialSccs tgraph in
-          match sccs with
-            | [] -> []
-            | [_] -> []
-            | scc::_ -> let l' = Utils.remdup (List.flatten (List.map Rule.getFuns scc))
-                        and allfuns = Utils.remdup (List.flatten (List.map Rule.getFuns (List.map first (first rccgl)))) in
-                          if (List.length l') = (List.length allfuns) then
-                            []
-                          else
-                            l'
+        match sccs with
+        | [] -> []
+        | [_] -> []
+        | scc::_ -> 
+          let l' = Utils.remdup (List.flatten (List.map Rule.getFuns scc))
+          and allfuns = Utils.remdup (List.flatten (List.map Rule.getFuns ctrsobl.ctrs.rules)) in
+          if (List.length l') = (List.length allfuns) then
+            []
+          else
+            l'
       )
 
-
 and doInitial () =
+  doInitialCleaning ();
   doLoop ();
+and doInitialCleaning () =
+  run UnsatProc.process;
+  run Cleaf.process;
 and doLoop () =
   doUnreachableRemoval ();
   doKnowledgePropagation ();
@@ -266,27 +268,24 @@ and doUnreachableRemoval () =
 and doKnowledgePropagation () =
   run KnowledgeProc.process
 and doSeparate () =
-  match !todo with
-    | (rccgl, tgraph, _, _) ->
-      (
-        let sccs = TGraph.getNontrivialSccs tgraph in
-        let rec findSubSCC rcc sccs =
-          match sccs with
-            | [] -> None
-            | scc::restSCCs ->
-                match selectSCC rcc scc with
-                  | Some innerFuns -> Some innerFuns
-                  | None -> findSubSCC rcc restSCCs
-        in
-        match findSubSCC (first rccgl) sccs with
-          | Some innerFuns ->
-              (
-               run_ite (Cseparate.process processInner innerFuns true (!done_inner + 1) sep) doSeparationCleanup doFarkasConstant
-              )
-          | None -> doFarkasConstant ()
-      )
+  let (ctrsobl, tgraph, _, _) = !todo in
+  let sccs = TGraph.getNontrivialSccs tgraph in
+  let rec findSubSCC ctrsobl sccs =
+    match sccs with
+    | [] -> None
+    | scc::restSCCs ->
+      match selectSCC ctrsobl scc with
+      | Some innerFuns -> Some innerFuns
+      | None -> findSubSCC ctrsobl restSCCs
+  in
+  match findSubSCC ctrsobl sccs with
+  | Some innerFuns ->
+    run_ite (Cseparate.process processInner innerFuns true (!done_inner + 1) sep) doSeparationCleanup doFarkasConstant
+  | None -> 
+    doFarkasConstant ()
 and doSeparationCleanup () =
   doApronInvariants () ;
+  run UnsatProc.process;
   doLoop () ;
 and doFarkasConstant () =
   run_ite (Cfarkaspolo.process false false 0) doLoop doFarkasConstantSizeBound

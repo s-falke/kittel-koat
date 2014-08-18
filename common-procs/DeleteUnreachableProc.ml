@@ -21,58 +21,47 @@
 open AbstractRule
 
 module Make (RuleT : AbstractRule) = struct
-  module CTRS = Ctrs.Make(RuleT)
   module TGraph = Tgraph.Make(RuleT)
   module RVG = Rvgraph.Make(RuleT)
-
-  let first (x, _, _) =
-    x
+  module CTRSObl = Ctrsobl.Make(RuleT)
+  module CTRS = CTRSObl.CTRS
+  open CTRSObl
+  open CTRS
 
   (* Remove unreachable *)
-  let rec process (rcc, g, l) tgraph rvgraph =
-    if CTRS.isSolved rcc then
+  let rec process ctrsobl tgraph rvgraph =
+    if CTRSObl.isSolved ctrsobl then
       None
     else
     (
-      let startNodes = getStartNodes rcc g in
-        let reachable = TGraph.computeReachable tgraph startNodes in
-          if List.length reachable = List.length rcc then
-            None
-          else
-            let nrcc = keepOnly rcc reachable
-            and ng = g
-            and nl = l
-            and ntgraph = TGraph.keepNodes tgraph reachable
-            and nrvgraph = getNewRVGraph rvgraph reachable in
-              Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g, l) (nrcc, ng, nl))
+      let startRules = 
+        List.filter 
+          (fun rule -> ctrsobl.ctrs.startFun = Term.getFun (RuleT.getLeft rule))
+          ctrsobl.ctrs.rules in
+      let reachableRules = TGraph.computeReachable tgraph startRules in
+      if List.length reachableRules = List.length ctrsobl.ctrs.rules then
+        None
+      else
+        let removedRules = Utils.removeAllC RuleT.equal ctrsobl.ctrs.rules reachableRules in
+        let newComplexities = CTRS.removeRulesFromMap ctrsobl.complexity removedRules in
+        let newCost = CTRS.removeRulesFromMap ctrsobl.cost removedRules in
+        let ntgraph = TGraph.keepNodes tgraph reachableRules in
+        let nrvgraph = RVG.updateOptionRVGraph rvgraph removedRules [] ntgraph in
+        let nctrsobl = { ctrs = { rules = reachableRules ; startFun = ctrsobl.ctrs.startFun } ; cost = newCost ; complexity = newComplexities ; leafCost = ctrsobl.leafCost } in
+        Some ((nctrsobl, ntgraph, nrvgraph), getProof ctrsobl nctrsobl removedRules)
     )
 
-  and getNewRVGraph rvgraph reachable =
-    match rvgraph with
-      | None -> None
-      | Some rvg -> Some (RVG.keepNodes rvg reachable)
-
-  and getProof ini outi rccgl nrccgl =
-    if first nrccgl = [] then
+  and getProof ctrsobl newctrsobl removedRules ini outi =
+    if newctrsobl.ctrs.rules = [] then
       "Testing for reachability in the complexity graph removes all transitions from problem " ^
       (string_of_int ini) ^ "."
     else
-      let removed = keepOnlyComplement (first rccgl) (List.map first (first nrccgl)) in
-        let more = (List.length removed <> 1) in
-          "Testing for reachability in the complexity graph removes the following " ^
-          (if more then "transitions " else "transition ") ^
-          "from problem " ^ (string_of_int ini) ^ ":\n" ^
-          (CTRS.toString removed) ^ "\n" ^
-          "We thus obtain the following problem:\n" ^
-          (CTRS.toStringGNumber nrccgl outi)
-
-  and getStartNodes rcc g =
-    List.filter (fun rule -> g = (Term.getFun (RuleT.getLeft rule))) (List.map first rcc)
-
-  and keepOnly rcc rules =
-    List.filter (fun (rule, _, _) -> List.exists (fun rule' -> RuleT.equal rule rule') rules) rcc
-
-  and keepOnlyComplement rcc rules =
-    List.filter (fun (rule, _, _) -> not (List.exists (fun rule' -> RuleT.equal rule rule') rules)) rcc
+      let moreThanOne = (List.length removedRules <> 1) in
+      "Testing for reachability in the complexity graph removes the following " ^
+        (if moreThanOne then "transitions " else "transition ") ^
+        "from problem " ^ (string_of_int ini) ^ ":\n" ^
+        (RuleT.listToStringPrefix "\t" removedRules) ^ "\n" ^
+        "We thus obtain the following problem:\n" ^
+        (CTRSObl.toStringNumber newctrsobl outi)
 end
 

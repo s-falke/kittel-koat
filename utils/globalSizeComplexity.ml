@@ -4,8 +4,12 @@ open AbstractRule
 module Make(RuleT : AbstractRule) = struct
   module RVG = Rvgraph.Make(RuleT)
   module LSC = LocalSizeComplexity.Make(RuleT)
-  module CTRS = Ctrs.Make(RuleT)
+  module CTRSObl = Ctrsobl.Make(RuleT)
+  module CTRS = CTRSObl.CTRS
   module G = Graph.Persistent.Digraph.Concrete(Tgraph.Int)
+
+  open CTRSObl
+  open CTRS
 
   module RVMap = 
     Map.Make(
@@ -32,40 +36,41 @@ module Make(RuleT : AbstractRule) = struct
       | Complexity.P p -> p
       | Complexity.Unknown -> failwith "Internal error in Crvgraph.getPol"
 
-  and gscForNonTrivialScc scc condensed rc rvgraph vars accu =
+  and gscForNonTrivialScc ctrsobl rvgraph condensed scc accu =
     if List.exists isTooBig scc then
       (LSC.Unknown, [])
     else
+      let vars = CTRS.getVars ctrsobl.ctrs in
       let possiblyScaledSumPlusConstants = List.filter isPossiblyScaledSumPlusConstant scc in
         let v_betas = List.map (get_v_beta rvgraph scc) possiblyScaledSumPlusConstants
         and sccpreds = getCondensedPreds condensed [scc]
         and maxs = List.filter isMax scc
         and maxPlusConstants = List.filter isMaxPlusConstant scc in
           let first = LSC.listMax ((List.map (fun scc -> getGSC accu scc) sccpreds) @ (List.map getAsPol maxs)) vars
-          and second = c2lsc (Complexity.listAdd (List.map (getMaxPlusConstantTerm rc vars) maxPlusConstants)) vars
-          and third = c2lsc (Complexity.listAdd (List.map2 (getPossiblyScaledSumPlusConstantTerm rc rvgraph scc vars accu) possiblyScaledSumPlusConstants v_betas)) vars in
+          and second = c2lsc (Complexity.listAdd (List.map (getMaxPlusConstantTerm ctrsobl vars) maxPlusConstants)) vars
+          and third = c2lsc (Complexity.listAdd (List.map2 (getPossiblyScaledSumPlusConstantTerm ctrsobl rvgraph scc vars accu) possiblyScaledSumPlusConstants v_betas)) vars in
             let sum = LSC.addList [first;second;third] vars in
-              let firstMult = getScaleProduct rc possiblyScaledSumPlusConstants v_betas
-              and secondMult = getVarsizeProduct rc possiblyScaledSumPlusConstants v_betas in
+              let firstMult = getScaleProduct ctrsobl possiblyScaledSumPlusConstants v_betas
+              and secondMult = getVarsizeProduct ctrsobl possiblyScaledSumPlusConstants v_betas in
                 let factor = Complexity.mult firstMult secondMult in
                   let res = c2lsc (Complexity.mult factor (LSC.toSmallestComplexity sum vars)) vars in
                     res
-  and getVarsizeProduct rc ruleWithLSCs v_betas =
-    List.fold_left Complexity.mult (Complexity.P Expexp.one) (List.map2 (getVarsizeFactor rc) ruleWithLSCs v_betas)
-  and getVarsizeFactor rc ruleWithLSC v_beta =
+  and getVarsizeProduct ctrsobl ruleWithLSCs v_betas =
+    List.fold_left Complexity.mult (Complexity.P Expexp.one) (List.map2 (getVarsizeFactor ctrsobl) ruleWithLSCs v_betas)
+  and getVarsizeFactor ctrsobl ruleWithLSC v_beta =
     let num = List.length v_beta
-    and r = CTRS.getComplexity rc (fst ruleWithLSC) in
+    and r = CTRSObl.getComplexity ctrsobl (fst ruleWithLSC) in
       if num < 2 then
         Complexity.P (Expexp.one)
       else if r = Complexity.Unknown then
         Complexity.Unknown
       else
         Complexity.P (Expexp.Exp (Expexp.fromConstant (Big_int.big_int_of_int num), Complexity.getExpexp r))
-  and getScaleProduct rc ruleWithLSCs v_betas =
-    List.fold_left Complexity.mult (Complexity.P Expexp.one) (List.map2 (getScaleFactor rc) ruleWithLSCs v_betas)
-  and getScaleFactor rc ruleWithLSC v_beta =
+  and getScaleProduct ctrsobl ruleWithLSCs v_betas =
+    List.fold_left Complexity.mult (Complexity.P Expexp.one) (List.map2 (getScaleFactor ctrsobl) ruleWithLSCs v_betas)
+  and getScaleFactor ctrsobl ruleWithLSC v_beta =
     let s = LSC.getS (snd (snd ruleWithLSC))
-    and r = CTRS.getComplexity rc (fst ruleWithLSC) in
+    and r = CTRSObl.getComplexity ctrsobl (fst ruleWithLSC) in
       if Big_int.eq_big_int s Big_int.unit_big_int || Big_int.eq_big_int s Big_int.zero_big_int then
         Complexity.P (Expexp.one)
       else if r = Complexity.Unknown then
@@ -123,12 +128,12 @@ module Make(RuleT : AbstractRule) = struct
                               gsb
                             else
                               getGSCForOne rest rv
-  and getMaxPlusConstantTerm rc vars ruleWithLSC =
-    let r = CTRS.getComplexity rc (fst ruleWithLSC)
+  and getMaxPlusConstantTerm ctrsobl vars ruleWithLSC =
+    let r = CTRSObl.getComplexity ctrsobl (fst ruleWithLSC)
     and e = LSC.toSmallestComplexity (getAsPol ruleWithLSC) vars in
       Complexity.mult r e
-  and getPossiblyScaledSumPlusConstantTerm rc rvgraph scc vars accu ruleWithLSC v_beta =
-    let r = CTRS.getComplexity rc (fst ruleWithLSC)
+  and getPossiblyScaledSumPlusConstantTerm ctrsobl rvgraph scc vars accu ruleWithLSC v_beta =
+    let r = CTRSObl.getComplexity ctrsobl (fst ruleWithLSC)
     and e = LSC.toSmallestComplexity (getAsPol ruleWithLSC) vars
     and preds = takeout (RVG.getPreds rvgraph [ruleWithLSC]) scc
     and beta_nums = (snd (snd (snd ruleWithLSC))) in
@@ -193,12 +198,12 @@ module Make(RuleT : AbstractRule) = struct
                    Utils.concatMap (fun y -> insertIntoAll (LSC.toSmallestComplexity (getGSCForOne accu y) vars) tmp) x
 
   (** computes global size bound for one SCC in the RVG *)
-  let computeGlobalSizeBound scc trivial condensed rc startFun rvgraph vars accu =
-    if trivial then 
+  let computeGlobalSizeBound ctrsobl rvgraph condensed scc isTrivial accu =
+    if isTrivial then 
       let lsc = getLSC (List.hd scc) in
       let leftFuns = List.map (fun (rule, _) -> Term.getFun (RuleT.getLeft rule)) scc in
       (* TACAS'14, Thm. 9, case trivial SCC { \alpha } with \alpha = |t, v'|. *)
-      if List.exists (fun f -> f = startFun) leftFuns then
+      if List.exists (fun f -> f = ctrsobl.ctrs.startFun) leftFuns then
         lsc
       else
         let preds = RVG.getPreds rvgraph scc in
@@ -207,21 +212,22 @@ module Make(RuleT : AbstractRule) = struct
         else
           (* max { S_l(\alpha)(S(t', v_1'), ..., S(t', v_n')) | t' \in pre(t) } *)
           let activeVarIdxs = snd lsc in
+          let vars = CTRS.getVars ctrsobl.ctrs in
           let activeVars = List.map (List.nth vars) activeVarIdxs in
           let allPredVarBounds = getPredVarBounds (collectPreds preds activeVarIdxs) vars accu in
           let lsc_alpha = getPol (LSC.toSmallestComplexity lsc vars) in
           LSC.listMax (List.map (fun predVarBounds -> c2lsc (Complexity.apply lsc_alpha (List.combine activeVars predVarBounds)) vars) allPredVarBounds) vars
       else
-        gscForNonTrivialScc scc condensed rc rvgraph vars accu
+        gscForNonTrivialScc ctrsobl rvgraph condensed scc accu
 
   (** computes global size complexities for all result variables *)
-  let compute rvgraph rc g vars =
+  let compute ctrsobl rvgraph =
     let condensed = RVG.condense rvgraph in
     let topo = RVG.getNodesInTopologicalOrder condensed in
     let sccs_with_gsb = 
       List.fold_left 
-        (fun acc (scc, trivial) ->
-          (scc, computeGlobalSizeBound scc trivial condensed rc g rvgraph vars acc)::acc) [] topo in
+        (fun acc (scc, isTrivial) ->
+          (scc, computeGlobalSizeBound ctrsobl rvgraph condensed scc isTrivial acc)::acc) [] topo in
     List.fold_left
       (fun acc (scc, gsc) -> 
         List.fold_left 
@@ -265,14 +271,15 @@ module Make(RuleT : AbstractRule) = struct
     Utils.mapiFlat (getSizeComplexitiesForRule' rule sizeComplexities) (RuleT.getRights rule)
 
   (** Pretty-print list of (rule, rhs-num, arg-num, size complexity) tuples. *)
-  let printSizeComplexities rcc gsc vars =
+  let printSizeComplexities ctrsobl gsc =
+    let vars = CTRS.getVars ctrsobl.ctrs in
     String.concat "\n"
-      (Utils.mapFlat (fun (rule, _, _) ->
+      (Utils.mapFlat (fun rule ->
         Utils.mapiFlat (fun rhsIdx _ ->
           Utils.mapi (fun varIdx _ -> 
             Printf.sprintf "\tS(%S, %i-%i) = %s"
               (RuleT.toString rule) rhsIdx varIdx (Complexity.toString (findEntry gsc rule rhsIdx varIdx vars)))
             vars)
           (RuleT.getRights rule))
-         rcc)
+         ctrsobl.ctrs.rules)
 end
