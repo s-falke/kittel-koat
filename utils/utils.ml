@@ -150,15 +150,25 @@ let rec map3 f xs ys zs =
     | [] -> []
     | x::xrest -> (f x (List.hd ys) (List.hd zs))::(map3 f xrest (List.tl ys) (List.tl zs))
 
+let rec combine3 l1 l2 l3 =
+  match (l1, l2, l3) with
+    ([], [], []) -> []
+  | (a1::l1, a2::l2, a3::l3) -> (a1, a2, a3) :: combine3 l1 l2 l3
+  | (_, _, _) -> invalid_arg "Utils.combine3"
+
+let rec combine4 l1 l2 l3 l4 =
+  match (l1, l2, l3, l4) with
+    ([], [], [], []) -> []
+  | (a1::l1, a2::l2, a3::l3, a4::l4) -> (a1, a2, a3, a4) :: combine4 l1 l2 l3 l4
+  | (_, _, _, _) -> invalid_arg "Utils.combine4"
+
 let unboxOption oOpt =
   match oOpt with
     | Some o -> o
     | _ -> failwith "trying to access Some value where None is"
 
 let rec mapFlat f l =
-  match l with
-    | []    -> []
-    | x::xs -> (f x) @ (mapFlat f xs)
+  List.fold_left (fun acc v -> (f v) @ acc) [] l
 
 let iteri f l =
   let rec iteri' i f l =
