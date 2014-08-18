@@ -350,6 +350,7 @@ let process_koat ctrsobl tgraph rvgraph =
       (CTRSObl.toStringNumber nctrsobl outi)
   in
 
+  Log.log "Trying apron AI processor ...";
 
   if CTRSObl.isSolved ctrsobl then
     None
@@ -368,6 +369,7 @@ let process_koat ctrsobl tgraph rvgraph =
                CTRS.RuleMap.add newRule (CTRS.RuleMap.find oldRule ctrsobl.complexity) newComplexities))
             ([], CTRS.RuleMap.empty, CTRS.RuleMap.empty)
             oldNewRules in
+        Log.log "Found new invariants.";
         let ntgraph = TGraph.compute newRules in
         let nctrsobl = 
           { ctrs = { rules = newRules ; startFun = ctrsobl.ctrs.startFun }

@@ -31,11 +31,13 @@ let rec process ctrsobl tgraph rvgraph =
     None
   else
   (
+    Log.log "Trying leaf removal processor ...";
     let leaves = TGraph.computeRulesInTwigs tgraph in
     if (leaves = []) || (List.for_all (fun rule -> not(CTRSObl.hasUnknownComplexity ctrsobl rule)) leaves) then
       None
     else
       (
+        Log.log (Printf.sprintf "Leaf removal processor successful, removing %i rules." (List.length leaves));
         let (removedRules, keptRules) = (leaves, Utils.removeAllC Rule.equal ctrsobl.ctrs.rules leaves) in
         let keptComplexities = CTRS.removeRulesFromMap ctrsobl.complexity leaves in
         let keptCost = CTRS.removeRulesFromMap ctrsobl.cost leaves in

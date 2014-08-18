@@ -38,6 +38,7 @@ module Make(RuleT : AbstractRule) = struct
       None
     else
       (
+        Log.log "Trying Chaining processor...";
         match getChainedRules max_fanout ctrsobl tgraph with
         | None -> None
         | Some (chainedRule, newRulesWithOrigin) ->
@@ -47,6 +48,7 @@ module Make(RuleT : AbstractRule) = struct
             else
               (
                 incr done_chaining;
+                Log.log "Successfully chained rules.";
                 let newctrsobl = getNewObl ctrsobl chainedRule newRulesWithOrigin
                 and plainNewRules = List.map fst newRulesWithOrigin in
                 let ntgraph = TGraph.addNodes (TGraph.removeNodes tgraph [chainedRule]) plainNewRules in

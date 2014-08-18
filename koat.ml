@@ -91,6 +91,8 @@ let rec speclist =
     ("--max-chaining", Arg.Set_int maxchaining, "");
     ("-help", Arg.Unit (fun () -> print_usage (); exit 1), "        - Display this list of options");
     ("--help", Arg.Unit (fun () -> print_usage (); exit 1), "");
+    ("-log", Arg.Int (fun i -> Log.logging_level := i), Printf.sprintf "         - Print live log (level 1) or debug (level 5) output during proof [default %i]" !Log.logging_level);
+    ("--log", Arg.Int (fun i -> Log.logging_level := i), "");
     ("-version", Arg.Unit (fun () -> Printf.printf "KoAT\nCopyright 2010-2014 Stephan Falke\nVersion %s\n" Git_sha1.git_sha1; exit 1), "     - Display the version of this program");
     ("--version", Arg.Unit (fun () -> Printf.printf "KoAT\nCopyright 2010-2014 Stephan Falke\nVersion %s\n" Git_sha1.git_sha1; exit 1), "")
   ]
@@ -108,6 +110,7 @@ let main () =
     exit 1
   )
   else
+    Log.init_timer ();
     let (startFun, cint) = Parser.parseCint !filename !combine in
       if Cint.isUnary cint then
         let tt = Cint.toTrs cint in

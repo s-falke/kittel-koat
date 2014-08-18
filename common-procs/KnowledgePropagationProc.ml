@@ -33,6 +33,7 @@ module Make (RuleT : AbstractRule) = struct
       None
     else
     (
+      Log.log "Trying Knowledge Propagation processor...";
       let s = CTRSObl.getUnknownComplexityRules ctrsobl in
       let k = CTRSObl.getKnownComplexityRules ctrsobl in
       let subsumed = List.rev (TGraph.computeSubsumed tgraph s k) in
@@ -46,6 +47,7 @@ module Make (RuleT : AbstractRule) = struct
   and propagateComplexities ctrsobl subsumed tgraph =
     let updateOneSubsumedRule tgraph complexities rule =
       let pre = TGraph.getPreds tgraph [rule] in
+      Log.debug (Printf.sprintf "Rule '%s' has predecessors\n  %s" (RuleT.toString rule) (String.concat "\n  " (List.map (fun r -> (Complexity.toString (CTRSObl.getComplexity ctrsobl r)) ^ "  == " ^ (RuleT.toString r)) pre)));
       let preComplexitiesSum = Complexity.listAdd (List.map (fun r -> CTRS.RuleMap.find r complexities) pre) in
       CTRS.RuleMap.add rule preComplexitiesSum complexities
     in

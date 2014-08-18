@@ -41,6 +41,7 @@ let rec process degree useSizeComplexities ctrsobl tgraph rvgraph =
     None
   else
     (
+      Log.log (Printf.sprintf "Trying PRF (RTA'11-style) processor for degree %i (%s size bounds)..." degree (if useSizeComplexities then "with" else "without"));
       let globalSizeComplexities = if useSizeComplexities then GSC.compute ctrsobl (Utils.unboxOption rvgraph) else GSC.empty in
       Polo.count := 1;
       let s = CTRSObl.getUnknownComplexityRules ctrsobl in
@@ -59,6 +60,7 @@ let rec process degree useSizeComplexities ctrsobl tgraph rvgraph =
           let model' = Polo.fix_model model params in
           let conc = List.map (fun (f, pol) -> (f, Some pol)) (Polo.get_concrete_poly abs model') in
           let c = Cfarkaspolo.getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities in
+          Log.log (Printf.sprintf "PRF synthesis successful, proven complexity %s." (Complexity.toString c));
           let nctrsobl = annotate ctrsobl s polystrict boundconditions model' c in
           if CTRSObl.haveSameComplexities ctrsobl nctrsobl then 
             None

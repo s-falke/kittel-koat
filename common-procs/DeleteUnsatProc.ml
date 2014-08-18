@@ -29,6 +29,7 @@ module Make (RuleT : AbstractRule) = struct
   open CTRS
 
   let rec process ctrsobl tgraph rvgraph =
+    Log.log "Trying Unsat Transition Removal processor...";
     if CTRSObl.isSolved ctrsobl then
       None
     else
@@ -37,6 +38,7 @@ module Make (RuleT : AbstractRule) = struct
         None
       else
         (
+          Log.log (Printf.sprintf "Removed %i unsat transitions" (List.length unsats));
           let newComplexity = CTRS.removeRulesFromMap ctrsobl.complexity unsats in
           let newCost = CTRS.removeRulesFromMap ctrsobl.cost unsats in
           let ntgraph = TGraph.removeNodes tgraph unsats in

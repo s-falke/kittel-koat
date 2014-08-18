@@ -41,6 +41,7 @@ let rec process useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph =
     None
   else
   (
+    Log.log (Printf.sprintf "Trying linear PRF (Farkas-based) processor for degree %i (%s size bounds, %s minimal element)..." degree (if useSizeComplexities then "with" else "without") (if useMinimal then "with" else "without"));
     let globalSizeComplexities = if useSizeComplexities then GSC.compute ctrsobl (Utils.unboxOption rvgraph) else GSC.empty in
     let s = if useSizeComplexities then (constructAllS (getS4SizeComplexities tgraph ctrsobl)) else [CTRSObl.getUnknownComplexityRules ctrsobl] in
     doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities s
@@ -67,14 +68,20 @@ and doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSi
       let cwbs = Farkaspolo.convert_rules_to_leqs toOrient abs Big_int.unit_big_int in
       let cwbs_for_unknowns = getOnlyFor cwbs toOrient s in
       let weak = List.map Farkaspolo.getWeak cwbs in
+      Log.debug "Weak constraints:";
+      List.iter (fun c -> Log.debug (Pc.toString c)) weak;
       let weakRhsMin = if useMinimal then (List.map (getRhsMin isMINs) toOrient) else [] in
       let bound = List.map Farkaspolo.getBound cwbs_for_unknowns in
+      Log.debug "Bound constraints:";
+      List.iter (fun c -> Log.debug (Pc.toString c)) bound;
       let weakUseMinimal = if useMinimal then List.map2 (addNeitherMin isMINs) weak toOrient else [] in
       let boundUseMinimal = if useMinimal then List.map2 (addLhsNotMin isMINs) bound s else [] in
       let strictDecrease = List.map Farkaspolo.getStrict (getOnlyFor weak toOrient s) in
       let strictRhsNotMin = if useMinimal then (List.map (fun rule -> [getRhsNotMin isMINs rule]) s) else [] in
       let strictRhsMin = if useMinimal then (List.map (fun rule -> [getRhsMin isMINs rule]) s) else [] in
       let strict = if useMinimal then [] else (Farkaspolo.combine bound strictDecrease) in
+      Log.debug "Strict decrease:";
+      List.iter (fun c -> Log.debug (Pc.toString c)) strictDecrease;
       let strictUseMinimal = if useMinimal then (Farkaspolo.combine strictDecrease strictRhsNotMin) else [] in
       let allparams = params @ !Farkaspolo.all_lambdas @ isMINsVars in
       let res = 
@@ -90,6 +97,8 @@ and doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSi
           let model' = Polo.fix_model model (params @ isMINsVars) in
           let conc = get_concrete_poly abs isMINs model' in
           let c = getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities in
+          if Log.do_debug () then
+            Log.debug ("Found the following PRF:\n" ^ (pol_to_string conc));
           let nctrsobl = 
             if useMinimal then 
               annotateMinimal ctrsobl s boundUseMinimal strictUseMinimal strictRhsMin model' c
@@ -101,6 +110,7 @@ and doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSi
             doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities (List.tl allS)
           else
             (
+              Log.log (Printf.sprintf "PRF synthesis successful, proven complexity %s." (Complexity.toString c));
               Some ((nctrsobl, tgraph, rvgraph), getProof ctrsobl nctrsobl conc useSizeComplexities globalSizeComplexities toOrient)
             )
         )

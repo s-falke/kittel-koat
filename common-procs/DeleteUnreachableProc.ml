@@ -30,6 +30,7 @@ module Make (RuleT : AbstractRule) = struct
 
   (* Remove unreachable *)
   let rec process ctrsobl tgraph rvgraph =
+    Log.log "Trying Unreachable Removal processor...";
     if CTRSObl.isSolved ctrsobl then
       None
     else
@@ -43,6 +44,7 @@ module Make (RuleT : AbstractRule) = struct
         None
       else
         let removedRules = Utils.removeAllC RuleT.equal ctrsobl.ctrs.rules reachableRules in
+        Log.log (Printf.sprintf "Removed %i unreachable rules." (List.length removedRules));
         let newComplexities = CTRS.removeRulesFromMap ctrsobl.complexity removedRules in
         let newCost = CTRS.removeRulesFromMap ctrsobl.cost removedRules in
         let ntgraph = TGraph.keepNodes tgraph reachableRules in

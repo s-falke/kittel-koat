@@ -43,6 +43,7 @@ let rec process innerprover innerFuns addSizeSummaries sepId sepOblIdMultiplier 
       None
     else
       (
+        Log.log (Printf.sprintf "Separating into subproblems, inner problem using locations [%s]." (String.concat ", " innerFuns));
         let freshOblId = (sepId * sepOblIdMultiplier) in
         let (outerRules, entryRules, innerRules, exitRules) = splitRules ctrsobl innerFuns in
         let (innerObl, innerTGraph, innerRVGraph) = getInnerObligation ctrsobl entryRules innerRules freshOblId tgraph rvgraph in
@@ -50,8 +51,10 @@ let rec process innerprover innerFuns addSizeSummaries sepId sepOblIdMultiplier 
         match subproof with
         | Some (Complexity.P innerComplexity, innerSizes, innerProof) ->
         (* Now that we could solve the subproblem, build the reduced outer problem *)
+          Log.log (Printf.sprintf "Inner problem for [%s] solved successfully, returning to outer problem." (String.concat ", " innerFuns));
           let (reducedOuterObl, reducedTGraph, reducedRVGraph) = 
             getOuterObligation ctrsobl tgraph rvgraph vars innerFuns outerRules entryRules innerRules exitRules freshOblId innerSizes innerComplexity addSizeSummaries in
+          Log.log (Printf.sprintf "Constructed outer problem");
           Some ((reducedOuterObl, reducedTGraph, reducedRVGraph), getProof innerObl freshOblId innerProof reducedOuterObl)
         | _ -> None
       )
