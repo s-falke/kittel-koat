@@ -49,7 +49,7 @@ let rec process useSizeComplexities degree ctrsobl tgraph rvgraph =
   else
   (
     let globalSizeComplexities = if useSizeComplexities then GSC.compute ctrsobl (Utils.unboxOption rvgraph) else GSC.empty in
-    let s = if useSizeComplexities then (constructAllS (getS4SizeComplexities tgraph ctrsobl)) else [CTRSObl.getUnknownComplexityRules ctrsobl] in
+    let s = if useSizeComplexities then (Utils.powSet (getS4SizeComplexities tgraph ctrsobl)) else [CTRSObl.getUnknownComplexityRules ctrsobl] in
     doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities s
   )
 and constructAllS s =

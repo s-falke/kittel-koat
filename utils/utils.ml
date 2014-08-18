@@ -215,3 +215,7 @@ let rec tryFind f l =
   match l with
   | e::rest -> if f e then Some e else tryFind f rest
   | []      -> None
+
+
+let powSet s = 
+  List.fold_left (fun state ele -> mapFlat (fun s -> [s ; ele::s]) state) [[]] s

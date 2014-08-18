@@ -200,8 +200,7 @@ and insertRVGraphIfNeeded () =
 *)
 
 and selectSubSCC sccFuns (sccTrans : Rule.rule list) =
-  let powSet s = List.fold_left (fun state ele -> Utils.concatMap (fun s -> [s ; ele::s]) state) [[]] s in
-  let funSubsets = List.tl (powSet sccFuns) in (* First one is the empty set *)
+  let funSubsets = List.tl (Utils.powSet sccFuns) in (* First one is the empty set *)
   let checkFunSubsetCand funSubset =
     let transSubset = List.filter (fun rule -> Utils.contains funSubset (Rule.getLeftFun rule) && Utils.contains funSubset (Rule.getRightFun rule)) sccTrans in
     let (funsWithIn', funsWithOut') = List.fold_left (fun (ins, outs) rule -> ((Rule.getLeftFun rule)::ins, (Rule.getRightFun rule)::outs)) ([], []) transSubset in
