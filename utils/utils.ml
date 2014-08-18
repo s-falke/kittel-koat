@@ -204,8 +204,12 @@ and getIdxAux l e i =
                   else
                     getIdxAux rest e (i + 1)
 
-let concatMap f l =
+(* Version of concatMap that for [v1; v2; ...; vn] produces (f v1) @ (f v2) @ ... @ (f vn). Not tail recursive. *)
+let concatMapStable f l =
   List.fold_right (fun v acc -> (f v) @ acc) l []
+
+let concatMap f l =
+  List.fold_left (fun acc v -> (f v) @ acc) [] l
 
 let rec tryFind f l =
   match l with
