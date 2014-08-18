@@ -268,14 +268,14 @@ module Make(RuleT : AbstractRule) = struct
     let getSizeComplexitiesForRule' rule sizeComplexities rhsIdx (_, rhsArgs) =
       Utils.mapi (fun varIdx _ -> findEntry sizeComplexities rule rhsIdx varIdx) rhsArgs
     in
-    Utils.mapiFlat (getSizeComplexitiesForRule' rule sizeComplexities) (RuleT.getRights rule)
+    Utils.concatMapi (getSizeComplexitiesForRule' rule sizeComplexities) (RuleT.getRights rule)
 
   (** Pretty-print list of (rule, rhs-num, arg-num, size complexity) tuples. *)
   let printSizeComplexities ctrsobl gsc =
     let vars = CTRS.getVars ctrsobl.ctrs in
     String.concat "\n"
-      (Utils.mapFlat (fun rule ->
-        Utils.mapiFlat (fun rhsIdx _ ->
+      (Utils.concatMap (fun rule ->
+        Utils.concatMapi (fun rhsIdx _ ->
           Utils.mapi (fun varIdx _ -> 
             Printf.sprintf "\tS(%S, %i-%i) = %s"
               (RuleT.toString rule) rhsIdx varIdx (Complexity.toString (findEntry gsc rule rhsIdx varIdx vars)))

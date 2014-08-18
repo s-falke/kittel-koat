@@ -167,9 +167,6 @@ let unboxOption oOpt =
     | Some o -> o
     | _ -> failwith "trying to access Some value where None is"
 
-let rec mapFlat f l =
-  List.fold_left (fun acc v -> (f v) @ acc) [] l
-
 let iteri f l =
   let rec iteri' i f l =
     match l with
@@ -185,14 +182,6 @@ let mapi f l =
       | x::xs -> (f i x) :: (mapi' (i+1) f xs)
   in
   mapi' 0 f l
-
-let mapiFlat f l =
-  let rec mapiFlat' i f l =
-    match l with
-      | []    -> []
-      | x::xs -> (f i x) @ (mapiFlat' (i+1) f xs)
-  in
-  mapiFlat' 0 f l
 
 let rec getIdx l e =
   getIdxAux l e 0
@@ -211,11 +200,18 @@ let concatMapStable f l =
 let concatMap f l =
   List.fold_left (fun acc v -> (f v) @ acc) [] l
 
+let concatMapi f l =
+  let rec concatMapi' i f l =
+    match l with
+      | []    -> []
+      | x::xs -> (f i x) @ (concatMapi' (i+1) f xs)
+  in
+  concatMapi' 0 f l
+
 let rec tryFind f l =
   match l with
   | e::rest -> if f e then Some e else tryFind f rest
   | []      -> None
 
-
 let powSet s = 
-  List.fold_left (fun state ele -> mapFlat (fun s -> [s ; ele::s]) state) [[]] s
+  List.fold_left (fun state ele -> concatMap (fun s -> [s ; ele::s]) state) [[]] s

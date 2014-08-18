@@ -222,7 +222,7 @@ and getSummaryConditions innerGSC exitRules allVars havocedVars =
     | [] -> cs
     | x::rest -> case_split (split_one cs x) rest in
   let polyConstraint = 
-    Utils.mapFlat 
+    Utils.concatMap
       (fun (var, bound) -> match Complexity.getPoly bound with | None -> [] | Some polyBound -> [Pc.Leq (Poly.fromVar var, polyBound)]) 
       havocedVarMaxSizeMap in
   let polyVars = Pc.getVars polyConstraint in
