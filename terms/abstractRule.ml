@@ -4,6 +4,7 @@ module type AbstractRule =
     val compare: rule -> rule -> int
     val toString: rule -> string
     val toDotString: rule -> string
+    val listToStringPrefix: string -> rule list -> string
     val getLeft: rule -> Term.term
     val getRights: rule -> Term.term list
     val getCond: rule -> Pc.cond

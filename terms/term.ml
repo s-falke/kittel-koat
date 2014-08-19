@@ -59,7 +59,7 @@ let getArity (_, args) =
 
 (* Return the variables of a term *)
 let getVars (_, args) =
-  Utils.remdup (Utils.concatMap Poly.getVars args)
+  Utils.remdup (Utils.concatMapStable Poly.getVars args)
 
 (* Instantiate a term *)
 let instantiate (f, args) bindings =

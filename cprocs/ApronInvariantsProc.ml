@@ -22,11 +22,14 @@ IFDEF HAVE_APRON THEN
 
 open Apron
 
-module CTRS = Ctrs.Make(Rule)
 module RVG = Rvgraph.Make(Rule)
 module TGraph = Tgraph.Make(Rule)
 module VarMap = Map.Make(String)
 module FunMap = Map.Make(String)
+module CTRSObl = Ctrsobl.Make(Rule)
+module CTRS = CTRSObl.CTRS
+open CTRSObl
+open CTRS
 
 let a_var m v = VarMap.find v m
 
@@ -214,7 +217,7 @@ let compute_invariants man rules startFuns =
       rules in
 
   (* Stack format: (fun with changed val, list of funs seen since last widening *)
- let stack = ref (List.map (fun startFun -> (startFun, [startFun])) startFuns) in
+  let stack = ref (List.map (fun startFun -> (startFun, [startFun])) startFuns) in
 
   (* Prepare abstract values for all symbols: Everything is empty, only start value allows everything *)
   let funToAbstrVal = (FunMap.fold (fun key _ acc -> FunMap.add key (Abstract1.bottom man (fst (FunMap.find key funToPreVarsEnv))) acc) funToOutgoingConstraintEnvs FunMap.empty) in
@@ -231,7 +234,20 @@ let compute_invariants man rules startFuns =
             let oldDstAbstrVal = FunMap.find dstFun !funToAbstrVal in
             let newDstAbstrVal = applyTrans man curAbstrVal consArray ruleEnv dstPostEnv (Abstract1.env oldDstAbstrVal) in
 
+            (* (* DEBUG *)
+            Printf.printf "Processing transition from %s to %s, with the following constraints:\n" f dstFun;
+            Tcons1.array_print Format.std_formatter consArray;
+            Printf.printf "\n Current abstract value at %s: %s\n" f (Pc.toString (abstr1_to_pc man curAbstrVal));
+            Printf.printf "  Old abstract value at %s: %s\n" dstFun (Pc.toString (abstr1_to_pc man oldDstAbstrVal));
+            Printf.printf "  New abstract value at %s: %s\n" dstFun (Pc.toString (abstr1_to_pc man newDstAbstrVal));
+            *)
+
             Abstract1.join_with man newDstAbstrVal oldDstAbstrVal;
+
+            (* (* DEBUG *)
+            Printf.printf "  Joined abstract value at %s: %s\n" dstFun (Pc.toString (abstr1_to_pc man newDstAbstrVal));
+            *)
+
             let (newHistory, resAbstrVal) =
               if Utils.contains history dstFun then
               (* We are repeating ourselves and start to get boring. Widen! *)
@@ -242,7 +258,7 @@ let compute_invariants man rules startFuns =
             (* Printf.printf "New invariant for '%s':\n" dstFun; print_abstr_val man resAbstrVal; (* DEBUG *) *)
             funToAbstrVal := FunMap.add dstFun resAbstrVal !funToAbstrVal;
 
-          (* If we changed the dst abstr value, we need to reprocess all outgoing transitions from there *)
+            (* If we changed the dst abstr value, we need to reprocess all outgoing transitions from there *)
             if not(Abstract1.is_eq man oldDstAbstrVal resAbstrVal) then
               stack := (dstFun, newHistory)::!stack
         )
@@ -299,15 +315,14 @@ let process_kittel startFuns trs =
   | Some (funToInv, newRules) ->
     Some ((newRules, Termgraph.compute newRules, false), get_proof man newRules funToInv)
 
-let process_koat (rcc, g, l) tgraph rvgraph =
+let process_koat ctrsobl tgraph rvgraph =
   let add_invariants man rules startFun =
     let funToAbstrVal = compute_invariants man rules startFun in
     if FunMap.exists (fun _ aV -> not(Abstract1.is_top man aV)) funToAbstrVal then
       Some
         (funToAbstrVal,
          (List.map
-            (fun r ->
-              let rule = CTRS.getRule r in
+            (fun rule ->
               let lhs = Rule.getLeft rule in
               let defSym = Term.getFun lhs in
               let inv = abstr1_to_pc man (FunMap.find defSym funToAbstrVal) in
@@ -317,14 +332,14 @@ let process_koat (rcc, g, l) tgraph rvgraph =
               let inv = Pc.instantiate inv subst in
 
               let newRule = Rule.create lhs (Rule.getRight rule) (Utils.remdupC Pc.equalAtom (inv@(Rule.getCond rule))) in
-              (newRule, CTRS.getRuleComplexity r, CTRS.getRuleCost r))
-            rcc)
+              (rule, newRule))
+            rules)
         )
     else
       None
   in
 
-  let get_proof man funToInv nrccgl ini outi =
+  let get_proof man funToInv nctrsobl ini outi =
     let open Printf in
     let invList = pp_invariants man funToInv in
     sprintf
@@ -332,22 +347,36 @@ let process_koat (rcc, g, l) tgraph rvgraph =
       (Manager.get_library man)
       ini
       invList
-      (CTRS.toStringGNumber nrccgl outi)
+      (CTRSObl.toStringNumber nctrsobl outi)
   in
 
-  if CTRS.isSolved rcc then
+  Log.log "Trying apron AI processor ...";
+
+  if CTRSObl.isSolved ctrsobl then
     None
   else
     (
       let man = Box.manager_alloc () in
-      let rules = List.map CTRS.getRule rcc in
-      match add_invariants man rules [g] with
+      match add_invariants man ctrsobl.ctrs.rules [ctrsobl.ctrs.startFun] with
       | None ->
         None
-      | Some (funToInv, newRcc) ->
-        let rules = List.map CTRS.getRule newRcc in
-        let nrccgl = (newRcc, g, l) in
-        Some ((nrccgl, TGraph.compute rules, None), get_proof man funToInv nrccgl)
+      | Some (funToInv, oldNewRules) ->
+        let (newRules, newCost, newComplexities) = 
+          List.fold_left
+            (fun (newRules, newCost, newComplexities) (oldRule, newRule) ->
+              (newRule::newRules, 
+               CTRS.RuleMap.add newRule (CTRS.RuleMap.find oldRule ctrsobl.cost) newCost, 
+               CTRS.RuleMap.add newRule (CTRS.RuleMap.find oldRule ctrsobl.complexity) newComplexities))
+            ([], CTRS.RuleMap.empty, CTRS.RuleMap.empty)
+            oldNewRules in
+        Log.log "Found new invariants.";
+        let ntgraph = TGraph.compute newRules in
+        let nctrsobl = 
+          { ctrs = { rules = newRules ; startFun = ctrsobl.ctrs.startFun }
+          ; cost = newCost
+          ; complexity = newComplexities
+          ; leafCost = ctrsobl.leafCost } in
+        Some ((nctrsobl, ntgraph, None), get_proof man funToInv nctrsobl)
     )
 
 END

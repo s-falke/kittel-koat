@@ -19,7 +19,7 @@ rule token = parse
   | '/''/''/''*''*''*'[^'\n']*'*''*''*''/''/''/' { EOL }
   | [' ']                            { incr pos; token lexbuf }
   | ['\t']                           { pos := !pos + 8; token lexbuf }
-  | ['\n']                           { pos := 1; incr line; EOL }
+  | ['\r' '\n']                      { pos := 1; incr line; EOL }
   | [',']                            { incr pos; COMMA }
   | '-''>'                           { pos := !pos + 2; TO }
   | ['a'-'z']['a'-'z' 'A'-'Z' '0'-'9' '_' '\'' '.']*

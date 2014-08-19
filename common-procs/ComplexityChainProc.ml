@@ -21,93 +21,92 @@
 open AbstractRule
 
 module Make(RuleT : AbstractRule) = struct
-  module CTRS = Ctrs.Make(RuleT)
+  module CTRSObl = Ctrsobl.Make(RuleT)
+  module CTRS = CTRSObl.CTRS
   module RVG = Rvgraph.Make(RuleT)
   module LSC = LocalSizeComplexity.Make(RuleT)
   module TGraph = Tgraph.Make(RuleT)
+  open CTRSObl
+  open CTRS
 
   let max_chaining = ref 0
   let done_chaining = ref 0
 
   (* Chain rules *)
-  let rec process max_fanout (rcc, g, l) tgraph rvgraph=
-    if (!done_chaining >= !max_chaining) || CTRS.isSolved rcc then
+  let rec process max_fanout ctrsobl tgraph rvgraph=
+    if (!done_chaining >= !max_chaining) || CTRSObl.isSolved ctrsobl then
       None
     else
-    (
-      match getNewRules max_fanout rcc tgraph with
+      (
+        Log.log "Trying Chaining processor...";
+        match getChainedRules max_fanout ctrsobl tgraph with
         | None -> None
-        | Some (oldRule, newRules) ->
+        | Some (chainedRule, newRulesWithOrigin) ->
           (
-            if (contains newRules oldRule) then
+            if (List.exists (fun r -> RuleT.equal chainedRule (fst r)) newRulesWithOrigin) then
               None
             else
-            (
-              incr done_chaining;
-              let nrcc = replace rcc (first oldRule) newRules
-              and ng = g
-              and nl = l
-              and plainNewRules = List.map first newRules in
-                let ntgraph = TGraph.addNodes (TGraph.removeNodes tgraph [first oldRule]) plainNewRules in
-                  let nrvgraph = getNewRVGraph rvgraph oldRule plainNewRules ntgraph in
-                    Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi oldRule newRules (rcc, g, l) (nrcc, ng, nl))
-            )
+              (
+                incr done_chaining;
+                Log.log "Successfully chained rules.";
+                let newctrsobl = getNewObl ctrsobl chainedRule newRulesWithOrigin
+                and plainNewRules = List.map fst newRulesWithOrigin in
+                let ntgraph = TGraph.addNodes (TGraph.removeNodes tgraph [chainedRule]) plainNewRules in
+                let nrvgraph = getNewRVGraph rvgraph chainedRule plainNewRules ntgraph in
+                Some ((newctrsobl, ntgraph, nrvgraph), getProof chainedRule newRulesWithOrigin ctrsobl newctrsobl)
+              )
           )
-    )
+      )
 
-  and first (x, _, _) =
-    x
+  (* Find a rule r with successor rules r_1, ..., r_k such that r has one rhs, r != r_i for all i, 0 < k <= max_fanout.
+   * If one exists, return (r, [chained(r, r_1), ..., chained(r, r_k)])
+   *)
+  and getChainedRules max_fanout ctrsobl tgraph =
+    let isSuitable max_fanout (candRule, succs) =
+      let numSuccs = List.length succs in
+      (numSuccs > 0) 
+      && (numSuccs <= max_fanout) 
+      && (RuleT.isUnary candRule) 
+      && not(Utils.containsP RuleT.equal succs candRule)
+    in
+    let buildNewRules rule =
+      List.map (fun succRule -> (RuleT.chainTwoRules rule succRule, succRule))
+    in
+    let candidates = List.map (fun r -> (r, TGraph.getSuccs tgraph [r])) ctrsobl.ctrs.rules in
+    match Utils.tryFind (isSuitable max_fanout) candidates with
+    | None -> None
+    | Some (rule, succRules) -> Some (rule, buildNewRules rule succRules)
 
-  and getNewRVGraph rvgraph oldRule plainNewRules ntgraph =
+  and getNewRVGraph rvgraph chainedRule newRules ntgraph =
     match rvgraph with
       | None -> None
-      | Some rvg -> let newRulesWithLSCs = LSC.computeLocalSizeComplexities plainNewRules in
-                      Some (RVG.addNodes (RVG.removeNodes rvg [first oldRule]) newRulesWithLSCs ntgraph)
+      | Some rvg -> let newRulesWithLSCs = LSC.computeLocalSizeComplexities newRules in
+                    Some (RVG.addNodes (RVG.removeNodes rvg [chainedRule]) newRulesWithLSCs ntgraph)
 
-  and getNewRules max_fanout rcc tgraph =
-    let candidates = getCandidates rcc tgraph in
-      findFirst max_fanout candidates
-  and getCandidates rcc tgraph =
-    List.map (computeCand rcc tgraph) rcc
-  and computeCand rcc tgraph (rule, c, c') =
-    let succs = TGraph.getSuccs tgraph [rule] in
-      ((rule, c, c'), List.map (fun succ -> (succ, CTRS.getCost rcc succ)) succs)
-  and findFirst max_fanout candidates =
-    match candidates with
-      | [] -> None
-      | cand::rest -> if isSuitable max_fanout cand then
-                        Some (fst cand, buildNewRules (fst cand) (snd cand))
-                      else
-                        findFirst max_fanout rest
-  and isSuitable max_fanout (rule, succs) =
-    let numSuccs = List.length succs in
-      (numSuccs > 0) && (numSuccs <= max_fanout) && (RuleT.isUnary (first rule)) && (not (containsRule succs rule))
-  and buildNewRules (rule, c, c') succs =
-    match succs with
-      | [] -> []
-      | (rule', c'')::rest -> let newrule = RuleT.chainTwoRules rule rule' in
-                               (newrule, c, Expexp.add c' c'')::(buildNewRules (rule, c, c') rest)
+  and getNewObl oldctrsobl chainedRule newRulesWithOrigin =
+    let open CTRS in
+    let newCTRS = (List.map fst newRulesWithOrigin) @ (List.filter (fun r -> not(RuleT.equal r chainedRule)) oldctrsobl.ctrs.rules) in
+    let chainedRuleCost = CTRSObl.getCost oldctrsobl chainedRule in
+    let chainedRuleComplexity = CTRSObl.getComplexity oldctrsobl chainedRule in
+    let (newCost, newComplexity) =
+      List.fold_left 
+        (fun (newCost, newComplexity) (newRule, originRule) -> 
+          (RuleMap.add newRule (Expexp.add (CTRSObl.getCost oldctrsobl originRule) chainedRuleCost) newCost, 
+           RuleMap.add newRule chainedRuleComplexity newComplexity))
+        (RuleMap.remove chainedRule oldctrsobl.cost, RuleMap.remove chainedRule oldctrsobl.complexity)
+        newRulesWithOrigin
+    in
+    { ctrs = { rules = newCTRS ; startFun = oldctrsobl.ctrs.startFun } 
+    ; cost = newCost
+    ; complexity = newComplexity
+    ; leafCost = oldctrsobl.leafCost }
 
-  and contains rcc (rule, _, _) =
-    List.exists (fun (rule', _, _) -> RuleT.equal rule rule') rcc
-  and containsRule rules (rule, _, _) =
-    List.exists (fun rule' -> RuleT.equal rule rule') (List.map fst rules)
-
-  and replace rcc rule newRules =
-    match rcc with
-      | [] -> []
-      | (rule', c, c')::rest -> if RuleT.equal rule rule' then
-                                  newRules @ rest
-                                else
-                                  (rule', c, c')::(replace rest rule newRules)
-
-  and getProof ini outi oldRule newRules rccgl nrccgl =
-    let numNewRules = List.length newRules in
-      let single = numNewRules = 1
-      and none = numNewRules = 0 in
-        "By chaining the transition " ^ (RuleT.toString (first oldRule)) ^ " with all transitions in problem " ^
-        (string_of_int ini) ^ ", the following new " ^ (if single then "transition is" else "transitions are") ^ " obtained:\n" ^
-        (if none then "\t(none)" else (CTRS.toStringPrefix "\t" newRules)) ^ "\n" ^
+  and getProof chainedRule newRulesWithOrigin ctrsobl newctrsobl ini outi =
+    let numNewRules = List.length newRulesWithOrigin in
+    let moreThanOne = numNewRules > 1 in
+    "By chaining the transition " ^ (RuleT.toString chainedRule) ^ " with all transitions in problem " ^
+      (string_of_int ini) ^ ", the following new " ^ (if moreThanOne then "transitions are" else "transition is") ^ " obtained:\n" ^
+      (RuleT.listToStringPrefix "\t" (List.map fst newRulesWithOrigin)) ^ "\n" ^
         "We thus obtain the following problem:\n" ^
-        (CTRS.toStringGNumber nrccgl outi)
+        (CTRSObl.toStringNumber newctrsobl outi)
 end

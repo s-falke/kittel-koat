@@ -26,7 +26,7 @@ rule token = parse
   | 'T''R''U''E'                     { pos := !pos + 4; TRUE }
   | [' ']                            { incr pos; token lexbuf }
   | ['\t']                           { pos := !pos + 8; token lexbuf }
-  | ['\n']                           { pos := 1; incr line; EOL }
+  | ['\r' '\n']                      { pos := 1; incr line; EOL }
   | [',']                            { incr pos; COMMA }
   | '-''>'                           { pos := !pos + 2; TO }
   | 'C''o''m''_'['1'-'9']['0'-'9']*  { let s = Lexing.lexeme lexbuf in

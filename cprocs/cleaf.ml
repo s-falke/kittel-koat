@@ -18,41 +18,42 @@
   limitations under the License.
 *)
 
-module CTRS = Ctrs.Make(Rule)
 module RVG = Rvgraph.Make(Rule)
-module LSC = LocalSizeComplexity.Make(Rule)
 module TGraph = Tgraph.Make(Rule)
+module CTRSObl = Ctrsobl.Make(Rule)
+module CTRS = CTRSObl.CTRS
+open CTRSObl
+open CTRS
 
 (* Remove leaves *)
-let rec process (rcc, g, l) tgraph rvgraph =
-  if CTRS.isSolved rcc then
+let rec process ctrsobl tgraph rvgraph =
+  if CTRSObl.isSolved ctrsobl then
     None
   else
   (
+    Log.log "Trying leaf removal processor ...";
     let leaves = TGraph.computeRulesInTwigs tgraph in
-      if (leaves = []) || (List.for_all (fun rule -> (CTRS.getComplexity rcc rule) <> Complexity.Unknown) leaves) then
-        None
-      else
-        let nrcc = removeRules rcc leaves
-        and ng = g
-        and nl = Expexp.add l (getNewLeafCost rcc leaves)
-        and ntgraph = TGraph.removeNodes tgraph leaves
-        and nrvgraph = getNewRVGraph rvgraph leaves in
-          Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g, l) (nrcc, ng, nl))
+    if (leaves = []) || (List.for_all (fun rule -> not(CTRSObl.hasUnknownComplexity ctrsobl rule)) leaves) then
+      None
+    else
+      (
+        Log.log (Printf.sprintf "Leaf removal processor successful, removing %i rules." (List.length leaves));
+        let (removedRules, keptRules) = (leaves, Utils.removeAllC Rule.equal ctrsobl.ctrs.rules leaves) in
+        let keptComplexities = CTRS.removeRulesFromMap ctrsobl.complexity leaves in
+        let keptCost = CTRS.removeRulesFromMap ctrsobl.cost leaves in
+        let nl = Expexp.add ctrsobl.leafCost (List.fold_left (fun sum r -> Expexp.add sum (CTRSObl.getCost ctrsobl r)) Expexp.zero removedRules) in
+        let ntgraph = TGraph.removeNodes tgraph leaves in
+        let nrvgraph = RVG.updateOptionRVGraph rvgraph leaves [] ntgraph in
+        let nctrsobl = 
+          { ctrs = { rules = keptRules ; startFun = ctrsobl.ctrs.startFun }
+          ; complexity = keptComplexities
+          ; cost = keptCost
+          ; leafCost = nl } in
+        Some ((nctrsobl, ntgraph, nrvgraph), getProof nctrsobl)
+      )
   )
 
-and getNewRVGraph rvgraph leaves =
-  match rvgraph with
-    | None -> None
-    | Some rvg -> Some (RVG.removeNodes rvg leaves)
-
-and getProof ini outi rccgl nrccgl =
+and getProof nctrsobl ini outi =
   "Repeatedly removing leaves of the complexity graph in problem " ^
   (string_of_int ini) ^ " produces the following problem:\n" ^
-  (CTRS.toStringGNumber nrccgl outi)
-
-and getNewLeafCost rcc leaves =
-  List.fold_left Expexp.add Expexp.zero (List.map (CTRS.getCost rcc) leaves)
-
-and removeRules rcc rules =
-  List.filter (fun (rule, _, _) -> not (List.exists (fun rule' -> Rule.equal rule rule') rules)) rcc
+  (CTRSObl.toStringNumber nctrsobl outi)

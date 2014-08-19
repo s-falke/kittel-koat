@@ -21,47 +21,42 @@
 open AbstractRule
 
 module Make (RuleT : AbstractRule) = struct
-  module CTRS = Ctrs.Make(RuleT)
   module TGraph = Tgraph.Make(RuleT)
   module RVG = Rvgraph.Make(RuleT)
+  module CTRSObl = Ctrsobl.Make(RuleT)
+  module CTRS = CTRSObl.CTRS
+  open CTRSObl
+  open CTRS
 
-  let first (x, _, _) = x
-
-  let rec process (rcc, g, l) tgraph rvgraph =
-    if CTRS.isSolved rcc then
+  let rec process ctrsobl tgraph rvgraph =
+    Log.log "Trying Unsat Transition Removal processor...";
+    if CTRSObl.isSolved ctrsobl then
       None
     else
-      let (sats, unsats) = Utils.split condIsSatisfiable rcc in
-        if unsats = [] then
-          None
-        else
-          let plainUnsats = List.map first unsats in
-            let nrcc = sats
-            and ng = g
-            and nl = l
-            and ntgraph = TGraph.removeNodes tgraph plainUnsats
-            and nrvgraph = getNewRVGraph rvgraph plainUnsats in
-              Some (((nrcc, ng, nl), ntgraph, nrvgraph), fun ini outi -> getProof ini outi (rcc, g, l) (nrcc, ng, nl) unsats)
+      let (sats, unsats) = Utils.split (fun rule -> Smt.isSatisfiable (Pc.dropNonLinearAtoms (RuleT.getCond rule)) <> Ynm.No) ctrsobl.ctrs.rules in
+      if unsats = [] then
+        None
+      else
+        (
+          Log.log (Printf.sprintf "Removed %i unsat transitions" (List.length unsats));
+          let newComplexity = CTRS.removeRulesFromMap ctrsobl.complexity unsats in
+          let newCost = CTRS.removeRulesFromMap ctrsobl.cost unsats in
+          let ntgraph = TGraph.removeNodes tgraph unsats in
+          let nrvgraph = RVG.updateOptionRVGraph rvgraph unsats [] ntgraph in
+          let nctrsobl = { ctrs = { rules = sats ; startFun = ctrsobl.ctrs.startFun } ; cost = newCost ; complexity = newComplexity ; leafCost = ctrsobl.leafCost } in
+          Some ((nctrsobl, ntgraph, nrvgraph), getProof ctrsobl nctrsobl unsats)
+        )
 
-  and getNewRVGraph rvgraph plainUnsats =
-    match rvgraph with
-      | None -> None
-      | Some rvg -> Some (RVG.removeNodes rvg plainUnsats)
-
-  and condIsSatisfiable (rule, _, _) =
-    let cond = RuleT.getCond rule in
-      Smt.isSatisfiable (Pc.dropNonLinearAtoms cond) <> Ynm.No
-
-  and getProof ini outi rccgl nrccgl unsats =
-    if first nrccgl = [] then
+  and getProof ctrsobl nctrsobl unsats ini outi =
+    if nctrsobl.ctrs.rules = [] then
       "Testing for unsatisfiable constraints removes all transitions from problem " ^
-      (string_of_int ini) ^ "."
+        (string_of_int ini) ^ "."
     else
-      let more = (List.length unsats) <> 1 in
-        "Testing for unsatisfiable constraints removes the following" ^
-        (if more then " transitions " else " transition ") ^
+      let moreThanOne = (List.length unsats) <> 1 in
+      "Testing for unsatisfiable constraints removes the following" ^
+        (if moreThanOne then " transitions " else " transition ") ^
         "from problem " ^ (string_of_int ini) ^ ":\n" ^
-        (CTRS.toString unsats) ^ "\n" ^
+        (RuleT.listToStringPrefix "\t" unsats) ^ "\n" ^
         "We thus obtain the following problem:\n" ^
-        (CTRS.toStringGNumber nrccgl outi)
+        (CTRSObl.toStringNumber nctrsobl outi)
 end
