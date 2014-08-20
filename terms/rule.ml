@@ -183,22 +183,11 @@ and remove c d =
                     d'::(remove rest d)
 
 and chainTwoRules rule1 rule2 =
-  let (_, args) = rule1.rhs in
   let renamedRule2 = renameVars (getVars rule1) rule2 in
-  let (_, args') = renamedRule2.rhs in
-  let rec remdupC c =
-    match c with
-      | [] -> []
-      | x::xs -> x::(remdupC (List.filter (fun y -> not (Pc.equalAtom x y)) xs))
-  and getSubstitution args args' =
-    match args' with
-      | [] -> []
-      | x::xx -> (getName x, List.hd args)::(getSubstitution (List.tl args) xx)
-  and getName poly = List.hd (Poly.getVars poly) in
-    let subby = getSubstitution args args' in
-    { lhs = rule1.lhs ;
-      rhs = Term.instantiate renamedRule2.rhs subby ;
-      cond = remdupC (rule1.cond @ (Pc.instantiate renamedRule2.cond subby)) }
+  let subby = List.combine (List.map (fun a -> List.hd (Poly.getVars a)) (Term.getArgs renamedRule2.lhs)) (Term.getArgs rule1.rhs) in
+  { lhs = rule1.lhs ;
+    rhs = Term.instantiate renamedRule2.rhs subby ;
+    cond = Utils.remdupC Pc.equalAtom (rule1.cond @ (Pc.instantiate renamedRule2.cond subby)) }
 and isUnary r =
   true
 

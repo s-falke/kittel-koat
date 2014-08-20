@@ -210,24 +210,11 @@ let chainTwoRules rule1 rule2 =
   if (not (isUnary rule1)) then
     failwith "Trying to chain rule1 and rule2 where rule1 is non-unary"
   else
-  let args = Term.getArgs (List.hd (getRights rule1))
-  and rule2' = renameVars (getVars rule1) rule2 in
-  let rec remdupC c =
-    match c with
-      | [] -> []
-      | x::xs -> x::(remdupC (List.filter (fun y -> not (Pc.equalAtom x y)) xs))
-  and getSubstitution args args' =
-    match args' with
-      | [] -> []
-      | x::xx -> (getName x, List.hd args)::(getSubstitution (List.tl args) xx)
-  and getName poly =
-    List.hd (Poly.getVars poly) in
-    let args' = Term.getArgs (getLeft rule2') in
-      let subby = getSubstitution args args' in
-        { lhs = rule1.lhs;
-          rhss = List.map (fun r -> Term.instantiate r subby) rule2'.rhss;
-          cond = remdupC (rule1.cond @ (Pc.instantiate rule2'.cond subby))}
-
+  let renamedRule2 = renameVars (getVars rule1) rule2 in
+  let subby = List.combine (List.map (fun a -> List.hd (Poly.getVars a)) (Term.getArgs renamedRule2.lhs)) (Term.getArgs (List.hd rule1.rhss)) in
+  { lhs = rule1.lhs ;
+    rhss = List.map (fun r -> Term.instantiate r subby) renamedRule2.rhss;
+    cond = Utils.remdupC Pc.equalAtom (rule1.cond @ (Pc.instantiate renamedRule2.cond subby)) }
 
 let removeNeq r =
   let rec removeNeqConstraint c =
