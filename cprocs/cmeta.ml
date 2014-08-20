@@ -202,6 +202,7 @@ and insertRVGraphIfNeeded () =
 *)
 
 and selectSubSCC ctrsobl sccFuns (sccTrans : Rule.rule list) =
+  let sccFunsNumber = List.length sccFuns in
   let funSubsets = List.tl (Utils.powSet sccFuns) in (* First one is the empty set *)
   let checkFunSubsetCand funSubset =
     let transSubset = List.filter (fun rule -> Utils.contains funSubset (Rule.getLeftFun rule) && Utils.contains funSubset (Rule.getRightFun rule)) sccTrans in
@@ -210,7 +211,7 @@ and selectSubSCC ctrsobl sccFuns (sccTrans : Rule.rule list) =
     let funsWithOut = Utils.remdup funsWithOut' in
     let funNumber = List.length funSubset in
     
-    if (funNumber > 0) && (List.length funsWithIn = funNumber) && (List.length funsWithOut = funNumber) then (* is SCC *)
+    if (funNumber > 0) && (funNumber < sccFunsNumber) && (List.length funsWithIn = funNumber) && (List.length funsWithOut = funNumber) then (* is non-trivial proper sub-SCC *)
     (
       (* We want to avoid the case where we have locations in the scc which
          are only reachable from the chosen subset, and only lead back to the
@@ -247,14 +248,21 @@ and selectSubSCC ctrsobl sccFuns (sccTrans : Rule.rule list) =
         List.exists (fun f -> not(hasExternalTrans ctrsobl subSCCFuns f)) outsideFuns
       in
       if not(hasSurroundedFun ctrsobl funSubset) then
-        let outerTransSet = Utils.removeAllC Rule.equal sccTrans transSubset in
-        let outerGuardVars = Utils.remdup (Utils.concatMap (fun rule -> Pc.getVars (Rule.getCond rule)) outerTransSet) in
-        let extractUpdatedVars rule =
-          let oldNewPairs = List.combine (Term.getArgs (Rule.getLeft rule)) (Term.getArgs (Rule.getRight rule)) in
-          Utils.concatMap (fun (oldV, newV) -> if (not (Poly.equal oldV newV)) then Poly.getVars oldV else []) oldNewPairs
-        in
-        let innerUpdatedVars = Utils.remdup (Utils.concatMap extractUpdatedVars transSubset) in
-        List.exists (fun v -> Utils.contains outerGuardVars v) innerUpdatedVars
+        (
+          let outerTransSet = Utils.removeAllC Rule.equal sccTrans transSubset in
+          (* Eliminate the negation of guards on the splitted transitions from the set of guards considered on the outside *)
+          let innerGuards = Utils.remdupC Pc.equalAtom (Utils.concatMap Rule.getCond transSubset) in
+          let cleanedOuterGuards = Utils.removeAllC Pc.equalAtom (Utils.concatMap Rule.getCond outerTransSet) (List.map Pc.negateAtom innerGuards) in
+          let outerGuardVars = Utils.remdup (Pc.getVars cleanedOuterGuards) in
+          let extractUpdatedVars rule =
+            let oldNewPairs = List.combine (Term.getArgs (Rule.getLeft rule)) (Term.getArgs (Rule.getRight rule)) in
+            Utils.concatMap (fun (oldV, newV) -> if (not (Poly.equal oldV newV)) then Poly.getVars oldV else []) oldNewPairs
+          in
+          let innerUpdatedVars = Utils.remdup (Utils.concatMap extractUpdatedVars transSubset) in
+          let res = not(List.exists (fun v -> Utils.contains outerGuardVars v) innerUpdatedVars) in
+          if res then Log.debug (Printf.sprintf " Splitting for outer guard vars [%s], inner update vars [%s]" (String.concat ", " outerGuardVars) (String.concat ", " innerUpdatedVars));
+          res
+        )
       else
         false
     )

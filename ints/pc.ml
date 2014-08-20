@@ -221,3 +221,12 @@ let getLeqZeroTerms a =
     | Gtr (l, r) -> [Poly.add (Poly.minus r l) ([], Big_int.unit_big_int)]
     | Leq (l, r) -> [Poly.minus l r]
     | Lss (l, r) -> [Poly.add (Poly.minus l r) ([], Big_int.unit_big_int)]
+
+let negateAtom a =
+  match a with
+  | Equ (l, r) -> Neq (l, r)
+  | Neq (l, r) -> Geq (l, r)
+  | Geq (l, r) -> Lss (l, r)
+  | Lss (l, r) -> Geq (l, r)
+  | Gtr (l, r) -> Leq (l, r)
+  | Leq (l, r) -> Gtr (l, r)
