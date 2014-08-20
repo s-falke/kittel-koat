@@ -225,7 +225,7 @@ let getLeqZeroTerms a =
 let negateAtom a =
   match a with
   | Equ (l, r) -> Neq (l, r)
-  | Neq (l, r) -> Geq (l, r)
+  | Neq (l, r) -> Equ (l, r)
   | Geq (l, r) -> Lss (l, r)
   | Lss (l, r) -> Geq (l, r)
   | Gtr (l, r) -> Leq (l, r)
