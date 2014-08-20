@@ -83,17 +83,20 @@ and tryOneS useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalS
       None
     else
       let (abs, params) = Polo.create_poly_map degree toOrient in
-      let (isMINs, isMINsVars) = if useMinimal then (create_is_mins toOrient) else ([], []) in
       let cwbs_with_rules = List.map (fun r -> (r, Farkaspolo.convert_rule_to_leqs r abs Big_int.unit_big_int)) toOrient in
       let cwbs_for_unknowns_with_rules = getOnlyFor cwbs_with_rules toOrient s in
       let weak_with_rules = List.map (fun (r, cwb) -> (r, Farkaspolo.getWeak cwb)) cwbs_with_rules in
-      let weakRhsMin_with_rules = if useMinimal then (List.map (fun r -> (r, (getRhsMin isMINs r))) toOrient) else [] in
       let bound_with_rules = List.map (fun (r, cwb) -> (r, Farkaspolo.getBound cwb)) cwbs_for_unknowns_with_rules in
-      let weakUseMinimal_with_rules = if useMinimal then List.map2 (fun (r, w) tO -> (r, addNeitherMin isMINs w tO)) weak_with_rules toOrient else [] in
-      let boundUseMinimal_with_rules = if useMinimal then List.map2 (fun (r, w) s -> (r, addLhsNotMin isMINs w s)) bound_with_rules s else [] in
       let strictDecrease_with_rules = List.map (fun (r, w) -> (r, Farkaspolo.getStrict w)) (getOnlyFor weak_with_rules toOrient s) in
-      let strictRhsNotMin_with_rules = if useMinimal then (List.map (fun rule -> (rule, [getRhsNotMin isMINs rule])) s) else [] in
-      let strictRhsMin_with_rules = if useMinimal then (List.map (fun rule -> (rule, [getRhsMin isMINs rule])) s) else [] in
+
+      let (isMINs, isMINsVars) = if useMinimal then (create_is_mins toOrient) else ([], []) in
+      let weakRhsMin_with_rules = if useMinimal then (List.map (fun r -> (r, (getRhsMin isMINs r))) toOrient) else [] in
+      let weakUseMinimal_with_rules = if useMinimal then List.map2 (fun (r, w) tO -> assert (Rule.equal r tO); (r, addNeitherMin isMINs w tO)) weak_with_rules toOrient else [] in
+      let s = (getOnlyFor toOrient toOrient s) in (* We need to do this to restore the same order as for the other things... *)
+      let boundUseMinimal_with_rules = if useMinimal then List.map2 (fun (r, w) s -> assert (Rule.equal r s); (r, addLhsNotMin isMINs w s)) bound_with_rules s else [] in
+      let strictRhsNotMin_with_rules = if useMinimal then (List.map (fun r -> (r, [getRhsNotMin isMINs r])) s) else [] in
+      let strictRhsMin_with_rules = if useMinimal then (List.map (fun r -> (r, [getRhsMin isMINs r])) s) else [] in
+
       let strictAndBounded_with_rules = 
         if useMinimal then [] 
         else 
