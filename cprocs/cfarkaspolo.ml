@@ -35,6 +35,35 @@ let rec getOnlyFor xx r s =
                  else
                    getOnlyFor xs (List.tl r) s
 
+
+let getRuleSubsetsToOrient tgraph ctrsobl useSizeComplexities =
+  (* Which ones to choose here is rather unclear, and a heuristic.
+   * Enumerating all possible subsets of unknowns (i.e., rule sets for which we
+   * search a PRF) works for small examples, but is not feasible on larger ones.
+   * We use the following heuristics:
+   *  - Try the set of _all_ unknown rules.
+   *  - Try those SCCs for which all predecessors already have time bounds
+   *    (if we use size complexities)
+   *)
+  let sccHasUnknownPreds tgraph unknowns scc =
+    let sccPreds = TGraph.getPreds tgraph scc in
+    let outsideSCCPreds = Utils.removeAllC Rule.equal sccPreds scc in
+    List.exists (Utils.containsP Rule.equal unknowns) outsideSCCPreds in
+  let unknowns = CTRSObl.getUnknownComplexityRules ctrsobl in
+  if useSizeComplexities then
+    let nonTrivialSCCs = TGraph.getNontrivialSccs tgraph in
+    unknowns :: (List.filter (fun scc -> not(sccHasUnknownPreds tgraph unknowns scc)) nonTrivialSCCs)
+  else
+    [unknowns]
+
+let rec findFirst f xs =
+  match xs with
+  | [] -> None
+  | x::rest ->
+    match f x with
+    | None -> findFirst f rest
+    | Some res -> Some res
+
 (* Find a polynomial interpretation *)
 let rec process useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph =
   if degree < 0 || degree > 1 || CTRSObl.isSolved ctrsobl then
@@ -43,20 +72,15 @@ let rec process useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph =
   (
     Log.log (Printf.sprintf "Trying linear PRF (Farkas-based) processor for degree %i (%s size bounds, %s minimal element)..." degree (if useSizeComplexities then "with" else "without") (if useMinimal then "with" else "without"));
     let globalSizeComplexities = if useSizeComplexities then GSC.compute ctrsobl (Utils.unboxOption rvgraph) else GSC.empty in
-    let s = if useSizeComplexities then (Utils.powSet (getS4SizeComplexities tgraph ctrsobl)) else [CTRSObl.getUnknownComplexityRules ctrsobl] in
-    doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities s
+    let allCandidates = getRuleSubsetsToOrient tgraph ctrsobl useSizeComplexities in
+    findFirst (tryOneS useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities) allCandidates
   )
-and doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities allS =
-  if allS = [] then
-    None
-  else
-  (
-    let s = List.hd allS in
+and tryOneS useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities s =
     Farkaspolo.lambda_count := 0;
     Farkaspolo.all_lambdas := [];
     let toOrient = if useSizeComplexities then s else ctrsobl.ctrs.rules in
     if toOrient = [] then
-      doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities (List.tl allS)
+      None
     else
       let (abs, params) = Polo.create_poly_map degree toOrient in
       let (isMINs, isMINsVars) = if useMinimal then (create_is_mins toOrient) else ([], []) in
@@ -99,8 +123,7 @@ and doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSi
               annotate ctrsobl strictAndBounded_with_rules model' c
           in
           if CTRSObl.haveSameComplexities ctrsobl nctrsobl then 
-            (* Try next variant of S *)
-            doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSizeComplexities (List.tl allS)
+            None
           else
             (
               if Log.do_debug () then
@@ -109,7 +132,6 @@ and doLoop useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalSi
               Some ((nctrsobl, tgraph, rvgraph), getProof ctrsobl nctrsobl conc useSizeComplexities globalSizeComplexities toOrient)
             )
         )
-  )
 
 and getIsMIN isMINs f =
   Pc.Equ (Poly.fromVar (getMINmarker isMINs f), Poly.one)
@@ -167,33 +189,6 @@ and get_concrete_poly abs isMINs model =
 and isNonMIN isMINs model f =
   let isMINvar = getMINmarker isMINs f in
     Poly.eq_big_int Big_int.zero_big_int (List.assoc isMINvar model)
-
-and getS4SizeComplexities tgraph ctrsobl =
-  let rec removeRulesWithUnknownPreds tgraph ctrsobl unknowns =
-    let rec removeOneRuleWithUnknownPreds tgraph ctrsobl x unknowns accu =
-      let hasUnknownPred tgraph ctrsobl r unknowns =
-        let preds = TGraph.getPreds tgraph [r] in
-        let otherPreds = Utils.notInP Rule.equal unknowns preds in
-        List.exists (CTRSObl.hasUnknownComplexity ctrsobl) otherPreds
-      in
-
-      match x with
-      | [] -> accu
-      | r::rest -> 
-        if hasUnknownPred tgraph ctrsobl r unknowns then
-          accu @ rest
-        else
-          removeOneRuleWithUnknownPreds tgraph ctrsobl rest unknowns (accu @ [r])
-    in
-    let oldsize = List.length unknowns
-    and tmp = removeOneRuleWithUnknownPreds tgraph ctrsobl unknowns unknowns [] in
-    if oldsize = (List.length tmp) then
-      unknowns
-    else
-      removeRulesWithUnknownPreds tgraph ctrsobl tmp
-  in
-  let unknowns = CTRSObl.getUnknownComplexityRules ctrsobl in
-  removeRulesWithUnknownPreds tgraph ctrsobl unknowns
 
 and getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities =
   let vars = CTRS.getVars ctrsobl.ctrs in
