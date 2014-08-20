@@ -188,7 +188,9 @@ and insertRVGraphIfNeeded () =
   match !todo with
     | (_, _, Some _, _) -> ()
     | (ctrsobl, tgraph, None, ini) ->
+      Log.log "Computing RVG.";
       let lscs = LSC.computeLocalSizeComplexities ctrsobl.ctrs.rules in
+      if Log.do_debug () then Log.debug (Printf.sprintf "Found the following local size bounds: \n  %s" (String.concat "\n  " (List.map LSC.dumpOneLSC lscs)));
       todo := (ctrsobl, tgraph, Some (RVG.compute lscs tgraph), ini)
 
 (*
