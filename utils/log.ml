@@ -37,4 +37,8 @@ let log msg =
 
 let debug msg =
   if do_debug () then
-    Printf.printf "LOG: %s\n" msg
+    (
+      let cur_time = Unix.gettimeofday() -. !start_time in
+      Printf.printf "%03.2f LOG: %s\n" cur_time msg;
+      flush stdout
+    )
