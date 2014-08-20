@@ -314,8 +314,13 @@ module Make (RuleT : AbstractRule) = struct
   and computeLSCReal lvars lvarswithnums i t linCond fullCond =
     let isLinear = Poly.isLinear t in
       if isLinear && (Smt.isConstantBound linCond t maxC) then
-        let e = minimizeC (Smt.isConstantBound linCond t) Big_int.zero_big_int maxC in
-          (i, (P (Expexp.fromConstant e), []))
+        (
+          if Poly.isConst t then
+            (i, (P (Expexp.fromConstant (Big_int.abs_big_int (Poly.getConstant t))), []))
+          else
+            let e = minimizeC (Smt.isConstantBound linCond t) Big_int.zero_big_int maxC in
+            (i, (P (Expexp.fromConstant e), []))
+        )
       else
         let alltvars = Poly.getVars t in
           let tvars = Utils.intersect lvars alltvars
@@ -331,6 +336,12 @@ module Make (RuleT : AbstractRule) = struct
                   let minimal = [!maxBound] in
                     let e = minimizeC (fun c -> Smt.isMaxBound linCond t c minimal) Big_int.zero_big_int maxC in
                       (i, (Max e, getVarNums lvarswithnums minimal))
+                else if isLinear && isRegular && (List.length tvars = 1) && (Poly.isSumOfVarsPlusConstant t) && isMaxPlusConstantBound linCond t (Big_int.abs_big_int (Poly.getConstant t)) deps then
+                  (* t = v_1 + ... + v_l + k, for v a lhs variable and k some constant. Start optimizing constant from k, not from maxC.
+                     This converges far faster for cases like "x + 1" or "x - 1"... *)
+                  let minimal = [!maxPlusConstantBound] in
+                    let e = minimizeC (fun c -> Smt.isMaxPlusConstantBound linCond t c minimal) Big_int.zero_big_int (Big_int.abs_big_int (Poly.getConstant t)) in
+                      (i, (MaxPlusConstant e, getVarNums lvarswithnums minimal))
                 else if isLinear && isMaxPlusConstantBound linCond t maxC deps then
                   let minimal = [!maxPlusConstantBound] in
                     let e = minimizeC (fun c -> Smt.isMaxPlusConstantBound linCond t c minimal) Big_int.zero_big_int maxC in
