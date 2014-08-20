@@ -493,9 +493,9 @@ module Make (RuleT : AbstractRule) = struct
   let rec dumpLSCs ruleWithLSCs =
     String.concat "\n" (List.map dumpOneLSC ruleWithLSCs)
   and dumpOneLSC (rule, lsb) =
-    (RuleT.toString rule) ^ ":: " ^ (dumpLSC lsb)
-  and dumpLSC (i, c_vars) =
-    (string_of_int i) ^ ": " ^ (toStringLocalComplexity c_vars)
+    (RuleT.toString rule) ^ " :: " ^ (dumpLSC lsb)
+  and dumpLSC ((i, j), c_vars) =
+    Printf.sprintf "%i-%i: %s" i j (toStringLocalComplexity c_vars)
   and dumpLSCDot (rule, lsb) =
     (RuleT.toDotString rule) ^ ":: " ^ (dumpLSC lsb)
 end
