@@ -205,14 +205,23 @@ and insertRVGraphIfNeeded () =
 
 and doInitial () =
   doInitialCleaning ();
-  doLoop ();
+  doMaybeSeparateLoop ();
 and doInitialCleaning () =
   run UnsatProc.process;
   run Cleaf.process;
+and doMaybeSeparateLoop () = 
+  (* This is split from doLoop, as the check if we can separate is rather expensive.
+   * When we can successfully separate, we try again (because there might be other things
+   * to separate / the program changed sufficiently).
+   * However, once this failed, we never need to check again (and will end in doLoop).
+   *)
+  doUnreachableRemoval ();
+  doKnowledgePropagation ();
+  doSeparate () ;
 and doLoop () =
   doUnreachableRemoval ();
   doKnowledgePropagation ();
-  doSeparate () ; (* doFarkasConstant () *)
+  doFarkasConstant ()
 and doApronInvariants () =
 IFDEF HAVE_APRON THEN
   run ApronInvariantsProc.process_koat
@@ -243,7 +252,7 @@ and doSeparate () =
 and doSeparationCleanup () =
   doApronInvariants () ;
   run UnsatProc.process;
-  doLoop () ;
+  doMaybeSeparateLoop () ;
 and doFarkasConstant () =
   run_ite (Cfarkaspolo.process false false 0) doLoop doFarkasConstantSizeBound
 and doFarkasConstantSizeBound () =
