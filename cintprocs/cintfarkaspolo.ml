@@ -37,6 +37,29 @@ let rec getOnlyFor x_with_rules r s =
                    else
                      getOnlyFor xs (List.tl r) s
 
+let getRuleSubsetsToOrient tgraph ctrsobl useSizeComplexities =
+  (* Which ones to choose here is rather unclear, and a heuristic.
+   * Enumerating all possible subsets of unknowns (i.e., rule sets for which we
+   * search a PRF) works for small examples, but is not feasible on larger ones.
+   * We use the following heuristics:
+   *  - Try the set of _all_ unknown rules.
+   *  - Take a SCC, remove everything that is already bounded, and try for the rest (?)
+   *  - Try those SCCs for which all predecessors already have time bounds
+   *    (if we use size complexities)
+   *)
+  let sccHasUnknownPreds tgraph unknowns scc =
+    let sccPreds = TGraph.getPreds tgraph scc in
+    let outsideSCCPreds = Utils.removeAllC Comrule.equal sccPreds scc in
+    List.exists (Utils.containsP Comrule.equal unknowns) outsideSCCPreds in
+  let sccContainsSomeUnknown unknowns scc =
+    List.exists (fun r -> Utils.containsP Comrule.equal unknowns r) scc in
+  let unknowns = CTRSObl.getUnknownComplexityRules ctrsobl in
+  if useSizeComplexities then
+    let nonTrivialSCCs = TGraph.getNontrivialSccs tgraph in
+    unknowns :: (List.filter (fun scc -> (sccContainsSomeUnknown unknowns scc) && not(sccHasUnknownPreds tgraph unknowns scc)) nonTrivialSCCs)
+  else
+    [unknowns]
+
 (* Find a polynomial interpretation *)
 let rec process useSizeComplexities degree ctrsobl tgraph rvgraph =
   if degree < 0 || degree > 1 || CTRSObl.isSolved ctrsobl then
@@ -45,7 +68,7 @@ let rec process useSizeComplexities degree ctrsobl tgraph rvgraph =
   (
     Log.log (Printf.sprintf "Trying linear PRF (Farkas-based) processor for degree %i (%s size bounds)..." degree (if useSizeComplexities then "with" else "without"));
     let globalSizeComplexities = if useSizeComplexities then GSC.compute ctrsobl (Utils.unboxOption rvgraph) else GSC.empty in
-    let s = if useSizeComplexities then (Utils.powSet (getS4SizeComplexities tgraph ctrsobl)) else [CTRSObl.getUnknownComplexityRules ctrsobl] in
+    let s = getRuleSubsetsToOrient tgraph ctrsobl useSizeComplexities in
     doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities s
   )
 and doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities allS =
@@ -144,33 +167,6 @@ and getAllBound (r, (c, ws, b)) =
 
 and getAllStrict (r, ws)  =
   (r, List.map Farkaspolo.getStrict ws)
-
-and getS4SizeComplexities tgraph ctrsobl =
-  let rec removeRulesWithUnknownPreds tgraph ctrsobl unknowns =
-    let rec removeOneRuleWithUnknownPreds tgraph ctrsobl x unknowns accu =
-      let hasUnknownPred tgraph ctrsobl r unknowns =
-        let preds = TGraph.getPreds tgraph [r] in
-        let otherPreds = Utils.notInP Comrule.equal unknowns preds in
-        List.exists (CTRSObl.hasUnknownComplexity ctrsobl) otherPreds
-      in
-
-      match x with
-      | [] -> accu
-      | r::rest -> 
-        if hasUnknownPred tgraph ctrsobl r unknowns then
-          accu @ rest
-        else
-          removeOneRuleWithUnknownPreds tgraph ctrsobl rest unknowns (accu @ [r])
-    in
-    let oldsize = List.length unknowns
-    and tmp = removeOneRuleWithUnknownPreds tgraph ctrsobl unknowns unknowns [] in
-    if oldsize = (List.length tmp) then
-      unknowns
-    else
-      removeRulesWithUnknownPreds tgraph ctrsobl tmp
-  in
-  let unknowns = CTRSObl.getUnknownComplexityRules ctrsobl in
-  removeRulesWithUnknownPreds tgraph ctrsobl unknowns
 
 and getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities =
   let vars = CTRS.getVars ctrsobl.ctrs in
