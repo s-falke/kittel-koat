@@ -225,3 +225,8 @@ let standardize rule =
     rhs = (Term.getFun rule.rhs, rhsArgs) ;
     cond = Pc.instantiate (Pc.instantiate (rule.cond @ rhsCond) (lhsSubst @ rhsSubst)) condSubst ;
   }
+
+let restrictArguments indexSet rule =
+  { lhs = (Term.getFun rule.lhs, Utils.getIndexedSubset indexSet (Term.getArgs rule.lhs)) ;
+    rhs = (Term.getFun rule.rhs, Utils.getIndexedSubset indexSet (Term.getArgs rule.rhs)) ;
+    cond = rule.cond }

@@ -228,3 +228,8 @@ let removeNeq r =
   in
   let c's = removeNeqConstraint r.cond in
     List.map (fun c' -> {lhs = r.lhs ; rhss = r.rhss ; cond = c' }) c's
+
+let restrictArguments indexSet rule =
+  { lhs = (Term.getFun rule.lhs, Utils.getIndexedSubset indexSet (Term.getArgs rule.lhs)) ;
+    rhss = List.map (fun rhs -> (Term.getFun rhs, Utils.getIndexedSubset indexSet (Term.getArgs rhs))) rule.rhss ;
+    cond = rule.cond }
