@@ -259,11 +259,11 @@ and doFarkasConstantSizeBound () =
   insertRVGraphIfNeeded ();
   run_ite (Cfarkaspolo.process true false 0) doLoop doFarkas
 and doFarkas () =
-  run_ite (Cfarkaspolo.process false false 1) doLoop doPolo1
+  run_ite (Cfarkaspolo.process false false 1) doLoop doFarkasSizeBound
 and doPolo1 () =
-  run_ite (Cpolo.process 1 false) doLoop doFarkasSizeBound
+  run_ite (Cpolo.process 1 false) doLoop doPolo1SizeBound
 and doFarkasSizeBound () =
-  run_ite (Cfarkaspolo.process true false 1) doLoop doPolo1SizeBound
+  run_ite (Cfarkaspolo.process true false 1) doLoop doPolo1
 and doPolo1SizeBound () =
   run_ite (Cpolo.process 1 true) doLoop doFarkasMinimal
 and doFarkasMinimal () =
