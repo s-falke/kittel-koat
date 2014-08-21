@@ -44,45 +44,50 @@ module Make (RuleT : AbstractRule) = struct
     if ruleNum * varNum < 40 then
       None
     else
-      let varToIdx = List.fold_left (fun map (v, i) -> VarMap.add v i map) VarMap.empty (List.mapi (fun i v -> (v, i)) vars) in
-      let varToIdxSet v = if VarMap.mem v varToIdx then [VarMap.find v varToIdx] else [] in
-      let computeNeeded rules = 
-        let rec propagate neededIdxs rules = 
-          let propagateForRule neededIdxs rule =
-            let propagateForRhs neededIdxs rhs =
-              Utils.concatMap 
-                (fun arg -> Utils.concatMap varToIdxSet (Poly.getVars arg))
-                (Utils.getIndexedSubset neededIdxs (Term.getArgs rhs)) in
-            Utils.concatMap (propagateForRhs neededIdxs) (RuleT.getRights rule) in
-          let newNeededIdxs = Utils.remdup (neededIdxs @ (Utils.concatMap (propagateForRule neededIdxs) rules)) in
-          if (List.length neededIdxs < List.length newNeededIdxs) then
-            propagate newNeededIdxs rules
-          else
-            newNeededIdxs
+      (
+        Log.log "Trying Slicing processor ...";
+        let varToIdx = List.fold_left (fun map (v, i) -> VarMap.add v i map) VarMap.empty (List.mapi (fun i v -> (v, i)) vars) in
+        let varToIdxSet v = if VarMap.mem v varToIdx then [VarMap.find v varToIdx] else [] in
+        let computeNeeded rules =
+          let rec propagate neededIdxs rules =
+            let propagateForRule neededIdxs rule =
+              let propagateForRhs neededIdxs rhs =
+                Utils.concatMap
+                  (fun arg -> Utils.concatMap varToIdxSet (Poly.getVars arg))
+                  (Utils.getIndexedSubset neededIdxs (Term.getArgs rhs)) in
+              Utils.concatMap (propagateForRhs neededIdxs) (RuleT.getRights rule) in
+            let newNeededIdxs = Utils.remdup (neededIdxs @ (Utils.concatMap (propagateForRule neededIdxs) rules)) in
+            if (List.length neededIdxs < List.length newNeededIdxs) then
+              propagate newNeededIdxs rules
+            else
+              newNeededIdxs
+          in
+          let varsInConds = Utils.remdup (Utils.concatMap (fun r -> Pc.getVars (RuleT.getCond r)) rules) in
+          let initNeededIdxs = Utils.concatMap varToIdxSet varsInConds in
+          propagate initNeededIdxs rules
         in
-        let varsInConds = Utils.remdup (Utils.concatMap (fun r -> Pc.getVars (RuleT.getCond r)) rules) in
-        let initNeededIdxs = Utils.concatMap varToIdxSet varsInConds in
-        propagate initNeededIdxs rules
-      in
-      let neededIdxs = computeNeeded ctrsobl.ctrs.rules in
-      if List.length neededIdxs = varNum then (* nothing filtered *)
-        None
-      else
-        let (newRules, newComplexity, newCost) =
-          List.fold_left
-            (fun (newRules, newComplexity, newCost) rule -> 
-              let newRule = RuleT.restrictArguments neededIdxs rule in
-              (newRule :: newRules,
-               RuleMap.add newRule (RuleMap.find rule ctrsobl.complexity) newComplexity,
-               RuleMap.add newRule (RuleMap.find rule ctrsobl.cost) newCost))
-            ([], RuleMap.empty, RuleMap.empty)
-            ctrsobl.ctrs.rules in
+        let neededIdxs = computeNeeded ctrsobl.ctrs.rules in
+        if List.length neededIdxs = varNum then (* nothing filtered *)
+          None
+        else
+          let remainingVars = Utils.getIndexedSubset neededIdxs vars in
+          Log.log (Printf.sprintf "Successfully sliced %i variables away, %s remain." (varNum - (List.length neededIdxs)) (String.concat ", " remainingVars));
+          let (newRules, newComplexity, newCost) =
+            List.fold_left
+              (fun (newRules, newComplexity, newCost) rule ->
+                let newRule = RuleT.restrictArguments neededIdxs rule in
+                (newRule :: newRules,
+                 RuleMap.add newRule (RuleMap.find rule ctrsobl.complexity) newComplexity,
+                 RuleMap.add newRule (RuleMap.find rule ctrsobl.cost) newCost))
+              ([], RuleMap.empty, RuleMap.empty)
+              ctrsobl.ctrs.rules in
 
-        let newctrsobl =
-          { ctrs = { rules = newRules ; startFun = ctrsobl.ctrs.startFun }
-          ; cost = newCost 
-          ; complexity = newComplexity 
-          ; leafCost = ctrsobl.leafCost 
-          } in
-        Some (newctrsobl, getProof ctrsobl newctrsobl (Utils.getIndexedSubset neededIdxs vars))
+          let newctrsobl =
+            { ctrs = { rules = newRules ; startFun = ctrsobl.ctrs.startFun }
+            ; cost = newCost
+            ; complexity = newComplexity
+            ; leafCost = ctrsobl.leafCost
+            } in
+          Some (newctrsobl, getProof ctrsobl newctrsobl remainingVars)
+      )
 end

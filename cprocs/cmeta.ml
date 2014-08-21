@@ -35,6 +35,7 @@ module KnowledgeProc = KnowledgePropagationProc.Make(Rule)
 module UnreachableProc = DeleteUnreachableProc.Make(Rule)
 module UnsatProc = DeleteUnsatProc.Make(Rule)
 module ChainProc = ComplexityChainProc.Make(Rule)
+module SlicingProc = SlicingProc.Make(Rule)
 
 let sep = 10000
 
@@ -72,26 +73,35 @@ and checkStartCondition tgraph trs startfun =
 
 let rec process trs maxchaining startfun =
   check trs;
+  i := 1;
+  proofs := [];
+  input_nums := [];
+  output_nums := [];
+  ChainProc.max_chaining := maxchaining;
+  ChainProc.done_chaining := 0;
+  let initObl = CTRSObl.getInitialObl trs startfun in
+  let maybeSlicedObl =
+    match (SlicingProc.process initObl) with
+    | None -> initObl
+    | Some (newctrsobl, proof) ->
+      i := 2;
+      proofs := proof::!proofs;
+      input_nums := 1::!input_nums;
+      output_nums := 2::!output_nums;
+      newctrsobl in
+  let tgraph = TGraph.compute maybeSlicedObl.ctrs.rules in
+  checkStartCondition tgraph maybeSlicedObl.ctrs.rules startfun;
+  let initial = (maybeSlicedObl, tgraph, None, !i) in
+  todo := initial;
+  doInitial ();
+  proofs := List.rev !proofs;
+  input_nums := List.rev !input_nums;
+  output_nums := List.rev !output_nums;
+  insertRVGraphIfNeeded ();
+  let (ctrsobl, tgraph, rvgraph, _) = !todo in
+  let globalSizeComplexities = GSC.compute ctrsobl (Utils.unboxOption rvgraph) in
   let vars = Term.getVars (Rule.getLeft (List.hd trs)) in
-  let tgraph = TGraph.compute trs in
-    checkStartCondition tgraph trs startfun;
-    let rvgraph = None in
-      let initial = (CTRSObl.getInitialObl trs startfun, tgraph, rvgraph, 1) in
-        i := 1;
-        proofs := [];
-        input_nums := [];
-        output_nums := [];
-        todo := initial;
-        ChainProc.max_chaining := maxchaining;
-        ChainProc.done_chaining := 0;
-        doInitial ();
-        proofs := List.rev !proofs;
-        input_nums := List.rev !input_nums;
-        output_nums := List.rev !output_nums;
-        insertRVGraphIfNeeded ();
-        let (ctrsobl, tgraph, rvgraph, _) = !todo in
-        let globalSizeComplexities = GSC.compute ctrsobl (Utils.unboxOption rvgraph) in
-        Some (getOverallCost tgraph globalSizeComplexities vars !todo, getProof initial !input_nums !output_nums !proofs)
+  Some (getOverallCost tgraph globalSizeComplexities vars !todo, getProof (initObl, tgraph, rvgraph, 1) !input_nums !output_nums !proofs)
 and processInner ctrsobl tgraph rvgraph =
   let vars = CTRS.getVars ctrsobl.ctrs in
   let initial = (ctrsobl, tgraph, rvgraph, (1 + sep * !done_inner)) in
@@ -315,7 +325,7 @@ and doSeparate () =
   | Some innerFuns ->
     Log.debug (Printf.sprintf "Looking at problem\n%s\nDecided to split innerFuns [%s]" (CTRSObl.toString ctrsobl) (String.concat ", " innerFuns));
     run_ite (Cseparate.process processInner innerFuns true !done_inner sep) doSeparationCleanup doFarkasConstant
-  | None -> 
+  | None ->
     doFarkasConstant ()
 and doSeparationCleanup () =
   doApronInvariants () ;
