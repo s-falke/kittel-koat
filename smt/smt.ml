@@ -316,12 +316,12 @@ let getModel f =
   smt_file_get_model filename
 
 (* Determines satisfiability for polynomial interpretations *)
-let isSatisfiablePolo polyconditions polystrict boundconditions vars =
+let isSatisfiablePolo polyconditions polystrict boundconditions extraconditions vars =
   let onePolyCondForm polCond = (Or (List.map (fun pc -> AndA pc) polCond)) in
   let polyCondFormula = (And (List.map onePolyCondForm polyconditions)) in
   let autoStrictFormula = (Or
     (List.map2 (fun pc bc -> And [onePolyCondForm pc; onePolyCondForm bc]) polystrict boundconditions)) in
-  let formula = (And [polyCondFormula ; autoStrictFormula]) in
+  let formula = (And [polyCondFormula ; autoStrictFormula ; AndA extraconditions]) in
   let filename = write_smt_file vars formula in
   smt_file_get_model filename
 

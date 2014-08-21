@@ -108,12 +108,25 @@ and tryOneS useSizeComplexities useMinimal degree ctrsobl tgraph rvgraph globalS
         if useMinimal then 
           List.map2 (fun (rS, s) (rB, b) -> assert(Rule.equal rB rS); (rS, b @ s)) strictDecrease_with_rules strictRhsNotMin_with_rules
         else [] in
+
+
+      (* Optimization: If we use size complexities, we force coefficient for input
+       * sizes that will have unknown sizes to zero.
+       * To avoid hacking the rest of the system, we add these constraints to the
+       * weak constraints, which are ANDed in anyway.
+       *)
+      let extra_constraints =
+        if useSizeComplexities && degree > 0 then
+          forceCoeffForUnknownInputToZero ctrsobl tgraph globalSizeComplexities toOrient abs
+        else
+          [] in
+
       let allparams = params @ !Farkaspolo.all_lambdas @ isMINsVars in
       let res = 
-        if useMinimal then 
-          Smt.isSatisfiableFarkasPoloMinimal (getMinRestrictions isMINsVars) (getMinImplications isMINs abs) (List.map snd weakUseMinimal_with_rules) (List.map snd weakRhsMin_with_rules) (List.map snd boundUseMinimal_with_rules) (List.map snd strictAndNoMin_with_rules) (List.map snd strictRhsMin_with_rules) allparams
+        if useMinimal then
+          Smt.isSatisfiableFarkasPoloMinimal (extra_constraints @ (getMinRestrictions isMINsVars)) (getMinImplications isMINs abs) (List.map snd weakUseMinimal_with_rules) (List.map snd weakRhsMin_with_rules) (List.map snd boundUseMinimal_with_rules) (List.map snd strictAndNoMin_with_rules) (List.map snd strictRhsMin_with_rules) allparams
         else 
-          Smt.isSatisfiableFarkasPolo (Utils.concatMap snd weak_with_rules) (List.map snd strictAndBounded_with_rules) allparams
+          Smt.isSatisfiableFarkasPolo (extra_constraints @ (Utils.concatMap snd weak_with_rules)) (List.map snd strictAndBounded_with_rules) allparams
       in
       match res with
       | None -> None
@@ -195,6 +208,33 @@ and get_concrete_poly abs isMINs model =
 and isNonMIN isMINs model f =
   let isMINvar = getMINmarker isMINs f in
     Poly.eq_big_int Big_int.zero_big_int (List.assoc isMINvar model)
+
+and forceCoeffForUnknownInputToZero ctrsobl tgraph globalSizeComplexities toOrient abs =
+  let vars = CTRS.getVars ctrsobl.ctrs in
+  let forceCoeffForUnknownInputToZeroForFun pre_toOrient funSym =
+    let incomingRules = List.filter (fun rule -> (Term.getFun (Rule.getRight rule)) = funSym) pre_toOrient in
+    let varsOfUnknownSize =
+      List.map fst
+        (Utils.concatMap
+           (fun prerule ->
+             List.filter
+               (fun (var, compl) -> compl = Complexity.Unknown)
+               (GSC.extractSizeMapForRuleForVars globalSizeComplexities prerule 0 vars))
+           incomingRules) in
+    let forcedToZeroCoeffs =
+      List.flatten
+        (List.mapi
+           (fun i v ->
+             if Utils.contains varsOfUnknownSize v then
+               [Polo.getName funSym (i+1)] (* We count 1-based there *)
+             else
+               [])
+           vars) in
+    forcedToZeroCoeffs in
+  let pre_toOrient = Utils.notInP Rule.equal toOrient (TGraph.getPreds tgraph toOrient) in
+  let funs_toOrient = Utils.remdup (List.map (fun rule -> Term.getFun (Rule.getLeft rule)) toOrient) in
+  let toZeroCoeffs = Utils.remdup (Utils.concatMap (forceCoeffForUnknownInputToZeroForFun pre_toOrient) funs_toOrient) in
+  List.map getZero toZeroCoeffs
 
 and getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities =
   let vars = CTRS.getVars ctrsobl.ctrs in

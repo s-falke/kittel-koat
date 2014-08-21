@@ -413,7 +413,7 @@ and asParaPoly (coeff, varPower) =
 
 (* use smt solver to check for solution *)
 and has_solution polyconditions polystrict boundconditions vars =
-  Smt.isSatisfiablePolo polyconditions polystrict boundconditions vars
+  Smt.isSatisfiablePolo polyconditions polystrict boundconditions [] vars
 and getGtrForConstant polyst =
   List.map (List.map convertToGtr) polyst
 and convertToGtr conds =

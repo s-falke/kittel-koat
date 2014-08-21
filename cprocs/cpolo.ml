@@ -53,7 +53,16 @@ let rec process degree useSizeComplexities ctrsobl tgraph rvgraph =
       let polyconditions = Polo.get_absolute_positive polyst in
       let boundconditions = Polo.get_absolute_positive boundst in
       let polystrict = Polo.getGtrForConstant (getSubset toOrient s polyconditions) in
-      match Polo.has_solution polyconditions polystrict boundconditions params with
+
+      (* Optimization: If we use size complexities, we force coefficient for input
+         sizes that will have unknown sizes to zero. *)
+      let extra_constraints =
+        if useSizeComplexities && degree > 0 then
+          Cfarkaspolo.forceCoeffForUnknownInputToZero ctrsobl tgraph globalSizeComplexities toOrient abs
+        else
+          [] in
+
+      match Smt.isSatisfiablePolo polyconditions polystrict boundconditions extra_constraints params with
       | None -> None
       | Some model ->
         (
