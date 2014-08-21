@@ -84,19 +84,15 @@ module Make (RuleT : AbstractRule) = struct
         (create_graph len edges, rva)
   and compute_edges edges rva len tgraph =
     for i = 0 to (len - 1) do
-      let r1 = fst (snd rva.(i))
-      and argnum1 = fst (first (snd (snd rva.(i))))
-      and num1 = snd (first (snd (snd rva.(i)))) in
-        for j = 0 to (len - 1) do
-          let r2 = fst (snd rva.(j))
-          and dep2 = third (snd (snd rva.(j))) in
-            let argterm = List.nth (RuleT.getRights r1) argnum1
-            and c1 = RuleT.getCond r1
-            and leftterm = RuleT.getLeft r2
-            and c2 = RuleT.getCond r2 in
-              if (TGraph.hasEdge tgraph r1 r2) && (Utils.contains dep2 num1) && (TGraph.connectableOne leftterm c1 c2 argterm) then
-                edges.(i).(j) <- true
-        done
+      (* rva.(i) = (i, (rule, ((rhsIdx, argumentIdx), (LSC, activeVarIdxs)))) *)
+      let rule1 = fst (snd rva.(i)) in
+      let (rhsnum1, argnum1) = fst (snd (snd rva.(i))) in
+      for j = 0 to (len - 1) do
+        let rule2 = fst (snd rva.(j)) in
+        let activeVars2 = snd (snd (snd (snd rva.(j)))) in
+        if (TGraph.hasEdge tgraph rule1 rule2) && (Utils.contains activeVars2 argnum1) then (* rule1 \in pre(rule2), argnum1 \in activeVars(S_l(rule2, var2)) *)
+          edges.(i).(j) <- true;
+      done
     done
   and first (x, (_, _)) =
     x
