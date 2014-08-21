@@ -203,93 +203,6 @@ and insertRVGraphIfNeeded () =
       if Log.do_debug () then Log.debug (Printf.sprintf "Found the following local size bounds: \n  %s" (String.concat "\n  " (List.map LSC.dumpOneLSC lscs)));
       todo := (ctrsobl, tgraph, Some (RVG.compute lscs tgraph), ini)
 
-(*
- Heuristic:
-  guardVars(  l -> r [g] ) = Vars(g)
-  updateVars( l -> r [g] ) = Vars(r) \ { v' \in Vars(r) | v = v' \in g }
-  Natural lift to rule sets
-  Take Sub-SCC S' of S if guardVars(S) \cap updateVars(S') = \emptyset
-*)
-
-and selectSubSCC ctrsobl sccFuns (sccTrans : Rule.rule list) =
-  let sccFunsNumber = List.length sccFuns in
-  let checkFunSubsetCand funSubset =
-    let transSubset = List.filter (fun rule -> Utils.contains funSubset (Rule.getLeftFun rule) && Utils.contains funSubset (Rule.getRightFun rule)) sccTrans in
-    let (funsWithIn', funsWithOut') = List.fold_left (fun (ins, outs) rule -> ((Rule.getLeftFun rule)::ins, (Rule.getRightFun rule)::outs)) ([], []) transSubset in
-    let funsWithIn = Utils.remdup funsWithIn' in
-    let funsWithOut = Utils.remdup funsWithOut' in
-    let funNumber = List.length funSubset in
-    
-    if (funNumber > 0) && (funNumber < sccFunsNumber) && (List.length funsWithIn = funNumber) && (List.length funsWithOut = funNumber) then (* is non-trivial proper sub-SCC *)
-    (
-      (* We want to avoid the case where we have locations in the scc which
-         are only reachable from the chosen subset, and only lead back to the
-         chosen subset. As example, consider this (simplified) problem appearing
-         in cexamples/ex16.koat:
-         s         -> bb4
-         bb4       -> i_1_in
-         i_1_in    -> i_1_compl
-         i_1_in    -> i_1_out
-         i_1_compl -> i_1_out
-         i_1_out   -> bb4
-         Here, i_1_compl 
-         Without this check, we split out [b_4, i_1_in, i_1_out] here (with
-         surrounded i_1_compl), which leads to an endless sequence of splits.
-         TODO: Actually, this check should be extended to sequences of
-         transitions, but I haven't seen a problem like this yet.
-      *)
-      let hasSurroundedFun ctrsobl subSCCFuns =
-        let hasExternalTrans ctrsobl subSCCFuns funSym =
-          List.exists
-            (fun r -> 
-              let rLhsFun = Rule.getLeftFun r in
-              let rRhsFun = Rule.getRightFun r in
-              if rRhsFun = funSym then
-                not(Utils.contains subSCCFuns rLhsFun) (* Incoming rule comes from outside the subSCC *)
-              else if rLhsFun = funSym then
-                not(Utils.contains subSCCFuns rRhsFun) (* Outgoing rule goes out of the subSCC *)
-              else
-                false)
-            ctrsobl.ctrs.rules
-        in
-        let allFuns = Utils.remdup (Utils.concatMap (fun r -> [Rule.getLeftFun r; Rule.getRightFun r]) ctrsobl.ctrs.rules) in
-        let outsideFuns = Utils.remove (Utils.removeAll allFuns subSCCFuns) ctrsobl.ctrs.startFun in
-        List.exists (fun f -> not(hasExternalTrans ctrsobl subSCCFuns f)) outsideFuns
-      in
-      if not(hasSurroundedFun ctrsobl funSubset) then
-        (
-          let outerTransSet = Utils.removeAllC Rule.equal sccTrans transSubset in
-          (* Eliminate the negation of guards on the splitted transitions from the set of guards considered on the outside *)
-          let innerGuards = Utils.remdupC Pc.equalAtom (Utils.concatMap Rule.getCond transSubset) in
-          let cleanedOuterGuards = Utils.removeAllC Pc.equalAtom (Utils.concatMap Rule.getCond outerTransSet) (List.map Pc.negateAtom innerGuards) in
-          let outerGuardVars = Utils.remdup (Pc.getVars cleanedOuterGuards) in
-          let extractUpdatedVars rule =
-            let oldNewPairs = List.combine (Term.getArgs (Rule.getLeft rule)) (Term.getArgs (Rule.getRight rule)) in
-            Utils.concatMap (fun (oldV, newV) -> if (not (Poly.equal oldV newV)) then Poly.getVars oldV else []) oldNewPairs
-          in
-          let innerUpdatedVars = Utils.remdup (Utils.concatMap extractUpdatedVars transSubset) in
-          let res = not(List.exists (fun v -> Utils.contains outerGuardVars v) innerUpdatedVars) in
-          if res then Log.debug (Printf.sprintf " Splitting for outer guard vars [%s], inner update vars [%s]" (String.concat ", " outerGuardVars) (String.concat ", " innerUpdatedVars));
-          res
-        )
-      else
-        false
-    )
-    else false
-  in
-  if sccFunsNumber > 6 then
-    None (* ... just not worth enumerating the powerset *)
-  else
-    let funSubsets = List.tl (Utils.powSet sccFuns) in (* First one is the empty set *)
-    Utils.tryFind checkFunSubsetCand funSubsets
-
-and selectSCC ctrsobl sccRules =
-  if List.for_all (fun r -> not(CTRSObl.hasUnknownComplexity ctrsobl r)) sccRules then
-    None
-  else
-    let sccFuns = Utils.remdup (Utils.concatMap Rule.getFuns sccRules) in
-    selectSubSCC ctrsobl sccFuns sccRules
-
 and doInitial () =
   doInitialCleaning ();
   doLoop ();
@@ -311,19 +224,19 @@ and doUnreachableRemoval () =
 and doKnowledgePropagation () =
   run KnowledgeProc.process
 and doSeparate () =
+  Log.log "Checking if parts of the problems can be separated out.";
   let (ctrsobl, tgraph, _, _) = !todo in
   let sccs = TGraph.getNontrivialSccs tgraph in
   let rec findSubSCC ctrsobl sccs =
     match sccs with
     | [] -> None
     | scc::restSCCs ->
-      match selectSCC ctrsobl scc with
+      match Cseparate.selectSCC ctrsobl scc with
       | Some innerFuns -> Some innerFuns
       | None -> findSubSCC ctrsobl restSCCs
   in
   match findSubSCC ctrsobl sccs with
   | Some innerFuns ->
-    Log.debug (Printf.sprintf "Looking at problem\n%s\nDecided to split innerFuns [%s]" (CTRSObl.toString ctrsobl) (String.concat ", " innerFuns));
     run_ite (Cseparate.process processInner innerFuns true !done_inner sep) doSeparationCleanup doFarkasConstant
   | None ->
     doFarkasConstant ()
