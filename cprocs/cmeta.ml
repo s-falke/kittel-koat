@@ -203,7 +203,6 @@ and insertRVGraphIfNeeded () =
 
 and selectSubSCC ctrsobl sccFuns (sccTrans : Rule.rule list) =
   let sccFunsNumber = List.length sccFuns in
-  let funSubsets = List.tl (Utils.powSet sccFuns) in (* First one is the empty set *)
   let checkFunSubsetCand funSubset =
     let transSubset = List.filter (fun rule -> Utils.contains funSubset (Rule.getLeftFun rule) && Utils.contains funSubset (Rule.getRightFun rule)) sccTrans in
     let (funsWithIn', funsWithOut') = List.fold_left (fun (ins, outs) rule -> ((Rule.getLeftFun rule)::ins, (Rule.getRightFun rule)::outs)) ([], []) transSubset in
@@ -268,7 +267,11 @@ and selectSubSCC ctrsobl sccFuns (sccTrans : Rule.rule list) =
     )
     else false
   in
-  Utils.tryFind checkFunSubsetCand funSubsets
+  if sccFunsNumber > 6 then
+    None (* ... just not worth enumerating the powerset *)
+  else
+    let funSubsets = List.tl (Utils.powSet sccFuns) in (* First one is the empty set *)
+    Utils.tryFind checkFunSubsetCand funSubsets
 
 and selectSCC ctrsobl sccRules =
   if List.for_all (fun r -> not(CTRSObl.hasUnknownComplexity ctrsobl r)) sccRules then
