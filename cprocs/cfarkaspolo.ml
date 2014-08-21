@@ -42,6 +42,7 @@ let getRuleSubsetsToOrient tgraph ctrsobl useSizeComplexities =
    * search a PRF) works for small examples, but is not feasible on larger ones.
    * We use the following heuristics:
    *  - Try the set of _all_ unknown rules.
+   *  - Take a SCC, remove everything that is already bounded, and try for the rest (?)
    *  - Try those SCCs for which all predecessors already have time bounds
    *    (if we use size complexities)
    *)
@@ -49,10 +50,12 @@ let getRuleSubsetsToOrient tgraph ctrsobl useSizeComplexities =
     let sccPreds = TGraph.getPreds tgraph scc in
     let outsideSCCPreds = Utils.removeAllC Rule.equal sccPreds scc in
     List.exists (Utils.containsP Rule.equal unknowns) outsideSCCPreds in
+  let sccContainsSomeUnknown unknowns scc =
+    List.exists (fun r -> Utils.containsP Rule.equal unknowns r) scc in
   let unknowns = CTRSObl.getUnknownComplexityRules ctrsobl in
   if useSizeComplexities then
     let nonTrivialSCCs = TGraph.getNontrivialSccs tgraph in
-    unknowns :: (List.filter (fun scc -> not(sccHasUnknownPreds tgraph unknowns scc)) nonTrivialSCCs)
+    unknowns :: (List.filter (fun scc -> (sccContainsSomeUnknown unknowns scc) && not(sccHasUnknownPreds tgraph unknowns scc)) nonTrivialSCCs)
   else
     [unknowns]
 
