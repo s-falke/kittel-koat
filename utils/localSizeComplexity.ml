@@ -290,43 +290,35 @@ module Make (RuleT : AbstractRule) = struct
   let sConstant = ref Big_int.zero_big_int
 
   let rec computeLocalSizeComplexities trs =
-    List.flatten (List.map (fun (rule, lsbs) -> List.map (fun lsb -> (rule, lsb)) lsbs) (List.map computeLocalSizeComplexitiesOne trs))
-  and computeLocalSizeComplexitiesOne rule =
+    Utils.concatMap computeLocalSizeComplexitiesForRule trs
+  and computeLocalSizeComplexitiesForRule rule =
     let fullCond = RuleT.getCond rule in
     let linCond = Pc.dropNonLinearAtoms fullCond in
     let lvars = Term.getVars (RuleT.getLeft rule) in
-      let lvarswithnums = Utils.mapi (fun i v -> (v, i)) lvars
-      and rs = RuleT.getRights rule in
-        let rsWithNum = List.combine (Utils.getList 0 ((List.length rs) - 1)) rs in
-          let tmp = List.flatten (List.map (computeLocalSizeComplexitiesOneAuxAux rule lvars lvarswithnums linCond fullCond) rsWithNum) in
-            (rule, tmp)
-  and computeLocalSizeComplexitiesOneAuxAux rule lvars lvarswithnums linCond fullCond (j, r) =
-    let tmp = computeLocalSizeComplexitiesOneAux rule lvars lvarswithnums 0 (Term.getArgs r) linCond fullCond in
-      List.map (fun (i, lsc) -> ((j, i), lsc)) tmp
-  and computeLocalSizeComplexitiesOneAux rule lvars lvarswithnums i terms linCond fullCond =
-    match terms with
-      | [] -> []
-      | t::rest -> 
-        (
-          let res = computeLSCReal lvars lvarswithnums i t linCond fullCond in
-          res::(computeLocalSizeComplexitiesOneAux rule lvars lvarswithnums (i + 1) rest linCond fullCond)
-        )
-  and computeLSCReal lvars lvarswithnums i t linCond fullCond =
+    let lvarswithnums = Utils.mapi (fun i v -> (v, i)) lvars in
+    (* This produces one (rule, ((rhsIdx, argumentIdx), (local size bound, active variable idxs))) tuple per RV *)
+    Utils.concatMap
+      (fun (rhs, rhsIdx) ->
+        List.mapi
+          (fun argIdx argument -> (rule, ((rhsIdx, argIdx), computeLSCForTerm lvars lvarswithnums linCond fullCond argument)))
+          (Term.getArgs rhs))
+      (List.mapi (fun idx rhs -> (rhs, idx)) (RuleT.getRights rule))
+  and computeLSCForTerm lvars lvarswithnums linCond fullCond t =
     let isLinear = Poly.isLinear t in
       if isLinear && (Smt.isConstantBound linCond t maxC) then
         (
           if Poly.isConst t then
-            (i, (P (Expexp.fromConstant (Big_int.abs_big_int (Poly.getConstant t))), []))
+            (P (Expexp.fromConstant (Big_int.abs_big_int (Poly.getConstant t))), [])
           else
             let e = minimizeC (Smt.isConstantBound linCond t) Big_int.zero_big_int maxC in
-            (i, (P (Expexp.fromConstant e), []))
+            (P (Expexp.fromConstant e), [])
         )
       else
         let alltvars = Poly.getVars t in
           let tvars = Utils.intersect lvars alltvars
           and isRegular = Utils.containsAll lvars alltvars in
             if isLinear && isRegular && (List.length tvars = 1) && (Poly.isSumOfVarsPlusConstant t) && (Poly.eq_big_int Big_int.zero_big_int (Poly.getConstant t)) then
-              (i, (Max Big_int.zero_big_int, getVarNums lvarswithnums tvars))
+              (Max Big_int.zero_big_int, getVarNums lvarswithnums tvars)
             else
             (
               maxBound := "";
@@ -335,44 +327,44 @@ module Make (RuleT : AbstractRule) = struct
                 if isLinear && isMaxBound linCond t maxC deps then
                   let minimal = [!maxBound] in
                     let e = minimizeC (fun c -> Smt.isMaxBound linCond t c minimal) Big_int.zero_big_int maxC in
-                      (i, (Max e, getVarNums lvarswithnums minimal))
+                      (Max e, getVarNums lvarswithnums minimal)
                 else if isLinear && isRegular && (List.length tvars = 1) && (Poly.isSumOfVarsPlusConstant t) && isMaxPlusConstantBound linCond t (Big_int.abs_big_int (Poly.getConstant t)) deps then
                   (* t = v_1 + ... + v_l + k, for v a lhs variable and k some constant. Start optimizing constant from k, not from maxC.
                      This converges far faster for cases like "x + 1" or "x - 1"... *)
                   let minimal = [!maxPlusConstantBound] in
                     let e = minimizeC (fun c -> Smt.isMaxPlusConstantBound linCond t c minimal) Big_int.zero_big_int (Big_int.abs_big_int (Poly.getConstant t)) in
-                      (i, (MaxPlusConstant e, getVarNums lvarswithnums minimal))
+                      (MaxPlusConstant e, getVarNums lvarswithnums minimal)
                 else if isLinear && isMaxPlusConstantBound linCond t maxC deps then
                   let minimal = [!maxPlusConstantBound] in
                     let e = minimizeC (fun c -> Smt.isMaxPlusConstantBound linCond t c minimal) Big_int.zero_big_int maxC in
-                      (i, (MaxPlusConstant e, getVarNums lvarswithnums minimal))
+                      (MaxPlusConstant e, getVarNums lvarswithnums minimal)
                 else if isLinear && Smt.isMaxBound linCond t maxC deps then
                   let minimal = minimize (Smt.isMaxBound linCond t maxC) deps [] in
                     let e = minimizeC (fun c -> Smt.isMaxBound linCond t c minimal) Big_int.zero_big_int maxC in
-                      (i, (Max e, getVarNums lvarswithnums minimal))
+                      (Max e, getVarNums lvarswithnums minimal)
                 else if isLinear && Smt.isMaxPlusConstantBound linCond t maxC deps then
                   let minimal = minimize (Smt.isMaxPlusConstantBound linCond t maxC) deps [] in
                     let e = minimizeC (fun c -> Smt.isMaxPlusConstantBound linCond t c minimal) Big_int.zero_big_int maxC in
-                      (i, (MaxPlusConstant e, getVarNums lvarswithnums minimal))
+                      (MaxPlusConstant e, getVarNums lvarswithnums minimal)
                 else if isLinear && (Smt.isSumPlusConstantBound linCond t maxC tvars) then
                   let minimal = minimize (Smt.isSumPlusConstantBound linCond t maxC) tvars [] in
                     let e = minimizeC (fun c -> Smt.isSumPlusConstantBound linCond t c minimal) Big_int.zero_big_int maxC in
-                      (i, (SumPlusConstant e, getVarNums lvarswithnums minimal))
+                      (SumPlusConstant e, getVarNums lvarswithnums minimal)
                 else if isLinear && (Smt.isSumPlusConstantBound linCond t maxC deps) then
                   let minimal = minimize (Smt.isSumPlusConstantBound linCond t maxC) deps [] in
                     let e = minimizeC (fun c -> Smt.isSumPlusConstantBound linCond t c minimal) Big_int.zero_big_int maxC in
-                      (i, (SumPlusConstant e, getVarNums lvarswithnums minimal))
+                      (SumPlusConstant e, getVarNums lvarswithnums minimal)
                 else if isLinear && (Smt.isScaledSumPlusConstantBound linCond t maxC maxS deps) then
                   let minimal = minimize (Smt.isScaledSumPlusConstantBound linCond t maxC maxS) deps [] in
                     let e = minimizeC (fun c -> Smt.isScaledSumPlusConstantBound linCond t c maxS minimal) Big_int.zero_big_int maxC in
                       let s = minimizeC (fun s -> Smt.isScaledSumPlusConstantBound linCond t e s minimal) Big_int.zero_big_int maxS in
-                        (i, (ScaledSumPlusConstant (e, s), getVarNums lvarswithnums minimal))
+                        (ScaledSumPlusConstant (e, s), getVarNums lvarswithnums minimal)
                 else if isRegular then
                   (* use syntactic criteria *)
                   if (Poly.isSumOfVarsPlusConstant t) then
-                    (i, (SumPlusConstant (Poly.getConstant t), getVarNums lvarswithnums tvars))
+                    (SumPlusConstant (Poly.getConstant t), getVarNums lvarswithnums tvars)
                   else
-                    (i, (P (Expexp.fromPoly (Poly.abs t)), getVarNums lvarswithnums tvars))
+                    (P (Expexp.fromPoly (Poly.abs t)), getVarNums lvarswithnums tvars)
                 else if (Poly.isVar t) && (let (varN, suffL) = (Poly.toString t, String.length "_sep") in String.length varN > suffL && (String.sub varN ((String.length varN) - suffL) suffL) = "_sep") then
                   (* This is a variable on an edge obtained from separating out a part of the program.
                      We generate conditions of the form v_sep >= 0 && v_sep <= boundTerm (or v_sep < 0 && -v_sep <= boundTerm).
@@ -414,13 +406,12 @@ module Make (RuleT : AbstractRule) = struct
                     match (checkLowerZeroArbitraryUpper, checkUpperZeroArbitraryLower) with
                     | (Some b, _)
                     | (_, Some b) ->
-                      (i, (P (Expexp.fromPoly (Poly.abs b)), getVarNums lvarswithnums (Poly.getVars b)))
+                      (P (Expexp.fromPoly (Poly.abs b)), getVarNums lvarswithnums (Poly.getVars b))
                     | _ ->
-                      (i, (Unknown, []))                        
+                      (Unknown, [])
                   )
                 else
-                  (i, (Unknown, []))
-
+                  (Unknown, [])
             )
   and isMaxBound cond t c a =
     match a with
