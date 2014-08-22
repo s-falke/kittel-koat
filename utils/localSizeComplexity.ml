@@ -299,10 +299,10 @@ module Make (RuleT : AbstractRule) = struct
     (* This produces one (rule, ((rhsIdx, argumentIdx), (local size bound, active variable idxs))) tuple per RV *)
     Utils.concatMap
       (fun (rhs, rhsIdx) ->
-        List.mapi
+        Utils.mapi
           (fun argIdx argument -> (rule, ((rhsIdx, argIdx), computeLSCForTerm lvars lvarswithnums linCond fullCond argument)))
           (Term.getArgs rhs))
-      (List.mapi (fun idx rhs -> (rhs, idx)) (RuleT.getRights rule))
+      (Utils.mapi (fun idx rhs -> (rhs, idx)) (RuleT.getRights rule))
   and computeLSCForTerm lvars lvarswithnums linCond fullCond t =
     let isLinear = Poly.isLinear t in
       if isLinear && (Smt.isConstantBound linCond t maxC) then

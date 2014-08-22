@@ -46,7 +46,7 @@ module Make (RuleT : AbstractRule) = struct
     else
       (
         Log.log "Trying Slicing processor ...";
-        let varToIdx = List.fold_left (fun map (v, i) -> VarMap.add v i map) VarMap.empty (List.mapi (fun i v -> (v, i)) vars) in
+        let varToIdx = List.fold_left (fun map (v, i) -> VarMap.add v i map) VarMap.empty (Utils.mapi (fun i v -> (v, i)) vars) in
         let varToIdxSet v = if VarMap.mem v varToIdx then [VarMap.find v varToIdx] else [] in
         let computeNeeded rules =
           let rec propagate neededIdxs rules =
