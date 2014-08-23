@@ -38,5 +38,8 @@ module Make(RuleT : AbstractRule) = struct
     Utils.containsC (fun r e -> RuleT.equal r e) ctrs.rules rule
 
   let getVars ctrs =
-    Term.getVars (RuleT.getLeft (List.hd ctrs.rules))
+    if ctrs.rules = [] then
+      []
+    else
+      Term.getVars (RuleT.getLeft (List.hd ctrs.rules))
 end
