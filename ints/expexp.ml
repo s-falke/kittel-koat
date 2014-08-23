@@ -27,14 +27,6 @@ let eq_big_int b1 b2 =
 let zero = Pol (Poly.zero)
 let one = Pol (Poly.one)
 
-(* Construct a string for an expexp *)
-let rec toString e =
-  match e with
-    | Pol p -> Poly.toString p
-    | Sum (e1, e2) -> "(" ^ (toString e1) ^ ") + (" ^ (toString e2) ^ ")"
-    | Mul (e1, e2) -> "(" ^ (toString e1) ^ ") * (" ^ (toString e2) ^ ")"
-    | Exp (Pol p1, e2) when Poly.isConst p1 -> (Poly.toString p1) ^ "^(" ^ (toString e2) ^ ")"
-    | Exp (e1, e2) -> "(" ^ (toString e1) ^ ")^(" ^ (toString e2) ^ ")"
 
 (* equality comparison *)
 let rec equal e1 e2 =
@@ -47,7 +39,16 @@ and equalInternal e1 e2 =
     | (Exp (e1, e2), Exp (e3, e4)) -> equal e1 e3 && equal e2 e4
     | _ -> false
 
-let rec isConst e =
+let fromConstant c =
+  Pol (Poly.fromConstant c)
+
+let fromVar v =
+  Pol (Poly.fromVar v)
+
+let fromPoly p =
+  Pol p
+
+let isConst e =
   match e with
     | Pol p -> Poly.isConst p
     | _ -> false
@@ -59,14 +60,95 @@ let rec getConstant e =
     | Mul (e1, e2) -> Big_int.mult_big_int (getConstant e1) (getConstant e2)
     | Exp (p, e) -> Big_int.zero_big_int
 
+let rec getSummands e =
+  match e with
+    | Pol _ -> [e]
+    | Sum (e1, e2) -> (getSummands e1) @ (getSummands e2)
+    | Mul _ -> [e]
+    | Exp _ -> [e]
+
+(* Construct a string for an expexp *)
+let toString e =
+  let rec toString' force e =
+    let protect strength force s =
+      if strength >= force then s else "(" ^ s ^ ")"
+    in
+    match e with
+    | Pol p -> protect 1 force (Poly.toString p)
+    | Sum (e1, e2) ->
+      protect 1 force (toString' 1 e1 ^ "+" ^ toString' 1 e2)
+    | Mul (e1, e2) when isConst e1 ->
+      protect 2 force ((Big_int.string_of_big_int (getConstant e1)) ^ "*" ^ toString' 2 e2)
+    | Mul (e1, e2) when isConst e2 ->
+      protect 2 force ((Big_int.string_of_big_int (getConstant e2)) ^ "*" ^ toString' 2 e1)
+    | Mul (e1, e2) ->
+      protect 2 force (toString' 2 e1 ^ "*" ^ toString' 2 e2)
+    | Exp (e1, e2) ->
+      "pow(" ^ (toString' 0 e1) ^ ", " ^ (toString' 0 e2) ^ ")"
+  in
+
+  let rec groupSummands summandList =
+    match summandList with
+    | [] -> []
+    | x::xs ->
+      (
+        let (sameSummands, otherSummands) = Utils.split (equal x) xs in
+        let thisOne =
+          if List.length sameSummands > 1 then
+            Mul (fromConstant (Big_int.big_int_of_int (List.length sameSummands)), x)
+          else
+            x in
+        thisOne :: (groupSummands otherSummands)
+      )
+  in
+
+  let summands = getSummands e in
+  let grouped_summands = groupSummands summands in
+  let e' = 
+    if grouped_summands = [] then
+      zero
+    else
+      List.fold_left (fun s res -> Sum (s, res)) (List.hd grouped_summands) (List.tl grouped_summands) in
+  toString' 0 e'
+
+let toPoly e =
+  match e with
+    | Pol p -> p
+    | _ -> failwith "Cannot convert Expexp to Poly!"
+
 let rec normalize e =
   match e with
     | Pol _ -> e
-    | _ -> let distr = distribute e in
-             let summands = getSummands distr in
-               let norm_summands = normalizeSummands summands Poly.zero in
-                 let res = sumup norm_summands in
-                   res
+    | _ ->
+      let evaledE = evalConsts e in
+      let distr = distribute evaledE in
+      let summands = getSummands distr in
+      let norm_summands = normalizeSummands summands Poly.zero in
+      let res = sumup norm_summands in
+      res
+and evalConsts e =
+  match e with
+  | Sum (e1, e2) ->
+    (
+      match (evalConsts e1, evalConsts e2) with
+      | (Pol p1, Pol p2) -> Pol (Poly.add p1 p2)
+      | (ee1, ee2) -> Sum (ee1, ee2)
+    )
+  | Mul (e1, e2) ->
+    (
+      match (evalConsts e1, evalConsts e2) with
+      | (Pol p1, Pol p2) -> Pol (Poly.mult p1 p2)
+      | (ee1, ee2) -> Mul (ee1, ee2)
+    )
+  | Exp (e1, e2) ->
+    let ee1 = evalConsts e1 in
+    let ee2 = evalConsts e2 in
+    if isConst ee1 && isConst ee2 then
+      Pol (Poly.fromConstant (Big_int.power_big_int_positive_big_int (getConstant ee1) (getConstant ee2)))
+    else
+      Exp (ee1, ee2)
+  | _ -> e
+
 and distribute e =
   match e with
     | Pol _ -> e
@@ -82,12 +164,7 @@ and distribute e =
                           | (e1'', e2'') -> Mul (e1'', e2'')
                       )
     | Exp (e1, e2) -> Exp (distribute e1, distribute e2)
-and getSummands e =
-  match e with
-    | Pol _ -> [e]
-    | Sum (e1, e2) -> (getSummands e1) @ (getSummands e2)
-    | Mul _ -> [e]
-    | Exp _ -> [e]
+
 and normalizeSummands summands accu =
   match summands with
     | [] -> [Pol accu]
@@ -125,6 +202,7 @@ and sumup summands =
         else
           Sum (sum, constantPart)
 and sumupAux summands =
+  (* Collect summands *)
   match summands with
     | [] -> zero
     | [x] -> x
@@ -186,6 +264,10 @@ and simplifyExp e1' e2' =
   else
     Exp (e1', e2')
 
+(* Exps two expexps *)
+let exp e1 e2 =
+  normalize (Exp (e1, e2))
+
 (* Adds two expexps *)
 let rec add e1 e2 =
   match (e1, e2) with
@@ -216,24 +298,6 @@ let mult e1 e2 =
   match (e1, e2) with
     | (Pol p, Pol q) -> Pol (Poly.mult p q)
     | _ -> normalize (Mul (e1, e2))
-
-(* Exps two expexps *)
-let exp e1 e2 =
-  normalize (Exp (e1, e2))
-
-let fromConstant c =
-  Pol (Poly.fromConstant c)
-
-let fromVar v =
-  Pol (Poly.fromVar v)
-
-let fromPoly p =
-  Pol p
-
-let toPoly e =
-  match e with
-    | Pol p -> p
-    | _ -> failwith "Cannot convert Expexp to Poly!"
 
 let rec getVars e =
   match e with
