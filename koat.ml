@@ -48,7 +48,7 @@ let timed_run f arg1 arg2 arg3 tsecs defaultval =
 let combine = ref Simple.Ctrls
 let filename = ref ""
 let timeout = ref 0.0
-let maxchaining = ref max_int
+let maxchaining = ref 15
 
 let usage = "usage: " ^ Sys.argv.(0) ^ " <filename>"
 
