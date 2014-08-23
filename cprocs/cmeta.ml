@@ -44,6 +44,7 @@ let done_inner = ref 1
 let proofs = ref []
 let output_nums = ref []
 let input_nums = ref []
+let did_ai = ref false
 let todo = ref (CTRSObl.getInitialObl [] "", (TGraph.G.empty, Array.of_list []), None, 0)
 
 let rec check trs =
@@ -111,11 +112,13 @@ and processInner ctrsobl tgraph rvgraph =
   and old_output_nums = !output_nums
   and old_todo = !todo
   and old_done_chaining = !ChainProc.done_chaining
+  and old_did_ai = !did_ai
   in
     i := 1;
     proofs := [];
     input_nums := [];
     output_nums := [];
+    did_ai := false;
     todo := initial;
     ChainProc.done_chaining := 0;
     doInitial ();
@@ -133,6 +136,7 @@ and processInner ctrsobl tgraph rvgraph =
     input_nums := old_input_nums;
     proofs := old_proofs;
     i := old_i;
+    did_ai := old_did_ai;
     res
 and getOverallCost tgraph globalSizeComplexities vars (ctrsobl, _, _, _) =
   let getCostForRule tgraph globalSizeComplexities vars rule =
@@ -223,6 +227,7 @@ and doLoop () =
   doKnowledgePropagation ();
   doFarkasConstant ()
 and doApronInvariants () =
+  did_ai := true;
 IFDEF HAVE_APRON THEN
   run ApronInvariantsProc.process_koat
 ELSE
@@ -250,8 +255,8 @@ and doSeparate () =
   | None ->
     doFarkasConstant ()
 and doSeparationCleanup () =
-  doApronInvariants () ;
-  run UnsatProc.process;
+  doApronInvariants () ; (* We run this even we have generated invariants before -- we changed the system *)
+  run UnsatProc.process; (* New invariants may show transitions to be unusable *)
   doMaybeSeparateLoop () ;
 and doFarkasConstant () =
   run_ite (Cfarkaspolo.process false false 0) doLoop doFarkasConstantSizeBound
@@ -260,16 +265,30 @@ and doFarkasConstantSizeBound () =
   run_ite (Cfarkaspolo.process true false 0) doLoop doFarkas
 and doFarkas () =
   run_ite (Cfarkaspolo.process false false 1) doLoop doFarkasSizeBound
-and doPolo1 () =
-  run_ite (Cpolo.process 1 false) doLoop doPolo1SizeBound
 and doFarkasSizeBound () =
   run_ite (Cfarkaspolo.process true false 1) doLoop doPolo1
+and doPolo1 () =
+  run_ite (Cpolo.process 1 false) doLoop doPolo1SizeBound
 and doPolo1SizeBound () =
   run_ite (Cpolo.process 1 true) doLoop doFarkasMinimal
 and doFarkasMinimal () =
   run_ite (Cfarkaspolo.process false true 1) doLoop doPolo2
 and doPolo2 () =
-  run_ite (Cpolo.process 2 false) doLoop doChain1
+  run_ite (Cpolo.process 2 false) doLoop doDesperateMeasures
+and doDesperateMeasures () =
+IFDEF HAVE_APRON THEN
+  if not(!did_ai) then
+    (
+      did_ai := true;
+      doApronInvariants ();
+      run UnsatProc.process; (* New invariants may show transitions to be unusable *)
+      doLoop ();
+    )
+  else
+    doChain1 ()
+ELSE
+  doChain1 ()
+END
 and doChain1 () =
   run_ite (ChainProc.process 1) doLoop doChain2
 and doChain2 () =
