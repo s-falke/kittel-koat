@@ -68,54 +68,49 @@ let rec process useSizeComplexities degree ctrsobl tgraph rvgraph =
   (
     Log.log (Printf.sprintf "Trying linear PRF (Farkas-based) processor for degree %i (%s size bounds)..." degree (if useSizeComplexities then "with" else "without"));
     let globalSizeComplexities = if useSizeComplexities then GSC.compute ctrsobl (Utils.unboxOption rvgraph) else GSC.empty in
-    let s = getRuleSubsetsToOrient tgraph ctrsobl useSizeComplexities in
-    doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities s
+    let allCandidates = getRuleSubsetsToOrient tgraph ctrsobl useSizeComplexities in
+    Cfarkaspolo.findFirst (tryOneS useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities) allCandidates
   )
-and doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities allS =
-  if allS = [] then
+and tryOneS useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities s =
+  Farkaspolo.lambda_count := 0;
+  Farkaspolo.all_lambdas := [];
+  let toOrient = if useSizeComplexities then s else ctrsobl.ctrs.rules in
+  if toOrient = [] then
     None
   else
-    let s = List.hd allS in
-    Farkaspolo.lambda_count := 0;
-    Farkaspolo.all_lambdas := [];
-    let toOrient = if useSizeComplexities then s else ctrsobl.ctrs.rules in
-    if toOrient = [] then
-      doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities (List.tl allS)
-    else
-      (
-        let (abs, params) = create_poly_map toOrient in
-        let cwbs_with_rules = get_cwbs toOrient abs in
-        let cwbs_with_rules_for_unknowns = getOnlyFor cwbs_with_rules toOrient s in
-        let weak_with_rules = List.map getAllWeak cwbs_with_rules in
-        let bound_with_rules = List.map getAllBound cwbs_with_rules_for_unknowns in
-        let strictDecrease_with_rules = List.map getAllStrict (getOnlyFor weak_with_rules toOrient s) in
-        let boundedAndStrict_with_rules =
-          List.map2 
+    (
+      let (abs, params) = create_poly_map toOrient in
+      let cwbs_with_rules = get_cwbs toOrient abs in
+      let cwbs_with_rules_for_unknowns = getOnlyFor cwbs_with_rules toOrient s in
+      let weak_with_rules = List.map getAllWeak cwbs_with_rules in
+      let bound_with_rules = List.map getAllBound cwbs_with_rules_for_unknowns in
+      let strictDecrease_with_rules = List.map getAllStrict (getOnlyFor weak_with_rules toOrient s) in
+      let boundedAndStrict_with_rules =
+        List.map2
           (fun (rB, b) (rS, ss) ->
             assert(Comrule.equal rB rS);
             (rB, b @ (List.flatten ss)))
-            bound_with_rules strictDecrease_with_rules
-        in
-        let allparams = params @ !Farkaspolo.all_lambdas in
-        let res = Smt.isSatisfiableFarkasPolo (List.flatten (Utils.concatMap snd weak_with_rules)) (List.map snd boundedAndStrict_with_rules) allparams in
-        match res with
-        | None -> None
-        | Some model ->
-          let model' = Polo.fix_model model params in
-          let conc = Polo.get_concrete_poly abs model' in
-          let c = getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities in
-          let nctrsobl = annotate ctrsobl boundedAndStrict_with_rules model' c in
-          if CTRSObl.haveSameComplexities ctrsobl nctrsobl then 
-            (* Try next variant of S *)
-            doLoop useSizeComplexities degree ctrsobl tgraph rvgraph globalSizeComplexities (List.tl allS)
-          else
-            (
-              if Log.do_debug () then
-                Log.debug ("Found the following PRF:\n" ^ (pol_to_string conc));
-              Log.log (Printf.sprintf "PRF synthesis successful, proven complexity %s." (Complexity.toString c));
-              Some ((nctrsobl, tgraph, rvgraph), fun ini outi -> getProof ini outi ctrsobl nctrsobl conc useSizeComplexities globalSizeComplexities toOrient)
-            )
-      )
+          bound_with_rules strictDecrease_with_rules
+      in
+      let allparams = params @ !Farkaspolo.all_lambdas in
+      let res = Smt.isSatisfiableFarkasPolo (List.flatten (Utils.concatMap snd weak_with_rules)) (List.map snd boundedAndStrict_with_rules) allparams in
+      match res with
+      | None -> None
+      | Some model ->
+        let model' = Polo.fix_model model params in
+        let conc = Polo.get_concrete_poly abs model' in
+        let c = getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities in
+        let nctrsobl = annotate ctrsobl boundedAndStrict_with_rules model' c in
+        if CTRSObl.haveSameComplexities ctrsobl nctrsobl then
+          None
+        else
+          (
+            if Log.do_debug () then
+              Log.debug ("Found the following PRF:\n" ^ (pol_to_string conc));
+            Log.log (Printf.sprintf "PRF synthesis successful, proven complexity %s." (Complexity.toString c));
+            Some ((nctrsobl, tgraph, rvgraph), fun ini outi -> getProof ini outi ctrsobl nctrsobl conc useSizeComplexities globalSizeComplexities toOrient)
+          )
+    )
 
 (* set up parametric polynomials *)
 and create_poly_map cint =
