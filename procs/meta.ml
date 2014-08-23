@@ -25,6 +25,8 @@ let input_nums = ref []
 let todo = ref []
 
 IFDEF HAVE_APRON THEN
+module ApronInvariantsProc = ApronInvariantsProcessor.Make(Rule)
+
 let setInitialProblem trs startFuns =
   (* If we have start function symbols, we can generate invariants as first step (it becomes unsound the second we start manipulating the TRS!) *)
   match startFuns with

@@ -23,6 +23,10 @@ type rule = { lhs : Term.term ; rhs : Term.term ; cond : Pc.cond }
 (* Create a rule. *)
 let create l r c = { lhs = l; rhs = r; cond = c }
 
+let createRule l rs c =
+  assert (List.length rs = 1);
+  create l (List.hd rs) c
+
 (* Create a string for a rule *)
 let toString r =
   (Term.toString r.lhs) ^ " -> " ^ (Term.toString r.rhs) ^

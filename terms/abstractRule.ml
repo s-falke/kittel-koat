@@ -1,6 +1,7 @@
 module type AbstractRule =
   sig
     type rule
+    val createRule: Term.term -> Term.term list -> Pc.cond -> rule
     val compare: rule -> rule -> int
     val toString: rule -> string
     val toDotString: rule -> string

@@ -18,10 +18,6 @@
   limitations under the License.
 *)
 
-IFDEF HAVE_APRON THEN
-open ApronInvariantsProc
-END
-
 module RVG = Rvgraph.Make(Rule)
 module LSC = LocalSizeComplexity.Make(Rule)
 module GSC = GlobalSizeComplexity.Make(Rule)
@@ -36,6 +32,10 @@ module UnreachableProc = DeleteUnreachableProc.Make(Rule)
 module UnsatProc = DeleteUnsatProc.Make(Rule)
 module ChainProc = ComplexityChainProc.Make(Rule)
 module SlicingProc = SlicingProc.Make(Rule)
+
+IFDEF HAVE_APRON THEN
+module ApronInvariantsProc = ApronInvariantsProcessor.Make(Rule)
+END
 
 let sep = 10000
 
