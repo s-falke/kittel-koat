@@ -101,10 +101,8 @@ let rec process trs maxchaining startfun =
   insertRVGraphIfNeeded ();
   let (ctrsobl, tgraph, rvgraph, _) = !todo in
   let globalSizeComplexities = GSC.compute ctrsobl (Utils.unboxOption rvgraph) in
-  let vars = Term.getVars (Rule.getLeft (List.hd trs)) in
-  Some (getOverallCost tgraph globalSizeComplexities vars !todo, getProof (initObl, tgraph, rvgraph, 1) !input_nums !output_nums !proofs)
+  Some (getOverallCost tgraph globalSizeComplexities !todo, getProof (initObl, tgraph, rvgraph, 1) !input_nums !output_nums !proofs)
 and processInner ctrsobl tgraph rvgraph =
-  let vars = CTRS.getVars ctrsobl.ctrs in
   let initial = (ctrsobl, tgraph, rvgraph, (1 + sep * !done_inner)) in
   let old_i = !i
   and old_proofs = !proofs
@@ -129,7 +127,7 @@ and processInner ctrsobl tgraph rvgraph =
     insertRVGraphIfNeeded ();
     let (ctrsobl, tgraph, rvgraph, _) = !todo in
     let globalSizeComplexities = GSC.compute ctrsobl (Utils.unboxOption rvgraph) in
-    let res = Some (getOverallCost tgraph globalSizeComplexities vars !todo, globalSizeComplexities, getProof initial !input_nums !output_nums !proofs) in
+    let res = Some (getOverallCost tgraph globalSizeComplexities !todo, globalSizeComplexities, getProof initial !input_nums !output_nums !proofs) in
     ChainProc.done_chaining := old_done_chaining;
     todo := old_todo;
     output_nums := old_output_nums;
@@ -138,7 +136,8 @@ and processInner ctrsobl tgraph rvgraph =
     i := old_i;
     did_ai := old_did_ai;
     res
-and getOverallCost tgraph globalSizeComplexities vars (ctrsobl, _, _, _) =
+and getOverallCost tgraph globalSizeComplexities (ctrsobl, _, _, _) =
+  let vars = CTRS.getVars ctrsobl.ctrs in
   let getCostForRule tgraph globalSizeComplexities vars rule =
     let ruleCost = CTRSObl.getCost ctrsobl rule in
     let ruleComplexity = CTRSObl.getComplexity ctrsobl rule in
