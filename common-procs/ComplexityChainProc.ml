@@ -38,7 +38,7 @@ module Make(RuleT : AbstractRule) = struct
       None
     else
       (
-        Log.log "Trying Chaining processor...";
+        Log.log (Printf.sprintf "Trying Chaining processor for maximal fanout %i ..." max_fanout);
         match getChainedRules max_fanout ctrsobl tgraph with
         | None -> None
         | Some (chainedRule, newRulesWithOrigin) ->
