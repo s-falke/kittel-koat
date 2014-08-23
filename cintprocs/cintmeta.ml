@@ -178,9 +178,7 @@ and doFarkasConstantSizeBound () =
 and doFarkas () =
   run_ite (Cintfarkaspolo.process false 1) doLoop doFarkasSizeBound
 and doFarkasSizeBound () =
-  run_ite (Cintfarkaspolo.process true 1) doLoop doExpFarkas
-and doExpFarkas () =
-  run_ite Cintexpfarkaspolo.process doLoop doDesperateMeasures
+  run_ite (Cintfarkaspolo.process true 1) doLoop doDesperateMeasures
 and doDesperateMeasures () =
 IFDEF HAVE_APRON THEN
   if not(!did_ai) then
@@ -205,6 +203,8 @@ END
 and doChain1 () =
   run_ite (ChainProc.process 1) doLoop doChain2
 and doChain2 () =
-  run_ite (ChainProc.process 2) doLoop doNothing
+  run_ite (ChainProc.process 2) doLoop doExpFarkas
+and doExpFarkas () =
+  run_ite Cintexpfarkaspolo.process doLoop doNothing
 and doNothing () =
   ()
