@@ -31,11 +31,17 @@ module KnowledgeProc = KnowledgePropagationProc.Make(Comrule)
 module UnreachableProc = DeleteUnreachableProc.Make(Comrule)
 module UnsatProc = DeleteUnsatProc.Make(Comrule)
 module ChainProc = ComplexityChainProc.Make(Comrule)
+module SlicingProc = SlicingProc.Make(Comrule)
+
+IFDEF HAVE_APRON THEN
+module ApronInvariantsProc = ApronInvariantsProcessor.Make(Comrule)
+END
 
 let i = ref 1
 let proofs = ref []
 let output_nums = ref []
 let input_nums = ref []
+let did_ai = ref false
 let todo = ref (CTRSObl.getInitialObl [] "", (TGraph.G.empty, Array.of_list []), None, 0)
 
 let rec check trs =
@@ -64,30 +70,37 @@ and checkStartCondition tgraph trs startfun =
 
 let rec process cint maxchaining startfun =
   check cint;
-  let vars = Term.getVars (Comrule.getLeft (List.hd cint)) in
-  let tgraph = TGraph.compute cint in
-    checkStartCondition tgraph cint startfun;
-    let rvgraph = None in
-      let initial = (CTRSObl.getInitialObl cint startfun, tgraph, rvgraph, 1) in
-        i := 1;
-        proofs := [];
-        input_nums := [];
-        output_nums := [];
-        todo := initial;
-        ChainProc.max_chaining := maxchaining;
-        ChainProc.done_chaining := 0;
-        run UnsatProc.process;
-        doLoop ();
-        proofs := List.rev !proofs;
-        input_nums := List.rev !input_nums;
-        output_nums := List.rev !output_nums;
-        insertRVGraphIfNeeded ();
-        let (ctrsobl, tgraph, rvgraph, _) = !todo in
-        let rvgraph = Utils.unboxOption rvgraph in
-        (* let tmp2 : ((int * int) * (LSC.localcomplexity * int list)) = snd (snd ((snd rvgraph).(0))) in *)
-        let globalSizeComplexities = GSC.compute ctrsobl rvgraph in
-        Some (getOverallCost tgraph globalSizeComplexities vars !todo, getProof initial !input_nums !output_nums !proofs)
-and getOverallCost tgraph globalSizeComplexities vars (ctrsobl, _, _, _) =
+  i := 1;
+  proofs := [];
+  input_nums := [];
+  output_nums := [];
+  ChainProc.max_chaining := maxchaining;
+  ChainProc.done_chaining := 0;
+  let initObl = CTRSObl.getInitialObl cint startfun in
+  let maybeSlicedObl =
+    match (SlicingProc.process initObl) with
+    | None -> initObl
+    | Some (newctrsobl, proof) ->
+      i := 2;
+      proofs := proof::!proofs;
+      input_nums := 1::!input_nums;
+      output_nums := 2::!output_nums;
+      newctrsobl in
+  let tgraph = TGraph.compute maybeSlicedObl.ctrs.rules in
+  checkStartCondition tgraph maybeSlicedObl.ctrs.rules startfun;
+  let initial = (maybeSlicedObl, tgraph, None, !i) in
+  todo := initial;
+  doLoop ();
+  proofs := List.rev !proofs;
+  input_nums := List.rev !input_nums;
+  output_nums := List.rev !output_nums;
+  insertRVGraphIfNeeded ();
+  let (ctrsobl, tgraph, rvgraph, _) = !todo in
+  let rvgraph = Utils.unboxOption rvgraph in
+  let globalSizeComplexities = GSC.compute ctrsobl rvgraph in
+  Some (getOverallCost tgraph globalSizeComplexities !todo, getProof (initObl, tgraph, rvgraph, 1) !input_nums !output_nums !proofs)
+and getOverallCost tgraph globalSizeComplexities (ctrsobl, _, _, _) =
+  let vars = CTRS.getVars ctrsobl.ctrs in
   let getCostForRule tgraph globalSizeComplexities vars rule = 
     let preRules = TGraph.getPreds tgraph [rule] in
     let getCostPerPreRule ruleCost globalSizeComplexities vars preRule =
@@ -165,11 +178,30 @@ and doFarkasConstantSizeBound () =
 and doFarkas () =
   run_ite (Cintfarkaspolo.process false 1) doLoop doFarkasSizeBound
 and doFarkasSizeBound () =
-  run_ite (Cintfarkaspolo.process true 1) doLoop doChain1
-(*
+  run_ite (Cintfarkaspolo.process true 1) doLoop doExpFarkas
 and doExpFarkas () =
-  run_ite (Cintexpfarkaspolo.process 1) doLoop doChain1
-*)
+  run_ite Cintexpfarkaspolo.process doLoop doDesperateMeasures
+and doDesperateMeasures () =
+IFDEF HAVE_APRON THEN
+  if not(!did_ai) then
+    (
+      did_ai := true;
+      doApronInvariants ();
+      run UnsatProc.process; (* New invariants may show transitions to be unusable *)
+      doLoop ();
+    )
+  else
+    doChain1 ()
+ELSE
+  doChain1 ()
+END
+and doApronInvariants () =
+  did_ai := true;
+IFDEF HAVE_APRON THEN
+  run ApronInvariantsProc.process_koat
+ELSE
+  ()
+END
 and doChain1 () =
   run_ite (ChainProc.process 1) doLoop doChain2
 and doChain2 () =
