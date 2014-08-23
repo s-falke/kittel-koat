@@ -98,7 +98,7 @@ and getC conc ctrsobl =
   let pol_startFun = Expexp.fromPoly (List.assoc ctrsobl.ctrs.startFun conc) in
   let b = get_max_rhs_arity ctrsobl.ctrs.rules in
   let powterm = getPowTerm b pol_startFun in
-  let varBindings = List.mapi (fun i v -> ("X_" ^ (string_of_int (i + 1)), Expexp.fromVar v)) (CTRS.getVars ctrsobl.ctrs) in
+  let varBindings = Utils.mapi (fun i v -> ("X_" ^ (string_of_int (i + 1)), Expexp.fromVar v)) (CTRS.getVars ctrsobl.ctrs) in
   Complexity.P (Expexp.abs (Expexp.instantiate powterm varBindings))
 and getPowTerm b pol =
   (* Bound should be b * (b^pol - 1))/(b-1). We approximate as b^(pol + 1). *)
