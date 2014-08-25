@@ -302,16 +302,43 @@ let selectSCC ctrsobl sccRules =
               let outerTransSet = Utils.removeAllC Rule.equal sccTrans transSubset in
               (* Eliminate the negation of guards on the splitted transitions from the set of guards considered on the outside *)
               let innerGuards = Utils.remdupC Pc.equalAtom (Utils.concatMap Rule.getCond transSubset) in
-              let cleanedOuterGuards = Utils.removeAllC Pc.equalAtom (Utils.concatMap Rule.getCond outerTransSet) (List.map Pc.negateAtom innerGuards) in
+              (* Stupid heuristic: If an inner guard is v1 >= v2 + 1, then it's negation may be v2 >= v1 *)
+              let negateGuard g =
+                match g with
+                | Pc.Geq(t1, t2) ->
+                  (
+                    match (Poly.getVars t1, Poly.getVars t2) with
+                    | ([v1], [v2]) ->
+                      if Poly.equal t1 (Poly.fromVar v1) && Poly.equal t2 (Poly.add (Poly.fromVar v2) (Poly.fromConstant (Big_int.big_int_of_int 1))) then
+                        [Pc.negateAtom g ; Pc.Geq (Poly.fromVar v2, t1)]
+                      else
+                        [Pc.negateAtom g]
+                    | _ ->
+                      [Pc.negateAtom g]
+                  )
+                | Pc.Leq(t2, t1) ->
+                  (
+                    match (Poly.getVars t1, Poly.getVars t2) with
+                    | ([v1], [v2]) ->
+                      if Poly.equal t1 (Poly.fromVar v1) && Poly.equal t2 (Poly.add (Poly.fromVar v2) (Poly.fromConstant (Big_int.big_int_of_int 1))) then
+                        [Pc.negateAtom g ; Pc.Leq (t1, Poly.fromVar v2)]
+                      else
+                        [Pc.negateAtom g]
+                    | _ ->
+                      [Pc.negateAtom g]
+                  )
+                | _ -> [Pc.negateAtom g]
+              in
+              let negatedInnerGuards = Utils.concatMap negateGuard innerGuards in
+              let cleanedOuterGuards = Utils.removeAllC Pc.equalAtom (Utils.concatMap Rule.getCond outerTransSet) negatedInnerGuards in
               let outerGuardVars = Utils.remdup (Pc.getVars cleanedOuterGuards) in
               let extractUpdatedVars rule =
                 let oldNewPairs = List.combine (Term.getArgs (Rule.getLeft rule)) (Term.getArgs (Rule.getRight rule)) in
                 Utils.concatMap (fun (oldV, newV) -> if (not (Poly.equal oldV newV)) then Poly.getVars oldV else []) oldNewPairs
               in
               let innerUpdatedVars = Utils.remdup (Utils.concatMap extractUpdatedVars transSubset) in
-              let res = not(List.exists (fun v -> Utils.contains outerGuardVars v) innerUpdatedVars) in
-              if res then Log.debug (Printf.sprintf " Splitting for outer guard vars [%s], inner update vars [%s]" (String.concat ", " outerGuardVars) (String.concat ", " innerUpdatedVars));
-              res
+              Log.debug (Printf.sprintf " Outer guard vars [%s], inner update vars [%s]" (String.concat ", " outerGuardVars) (String.concat ", " innerUpdatedVars));
+              not(List.exists (fun v -> Utils.contains outerGuardVars v) innerUpdatedVars)
             )
           else
             false
