@@ -21,7 +21,7 @@
 let logging_level = ref 0
 let start_time = ref 0.0
 
-let init_timer () = 
+let init_timer () =
   start_time := Unix.gettimeofday ()
 let do_logging () = !logging_level >= 1
 let do_debug () = !logging_level >= 5
@@ -33,7 +33,7 @@ let log msg =
       Printf.printf "%03.2f LOG: %s\n" cur_time msg;
       flush stdout
     )
-  
+
 
 let debug msg =
   if do_debug () then

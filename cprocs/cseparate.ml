@@ -53,7 +53,7 @@ let rec process innerprover innerFuns addSizeSummaries sepId sepOblIdMultiplier 
         | Some (Complexity.P innerComplexity, innerSizes, innerProof) ->
         (* Now that we could solve the subproblem, build the reduced outer problem *)
           Log.log (Printf.sprintf "Inner problem for [%s] solved successfully, returning to outer problem." (String.concat ", " innerFuns));
-          let (reducedOuterObl, reducedTGraph, reducedRVGraph) = 
+          let (reducedOuterObl, reducedTGraph, reducedRVGraph) =
             getOuterObligation ctrsobl tgraph rvgraph vars innerFuns outerRules entryRules innerRules exitRules freshOblId innerSizes innerComplexity addSizeSummaries in
           Log.log (Printf.sprintf "Constructed outer problem");
           Some ((reducedOuterObl, reducedTGraph, reducedRVGraph), getProof innerObl freshOblId innerProof reducedOuterObl)
@@ -80,29 +80,29 @@ and splitRules ctrsobl innerFuns =
 
 and getInnerObligation ctrsobl entryRules innerRules freshOblId tgraph rvgraph =
   let innerStartFun = "inner_" ^ (string_of_int freshOblId) ^ "_start_sep" in
-  let innerStartRules = 
-    List.map 
+  let innerStartRules =
+    List.map
       (fun entryRule -> Rule.create (innerStartFun, snd (Rule.getLeft entryRule)) (Rule.getRight entryRule) [])
       entryRules in
   let innerTGraph = TGraph.addNodes (TGraph.keepNodes tgraph innerRules) innerStartRules in
-  let innerRVGraph = 
+  let innerRVGraph =
     match rvgraph with
     | None -> None
     | Some rvg ->
       let innerStartRulesWithLSCs = LSC.computeLocalSizeComplexities innerStartRules in
       Some (RVG.addNodes (RVG.keepNodes rvg innerRules) innerStartRulesWithLSCs innerTGraph) in
   let (innerCost, innerComplexity) =
-    List.fold_left 
-      (fun (innerCost, innerComplexity) rule -> 
+    List.fold_left
+      (fun (innerCost, innerComplexity) rule ->
         (RuleMap.add rule (RuleMap.find rule ctrsobl.cost) innerCost,
          RuleMap.add rule (RuleMap.find rule ctrsobl.complexity) innerComplexity))
-      (List.fold_left 
-         (fun (innerCost, innerComplexity) rule -> 
+      (List.fold_left
+         (fun (innerCost, innerComplexity) rule ->
            (RuleMap.add rule Expexp.zero innerCost, RuleMap.add rule (Complexity.P Expexp.one) innerComplexity))
          (RuleMap.empty, RuleMap.empty)
          innerStartRules)
       innerRules in
-  let innerObl = 
+  let innerObl =
     { ctrs = { rules = innerStartRules @ innerRules ; startFun = innerStartFun }
     ; cost = innerCost
     ; complexity = innerComplexity
@@ -134,11 +134,11 @@ and getOuterObligation ctrsobl tgraph rvgraph vars innerFuns outerRules entryRul
    * - summaryRules, which summarize the changes to values (several, to make the case analysis for abs(...) explicit)
    *)
   let costRule = Rule.create (inLoopFun, varPols) (tmpFun, varPols) [] in
-  let summaryRules = 
+  let summaryRules =
     if (not addSizeSummaries) || (exitRules = []) then
       [Rule.create (tmpFun, varPols) (outLoopFun, maybeHavocedVarPols) []]
     else
-      List.map 
+      List.map
         (fun summaryCond -> Rule.create (tmpFun, varPols) (outLoopFun, maybeHavocedVarPols) summaryCond)
         (getSummaryConditions innerGSC exitRules vars havocedVars) in
   let tskip = Rule.create (inLoopFun, varPols) (outLoopFun, varPols) [] in
@@ -148,14 +148,14 @@ and getOuterObligation ctrsobl tgraph rvgraph vars innerFuns outerRules entryRul
   let (newCost, newComplexity, newEntryExitRules) =
     (* Redirect exit rules *)
     List.fold_left
-      (fun (newCost, newComplexity, newRules) r -> 
+      (fun (newCost, newComplexity, newRules) r ->
         let newRule = Rule.create (outLoopFun, Term.getArgs (Rule.getLeft r)) (Rule.getRight r) (Rule.getCond r) in
         (RuleMap.add newRule (RuleMap.find r ctrsobl.cost) newCost,
          RuleMap.add newRule (RuleMap.find r ctrsobl.complexity) newComplexity,
          newRule::newRules))
       (* Redirect entry rules *)
       (List.fold_left
-         (fun (newCost, newComplexity, newRules) r -> 
+         (fun (newCost, newComplexity, newRules) r ->
            let newRule = Rule.create (Rule.getLeft r) (inLoopFun, Term.getArgs (Rule.getRight r)) (Rule.getCond r) in
            (RuleMap.add newRule (RuleMap.find r ctrsobl.cost) newCost,
             RuleMap.add newRule (RuleMap.find r ctrsobl.complexity) newComplexity,
@@ -168,22 +168,22 @@ and getOuterObligation ctrsobl tgraph rvgraph vars innerFuns outerRules entryRul
   (* Now prepare the new obligation. *)
   let addedRules = tskip :: (costRule :: (summaryRules @ newEntryExitRules)) in
   let newRules = addedRules @ outerRules in
-  let newCost = 
+  let newCost =
     List.fold_left
       (fun newCost summaryRule -> RuleMap.add summaryRule Expexp.zero newCost)
       (RuleMap.add costRule innerCost (RuleMap.add tskip Expexp.zero newCost))
       summaryRules in
-  let newComplexity = 
+  let newComplexity =
     List.fold_left
       (fun newComplexity summaryRule -> RuleMap.add summaryRule Complexity.Unknown newComplexity)
       (RuleMap.add costRule Complexity.Unknown (RuleMap.add tskip Complexity.Unknown newComplexity))
       summaryRules in
   let newTGraph = TGraph.addNodes (TGraph.removeNodes tgraph allRemovedRules) addedRules in
   let newRVGraph = RVG.updateOptionRVGraph rvgraph allRemovedRules addedRules newTGraph in
-  let outerObl = 
-    { ctrs = { rules = newRules ; startFun = ctrsobl.ctrs.startFun } 
-    ; cost = newCost 
-    ; complexity = newComplexity 
+  let outerObl =
+    { ctrs = { rules = newRules ; startFun = ctrsobl.ctrs.startFun }
+    ; cost = newCost
+    ; complexity = newComplexity
     ; leafCost = ctrsobl.leafCost } in
   (outerObl, newTGraph, newRVGraph)
 
@@ -204,7 +204,7 @@ and getSummaryConditions innerGSC exitRules allVars havocedVars =
       List.map2 maxOneVarPair map map' in
     List.fold_left maxMapPair (List.hd maxExitSizeMaps) (List.tl maxExitSizeMaps) in
   (* Restrict to havoced vars. Then, as these are in absolute values, so now we have to unfold the abs(...) everywhere... *)
-  let havocedVarMaxSizeMap = 
+  let havocedVarMaxSizeMap =
     let getSizeBoundForUnhavoced havocedVar =
       let origVar = String.sub havocedVar 0 ((String.length havocedVar) - (String.length sep_var_suffix)) in
       List.assoc origVar overallMaxSizeMap in
@@ -221,9 +221,9 @@ and getSummaryConditions innerGSC exitRules allVars havocedVars =
     match vars with
     | [] -> cs
     | x::rest -> case_split (split_one cs x) rest in
-  let polyConstraint = 
+  let polyConstraint =
     Utils.concatMap
-      (fun (var, bound) -> match Complexity.getPoly bound with | None -> [] | Some polyBound -> [Pc.Leq (Poly.fromVar var, polyBound)]) 
+      (fun (var, bound) -> match Complexity.getPoly bound with | None -> [] | Some polyBound -> [Pc.Leq (Poly.fromVar var, polyBound)])
       havocedVarMaxSizeMap in
   let polyVars = Pc.getVars polyConstraint in
   case_split [polyConstraint] polyVars
@@ -258,7 +258,7 @@ let selectSCC ctrsobl sccRules =
       let funsWithIn = Utils.remdup funsWithIn' in
       let funsWithOut = Utils.remdup funsWithOut' in
       let funNumber = List.length funSubset in
-      
+
       if (funNumber > 0) && (funNumber < sccFunsNumber) && (List.length funsWithIn = funNumber) && (List.length funsWithOut = funNumber) then (* is non-trivial proper sub-SCC *)
         (
           Log.debug " ... which is a non-trivial proper sub-SCC";
@@ -272,7 +272,7 @@ let selectSCC ctrsobl sccRules =
              i_1_in    -> i_1_out
              i_1_compl -> i_1_out
              i_1_out   -> bb4
-             Here, i_1_compl 
+             Here, i_1_compl
              Without this check, we split out [b_4, i_1_in, i_1_out] here (with
              surrounded i_1_compl), which leads to an endless sequence of splits.
              TODO: Actually, this check should be extended to sequences of
@@ -281,7 +281,7 @@ let selectSCC ctrsobl sccRules =
           let hasSurroundedFun ctrsobl subSCCFuns =
             let hasExternalTrans ctrsobl subSCCFuns funSym =
               List.exists
-                (fun r -> 
+                (fun r ->
                   let rLhsFun = Rule.getLeftFun r in
                   let rRhsFun = Rule.getRightFun r in
                   if rRhsFun = funSym then

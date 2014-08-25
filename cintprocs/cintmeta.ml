@@ -101,7 +101,7 @@ let rec process cint maxchaining startfun =
   Some (getOverallCost tgraph globalSizeComplexities !todo, getProof (initObl, tgraph, rvgraph, 1) !input_nums !output_nums !proofs)
 and getOverallCost tgraph globalSizeComplexities (ctrsobl, _, _, _) =
   let vars = CTRS.getVars ctrsobl.ctrs in
-  let getCostForRule tgraph globalSizeComplexities vars rule = 
+  let getCostForRule tgraph globalSizeComplexities vars rule =
     let preRules = TGraph.getPreds tgraph [rule] in
     let getCostPerPreRule ruleCost globalSizeComplexities vars preRule =
       let csmap = GSC.extractSizeMapForRule globalSizeComplexities preRule 0 vars in
@@ -110,7 +110,7 @@ and getOverallCost tgraph globalSizeComplexities (ctrsobl, _, _, _) =
     let ruleComplexity = CTRSObl.getComplexity ctrsobl rule in
     let ruleCost = CTRSObl.getCost ctrsobl rule in
     Complexity.mult ruleComplexity (Complexity.sup (List.map (getCostPerPreRule ruleCost globalSizeComplexities vars) preRules)) in
-  Complexity.add 
+  Complexity.add
     (Complexity.listAdd (List.map (getCostForRule tgraph globalSizeComplexities vars) ctrsobl.ctrs.rules))
     (Complexity.P ctrsobl.leafCost)
 and getProof (ctrsobl, _, _, _) inums onums theproofs =
@@ -150,7 +150,7 @@ and run_ite proc1 proc2 proc3 =
         else
           match (proc1 ctrsobl tgraph rvgraph) with
             | None -> proc3 ()
-            | Some (newData, p) -> 
+            | Some (newData, p) ->
               update newData p ini;
               proc2 ()
       )

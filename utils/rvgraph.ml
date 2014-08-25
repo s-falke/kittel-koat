@@ -45,10 +45,10 @@ module Make (RuleT : AbstractRule) = struct
 
   module RV = RV.Make(RuleT)
 
-  module RVMap = 
-    Map.Make(struct 
+  module RVMap =
+    Map.Make(struct
       type t = RV.t
-      let compare = RV.compare 
+      let compare = RV.compare
     end)
 
 
@@ -248,7 +248,7 @@ module Make (RuleT : AbstractRule) = struct
   and updateOptionRVGraph rvgraph toRemove toAdd updatedTGraph =
     match rvgraph with
     | None -> None
-    | Some rvg -> 
+    | Some rvg ->
       let toAddWithLSCs = LSC.computeLocalSizeComplexities toAdd in
       Some (addNodes (removeNodes rvg toRemove) toAddWithLSCs updatedTGraph)
 

@@ -71,7 +71,7 @@ let rec process degree useSizeComplexities ctrsobl tgraph rvgraph =
           let c = Cfarkaspolo.getC useSizeComplexities tgraph conc ctrsobl toOrient globalSizeComplexities in
           Log.log (Printf.sprintf "PRF synthesis successful, proven complexity %s." (Complexity.toString c));
           let nctrsobl = annotate ctrsobl s polystrict boundconditions model' c in
-          if CTRSObl.haveSameComplexities ctrsobl nctrsobl then 
+          if CTRSObl.haveSameComplexities ctrsobl nctrsobl then
             None
           else
             Some ((nctrsobl, tgraph, rvgraph), Cfarkaspolo.getProof ctrsobl nctrsobl conc useSizeComplexities globalSizeComplexities toOrient)
@@ -83,9 +83,9 @@ and annotate ctrsobl s polystrict boundconditions model d =
     (List.exists (fun c -> Pc.isTrue c model) strictcond) && (List.exists (fun c -> Pc.isTrue c model) boundcond)
   in
   let newComplexity =
-    List.fold_left 
-      (fun newComplexity (rule, strictVar, boundVar) -> 
-        if isStrictlySmaller strictVar boundVar model && CTRSObl.hasUnknownComplexity ctrsobl rule then 
+    List.fold_left
+      (fun newComplexity (rule, strictVar, boundVar) ->
+        if isStrictlySmaller strictVar boundVar model && CTRSObl.hasUnknownComplexity ctrsobl rule then
           RuleMap.add rule d newComplexity
         else
           newComplexity)

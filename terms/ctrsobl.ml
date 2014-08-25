@@ -25,10 +25,10 @@ module Make(RuleT : AbstractRule) = struct
   module CTRS = Ctrs.Make(RuleT)
   module RuleMap = CTRS.RuleMap
 
-  type t = 
+  type t =
     { ctrs : CTRS.t ;
       cost : Expexp.expexp RuleMap.t ;
-      complexity : Complexity.complexity RuleMap.t ; 
+      complexity : Complexity.complexity RuleMap.t ;
       leafCost : Expexp.expexp ;
     }
 
@@ -40,7 +40,7 @@ module Make(RuleT : AbstractRule) = struct
   let toStringPrefix prefix obl =
     let open Printf in
     let open CTRS in
-    let rulesString = 
+    let rulesString =
       if obl.ctrs.rules = [] then
         "(none)"
       else
@@ -71,9 +71,9 @@ module Make(RuleT : AbstractRule) = struct
   let getInitialObl rules start =
     let open Expexp in
     let open CTRS in
-    let (rules, initCost, initCompl) = 
-      List.fold_left 
-        (fun (rules, cost, compl) rule -> 
+    let (rules, initCost, initCompl) =
+      List.fold_left
+        (fun (rules, cost, compl) rule ->
           if Term.getFun (RuleT.getLeft rule) = start then
             (rule::rules, RuleMap.add rule one cost, RuleMap.add rule (Complexity.P one) compl)
           else
@@ -81,7 +81,7 @@ module Make(RuleT : AbstractRule) = struct
         ([], RuleMap.empty, RuleMap.empty) rules in
     {
       ctrs = { rules = rules ;
-               startFun = start ; 
+               startFun = start ;
              } ;
       cost = initCost ;
       complexity = initCompl ;

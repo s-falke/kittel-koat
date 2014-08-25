@@ -64,9 +64,9 @@ module Make(RuleT : AbstractRule) = struct
   and getChainedRules max_fanout ctrsobl tgraph =
     let isSuitable max_fanout (candRule, succs) =
       let numSuccs = List.length succs in
-      (numSuccs > 0) 
-      && (numSuccs <= max_fanout) 
-      && (RuleT.isUnary candRule) 
+      (numSuccs > 0)
+      && (numSuccs <= max_fanout)
+      && (RuleT.isUnary candRule)
       && not(Utils.containsP RuleT.equal succs candRule)
     in
     let buildNewRules rule =
@@ -89,14 +89,14 @@ module Make(RuleT : AbstractRule) = struct
     let chainedRuleCost = CTRSObl.getCost oldctrsobl chainedRule in
     let chainedRuleComplexity = CTRSObl.getComplexity oldctrsobl chainedRule in
     let (newCost, newComplexity) =
-      List.fold_left 
-        (fun (newCost, newComplexity) (newRule, originRule) -> 
-          (RuleMap.add newRule (Expexp.add (CTRSObl.getCost oldctrsobl originRule) chainedRuleCost) newCost, 
+      List.fold_left
+        (fun (newCost, newComplexity) (newRule, originRule) ->
+          (RuleMap.add newRule (Expexp.add (CTRSObl.getCost oldctrsobl originRule) chainedRuleCost) newCost,
            RuleMap.add newRule chainedRuleComplexity newComplexity))
         (RuleMap.remove chainedRule oldctrsobl.cost, RuleMap.remove chainedRule oldctrsobl.complexity)
         newRulesWithOrigin
     in
-    { ctrs = { rules = newCTRS ; startFun = oldctrsobl.ctrs.startFun } 
+    { ctrs = { rules = newCTRS ; startFun = oldctrsobl.ctrs.startFun }
     ; cost = newCost
     ; complexity = newComplexity
     ; leafCost = oldctrsobl.leafCost }

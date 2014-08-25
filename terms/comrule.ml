@@ -38,7 +38,7 @@ let compare r1 r2 =
   let lComp = Term.compare r1.lhs r2.lhs in
   if lComp <> 0 then
     lComp
-  else    
+  else
     let rhsNum1 = List.length r1.rhss in
     let rhsNum2 = List.length r2.rhss in
     if rhsNum1 < rhsNum2 then

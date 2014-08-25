@@ -21,10 +21,10 @@
 open AbstractRule
 
 module Make(RuleT : AbstractRule) = struct
-  module RuleMap = 
-    Map.Make(struct 
+  module RuleMap =
+    Map.Make(struct
       type t = RuleT.rule
-      let compare = RuleT.compare 
+      let compare = RuleT.compare
     end)
 
   let removeRulesFromMap ruleMap rules =

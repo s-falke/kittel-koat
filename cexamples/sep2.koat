@@ -7,5 +7,5 @@
   l2(r, x, i, s) -> l2(r, x, i + 1, s + i) [ i < x ]
   l2(r, x, i, s) -> l1(r + s, x - 1, i, s) [ i >= x ]
   l1(r, x, i, s) -> l3(r, x, i, s) [ x <= 0 ]
-  l3(r, x, i, s) -> l3(r - 1, x, i, s) [ r > 0 ] 
+  l3(r, x, i, s) -> l3(r - 1, x, i, s) [ r > 0 ]
 )

@@ -153,7 +153,7 @@ and getOverallCost tgraph globalSizeComplexities (ctrsobl, _, _, _) =
         Complexity.mult ruleComplexity (Complexity.sup (List.map (getCostPerPreRule ruleCost globalSizeComplexities vars) preRules))
       ) in
   let ruleCosts = (Complexity.listAdd (List.map (getCostForRule tgraph globalSizeComplexities vars) ctrsobl.ctrs.rules)) in
-  Complexity.add 
+  Complexity.add
     ruleCosts
     (Complexity.P ctrsobl.leafCost)
 and getProof (ctrsobl, _, _, i) inums onums theproofs =
@@ -212,7 +212,7 @@ and doInitial () =
 and doInitialCleaning () =
   run UnsatProc.process;
   run Cleaf.process;
-and doMaybeSeparateLoop () = 
+and doMaybeSeparateLoop () =
   (* This is split from doLoop, as the check if we can separate is rather expensive.
    * When we can successfully separate, we try again (because there might be other things
    * to separate / the program changed sufficiently).

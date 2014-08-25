@@ -35,8 +35,8 @@ module Make (RuleT : AbstractRule) = struct
       None
     else
     (
-      let startRules = 
-        List.filter 
+      let startRules =
+        List.filter
           (fun rule -> ctrsobl.ctrs.startFun = Term.getFun (RuleT.getLeft rule))
           ctrsobl.ctrs.rules in
       let reachableRules = TGraph.computeReachable tgraph startRules in

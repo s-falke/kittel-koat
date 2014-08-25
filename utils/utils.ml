@@ -213,15 +213,15 @@ let rec tryFind f l =
   | e::rest -> if f e then Some e else tryFind f rest
   | []      -> None
 
-let powSet s = 
+let powSet s =
   List.fold_left (fun state ele -> concatMap (fun s -> [s ; ele::s]) state) [[]] s
 
-let getIndexedSubset idxsToKeep list = 
+let getIndexedSubset idxsToKeep list =
   let rec getIndexedSubset' idxsToKeep idx list =
     match list with
     | [] -> []
-    | (x::xs) -> 
-      if contains idxsToKeep idx then 
+    | (x::xs) ->
+      if contains idxsToKeep idx then
         x::(getIndexedSubset' idxsToKeep (idx+1)) xs
       else
         (getIndexedSubset' idxsToKeep (idx+1)) xs

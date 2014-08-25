@@ -50,15 +50,15 @@ let compareMonomial m1 m2 =
     1
   else
     List.fold_left2
-      (fun acc (v1, e1) (v2, e2) -> 
-        if acc <> 0 then 
-          acc 
-        else 
-          if e1 < e2 then 
+      (fun acc (v1, e1) (v2, e2) ->
+        if acc <> 0 then
+          acc
+        else
+          if e1 < e2 then
             -1
           else if e1 > e2 then
             1
-          else 
+          else
             String.compare v1 v2) 0 m1 m2
 
 let compare (ss1, const1) (ss2, const2) =
@@ -74,9 +74,9 @@ let compare (ss1, const1) (ss2, const2) =
       1
     else
       List.fold_left2
-        (fun acc (coeff1, m1) (coeff2, m2) -> 
-          if acc <> 0 then 
-            acc 
+        (fun acc (coeff1, m1) (coeff2, m2) ->
+          if acc <> 0 then
+            acc
           else
             let cComp = Big_int.compare_big_int coeff1 coeff2 in
             if cComp <> 0 then

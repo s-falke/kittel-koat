@@ -11,14 +11,14 @@ module Make(RuleT : AbstractRule) = struct
   open CTRSObl
   open CTRS
 
-  module RVMap = 
+  module RVMap =
     Map.Make(
       struct type t = RuleT.rule * (int * int)
-      let compare (r1, (rhsIdx1, varIdx1)) (r2, (rhsIdx2, varIdx2)) = 
+      let compare (r1, (rhsIdx1, varIdx1)) (r2, (rhsIdx2, varIdx2)) =
         let rComp = compare rhsIdx1 rhsIdx2 in
         if rComp <> 0 then
           rComp
-        else 
+        else
           let vComp = compare varIdx1 varIdx2 in
             if vComp <> 0 then
               vComp
@@ -199,7 +199,7 @@ module Make(RuleT : AbstractRule) = struct
 
   (** computes global size bound for one SCC in the RVG *)
   let computeGlobalSizeBound ctrsobl rvgraph condensed scc isTrivial accu =
-    if isTrivial then 
+    if isTrivial then
       let lsc = getLSC (List.hd scc) in
       let leftFuns = List.map (fun (rule, _) -> Term.getFun (RuleT.getLeft rule)) scc in
       (* TACAS'14, Thm. 9, case trivial SCC { \alpha } with \alpha = |t, v'|. *)
@@ -224,13 +224,13 @@ module Make(RuleT : AbstractRule) = struct
   let compute ctrsobl rvgraph =
     let condensed = RVG.condense rvgraph in
     let topo = RVG.getNodesInTopologicalOrder condensed in
-    let sccs_with_gsb = 
-      List.fold_left 
+    let sccs_with_gsb =
+      List.fold_left
         (fun acc (scc, isTrivial) ->
           (scc, computeGlobalSizeBound ctrsobl rvgraph condensed scc isTrivial acc)::acc) [] topo in
     List.fold_left
-      (fun acc (scc, gsc) -> 
-        List.fold_left 
+      (fun acc (scc, gsc) ->
+        List.fold_left
           (fun acc (rule, ((rhsIdx, varIdx), _)) -> RVMap.add (rule, (rhsIdx, varIdx)) gsc acc)
           acc scc)
       RVMap.empty sccs_with_gsb
@@ -276,7 +276,7 @@ module Make(RuleT : AbstractRule) = struct
     String.concat "\n"
       (Utils.concatMap (fun rule ->
         Utils.concatMapi (fun rhsIdx _ ->
-          Utils.mapi (fun varIdx _ -> 
+          Utils.mapi (fun varIdx _ ->
             Printf.sprintf "\tS(%S, %i-%i) = %s"
               (RuleT.toString rule) rhsIdx varIdx (Complexity.toString (findEntry gsc rule rhsIdx varIdx vars)))
             vars)

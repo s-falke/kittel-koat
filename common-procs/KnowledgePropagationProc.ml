@@ -51,7 +51,7 @@ module Make (RuleT : AbstractRule) = struct
       let preComplexitiesSum = Complexity.listAdd (List.map (fun r -> CTRS.RuleMap.find r complexities) pre) in
       CTRS.RuleMap.add rule preComplexitiesSum complexities
     in
-    { ctrs = ctrsobl.ctrs 
+    { ctrs = ctrsobl.ctrs
     ; cost = ctrsobl.cost
     ; complexity = List.fold_left (updateOneSubsumedRule tgraph) ctrsobl.complexity subsumed
     ; leafCost = ctrsobl.leafCost }

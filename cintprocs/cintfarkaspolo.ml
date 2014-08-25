@@ -195,9 +195,9 @@ and getTerm conc ctrsobl pre_toOrient globalSizeComplexities vars f =
 
 and annotate ctrsobl boundedAndStrictConstraints_with_rules model d =
   let newComplexity =
-    List.fold_left 
-      (fun newComplexity (rule, isBoundedAndStrictConstraint) -> 
-        if Cfarkaspolo.isStrict isBoundedAndStrictConstraint model && CTRSObl.hasUnknownComplexity ctrsobl rule then 
+    List.fold_left
+      (fun newComplexity (rule, isBoundedAndStrictConstraint) ->
+        if Cfarkaspolo.isStrict isBoundedAndStrictConstraint model && CTRSObl.hasUnknownComplexity ctrsobl rule then
           CTRSObl.RuleMap.add rule d newComplexity
         else
           newComplexity)

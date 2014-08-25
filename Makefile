@@ -1,8 +1,8 @@
 HAVE_APRON=true
 
 ifeq (${HAVE_APRON},true)
-  LIBPATH=-cflags -I,+ocamlgraph -cflags -I,+apron -lflags -I,+ocamlgraph -lflags -I,+apron
-  #LIBPATH=-cflags -I,+ocamlgraph -cflags -I,+apron -cflags -I,+mlgmpidl -lflags -I,+ocamlgraph -lflags -I,+apron -lflags -I,+mlgmpidl
+  #LIBPATH=-cflags -I,+ocamlgraph -cflags -I,+apron -lflags -I,+ocamlgraph -lflags -I,+apron
+  LIBPATH=-cflags -I,+ocamlgraph -cflags -I,+apron -cflags -I,+mlgmpidl -lflags -I,+ocamlgraph -lflags -I,+apron -lflags -I,+mlgmpidl
   LIBS=-libs graph,unix,nums,str,bigarray,gmp,apron,boxMPQ,octD
   PP_OPTS=-pp "camlp4o pa_macro.cmo -DHAVE_APRON"
 else

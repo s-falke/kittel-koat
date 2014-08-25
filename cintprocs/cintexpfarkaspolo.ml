@@ -37,7 +37,7 @@ let rec process ctrsobl tgraph rvgraph =
     Log.log (Printf.sprintf "Trying (Farkas-based) processor for exponential RFs ...");
     let allCandidates = Cintfarkaspolo.getRuleSubsetsToOrient tgraph ctrsobl false in
     Cfarkaspolo.findFirst (tryOneS ctrsobl tgraph rvgraph) allCandidates;
-  ) 
+  )
 and tryOneS ctrsobl tgraph rvgraph s =
   Farkaspolo.lambda_count := 0;
   Farkaspolo.all_lambdas := [];
@@ -49,7 +49,7 @@ and tryOneS ctrsobl tgraph rvgraph s =
   let bound_with_rules = List.map Cintfarkaspolo.getAllBound cwbs_with_rules_for_unknowns in
   let strictDecrease_with_rules = List.map Cintfarkaspolo.getAllStrict (Cintfarkaspolo.getOnlyFor weak_with_rules toOrient s) in
   let boundedAndStrict_with_rules =
-    List.map2 
+    List.map2
       (fun (rB, b) (rS, ss) ->
         assert(Comrule.equal rB rS);
         (rB, b @ (List.flatten ss)))
@@ -65,7 +65,7 @@ and tryOneS ctrsobl tgraph rvgraph s =
       let conc = Polo.get_concrete_poly abs model' in
       let c = getC conc ctrsobl in
       let nctrsobl = Cintfarkaspolo.annotate ctrsobl boundedAndStrict_with_rules model' c in
-      if CTRSObl.haveSameComplexities ctrsobl nctrsobl then 
+      if CTRSObl.haveSameComplexities ctrsobl nctrsobl then
         None
       else
         (
@@ -73,7 +73,7 @@ and tryOneS ctrsobl tgraph rvgraph s =
             Log.debug ("Found the following PRF:\n" ^ (Cintfarkaspolo.pol_to_string conc));
           Log.log (Printf.sprintf "ExpRF synthesis successful, proven complexity %s." (Complexity.toString c));
           Some ((nctrsobl, tgraph, rvgraph), getProof ctrsobl nctrsobl conc toOrient)
-        )     
+        )
     )
 
 

@@ -180,7 +180,7 @@ module Make(RuleT : AbstractRule) = struct
     let rules = List.map Rule.standardize rules in
 
   (* Prepare environments for each function symbol *)
-    let funToPreVarsEnv = 
+    let funToPreVarsEnv =
       List.fold_left
         (fun acc rule ->
           let lhs = Rule.getLeft rule in
@@ -365,17 +365,17 @@ module Make(RuleT : AbstractRule) = struct
         | None ->
           None
         | Some (funToInv, oldNewRules) ->
-          let (newRules, newCost, newComplexities) = 
+          let (newRules, newCost, newComplexities) =
             List.fold_left
               (fun (newRules, newCost, newComplexities) (oldRule, newRule) ->
-                (newRule::newRules, 
-                 CTRS.RuleMap.add newRule (CTRS.RuleMap.find oldRule ctrsobl.cost) newCost, 
+                (newRule::newRules,
+                 CTRS.RuleMap.add newRule (CTRS.RuleMap.find oldRule ctrsobl.cost) newCost,
                  CTRS.RuleMap.add newRule (CTRS.RuleMap.find oldRule ctrsobl.complexity) newComplexities))
               ([], CTRS.RuleMap.empty, CTRS.RuleMap.empty)
               oldNewRules in
           Log.log "Found new invariants.";
           let ntgraph = TGraph.compute newRules in
-          let nctrsobl = 
+          let nctrsobl =
             { ctrs = { rules = newRules ; startFun = ctrsobl.ctrs.startFun }
             ; cost = newCost
             ; complexity = newComplexities

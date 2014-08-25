@@ -39,7 +39,7 @@ module type AbstractRule =
     val isUnary: rule -> bool
 
     (** Restricts the arguments of terms appearing in rules according to a set of (0-based) indices.
-      *  So 
+      *  So
       *    restrictArguments [0;1;4] (f(x,y,z,u,v) -> Com_2(g(x,y,z,u+1,v),h(y,x,u,z,v)))
       *  yields
       *    f(x,y,v) -> Com_2(g(x,y,v),h(y,x,v)))

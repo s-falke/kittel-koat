@@ -28,14 +28,14 @@ module Make (RuleT : AbstractRule) = struct
   open CTRS
 
   let getProof ctrsobl nctrsobl remainingVars ini outi =
-    Printf.sprintf 
+    Printf.sprintf
       "Slicing away variables that do not contribute to conditions from problem %i leaves variables [%s].\nWe thus obtain the following problem:\n%s"
       ini
       (String.concat ", " remainingVars)
       (CTRSObl.toStringNumber nctrsobl outi)
 
   let process ctrsobl =
-    (* Heuristic: Do nothing for "small" systems, where small is an arbitrary number. 
+    (* Heuristic: Do nothing for "small" systems, where small is an arbitrary number.
      * Thing to keep in mind: The RVG has |vars| * |rules| nodes, and up to squared that edges.
      *)
     let ruleNum = List.length ctrsobl.ctrs.rules in

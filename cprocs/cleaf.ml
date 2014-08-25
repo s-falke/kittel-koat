@@ -44,7 +44,7 @@ let rec process ctrsobl tgraph rvgraph =
         let nl = Expexp.add ctrsobl.leafCost (List.fold_left (fun sum r -> Expexp.add sum (CTRSObl.getCost ctrsobl r)) Expexp.zero removedRules) in
         let ntgraph = TGraph.removeNodes tgraph leaves in
         let nrvgraph = RVG.updateOptionRVGraph rvgraph leaves [] ntgraph in
-        let nctrsobl = 
+        let nctrsobl =
           { ctrs = { rules = keptRules ; startFun = ctrsobl.ctrs.startFun }
           ; complexity = keptComplexities
           ; cost = keptCost
