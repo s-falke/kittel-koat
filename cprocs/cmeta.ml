@@ -250,7 +250,40 @@ and doSeparate () =
   in
   match findSubSCC ctrsobl sccs with
   | Some innerFuns ->
-    run_ite (Cseparate.process processInner innerFuns true !done_inner sep) doSeparationCleanup doFarkasConstant
+    (
+    (* This can go wrong, in the sense of that we do not end up with a solvable problem. So try, and if we fail, reset. *)
+    let old_i = !i
+    and old_proofs = !proofs
+    and old_input_nums = !input_nums
+    and old_output_nums = !output_nums
+    and old_todo = !todo
+    and old_done_chaining = !ChainProc.done_chaining in
+    run_ite (Cseparate.process processInner innerFuns true !done_inner sep) doSeparationCleanup doFarkasConstant;
+    let (resobl, _, _, _) = !todo in
+    let should_retry =
+      if not(CTRSObl.isSolved resobl) then
+        true
+      else
+        (
+          insertRVGraphIfNeeded ();
+          let (resobl, tgraph, rvgraph, _) = !todo in
+          let globalSizeComplexities = GSC.compute resobl (Utils.unboxOption rvgraph) in
+          Complexity.Unknown = getOverallCost tgraph globalSizeComplexities !todo
+        ) in
+    if should_retry then
+      (
+        Log.debug "Separated analysis failed, going back to std. analysis";
+        i := old_i;
+        proofs := old_proofs;
+        input_nums := old_input_nums;
+        output_nums := old_output_nums;
+        ChainProc.done_chaining := old_done_chaining;
+        todo := old_todo;
+        doFarkasConstant ()
+      )
+    else
+      ()
+    )
   | None ->
     doFarkasConstant ()
 and doSeparationCleanup () =
