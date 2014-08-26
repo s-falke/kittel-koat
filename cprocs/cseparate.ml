@@ -337,8 +337,9 @@ let selectSCC ctrsobl sccRules =
                 Utils.concatMap (fun (oldV, newV) -> if (not (Poly.equal oldV newV)) then Poly.getVars oldV else []) oldNewPairs
               in
               let innerUpdatedVars = Utils.remdup (Utils.concatMap extractUpdatedVars transSubset) in
+              let allVars = CTRS.getVars ctrsobl.ctrs in
               Log.debug (Printf.sprintf " Outer guard vars [%s], inner update vars [%s]" (String.concat ", " outerGuardVars) (String.concat ", " innerUpdatedVars));
-              not(List.exists (fun v -> Utils.contains outerGuardVars v) innerUpdatedVars)
+              (List.length innerUpdatedVars < List.length allVars) && not(List.exists (fun v -> Utils.contains outerGuardVars v) innerUpdatedVars)
             )
           else
             false
