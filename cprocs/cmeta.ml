@@ -300,9 +300,7 @@ and doFarkas () =
 and doFarkasSizeBound () =
   run_ite (Cfarkaspolo.process true false 1) doLoop doFarkasMinimal
 and doFarkasMinimal () =
-  run_ite (Cfarkaspolo.process false true 1) doLoop doPolo2
-and doPolo2 () =
-  run_ite (Cpolo.process 2 false) doLoop doDesperateMeasures
+  run_ite (Cfarkaspolo.process false true 1) doLoop doDesperateMeasures
 and doDesperateMeasures () =
 IFDEF HAVE_APRON THEN
   if not(!did_ai) then
@@ -313,10 +311,18 @@ IFDEF HAVE_APRON THEN
       doLoop ();
     )
   else
-    doChain1 ()
+    if !ChainProc.done_chaining > 3 then
+      doPolo2 ()
+    else
+      doChain1 ()
 ELSE
-  doChain1 ()
+  if !ChainProc.done_chaining > 3 then
+    doPolo2 ()
+  else
+    doChain1 ()
 END
+and doPolo2 () =
+  run_ite (Cpolo.process 2 false) doLoop doChain1
 and doChain1 () =
   run_ite (ChainProc.process 1) doLoop doChain2
 and doChain2 () =
