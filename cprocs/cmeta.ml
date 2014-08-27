@@ -311,18 +311,10 @@ IFDEF HAVE_APRON THEN
       doLoop ();
     )
   else
-    if !ChainProc.done_chaining > 3 then
-      doPolo2 ()
-    else
-      doChain1 ()
-ELSE
-  if !ChainProc.done_chaining > 3 then
-    doPolo2 ()
-  else
     doChain1 ()
+ELSE
+  doChain1 ()
 END
-and doPolo2 () =
-  run_ite (Cpolo.process 2 false) doLoop doChain1
 and doChain1 () =
   run_ite (ChainProc.process 1) doLoop doChain2
 and doChain2 () =
