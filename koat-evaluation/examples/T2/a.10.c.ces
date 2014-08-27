@@ -1,0 +1,14 @@
+eq(pubs_start(A,B,C,D,E,F,G,H,I,J,K,L),0,[f0(A,B,C,D,E,F,G,H,I,J,K,L)],[]).
+eq(f0(A,B,C,D,E,F,G,H,I,J,K,L),1,[f3(A,B,C,D,E,F,G,H,I,J,K,L)],[]).
+eq(f0(A,B,C,D,E,F,G,H,I,J,K,L),1,[f4(A,B,C,D,E,F,G,H,I,J,K,L)],[]).
+eq(f0(A,B,C,D,E,F,G,H,I,J,K,L),1,[f8(A,B,C,D,E,F,G,H,I,J,K,L)],[]).
+eq(f3(A,B,C,D,E,F,G,H,I,J,K,L),1,[f4(A,B,D,D,F,F,A,B,I,J,K,L)],[A >= B + 1]).
+eq(f3(A,B,C,D,E,F,G,H,I,J,K,L),1,[f4(A,B,D,D,F,F,A,B,I,J,K,L)],[B >= A + 1]).
+eq(f0(A,B,C,D,E,F,G,H,I,J,K,L),1,[f3(F,D,D,D,F,F,A,B,I,J,K,L)],[]).
+eq(f0(A,B,C,D,E,F,G,H,I,J,K,L),1,[f3(F,D,D,D,F,F,M,N,M,N,K,L)],[]).
+eq(f0(A,B,C,D,E,F,G,H,I,J,K,L),1,[f8(O,P,D,M,F,N,A,B,M,N,O,P)],[]).
+eq(f3(A,B,C,D,E,F,G,H,I,J,K,L),1,[f8(O,P,D,M,F,N,A,A,M,N,O,P)],[A = B]).
+eq(f0(A,B,C,D,E,F,G,H,I,J,K,L),1,[f3(A + 1,B,D,D,F,F,A,B,I,J,K,L)],[]).
+eq(f4(A,B,C,D,E,F,G,H,I,J,K,L),1,[f3(A + 1,B,D,D,F,F,A,B,I,J,K,L)],[B >= A + 1]).
+eq(f0(A,B,C,D,E,F,G,H,I,J,K,L),1,[f3(A,B + 1,D,D,F,F,A,B,I,J,K,L)],[]).
+eq(f4(A,B,C,D,E,F,G,H,I,J,K,L),1,[f3(A,B + 1,D,D,F,F,A,B,I,J,K,L)],[A >= B]).

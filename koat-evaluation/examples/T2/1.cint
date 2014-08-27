@@ -1,0 +1,11 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f3000))
+(VAR Result_4 t_17 lt_21 x_18 len_47 a_140 tmp_20 __cil_tmp6_15 length_10 i_11 tmp___0_14 tmp_13 head_12 length_19 $nondet1 $nondet x0 x1 x2 c0 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x3 x15 x16 x17)
+(RULES
+  f11(Result_4, t_17, lt_21, x_18, len_47, a_140, tmp_20, __cil_tmp6_15, length_10, i_11, tmp___0_14, tmp_13, head_12, length_19) -> Com_1(f11(Result_4, x_18, $nondet1, $nondet, len_47, a_140, tmp_20, __cil_tmp6_15, length_10, i_11, tmp___0_14, tmp_13, head_12, length_19)) :|: a_140 > -1 && x_18 != 0
+  f16(Result_4, t_17, lt_21, x_18, len_47, a_140, tmp_20, __cil_tmp6_15, length_10, i_11, tmp___0_14, tmp_13, head_12, length_19) -> Com_1(f16(Result_4, t_17, lt_21, x_18, len_47, a_140, tmp_20, __cil_tmp6_15, length_10, i_11 + 1, $nondet, $nondet, $nondet, length_19)) :|: len_47 > -1 && length_10 - i_11 >= 2
+  f11(x0, x1, x2, c0, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13) -> Com_1(f13(x14, x1, x2, 0, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)) :|: x5 > -1 && 0 = c0
+  f16(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13) -> Com_1(f11(x14, x15, x16, x17, x4, x5, x12, x12, x8, x9, x10, x11, x12, x13)) :|: x8 - x9 < 2 && x15 != 0 && x4 > -1
+  f3000(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13) -> Com_1(f16(x0, x1, x2, x3, x4, x5, x6, x7, x8, 1, x14, x14, x14, x13 % 100)) :|: x8 > 1
+  f3000(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13) -> Com_1(f13(x14, x1, x2, 0, x4, x5, 0, 0, x8, 0, x10, x11, 0, x13 % 100)) :|: x8 < 2
+)

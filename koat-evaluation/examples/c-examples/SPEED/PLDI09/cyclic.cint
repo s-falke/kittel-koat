@@ -1,0 +1,16 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_cyclic_start))
+(VAR nondef_0 v_id v_maxId v_tmp.0)
+(RULES
+    eval_cyclic_start(v_id, v_maxId) -> Com_1(eval_cyclic_entry_in(v_id, v_maxId))
+    eval_cyclic_entry_in(v_id, v_maxId) -> Com_1(eval_cyclic_bb3_in(v_id, v_maxId, v_id + 1)) :|: v_id >= 0 && v_id < v_maxId
+    eval_cyclic_bb3_in(v_id, v_maxId, v_tmp.0) -> Com_1(eval_cyclic_return_in()) :|: v_tmp.0 = v_id
+    eval_cyclic_bb3_in(v_id, v_maxId, v_tmp.0) -> Com_1(eval_cyclic_bb4_in(v_id, v_maxId, v_tmp.0)) :|: v_tmp.0 < v_id
+    eval_cyclic_bb3_in(v_id, v_maxId, v_tmp.0) -> Com_1(eval_cyclic_bb4_in(v_id, v_maxId, v_tmp.0)) :|: v_tmp.0 > v_id
+    eval_cyclic_bb4_in(v_id, v_maxId, v_tmp.0) -> Com_1(eval_cyclic_bb_in(v_id, v_maxId, v_tmp.0)) :|: nondef_0 < 0
+    eval_cyclic_bb4_in(v_id, v_maxId, v_tmp.0) -> Com_1(eval_cyclic_bb_in(v_id, v_maxId, v_tmp.0)) :|: nondef_0 > 0
+    eval_cyclic_bb4_in(v_id, v_maxId, v_tmp.0) -> Com_1(eval_cyclic_return_in()) :|: nondef_0 = 0
+    eval_cyclic_bb_in(v_id, v_maxId, v_tmp.0) -> Com_1(eval_cyclic_bb3_in(v_id, v_maxId, v_tmp.0 + 1)) :|: v_tmp.0 <= v_maxId
+    eval_cyclic_bb_in(v_id, v_maxId, v_tmp.0) -> Com_1(eval_cyclic_bb3_in(v_id, v_maxId, 0)) :|: v_tmp.0 > v_maxId
+    eval_cyclic_return_in() -> Com_1(eval_cyclic_stop())
+)

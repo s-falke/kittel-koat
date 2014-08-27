@@ -1,0 +1,16 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR A B C D E F)
+(RULES
+  matrixMult0(A,B,C,D,E) -> Com_1(computeLine(0,B,C,D,E))
+  matrixMult1(A,B,C,D,E) -> Com_1(matrixMult(D,A - 1,B,C,E))
+  matrixMult(A,B,C,D,E) -> Com_2(matrixMult0(B,C,D,A,E),matrixMult1(B,C,D,A,E)) :|: B >= 1
+  computeLine0(A,B,C,D,E) -> Com_1(lineMult(A,B,C,D,E))
+  computeLine1(A,B,C,D,E) -> Com_1(computeLine(D,A - 1,E - 1,C,E))
+  computeLine(A,B,C,D,E) -> Com_2(computeLine0(B,F,D,A,C),computeLine1(B,F,D,A,C)) :|: B >= 1 && C >= 1
+  sizelineMult(A,B,C,D,E) -> Com_1(sizelineMult(A,B,C - 1,0,E)) :|: C >= 1 && D = 0
+  sizelineMult(A,B,C,D,E) -> Com_1(sizelineMult(A,B,C - 1,-1,E)) :|: C >= 1 && D = 0
+  lineMult(A,B,C,D,E) -> Com_1(lineMult(A,B,C - 1,0,E)) :|: C >= 1 && D = 0
+  lineMult(A,B,C,D,E) -> Com_1(lineMult(A,B,C - 1,-1,E)) :|: C >= 1 && D = 0
+  start(A,B,C,D,E) -> Com_1(matrixMult(A,B,C,D,E))
+)

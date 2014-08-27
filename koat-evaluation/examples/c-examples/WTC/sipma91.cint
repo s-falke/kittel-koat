@@ -1,0 +1,22 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_sipma91_start))
+(VAR v_5 v_6 v_x v_y1.0 v_y1.2 v_y2.0 v_y2.2)
+(RULES
+    eval_sipma91_start(v_x) -> Com_1(eval_sipma91_entry_in(v_x))
+    eval_sipma91_entry_in(v_x) -> Com_1(eval_sipma91_return_in()) :|: v_x > 100
+    eval_sipma91_entry_in(v_x) -> Com_1(eval_sipma91_bb3_in(1, v_x)) :|: v_x <= 100
+    eval_sipma91_bb3_in(v_y2.0, v_y1.0) -> Com_1(eval_sipma91_bb2_in(v_y2.0, v_y1.0)) :|: v_y1.0 <= 100
+    eval_sipma91_bb3_in(v_y2.0, v_y1.0) -> Com_1(eval_sipma91_bb11_in(v_y2.0, v_y1.0)) :|: v_y1.0 > 100
+    eval_sipma91_bb2_in(v_y2.0, v_y1.0) -> Com_1(eval_sipma91_bb3_in(v_y2.0 + 1, v_y1.0 + 11))
+    eval_sipma91_bb11_in(v_y2.2, v_y1.2) -> Com_1(eval_sipma91_bb5_in(v_y2.2, v_y1.2)) :|: v_y2.2 > 1
+    eval_sipma91_bb11_in(v_y2.2, v_y1.2) -> Com_1(eval_sipma91_return_in()) :|: v_y2.2 <= 1
+    eval_sipma91_bb5_in(v_y2.2, v_y1.2) -> Com_1(eval_sipma91_bb8_in(v_y2.2, v_y1.2, v_y1.2 - 10, v_y2.2 - 1)) :|: v_y1.2 - 10 <= 100
+    eval_sipma91_bb5_in(v_y2.2, v_y1.2) -> Com_1(eval_sipma91_bb8_in(v_y2.2, v_y1.2, v_y1.2 - 10, v_y2.2 - 1)) :|: v_y2.2 - 1 < 1
+    eval_sipma91_bb5_in(v_y2.2, v_y1.2) -> Com_1(eval_sipma91_bb8_in(v_y2.2, v_y1.2, v_y1.2 - 10, v_y2.2 - 1)) :|: v_y2.2 - 1 > 1
+    eval_sipma91_bb5_in(v_y2.2, v_y1.2) -> Com_1(eval_sipma91_bb11_in(v_y2.2 - 1, v_y1.2 - 10)) :|: v_y1.2 - 10 > 100 && v_y2.2 - 1 = 1
+    eval_sipma91_bb8_in(v_y2.2, v_y1.2, v_5, v_6) -> Com_1(eval_sipma91_bb11_in(v_6, v_5 + 1)) :|: v_5 > 100 && v_5 > 100
+    eval_sipma91_bb8_in(v_y2.2, v_y1.2, v_5, v_6) -> Com_1(eval_sipma91_bb11_in(v_6, v_5 + 11)) :|: v_5 > 100 && v_5 <= 100
+    eval_sipma91_bb8_in(v_y2.2, v_y1.2, v_5, v_6) -> Com_1(eval_sipma91_bb11_in(v_6 + 1, v_5 + 1)) :|: v_5 <= 100 && v_5 > 100
+    eval_sipma91_bb8_in(v_y2.2, v_y1.2, v_5, v_6) -> Com_1(eval_sipma91_bb11_in(v_6 + 1, v_5 + 11)) :|: v_5 <= 100 && v_5 <= 100
+    eval_sipma91_return_in() -> Com_1(eval_sipma91_stop())
+)

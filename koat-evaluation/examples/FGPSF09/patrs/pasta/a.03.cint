@@ -1,0 +1,16 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_1))
+(VAR i j l r n z z')
+(RULES
+  eval_1(i, j, l, r, n) -> Com_1(eval_2(i, j, z, r, n)) :|: l - 2 >= 0 && z - (l - 1) >= 0 && l - 1 - z >= 0
+  eval_1(i, j, l, r, n) -> Com_1(eval_2(i, j, l, z, n)) :|: 2 - l - 1 >= 0 && z - (r - 1) >= 0 && r - 1 - z >= 0
+  eval_2(i, j, l, r, n) -> Com_1(eval_3(l, z, l, r, n)) :|: r - 2 >= 0 && z - 2 * l >= 0 && 2 * l - z >= 0
+  eval_3(i, j, l, r, n) -> Com_1(eval_4(i, j, l, r, n)) :|: r - j >= 0 && r - 1 - j >= 0
+  eval_3(i, j, l, r, n) -> Com_1(eval_4(i, z, l, r, n)) :|: r - j >= 0 && r - 1 - j >= 0 && z - (j + 1) >= 0 && j + 1 - z >= 0
+  eval_3(i, j, l, r, n) -> Com_1(eval_3(j, z, l, r, n)) :|: r - j >= 0 && r - 1 - j >= 0 && j - 1 >= 0 && z - 2 * j >= 0 && 2 * j - z >= 0
+  eval_3(i, j, l, r, n) -> Com_1(eval_3(z, z', l, r, n)) :|: r - j >= 0 && r - 1 - j >= 0 && j - 1 >= 0 && z - (j + 1) >= 0 && j + 1 - z >= 0 && z' - (2 * j + 2) >= 0 && 2 * j + 2 - z' >= 0
+  eval_3(i, j, l, r, n) -> Com_1(eval_4(i, j, l, r, n)) :|: r - j >= 0 && j - (r - 1) - 1 >= 0
+  eval_3(i, j, l, r, n) -> Com_1(eval_3(j, z, l, r, n)) :|: r - j >= 0 && j - (r - 1) - 1 >= 0 && j - 1 >= 0 && z - 2 * j >= 0 && 2 * j - z >= 0
+  eval_4(i, j, l, r, n) -> Com_1(eval_2(i, j, z, r, n)) :|: l - 2 >= 0 && l - 1 >= 0 && r - 2 >= 0 && z - (l - 1) >= 0 && l - 1 - z >= 0
+  eval_4(i, j, l, r, n) -> Com_1(eval_2(i, j, l, z, n)) :|: 2 - l - 1 >= 0 && l - 1 >= 0 && r - 2 >= 0 && z - (r - 1) >= 0 && r - 1 - z >= 0
+)

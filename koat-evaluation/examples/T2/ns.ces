@@ -1,0 +1,12 @@
+eq(pubs_start(A,B,C,D,E),0,[f0(A,B,C,D,E)],[]).
+eq(f0(A,B,C,D,E),1,[f7(400,0,C,D,E)],[]).
+eq(f7(A,B,C,D,E),1,[f10(A,B,0,D,E)],[4 >= B]).
+eq(f10(A,B,C,D,E),1,[f13(A,B,C,0,E)],[4 >= C]).
+eq(f13(A,B,C,D,E),1,[f16(A,B,C,D,0)],[4 >= D]).
+eq(f16(A,B,C,D,E),1,[f16(A,B,C,D,E + 1)],[4 >= E, A >= F + 1]).
+eq(f16(A,B,C,D,E),1,[f16(A,B,C,D,E + 1)],[4 >= E]).
+eq(f16(A,B,C,D,E),1,[f31(A,B,C,D,E)],[4 >= E]).
+eq(f16(A,B,C,D,E),1,[f13(A,B,C,D + 1,E)],[E >= 5]).
+eq(f13(A,B,C,D,E),1,[f10(A,B,C + 1,D,E)],[D >= 5]).
+eq(f10(A,B,C,D,E),1,[f7(A,B + 1,C,D,E)],[C >= 5]).
+eq(f7(A,B,C,D,E),1,[f31(A,B,C,D,E)],[B >= 5]).

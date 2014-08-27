@@ -1,0 +1,28 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 c0 arith x11 x13 x12)
+(RULES
+  f63(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f11(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)) :|: x9 >= 1 + x0
+  f0(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f11(10, 20, 1, 20, 0, 0, x6, x7, x8, x9, x10)) :|: TRUE
+  f11(x0, x1, x2, x3, x4, c0, x6, x7, x8, x9, x10) -> Com_1(f11(x0, x1, x2, x3, x4, 1, x6, x7, x8, x9, x10)) :|: x3 + 1 <= x2 + 1 && 0 = c0
+  f11(x0, x1, x2, x3, x4, c0, x6, x7, x8, x9, x10) -> Com_1(f11(x0, x1, x2, x3, x4, 1, x6, x7, x8, x9, x10)) :|: x3 <= x2 + 1 && x3 >= 1 + (x2 + 1) && 0 = c0
+  f11(x0, x1, x2, arith, x4, c0, x6, x7, x8, x9, x10) -> Com_1(f11(x0, x1, x2, x2 + 1, x4, 1, x6, x7, x8, x9, x10)) :|: arith = x2 + 1 && 0 = c0
+  f11(x0, x1, x2, arith, x4, c0, x6, x7, x8, x9, x10) -> Com_1(f11(x0, x1, x2, x2 + 1, x4, 1, x11, x7, x8, x9, x10)) :|: x13 >= x12 + 1 && arith = x2 + 1 && 0 = c0
+  f11(x0, x1, x2, x3, x4, c0, x6, x7, x8, x9, x10) -> Com_1(f40(x0, x1, x2, x3, x4, 0, x11, x12, x2 + 1, x3, x13)) :|: x3 >= 1 + (x2 + 1) && 0 = c0
+  f40(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f59(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)) :|: x4 < 0
+  f40(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f59(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)) :|: x4 > 0
+  f40(x0, x1, x2, x3, c0, x5, x6, x7, x8, x9, x10) -> Com_1(f43(x0, x1, x2, x3, 0, x5, x6, x7, x8 + 1, x9, x10)) :|: 0 = c0
+  f43(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f43(x0, x1, x2, x3, x4, x5, x6, x7, x8 + 1, x9, x10)) :|: x11 + 1 <= x10
+  f48(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f48(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9 - 1, x10)) :|: TRUE
+  f54(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f40(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)) :|: x4 < 0
+  f54(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f40(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)) :|: x4 > 0
+  f54(x0, x1, x2, x3, c0, x5, x6, x7, x8, x9, x10) -> Com_1(f40(x0, x1, x2, x3, 0, x5, x11, x7, x8, x9, x10)) :|: 0 = c0
+  f59(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f63(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)) :|: x9 + 1 <= x0
+  f59(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f63(x0, x1, x2, x9 - 1, x4, x5, x6, x7, x8, x9, x10)) :|: x9 >= x0
+  f63(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f11(x0, x1, x8, x3, x4, x5, x6, x7, x8, x9, x10)) :|: x9 <= x0
+  f48(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f54(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)) :|: x9 >= x8
+  f48(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f54(x0, x1, x2, x3, 1, x5, x6, x7, x8, x9, x10)) :|: x9 + 1 <= x8
+  f43(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f48(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9 - 1, x10)) :|: TRUE
+  f11(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f69(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)) :|: x5 < 0
+  f11(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f69(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)) :|: x5 > 0
+)

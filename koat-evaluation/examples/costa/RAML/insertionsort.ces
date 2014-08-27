@@ -1,0 +1,6 @@
+eq(pubs_start(A,B),0,[start(A,B)],[]).
+eq(insertionsortD0(A,B),1,[insertD(A - 1,B)],[]).
+eq(insertionsortD1(A,B),1,[insertionsortD(A,A - 1)],[]).
+eq(insertionsortD(A,B),1,[insertionsortD0(B,C),insertionsortD1(B,C)],[B >= 1]).
+eq(insertD(A,B),1,[insertD(A - 1,B)],[A >= 1]).
+eq(start(A,B),1,[insertionsortD(A,B)],[]).

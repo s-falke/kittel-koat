@@ -1,0 +1,14 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR i i__o j j__o k k__o n n__o)
+(RULES
+  start(i, j, k, n, i__o, j__o, k__o, n__o) -> Com_1(a(i, j, k, n, i__o, j__o, k__o, n__o)) :|: n>=1 && n=n__o && k=k__o && j=j__o && i=i__o 
+  a(i, j, k, n, i__o, j__o, k__o, n__o) -> Com_1(d(i, j, 1, n, i__o, j__o, k__o, n__o)) :|: n>=1 && i=i__o && j=j__o && k=k__o && n=n__o 
+  d(i, j, k, n, i__o, j__o, k__o, n__o) -> Com_1(b(1  + k, j, k, n, i__o, j__o, k__o, n__o)) :|: k<n && k<n+1 && n>=1 && k>=1 && n=n__o 
+  d(i, j, k, n, i__o, j__o, k__o, n__o) -> Com_1(halt(i, j, k, n, i__o, j__o, k__o, n__o)) :|: k>=n && k<n+1 && n>=1 && k>=1 && n=n__o 
+  b(i, j, k, n, i__o, j__o, k__o, n__o) -> Com_1(d(i, j, 1  + k, n, i__o, j__o, k__o, n__o)) :|: i>n && i<=n+1 && k<n && k>=1 && i>=k+1 && n=n__o 
+  b(i, j, k, n, i__o, j__o, k__o, n__o) -> Com_1(c(i, n, k, n, i__o, j__o, k__o, n__o)) :|: i<=n && i<=n+1 && k<n && k>=1 && i>=k+1 && n=n__o 
+  c(i, j, k, n, i__o, j__o, k__o, n__o) -> Com_1(c(i, j - 1, k, n, i__o, j__o, k__o, n__o)) :|: j>k && j<=n && i<=n && k>=1 && j+1>k && i>=k+1 && n=n__o 
+  c(i, j, k, n, i__o, j__o, k__o, n__o) -> Com_1(b(1  + i, j, k, n, i__o, j__o, k__o, n__o)) :|: j<=k && j<=n && i<=n && k>=1 && j+1>k && i>=k+1 && n=n__o 
+  ____start(i, j, k, n, i__o, j__o, k__o, n__o) -> Com_1(start(i__o, j__o, k__o, n__o, i__o, j__o, k__o, n__o)) :|: TRUE 
+)

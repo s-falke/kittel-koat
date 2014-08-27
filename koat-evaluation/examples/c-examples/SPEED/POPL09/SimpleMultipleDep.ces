@@ -1,0 +1,10 @@
+eq(pubs_start(A,B,C,D),0,[evalSimpleMultipleDepstart(A,B,C,D)],[]).
+eq(evalSimpleMultipleDepstart(A,B,C,D),1,[evalSimpleMultipleDepentryin(A,B,C,D)],[]).
+eq(evalSimpleMultipleDepentryin(A,B,C,D),1,[evalSimpleMultipleDepbb3in(0,0,C,D)],[]).
+eq(evalSimpleMultipleDepbb3in(A,B,C,D),1,[evalSimpleMultipleDepbbin(A,B,C,D)],[C >= B + 1]).
+eq(evalSimpleMultipleDepbb3in(A,B,C,D),1,[evalSimpleMultipleDepreturnin(A,B,C,D)],[B >= C]).
+eq(evalSimpleMultipleDepbbin(A,B,C,D),1,[evalSimpleMultipleDepbb1in(A,B,C,D)],[D >= A + 1]).
+eq(evalSimpleMultipleDepbbin(A,B,C,D),1,[evalSimpleMultipleDepbb2in(A,B,C,D)],[A >= D]).
+eq(evalSimpleMultipleDepbb1in(A,B,C,D),1,[evalSimpleMultipleDepbb3in(A + 1,B,C,D)],[]).
+eq(evalSimpleMultipleDepbb2in(A,B,C,D),1,[evalSimpleMultipleDepbb3in(0,B + 1,C,D)],[]).
+eq(evalSimpleMultipleDepreturnin(A,B,C,D),1,[evalSimpleMultipleDepstop(A,B,C,D)],[]).

@@ -1,0 +1,12 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_nd_loop_start))
+(VAR nondef_0 v_x.0)
+(RULES
+    eval_nd_loop_start() -> Com_1(eval_nd_loop_entry_in())
+    eval_nd_loop_entry_in() -> Com_1(eval_nd_loop_bb_in(0))
+    eval_nd_loop_bb_in(v_x.0) -> Com_1(eval_nd_loop_bb_in(nondef_0)) :|: nondef_0 - v_x.0 <= 2 && nondef_0 - v_x.0 > 0 && nondef_0 <= 9
+    eval_nd_loop_bb_in(v_x.0) -> Com_1(eval_nd_loop_return_in()) :|: nondef_0 - v_x.0 > 2
+    eval_nd_loop_bb_in(v_x.0) -> Com_1(eval_nd_loop_return_in()) :|: nondef_0 - v_x.0 <= 0
+    eval_nd_loop_bb_in(v_x.0) -> Com_1(eval_nd_loop_return_in()) :|: nondef_0 > 9
+    eval_nd_loop_return_in() -> Com_1(eval_nd_loop_stop())
+)

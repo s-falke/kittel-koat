@@ -1,0 +1,17 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_Ex4_start))
+(VAR nondef_0 v_flag.0 v_flag.1 v_n v_n_addr.0 v_n_addr.1)
+(RULES
+    eval_Ex4_start(v_n) -> Com_1(eval_Ex4_entry_in(v_n))
+    eval_Ex4_entry_in(v_n) -> Com_1(eval_Ex4_bb4_in(1, v_n))
+    eval_Ex4_bb4_in(v_flag.1, v_n_addr.1) -> Com_1(eval_Ex4_bb2_in(v_flag.1, v_n_addr.1, 0, v_n_addr.1)) :|: v_flag.1 = 1
+    eval_Ex4_bb4_in(v_flag.1, v_n_addr.1) -> Com_1(eval_Ex4_return_in()) :|: v_flag.1 < 1
+    eval_Ex4_bb4_in(v_flag.1, v_n_addr.1) -> Com_1(eval_Ex4_return_in()) :|: v_flag.1 > 1
+    eval_Ex4_bb2_in(v_flag.1, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex4_bb4_in(v_flag.0, v_n_addr.0)) :|: v_n_addr.0 <= 0
+    eval_Ex4_bb2_in(v_flag.1, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex4_bb3_in(v_flag.1, v_n_addr.1, v_flag.0, v_n_addr.0)) :|: v_n_addr.0 > 0
+    eval_Ex4_bb3_in(v_flag.1, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex4_bb1_in(v_flag.1, v_n_addr.1, v_flag.0, v_n_addr.0)) :|: nondef_0 < 0
+    eval_Ex4_bb3_in(v_flag.1, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex4_bb1_in(v_flag.1, v_n_addr.1, v_flag.0, v_n_addr.0)) :|: nondef_0 > 0
+    eval_Ex4_bb3_in(v_flag.1, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex4_bb4_in(v_flag.0, v_n_addr.0)) :|: nondef_0 = 0
+    eval_Ex4_bb1_in(v_flag.1, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex4_bb2_in(v_flag.1, v_n_addr.1, 1, v_n_addr.0 - 1))
+    eval_Ex4_return_in() -> Com_1(eval_Ex4_stop())
+)

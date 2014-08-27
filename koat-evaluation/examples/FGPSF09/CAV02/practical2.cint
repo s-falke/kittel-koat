@@ -1,0 +1,18 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_0))
+(VAR x y1 y2 z z' z'')
+(RULES
+  eval_0(x, y1, y2, z) -> Com_1(eval_1(x, x, z', z)) :|: z' - 1 >= 0 && 1 - z' >= 0
+  eval_1(x, y1, y2, z) -> Com_0 :|: y1 - 100 - 1 >= 0 && z' - (y1 - 10) >= 0 && y1 - 10 - z' >= 0
+  eval_1(x, y1, y2, z) -> Com_1(eval_3(x, y1, y2, z)) :|: 100 - y1 >= 0
+  eval_3(x, y1, y2, z) -> Com_1(eval_3(x, z', z'', z)) :|: 100 - y1 >= 0 && z' - (y1 + 11) >= 0 && y1 + 11 - z' >= 0 && z'' - (y2 + 1) >= 0 && y2 + 1 - z'' >= 0
+  eval_3(x, y1, y2, z) -> Com_1(eval_5(x, y1, y2, z)) :|: y1 - 100 - 1 >= 0
+  eval_5(x, y1, y2, z) -> Com_1(eval_7(x, z', z'', z)) :|: y2 - 1 - 1 >= 0 && z' - (y1 - 10) >= 0 && y1 - 10 - z' >= 0 && z'' - (y2 - 1) >= 0 && y2 - 1 - z'' >= 0
+  eval_7(x, y1, y2, z) -> Com_1(eval_5(x, y1, y2, z')) :|: y1 - 100 - 1 >= 0 && y2 - 1 >= 0 && 1 - y2 >= 0 && z' - (y1 - 10) >= 0 && y1 - 10 - z' >= 0
+  eval_7(x, y1, y2, z) -> Com_1(eval_9(x, y1, y2, z)) :|: 100 - y1 >= 0
+  eval_7(x, y1, y2, z) -> Com_1(eval_9(x, y1, y2, z)) :|: 1 - (y2 - 1) >= 0
+  eval_7(x, y1, y2, z) -> Com_1(eval_9(x, y1, y2, z)) :|: 1 - (1 - y2) >= 0
+  eval_9(x, y1, y2, z) -> Com_1(eval_11(x, z', z'', z)) :|: y1 - 100 - 1 >= 0 && z' - (y1 - 10) >= 0 && y1 - 10 - z' >= 0 && z'' - (y2 - 1) >= 0 && y2 - 1 - z'' >= 0
+  eval_9(x, y1, y2, z) -> Com_1(eval_11(x, y1, y2, z)) :|: 100 - y1 >= 0
+  eval_11(x, y1, y2, z) -> Com_1(eval_5(x, z', z'', z)) :|: z' - (y1 + 11) >= 0 && y1 + 11 - z' >= 0 && z'' - (y2 + 1) >= 0 && y2 + 1 - z'' >= 0
+)

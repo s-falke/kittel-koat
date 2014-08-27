@@ -1,0 +1,10 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR i i__o n n__o)
+(RULES
+  start(i, n, i__o, n__o) -> Com_1(stop(i, n, i__o, n__o)) :|: i<=1 && n=n__o && i=i__o 
+  start(i, n, i__o, n__o) -> Com_1(lbl_3_2(i - 1, n, i__o, n__o)) :|: i>=2 && n=n__o && i=i__o 
+  lbl_3_2(i, n, i__o, n__o) -> Com_1(stop(i, n, i__o, n__o)) :|: i<=1 && i>=1 && i+1<=i__o && n=n__o 
+  lbl_3_2(i, n, i__o, n__o) -> Com_1(lbl_3_2(i - 1, n, i__o, n__o)) :|: i>=2 && i>=1 && i+1<=i__o && n=n__o 
+  ____start(i, n, i__o, n__o) -> Com_1(start(i__o, n__o, i__o, n__o)) :|: TRUE 
+)

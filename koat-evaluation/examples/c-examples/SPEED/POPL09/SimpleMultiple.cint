@@ -1,0 +1,14 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_SimpleMultiple_start))
+(VAR v_m v_n v_x.0 v_y.0)
+(RULES
+    eval_SimpleMultiple_start(v_n, v_m) -> Com_1(eval_SimpleMultiple_entry_in(v_n, v_m))
+    eval_SimpleMultiple_entry_in(v_n, v_m) -> Com_1(eval_SimpleMultiple_bb3_in(v_n, v_m, 0, 0))
+    eval_SimpleMultiple_bb3_in(v_n, v_m, v_y.0, v_x.0) -> Com_1(eval_SimpleMultiple_bb_in(v_n, v_m, v_y.0, v_x.0)) :|: v_x.0 < v_n
+    eval_SimpleMultiple_bb3_in(v_n, v_m, v_y.0, v_x.0) -> Com_1(eval_SimpleMultiple_return_in()) :|: v_x.0 >= v_n
+    eval_SimpleMultiple_bb_in(v_n, v_m, v_y.0, v_x.0) -> Com_1(eval_SimpleMultiple_bb1_in(v_n, v_m, v_y.0, v_x.0)) :|: v_y.0 < v_m
+    eval_SimpleMultiple_bb_in(v_n, v_m, v_y.0, v_x.0) -> Com_1(eval_SimpleMultiple_bb2_in(v_n, v_m, v_y.0, v_x.0)) :|: v_y.0 >= v_m
+    eval_SimpleMultiple_bb1_in(v_n, v_m, v_y.0, v_x.0) -> Com_1(eval_SimpleMultiple_bb3_in(v_n, v_m, v_y.0 + 1, v_x.0))
+    eval_SimpleMultiple_bb2_in(v_n, v_m, v_y.0, v_x.0) -> Com_1(eval_SimpleMultiple_bb3_in(v_n, v_m, v_y.0, v_x.0 + 1))
+    eval_SimpleMultiple_return_in() -> Com_1(eval_SimpleMultiple_stop())
+)

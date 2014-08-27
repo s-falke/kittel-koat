@@ -1,0 +1,13 @@
+eq(pubs_start(A,B,C,D,E,F,G),0,[evalfstart(A,B,C,D,E,F,G)],[]).
+eq(evalfstart(A,B,C,D,E,F,G),1,[evalfentryin(A,B,C,D,E,F,G)],[]).
+eq(evalfentryin(A,B,C,D,E,F,G),1,[evalfbb5in(0,0,0,D,E,F,G)],[]).
+eq(evalfbb5in(A,B,C,D,E,F,G),1,[evalfreturnin(A,B,C,D,E,F,G)],[C >= D]).
+eq(evalfbb5in(A,B,C,D,E,F,G),1,[evalfbbin(A,B,C,D,C + 1,F,G)],[D >= C + 1]).
+eq(evalfbbin(A,B,C,D,E,F,G),1,[evalfbb1in(A,B,C,D,E,B,G)],[0 >= H + 1]).
+eq(evalfbbin(A,B,C,D,E,F,G),1,[evalfbb1in(A,B,C,D,E,B,G)],[H >= 1]).
+eq(evalfbbin(A,B,C,D,E,F,G),1,[evalfbb3in(A,B,C,D,E,A,G)],[]).
+eq(evalfbb1in(A,B,C,D,E,F,G),1,[evalfbb5in(A,F + 1,E,D,E,F,G)],[F >= G]).
+eq(evalfbb1in(A,B,C,D,E,F,G),1,[evalfbb1in(A,B,C,D,E,F + 1,G)],[G >= F + 1]).
+eq(evalfbb3in(A,B,C,D,E,F,G),1,[evalfbb5in(F + 1,B,E,D,E,F,G)],[F >= G]).
+eq(evalfbb3in(A,B,C,D,E,F,G),1,[evalfbb3in(A,B,C,D,E,F + 1,G)],[G >= F + 1]).
+eq(evalfreturnin(A,B,C,D,E,F,G),1,[evalfstop(A,B,C,D,E,F,G)],[]).

@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f1))
+(VAR result_11 a_13 a_21 nondet_12 x_15 temp0_14 $nondet $nondet2 $nondet1 arith)
+(RULES
+  f0(result_11, a_13, a_21, nondet_12, x_15) -> Com_1(f2(temp0_14, a_13, a_21, nondet_12, x_15)) :|: a_13 < 1
+  f0(result_11, a_13, a_21, nondet_12, x_15) -> Com_1(f0(result_11, 1 + 3 * a_13, $nondet, $nondet2, $nondet1)) :|: a_13 > 0 && a_13 != 2 * $nondet1 && 1 + 3 * a_13 = 1 + 3 * $nondet && $nondet != 2 * $nondet1 && 0 < $nondet
+  f0(result_11, arith, a_21, nondet_12, x_15) -> Com_1(f0(result_11, $nondet, a_21, $nondet1, $nondet)) :|: 2 * $nondet >= 1 && a_13 > 0 && arith = $nondet * 2
+  f1(result_11, a_13, a_21, nondet_12, x_15) -> Com_1(f0(result_11, a_13, a_21, nondet_12, x_15)) :|: TRUE
+)

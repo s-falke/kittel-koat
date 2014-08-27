@@ -1,0 +1,13 @@
+eq(pubs_start(A,B,C,D),0,[evalEx4start(A,B,C,D)],[]).
+eq(evalEx4start(A,B,C,D),1,[evalEx4entryin(A,B,C,D)],[]).
+eq(evalEx4entryin(A,B,C,D),1,[evalEx4bb4in(1,A,C,D)],[]).
+eq(evalEx4bb4in(A,B,C,D),1,[evalEx4bb2in(A,B,0,B)],[A = 1]).
+eq(evalEx4bb4in(A,B,C,D),1,[evalEx4returnin(A,B,C,D)],[0 >= A]).
+eq(evalEx4bb4in(A,B,C,D),1,[evalEx4returnin(A,B,C,D)],[A >= 2]).
+eq(evalEx4bb2in(A,B,C,D),1,[evalEx4bb4in(C,D,C,D)],[0 >= D]).
+eq(evalEx4bb2in(A,B,C,D),1,[evalEx4bb3in(A,B,C,D)],[D >= 1]).
+eq(evalEx4bb3in(A,B,C,D),1,[evalEx4bb1in(A,B,C,D)],[0 >= E + 1]).
+eq(evalEx4bb3in(A,B,C,D),1,[evalEx4bb1in(A,B,C,D)],[E >= 1]).
+eq(evalEx4bb3in(A,B,C,D),1,[evalEx4bb4in(C,D,C,D)],[]).
+eq(evalEx4bb1in(A,B,C,D),1,[evalEx4bb2in(A,B,1,D - 1)],[]).
+eq(evalEx4returnin(A,B,C,D),1,[evalEx4stop(A,B,C,D)],[]).

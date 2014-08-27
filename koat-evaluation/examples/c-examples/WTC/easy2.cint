@@ -1,0 +1,11 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_easy2_start))
+(VAR v_z v_z_addr.0)
+(RULES
+    eval_easy2_start(v_z) -> Com_1(eval_easy2_entry_in(v_z))
+    eval_easy2_entry_in(v_z) -> Com_1(eval_easy2_bb1_in(v_z))
+    eval_easy2_bb1_in(v_z_addr.0) -> Com_1(eval_easy2_bb_in(v_z_addr.0)) :|: v_z_addr.0 > 0
+    eval_easy2_bb1_in(v_z_addr.0) -> Com_1(eval_easy2_return_in()) :|: v_z_addr.0 <= 0
+    eval_easy2_bb_in(v_z_addr.0) -> Com_1(eval_easy2_bb1_in(v_z_addr.0 - 1))
+    eval_easy2_return_in() -> Com_1(eval_easy2_stop())
+)

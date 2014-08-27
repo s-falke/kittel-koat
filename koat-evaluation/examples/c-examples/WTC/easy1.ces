@@ -1,0 +1,11 @@
+eq(pubs_start(A,B),0,[evaleasy1start(A,B)],[]).
+eq(evaleasy1start(A,B),1,[evaleasy1entryin(A,B)],[]).
+eq(evaleasy1entryin(A,B),1,[evaleasy1bb3in(0,B)],[]).
+eq(evaleasy1bb3in(A,B),1,[evaleasy1bbin(A,B)],[39 >= A]).
+eq(evaleasy1bb3in(A,B),1,[evaleasy1returnin(A,B)],[A >= 40]).
+eq(evaleasy1bbin(A,B),1,[evaleasy1bb1in(A,B)],[B = 0]).
+eq(evaleasy1bbin(A,B),1,[evaleasy1bb2in(A,B)],[0 >= B + 1]).
+eq(evaleasy1bbin(A,B),1,[evaleasy1bb2in(A,B)],[B >= 1]).
+eq(evaleasy1bb1in(A,B),1,[evaleasy1bb3in(A + 1,B)],[]).
+eq(evaleasy1bb2in(A,B),1,[evaleasy1bb3in(A + 2,B)],[]).
+eq(evaleasy1returnin(A,B),1,[evaleasy1stop(A,B)],[]).

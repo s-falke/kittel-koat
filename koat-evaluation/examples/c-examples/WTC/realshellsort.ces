@@ -1,0 +1,20 @@
+eq(pubs_start(A,B,C,D,E),0,[evalrealshellsortstart(A,B,C,D,E)],[]).
+eq(evalrealshellsortstart(A,B,C,D,E),1,[evalrealshellsortentryin(A,B,C,D,E)],[]).
+eq(evalrealshellsortentryin(A,B,C,D,E),1,[evalrealshellsortbb8in(A,0,C,D,E)],[A = 0]).
+eq(evalrealshellsortentryin(A,B,C,D,E),1,[evalrealshellsortbb8in(A,F,C,D,E)],[A >= 1, F >= 0, A >= 2*F, 1 + 2*F >= A]).
+eq(evalrealshellsortentryin(A,B,C,D,E),1,[evalrealshellsortbb8in(A,F,C,D,E)],[0 >= A + 1, 0 >= F, 2*F >= A, 1 + A >= 2*F]).
+eq(evalrealshellsortbb8in(A,B,C,D,E),1,[evalrealshellsortbb6in(A,B,0,D,E)],[B >= 1]).
+eq(evalrealshellsortbb8in(A,B,C,D,E),1,[evalrealshellsortreturnin(A,B,C,D,E)],[0 >= B]).
+eq(evalrealshellsortbb6in(A,B,C,D,E),1,[evalrealshellsortbb1in(A,B,C,D,E)],[A >= C + 1]).
+eq(evalrealshellsortbb6in(A,B,C,D,E),1,[evalrealshellsortbb7in(A,B,C,D,E)],[C >= A]).
+eq(evalrealshellsortbb1in(A,B,C,D,E),1,[evalrealshellsortbb3in(A,B,C,F,C)],[]).
+eq(evalrealshellsortbb3in(A,B,C,D,E),1,[evalrealshellsortbb5in(A,B,C,D,E)],[B >= E + 1]).
+eq(evalrealshellsortbb3in(A,B,C,D,E),1,[evalrealshellsortbb4in(A,B,C,D,E)],[E >= B]).
+eq(evalrealshellsortbb4in(A,B,C,D,E),1,[evalrealshellsortbb2in(A,B,C,D,E)],[F >= D + 1]).
+eq(evalrealshellsortbb4in(A,B,C,D,E),1,[evalrealshellsortbb5in(A,B,C,D,E)],[D >= F]).
+eq(evalrealshellsortbb2in(A,B,C,D,E),1,[evalrealshellsortbb3in(A,B,C,D,E - B)],[]).
+eq(evalrealshellsortbb5in(A,B,C,D,E),1,[evalrealshellsortbb6in(A,B,C + 1,D,E)],[]).
+eq(evalrealshellsortbb7in(A,B,C,D,E),1,[evalrealshellsortbb8in(A,0,C,D,E)],[B = 0]).
+eq(evalrealshellsortbb7in(A,B,C,D,E),1,[evalrealshellsortbb8in(A,F,C,D,E)],[B >= 1, F >= 0, B >= 2*F, 1 + 2*F >= B]).
+eq(evalrealshellsortbb7in(A,B,C,D,E),1,[evalrealshellsortbb8in(A,F,C,D,E)],[0 >= B + 1, 0 >= F, 2*F >= B, 1 + B >= 2*F]).
+eq(evalrealshellsortreturnin(A,B,C,D,E),1,[evalrealshellsortstop(A,B,C,D,E)],[]).

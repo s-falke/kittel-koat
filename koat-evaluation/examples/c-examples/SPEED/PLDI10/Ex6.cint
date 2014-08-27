@@ -1,0 +1,14 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_Ex6_start))
+(VAR v_n v_x v_x_addr.0 v_z v_z_addr.0)
+(RULES
+    eval_Ex6_start(v_n, v_x, v_z) -> Com_1(eval_Ex6_entry_in(v_n, v_x, v_z))
+    eval_Ex6_entry_in(v_n, v_x, v_z) -> Com_1(eval_Ex6_bb3_in(v_n, v_z, v_x))
+    eval_Ex6_bb3_in(v_n, v_z_addr.0, v_x_addr.0) -> Com_1(eval_Ex6_bb_in(v_n, v_z_addr.0, v_x_addr.0)) :|: v_x_addr.0 < v_n
+    eval_Ex6_bb3_in(v_n, v_z_addr.0, v_x_addr.0) -> Com_1(eval_Ex6_return_in()) :|: v_x_addr.0 >= v_n
+    eval_Ex6_bb_in(v_n, v_z_addr.0, v_x_addr.0) -> Com_1(eval_Ex6_bb1_in(v_n, v_z_addr.0, v_x_addr.0)) :|: v_z_addr.0 > v_x_addr.0
+    eval_Ex6_bb_in(v_n, v_z_addr.0, v_x_addr.0) -> Com_1(eval_Ex6_bb2_in(v_n, v_z_addr.0, v_x_addr.0)) :|: v_z_addr.0 <= v_x_addr.0
+    eval_Ex6_bb1_in(v_n, v_z_addr.0, v_x_addr.0) -> Com_1(eval_Ex6_bb3_in(v_n, v_z_addr.0, v_x_addr.0 + 1))
+    eval_Ex6_bb2_in(v_n, v_z_addr.0, v_x_addr.0) -> Com_1(eval_Ex6_bb3_in(v_n, v_z_addr.0 + 1, v_x_addr.0))
+    eval_Ex6_return_in() -> Com_1(eval_Ex6_stop())
+)

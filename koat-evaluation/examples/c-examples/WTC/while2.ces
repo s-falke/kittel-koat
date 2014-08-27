@@ -1,0 +1,10 @@
+eq(pubs_start(A,B,C),0,[evalwhile2start(A,B,C)],[]).
+eq(evalwhile2start(A,B,C),1,[evalwhile2entryin(A,B,C)],[]).
+eq(evalwhile2entryin(A,B,C),1,[evalwhile2bb4in(B,B,C)],[]).
+eq(evalwhile2bb4in(A,B,C),1,[evalwhile2bb2in(A,B,B)],[A >= 1]).
+eq(evalwhile2bb4in(A,B,C),1,[evalwhile2returnin(A,B,C)],[0 >= A]).
+eq(evalwhile2bb2in(A,B,C),1,[evalwhile2bb1in(A,B,C)],[C >= 1]).
+eq(evalwhile2bb2in(A,B,C),1,[evalwhile2bb3in(A,B,C)],[0 >= C]).
+eq(evalwhile2bb1in(A,B,C),1,[evalwhile2bb2in(A,B,C - 1)],[]).
+eq(evalwhile2bb3in(A,B,C),1,[evalwhile2bb4in(A - 1,B,C)],[]).
+eq(evalwhile2returnin(A,B,C),1,[evalwhile2stop(A,B,C)],[]).

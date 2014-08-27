@@ -1,0 +1,11 @@
+(GOAL COMPLEXITY)
+(STARTTERM CONSTRUCTOR-BASED)
+(VAR x y z z')
+(RULES
+  eval(x, y, z) -> Com_1(eval(z', y, z)) :|: x - z - 1 >= 0 && z' - (x - 1) >= 0 && x - 1 - z' >= 0
+  eval(x, y, z) -> Com_1(eval(z', y, z)) :|: y - z - 1 >= 0 && x - z - 1 >= 0 && z' - (x - 1) >= 0 && x - 1 - z' >= 0
+  eval(x, y, z) -> Com_1(eval(x, z', z)) :|: x - z - 1 >= 0 && z - x >= 0 && y - z - 1 >= 0 && z' - (y - 1) >= 0 && y - 1 - z' >= 0
+  eval(x, y, z) -> Com_1(eval(x, z', z)) :|: y - z - 1 >= 0 && z - x >= 0 && z' - (y - 1) >= 0 && y - 1 - z' >= 0
+  eval(x, y, z) -> Com_1(eval(x, y, z)) :|: x - z - 1 >= 0 && z - x >= 0 && z - y >= 0
+  eval(x, y, z) -> Com_1(eval(x, y, z)) :|: y - z - 1 >= 0 && z - x >= 0 && z - y >= 0
+)

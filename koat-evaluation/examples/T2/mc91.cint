@@ -1,0 +1,8 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR n e $nondet)
+(RULES
+  f0(n, e) -> Com_1(f1($nondet, 1)) :|: TRUE
+  f1(n, e) -> Com_1(f1(n - 10, e - 1)) :|: e > 0 && n > 100
+  f1(n, e) -> Com_1(f1(n + 11, e + 1)) :|: e > 0 && n < 101
+)

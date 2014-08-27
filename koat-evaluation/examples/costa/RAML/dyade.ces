@@ -1,0 +1,6 @@
+eq(pubs_start(A,B,C),0,[start(A,B,C)],[]).
+eq(dyade0(A,B,C),1,[mult(A,B,C)],[]).
+eq(dyade1(A,B,C),1,[dyade(B - 1,B,C)],[]).
+eq(dyade(A,B,C),1,[dyade0(D,A,C),dyade1(D,A,C)],[A >= 1]).
+eq(mult(A,B,C),1,[mult(A,B,C - 1)],[C >= 1]).
+eq(start(A,B,C),1,[dyade(A,B,C)],[]).

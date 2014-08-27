@@ -1,0 +1,15 @@
+eq(pubs_start(A,B),0,[concat(A,B)],[]).
+eq(concat(A,B),1,[m4(A,B)],[A >= 0, B >= 0]).
+eq(m0(A,B),1,[m1(A,B)],[A >= 0, B >= A]).
+eq(m2(A,B),1,[m3(A,B)],[B >= A]).
+eq(m8(A,B),1,[m0(C,B)],[A >= 0, B >= A + 1, A + 1 >= C, C >= 1 + A]).
+eq(m1(A,B),1,[m8(A,B)],[]).
+eq(m1(A,B),1,[m6(A,B)],[]).
+eq(m9(A,B),1,[m2(C,B)],[B >= C, A + 1 >= C, C >= 1 + A]).
+eq(m3(A,B),1,[m9(A,B)],[]).
+eq(m3(A,B),1,[m7(A,B)],[]).
+eq(n00(A,B),1,[m5(A,B)],[]).
+eq(n01(A,B),1,[m0(0,B)],[]).
+eq(n02(A,B),1,[m2(B,A)],[]).
+eq(n0(A,B),1,[n00(D,C),n01(D,C),n02(D,C)],[C >= 0, D >= C, B >= C, C >= B, A + C >= D, D >= A + C]).
+eq(m4(A,B),1,[n0(A,B)],[A >= 0, B >= 0]).

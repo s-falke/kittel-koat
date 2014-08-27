@@ -1,0 +1,10 @@
+eq(pubs_start(A,B,C,D,E,F),0,[f4(A,B,C,D,E,F)],[]).
+eq(f2(A,B,C,D,E,F),1,[f2(1 + A,G,G,D,E,F)],[G >= 1, A >= 1]).
+eq(f2(A,B,C,D,E,F),1,[f2(1 + A,G,G,D,E,F)],[0 >= G + 1, A >= 1]).
+eq(f2(A,B,C,D,E,F),1,[f0(A,0,0,G,E,F)],[]).
+eq(f3(A,B,C,D,E,F),1,[f2(1 + A,G,G,D,E,F)],[G >= 1, A >= 1]).
+eq(f3(A,B,C,D,E,F),1,[f2(1 + A,G,G,D,E,F)],[0 >= G + 1, A >= 1]).
+eq(f3(A,B,C,D,E,F),1,[f0(A,0,0,G,E,F)],[]).
+eq(f4(A,B,C,D,E,F),1,[f2(1 + H,G,G,D,H,H)],[G >= 1, H >= 1]).
+eq(f4(A,B,C,D,E,F),1,[f2(1 + H,G,G,D,H,H)],[0 >= G + 1, H >= 1]).
+eq(f4(A,B,C,D,E,F),1,[f0(G,0,0,H,G,G)],[]).

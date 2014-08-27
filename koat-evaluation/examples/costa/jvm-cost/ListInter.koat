@@ -1,0 +1,45 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS listInter))
+(VAR A B C D E F G)
+(RULES
+  listInter(A,B,C,D,E) -> Com_1(m9(A,B,C,D,E)) :|: A >= 0 && B >= 0
+  m0(A,B,C,D,E) -> Com_1(m1(A,B,C,D,E)) :|: A >= 0
+  m2(A,B,C,D,E) -> Com_1(m3(A,B,C,D,E)) :|: C >= 0 && A >= 1 && B >= 0
+  m4(A,B,C,D,E) -> Com_1(m5(A,B,C,D,E)) :|: B >= 1
+  m5(A,B,C,D,E) -> Com_1(m8(A,B,C,D,E)) :|: B >= 1
+  n1(A,B,C,D,E) -> Com_1(n2(A,B,C,D,E)) :|: C >= 0 && A >= 1 && D >= 0 && B >= 0 && 1 >= D
+  n2(A,B,C,D,E) -> Com_1(m2(A,B,F,D,E)) :|: F >= 0 && A >= 1 && B >= 0 && C >= F + 1
+  m3(A,B,C,D,E) -> Com_1(n4(A,B,C,D,E))
+  m3(A,B,C,D,E) -> Com_1(n3(A,C,C,D,E))
+  n50(A,B,C,D,E) -> Com_1(n0(A,B,C,D,E))
+  n51(A,B,C,D,E) -> Com_1(m4(A,B,C,D,E))
+  n52(A,B,C,D,E) -> Com_1(m2(C,A,D,D,E))
+  n5(A,B,C,D,E) -> Com_3(n50(A,F,G,B,E),n51(A,F,G,B,E),n52(A,F,G,B,E)) :|: G >= 1 && F >= 1 && A >= 0 && B >= 0
+  m9(A,B,C,D,E) -> Com_1(n5(A,B,C,D,E)) :|: A >= 0 && B >= 0
+  n60(A,B,C,D,E) -> Com_1(n2(A,B,C,D,E))
+  n61(A,B,C,D,E) -> Com_1(m4(A,D,C,D,E))
+  n6(A,B,C,D,E) -> Com_2(n60(F,B,C,G,E),n61(F,B,C,G,E)) :|: G >= 1 && F >= 1 && C >= 0 && A >= 1 && B >= 0 && D = 1
+  n40(A,B,C,D,E) -> Com_1(n8(A,B,C,D,E))
+  n41(A,B,C,D,E) -> Com_1(n7(E,B,C,D,E))
+  n4(A,B,C,D,E) -> Com_2(n40(A,B,C,F,G),n41(A,B,C,F,G)) :|: C >= 0 && A >= 1 && F >= 0 && B >= 0 && 1 >= F
+  n8(A,B,C,D,E) -> Com_1(n1(A,B,C,D,E))
+  n8(A,B,C,D,E) -> Com_1(n6(A,B,C,D,E))
+  n7(A,B,C,D,E) -> Com_1(n9(A,B,C,D,E)) :|: B >= 0
+  o1(A,B,C,D,E) -> Com_1(o0(A,B,C,D,E)) :|: A = 0
+  o2(A,B,C,D,E) -> Com_1(o0(A,B,C,D,E)) :|: B >= A && A >= B
+  n9(A,B,C,D,E) -> Com_1(o3(A,B,C,D,E)) :|: B >= 0
+  o4(A,B,C,D,E) -> Com_1(m6(A,0,C,D,E)) :|: B = 0
+  o5(A,B,C,D,E) -> Com_1(m6(A,1,C,D,E)) :|: B >= 0
+  o30(A,B,C,D,E) -> Com_1(o6(A,B,C,D,E))
+  o31(A,B,C,D,E) -> Com_1(m0(C,A,C,D,E))
+  o3(A,B,C,D,E) -> Com_2(o30(A,F,B,D,E),o31(A,F,B,D,E)) :|: F >= 0 && B >= F
+  o6(A,B,C,D,E) -> Com_1(o4(A,B,C,D,E))
+  o6(A,B,C,D,E) -> Com_1(o5(A,B,C,D,E))
+  m1(A,B,C,D,E) -> Com_1(o1(A,B,C,D,E))
+  m1(A,B,C,D,E) -> Com_1(o7(A,B,C,D,E))
+  o8(A,B,C,D,E) -> Com_1(m0(F,B,C,D,E)) :|: A >= 0 && A >= 1 && F >= 0 && A >= F + 1
+  o7(A,B,C,D,E) -> Com_1(o9(F,B,A,D,E)) :|: A >= 0
+  o9(A,B,C,D,E) -> Com_1(o2(A,B,C,D,E))
+  o9(A,B,C,D,E) -> Com_1(o8(C,B,A,D,E))
+  m8(A,B,C,D,E) -> Com_2(m7(A,B,C,D,E),p0(A,B,C,D,E)) :|: B >= 1
+)

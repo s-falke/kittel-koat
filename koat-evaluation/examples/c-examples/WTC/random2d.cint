@@ -1,0 +1,37 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_random2d_start))
+(VAR nondef_0 v_1 v_2 v_i.0 v_N)
+(RULES
+    eval_random2d_start(v_N) -> Com_1(eval_random2d_entry_in(v_N))
+    eval_random2d_entry_in(v_N) -> Com_1(eval_random2d_bb10_in(v_N, 0))
+    eval_random2d_bb10_in(v_N, v_i.0) -> Com_1(eval_random2d_bb_in(v_N, v_i.0)) :|: v_i.0 < v_N
+    eval_random2d_bb10_in(v_N, v_i.0) -> Com_1(eval_random2d_return_in()) :|: v_i.0 >= v_N
+    eval_random2d_bb_in(v_N, v_i.0) -> Com_1(eval_random2d_bb2_in(v_N, v_i.0, v_i.0 + 1, nondef_0)) :|: nondef_0 >= 0 && nondef_0 <= 3
+    eval_random2d_bb_in(v_N, v_i.0) -> Com_1(eval_random2d_bb10_in(v_N, v_i.0 + 1)) :|: nondef_0 < 0
+    eval_random2d_bb_in(v_N, v_i.0) -> Com_1(eval_random2d_bb10_in(v_N, v_i.0 + 1)) :|: nondef_0 > 3
+    eval_random2d_bb2_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_NodeBlock9_in(v_N, v_i.0, v_1, v_2))
+    eval_random2d_NodeBlock9_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_NodeBlock_in(v_N, v_i.0, v_1, v_2)) :|: v_2 < 2
+    eval_random2d_NodeBlock9_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_NodeBlock7_in(v_N, v_i.0, v_1, v_2)) :|: v_2 >= 2
+    eval_random2d_NodeBlock_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_LeafBlock_in(v_N, v_i.0, v_1, v_2)) :|: v_2 < 1
+    eval_random2d_NodeBlock_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_LeafBlock1_in(v_N, v_i.0, v_1, v_2)) :|: v_2 >= 1
+    eval_random2d_LeafBlock_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_bb3_in(v_N, v_i.0, v_1, v_2)) :|: v_2 = 0
+    eval_random2d_LeafBlock_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_NewDefault_in(v_N, v_i.0, v_1, v_2)) :|: v_2 < 0
+    eval_random2d_LeafBlock_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_NewDefault_in(v_N, v_i.0, v_1, v_2)) :|: v_2 > 0
+    eval_random2d_bb3_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_bb10_in(v_N, v_1))
+    eval_random2d_LeafBlock1_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_bb5_in(v_N, v_i.0, v_1, v_2)) :|: v_2 = 1
+    eval_random2d_LeafBlock1_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_NewDefault_in(v_N, v_i.0, v_1, v_2)) :|: v_2 < 1
+    eval_random2d_LeafBlock1_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_NewDefault_in(v_N, v_i.0, v_1, v_2)) :|: v_2 > 1
+    eval_random2d_bb5_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_bb10_in(v_N, v_1))
+    eval_random2d_NodeBlock7_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_LeafBlock3_in(v_N, v_i.0, v_1, v_2)) :|: v_2 < 3
+    eval_random2d_NodeBlock7_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_LeafBlock5_in(v_N, v_i.0, v_1, v_2)) :|: v_2 >= 3
+    eval_random2d_LeafBlock3_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_bb7_in(v_N, v_i.0, v_1, v_2)) :|: v_2 = 2
+    eval_random2d_LeafBlock3_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_NewDefault_in(v_N, v_i.0, v_1, v_2)) :|: v_2 < 2
+    eval_random2d_LeafBlock3_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_NewDefault_in(v_N, v_i.0, v_1, v_2)) :|: v_2 > 2
+    eval_random2d_bb7_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_bb10_in(v_N, v_1))
+    eval_random2d_LeafBlock5_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_bb9_in(v_N, v_i.0, v_1, v_2)) :|: v_2 = 3
+    eval_random2d_LeafBlock5_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_NewDefault_in(v_N, v_i.0, v_1, v_2)) :|: v_2 < 3
+    eval_random2d_LeafBlock5_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_NewDefault_in(v_N, v_i.0, v_1, v_2)) :|: v_2 > 3
+    eval_random2d_bb9_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_bb10_in(v_N, v_1))
+    eval_random2d_NewDefault_in(v_N, v_i.0, v_1, v_2) -> Com_1(eval_random2d_bb10_in(v_N, v_1))
+    eval_random2d_return_in() -> Com_1(eval_random2d_stop())
+)

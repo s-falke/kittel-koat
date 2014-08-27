@@ -1,0 +1,16 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR b b__o i i__o n n__o t t__o x x__o)
+(RULES
+  start(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o) -> Com_1(stop(b, i, n, 1, x, b__o, i__o, n__o, t__o, x__o)) :|: b>=1 && n+1<=x && x=x__o && t=t__o && n=n__o && i=i__o && b=b__o 
+  start(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o) -> Com_1(lbl_7_1(b, i, n, 1, 1  + x, b__o, i__o, n__o, t__o, x__o)) :|: b>=1 && n>=x && x=x__o && t=t__o && n=n__o && i=i__o && b=b__o 
+  start(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o) -> Com_1(stop(b, i, n, - 1, x, b__o, i__o, n__o, t__o, x__o)) :|: n+1<=x && b<=0 && x=x__o && t=t__o && n=n__o && i=i__o && b=b__o 
+  start(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o) -> Com_1(lbl_8_1(b, i, n, - 1, 1  + x, b__o, i__o, n__o, t__o, x__o)) :|: n>=x && b<=0 && x=x__o && t=t__o && n=n__o && i=i__o && b=b__o 
+  lbl_7_1(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o) -> Com_1(stop(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o)) :|: n+1<=x && x>=x__o+1 && n+1>=x && b>=1 && t=1 && b=b__o && i=i__o && n=n__o 
+  lbl_7_1(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o) -> Com_1(lbl_7_1(b, i, n, t, t  + x, b__o, i__o, n__o, t__o, x__o)) :|: b>=1 && n>=x && x>=x__o+1 && n+1>=x && b>=1 && t=1 && b=b__o && i=i__o && n=n__o 
+  lbl_7_1(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o) -> Com_1(lbl_8_1(b, i, n, t, x - t, b__o, i__o, n__o, t__o, x__o)) :|: n>=x && b<=0 && x>=x__o+1 && n+1>=x && b>=1 && t=1 && b=b__o && i=i__o && n=n__o 
+  lbl_8_1(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o) -> Com_1(stop(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o)) :|: n+1<=x && b<=0 && x>=x__o+1 && n+1>=x && t+1=0 && b=b__o && i=i__o && n=n__o 
+  lbl_8_1(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o) -> Com_1(lbl_7_1(b, i, n, t, t  + x, b__o, i__o, n__o, t__o, x__o)) :|: b>=1 && n>=x && b<=0 && x>=x__o+1 && n+1>=x && t+1=0 && b=b__o && i=i__o && n=n__o 
+  lbl_8_1(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o) -> Com_1(lbl_8_1(b, i, n, t, x - t, b__o, i__o, n__o, t__o, x__o)) :|: n>=x && b<=0 && b<=0 && x>=x__o+1 && n+1>=x && t+1=0 && b=b__o && i=i__o && n=n__o 
+  ____start(b, i, n, t, x, b__o, i__o, n__o, t__o, x__o) -> Com_1(start(b__o, i__o, n__o, t__o, x__o, b__o, i__o, n__o, t__o, x__o)) :|: TRUE 
+)

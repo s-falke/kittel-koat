@@ -1,0 +1,14 @@
+eq(pubs_start(A,B,C,D),0,[eval0(A,B,C,D)],[]).
+eq(eval0(A,B,C,D),1,[eval1(B,B,1,D)],[]).
+eq(eval1(A,B,C,D),1,[end(A,B,C,D)],[A >= 101]).
+eq(eval1(A,B,C,D),1,[eval3(A,B,C,D)],[100 >= A]).
+eq(eval3(A,B,C,D),1,[eval3(A + 11,B,C + 1,D)],[100 >= A]).
+eq(eval3(A,B,C,D),1,[eval5(A,B,C,D)],[A >= 101]).
+eq(eval5(A,B,C,D),1,[eval7(A - 10,B,C - 1,D)],[C >= 2]).
+eq(eval7(A,B,C,D),1,[eval5(A,B,C,A - 10)],[A >= 101, C = 1]).
+eq(eval7(A,B,C,D),1,[eval9(A,B,C,D)],[100 >= A]).
+eq(eval7(A,B,C,D),1,[eval9(A,B,C,D)],[2 >= C]).
+eq(eval7(A,B,C,D),1,[eval9(A,B,C,D)],[C >= 0]).
+eq(eval9(A,B,C,D),1,[eval11(A - 10,B,C - 1,D)],[A >= 101]).
+eq(eval9(A,B,C,D),1,[eval11(A,B,C,D)],[100 >= A]).
+eq(eval11(A,B,C,D),1,[eval5(A + 11,B,C + 1,D)],[]).

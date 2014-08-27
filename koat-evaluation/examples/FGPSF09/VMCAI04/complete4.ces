@@ -1,0 +1,4 @@
+eq(pubs_start(A,B),0,[start(A,B)],[]).
+eq(eval(A,B),1,[eval(A - 1,C)],[A >= 0]).
+eq(eval(A,B),1,[eval(A,B - 1)],[B >= 0]).
+eq(start(A,B),1,[eval(A,B)],[]).

@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f23))
+(VAR x_13 len_87 len_165 lt_28 lt_27 lt_26 t_16 y_18 w_15 x_17 tmp_9 x_8 __cil_tmp5_10 Result_4 __patmp1 __patmp2 k_145 lt_22 lt_21 k_191 lt_25 lt_24 lt_23 k_110 y_12 x_19 y_20 x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15 x16 x17 x18 x19 x20 x21 x22 x23 x24 x25 x26 x27 x28 x29 x30 x31 x32 x33 x34 x35 x01)
+(RULES
+  f8(x_13, len_87, len_165, lt_28, lt_27, lt_26, t_16, y_18, w_15, x_17, tmp_9, x_8, __cil_tmp5_10, Result_4, __patmp1, __patmp2, k_145, lt_22, lt_21, k_191, lt_25, lt_24, lt_23, k_110, y_12, x_19, y_20) -> Com_1(f8(x_13, len_87, len_165, lt_28, lt_27, lt_26, x_17, x_17, w_15, x_17, tmp_9, x_8, __cil_tmp5_10, Result_4, __patmp1, __patmp2, k_145, lt_22, lt_21, k_191, lt_25, lt_24, lt_23, k_110, y_12, x_19, y_20)) :|: w_15 != x_17
+  f2(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20, x21, x22, x23, x24, x25, x26) -> Com_1(f2(x27, x1, 1 + x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, 1 + x2, -1 + x16, -1 + x16, x28, x29, -1 + x16, x20, x21, x22, x23, x24, x25, x26)) :|: x24 != x0 && x16 > 0 && x2 > -1
+  f23(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20, x21, x22, x23, x24, x25, x26) -> Com_1(f2(x27, 2, 1, x28, x29, x30, x6, x7, x8, x9, x31, x31, x31, x31, 1, 2, 2, x17, x18, x19, x20, x32, x33, 2, x24, x34, 0)) :|: x24 != x35
+  f2(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20, x21, x22, x23, x01, x25, x26) -> Com_1(f8(x0, x1, x2, x3, x4, x27, x28, x28, x8, x28, x10, x11, x12, x29, x14, x15, x16, x17, x18, x19, x30, x21, x22, x23, x0, x25, x26)) :|: x8 != x28 && x16 > 0 && x2 > -1 && x0 = x01
+)

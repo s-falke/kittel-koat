@@ -1,0 +1,23 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS lcs))
+(VAR A B C D E F G)
+(RULES
+  lcs(A,B,C,D,E) -> Com_1(lcstable(A,B,C,D,E)) :|: A >= 0 && B >= 0
+  lcstable(A,B,C,D,E) -> Com_1(firstline(B,B,C,D,E)) :|: A = 0
+  lcstable0(A,B,C,D,E) -> Com_1(newline(A,B,B,D,E))
+  lcstable1(A,B,C,D,E) -> Com_1(lcstable(C - 1,B,C,D,E))
+  lcstable(A,B,C,D,E) -> Com_2(lcstable0(F,B,A,D,E),lcstable1(F,B,A,D,E)) :|: A >= 1
+  out1lcstable(A,B,C,D,E) -> Com_1(out1lcstable(A - 1,B,C,D,E)) :|: A >= 1
+  out2lcstable(A,B,C,D,E) -> Com_1(out2lcstable(A - 1,B,C,D,E)) :|: A >= 1
+  firstline(A,B,C,D,E) -> Com_1(firstline(A - 1,B,C,D,E)) :|: A >= 1
+  newline0(A,B,C,D,E) -> Com_1(right(A - 1,B,C,D,E))
+  newline1(A,B,C,D,E) -> Com_1(right(B - 1,B,C,D,E))
+  newline2(A,B,C,D,E) -> Com_1(max(C,D,C,D,E))
+  newline3(A,B,C,D,E) -> Com_1(newline(E,B - 1,A - 1,D,E))
+  newline(A,B,C,D,E) -> Com_4(newline0(C,B,F,G,A),newline1(C,B,F,G,A),newline2(C,B,F,G,A),newline3(C,B,F,G,A)) :|: C >= 1 && B >= 1
+  newline4(A,B,C,D,E) -> Com_1(right(A - 1,B,C,D,E))
+  newline5(A,B,C,D,E) -> Com_1(right(B - 1,B,C,D,E))
+  newline6(A,B,C,D,E) -> Com_1(newline(C,B - 1,A - 1,D,E))
+  newline(A,B,C,D,E) -> Com_3(newline4(C,B,A,D,E),newline5(C,B,A,D,E),newline6(C,B,A,D,E)) :|: C >= 1 && B >= 1
+  outnewline(A,B,C,D,E) -> Com_1(outnewline(A,B - 1,C - 1,D,E)) :|: C >= 1 && B >= 1
+)

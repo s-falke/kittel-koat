@@ -1,0 +1,15 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR da da__o db db__o r r__o temp temp__o)
+(RULES
+  start(da, db, r, temp, da__o, db__o, r__o, temp__o) -> Com_1(stop(da, db, r, temp, da__o, db__o, r__o, temp__o)) :|: r+1<=0 && temp=temp__o && r=r__o && db=db__o && da=da__o 
+  start(da, db, r, temp, da__o, db__o, r__o, temp__o) -> Com_1(lbl_8_2(2*r - 1, 2*r, r, temp, da__o, db__o, r__o, temp__o)) :|: r>=0 && temp=temp__o && r=r__o && db=db__o && da=da__o 
+  start(da, db, r, temp, da__o, db__o, r__o, temp__o) -> Com_1(lbl_12_1(2*r - 1, 2*r - 1, r, 2*r, da__o, db__o, r__o, temp__o)) :|: r>=0 && temp=temp__o && r=r__o && db=db__o && da=da__o 
+  lbl_8_2(da, db, r, temp, da__o, db__o, r__o, temp__o) -> Com_1(stop(da, db, r, temp, da__o, db__o, r__o, temp__o)) :|: da+1<=r && da+1<=db && db<=2*r && da+1>=r && r=r__o 
+  lbl_8_2(da, db, r, temp, da__o, db__o, r__o, temp__o) -> Com_1(lbl_8_2(da - 1, db, r, temp, da__o, db__o, r__o, temp__o)) :|: da>=r && da+1<=db && db<=2*r && da+1>=r && r=r__o 
+  lbl_8_2(da, db, r, temp, da__o, db__o, r__o, temp__o) -> Com_1(lbl_12_1(db - 1, db - 1, r, da, da__o, db__o, r__o, temp__o)) :|: da>=r && da+1<=db && db<=2*r && da+1>=r && r=r__o 
+  lbl_12_1(da, db, r, temp, da__o, db__o, r__o, temp__o) -> Com_1(stop(da, db, r, temp, da__o, db__o, r__o, temp__o)) :|: da+1<=r && da+1<=2*r && r<=temp && da+1>=temp && da=db && r=r__o 
+  lbl_12_1(da, db, r, temp, da__o, db__o, r__o, temp__o) -> Com_1(lbl_8_2(da - 1, db, r, temp, da__o, db__o, r__o, temp__o)) :|: da>=r && da+1<=2*r && r<=temp && da+1>=temp && da=db && r=r__o 
+  lbl_12_1(da, db, r, temp, da__o, db__o, r__o, temp__o) -> Com_1(lbl_12_1(db - 1, db - 1, r, da, da__o, db__o, r__o, temp__o)) :|: da>=r && da+1<=2*r && r<=temp && da+1>=temp && da=db && r=r__o 
+  ____start(da, db, r, temp, da__o, db__o, r__o, temp__o) -> Com_1(start(da__o, db__o, r__o, temp__o, da__o, db__o, r__o, temp__o)) :|: TRUE 
+)

@@ -1,0 +1,3 @@
+eq(pubs_start(A),0,[start(A)],[]).
+eq(eval(A),1,[eval(B)],[A >= 0, B + 2*A >= 10, 10 >= 2*A + B]).
+eq(start(A),1,[eval(A)],[]).

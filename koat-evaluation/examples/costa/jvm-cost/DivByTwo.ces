@@ -1,0 +1,8 @@
+eq(pubs_start(A),0,[divByTwo(A)],[]).
+eq(divByTwo(A),1,[m2(A)],[A >= 1]).
+eq(m0(A),1,[m1(A)],[]).
+eq(m5(A),1,[m3(A),m0(A)],[A >= 1]).
+eq(m2(A),1,[m5(A)],[A >= 1]).
+eq(m6(A),1,[m0(B)],[A >= 2*B, A >= 1]).
+eq(m1(A),1,[m6(A)],[]).
+eq(m1(A),1,[m4(A)],[]).

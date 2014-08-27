@@ -1,0 +1,4 @@
+eq(pubs_start(A,B,C),0,[f0(A,B,C)],[]).
+eq(f0(A,B,C),1,[f5(0,0,C)],[]).
+eq(f5(A,B,C),1,[f5(A + 1,B + 2,D + E)],[]).
+eq(f5(A,B,C),1,[f16(A,B,C)],[]).

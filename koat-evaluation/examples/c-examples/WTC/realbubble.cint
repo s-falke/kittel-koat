@@ -1,0 +1,20 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_realbubble_start))
+(VAR nondef_0 nondef_1 v_i.0 v_j.0 v_length v_test.0 v_test.1)
+(RULES
+    eval_realbubble_start(v_length) -> Com_1(eval_realbubble_entry_in(v_length))
+    eval_realbubble_entry_in(v_length) -> Com_1(eval_realbubble_bb7_in(v_length - 1))
+    eval_realbubble_bb7_in(v_i.0) -> Com_1(eval_realbubble_bb4_in(v_i.0, 0, 0)) :|: v_i.0 > 0
+    eval_realbubble_bb7_in(v_i.0) -> Com_1(eval_realbubble_return_in()) :|: v_i.0 <= 0
+    eval_realbubble_bb4_in(v_i.0, v_j.0, v_test.1) -> Com_1(eval_realbubble_bb1_in(v_i.0, v_j.0, v_test.1)) :|: v_j.0 < v_i.0
+    eval_realbubble_bb4_in(v_i.0, v_j.0, v_test.1) -> Com_1(eval_realbubble_bb5_in(v_i.0, v_j.0, v_test.1)) :|: v_j.0 >= v_i.0
+    eval_realbubble_bb1_in(v_i.0, v_j.0, v_test.1) -> Com_1(eval_realbubble_bb2_in(v_i.0, v_j.0, v_test.1)) :|: nondef_0 > nondef_1
+    eval_realbubble_bb1_in(v_i.0, v_j.0, v_test.1) -> Com_1(eval_realbubble_bb3_in(v_i.0, v_j.0, v_test.1, v_test.1)) :|: nondef_0 <= nondef_1
+    eval_realbubble_bb2_in(v_i.0, v_j.0, v_test.1) -> Com_1(eval_realbubble_bb3_in(v_i.0, v_j.0, v_test.1, 1))
+    eval_realbubble_bb3_in(v_i.0, v_j.0, v_test.1, v_test.0) -> Com_1(eval_realbubble_bb4_in(v_i.0, v_j.0 + 1, v_test.0))
+    eval_realbubble_bb5_in(v_i.0, v_j.0, v_test.1) -> Com_1(eval_realbubble_return_in()) :|: v_test.1 = 0
+    eval_realbubble_bb5_in(v_i.0, v_j.0, v_test.1) -> Com_1(eval_realbubble_bb6_in(v_i.0, v_j.0, v_test.1)) :|: v_test.1 < 0
+    eval_realbubble_bb5_in(v_i.0, v_j.0, v_test.1) -> Com_1(eval_realbubble_bb6_in(v_i.0, v_j.0, v_test.1)) :|: v_test.1 > 0
+    eval_realbubble_bb6_in(v_i.0, v_j.0, v_test.1) -> Com_1(eval_realbubble_bb7_in(v_i.0 - 1))
+    eval_realbubble_return_in() -> Com_1(eval_realbubble_stop())
+)

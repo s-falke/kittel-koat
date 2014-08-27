@@ -1,0 +1,46 @@
+table {
+    border-collapse:collapse;
+}
+#benchmark_table th,
+#benchmark_table td,
+#overview_table th,
+#overview_table td
+{
+    border: 1px solid lightgray;
+    text-align: left;
+}
+
+.noBound {
+    color: gray;
+}
+
+.lower_line {
+    font-size: 0.7em;
+}
+
+.incompatible {
+    color: gray;
+    font-size: 0.7em;
+}
+
+#benchmark_table, #overview_table {
+    margin-top: 1em;
+}
+
+
+.table-prover-head {
+    text-align: center;
+    background-color: lightgray;
+}
+
+#comparison_table table {
+    margin: 5px;
+}
+
+#comparison_table td, #comparison_table th {
+    border: 1px solid gray;
+}
+
+.zero {
+    color: lightgray;
+}

@@ -1,0 +1,11 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f12))
+(VAR __cil_tmp2_6 Result_4 maxRetries_9 retryCount_10 selected_11 __cil_tmp6_12 c0 x0 x1 x2 x3 x4 x5 x6 x7)
+(RULES
+  f12(__cil_tmp2_6, Result_4, maxRetries_9, retryCount_10, selected_11, __cil_tmp6_12) -> Com_1(f5(__cil_tmp2_6, Result_4, 400, 0, 0, __cil_tmp6_12)) :|: TRUE
+  f5(__cil_tmp2_6, Result_4, maxRetries_9, retryCount_10, c0, __cil_tmp6_12) -> Com_1(f11(__cil_tmp2_6, 0, maxRetries_9, retryCount_10, 0, 0)) :|: 0 > -1 + maxRetries_9 - retryCount_10 && 0 = c0
+  f5(__cil_tmp2_6, Result_4, maxRetries_9, retryCount_10, selected_11, __cil_tmp6_12) -> Com_1(f10(__cil_tmp2_6, selected_11, maxRetries_9, retryCount_10, selected_11, selected_11)) :|: selected_11 != 0
+  f7(x0, x1, x2, x3, x4, x5) -> Com_1(f5(x6, x7, x2, 1 + x3, x6, x5)) :|: TRUE
+  f8(x0, x1, x2, x3, x4, x5) -> Com_1(f5(x6, x7, x2, 1 + x3, x6, x5)) :|: TRUE
+  f5(x0, x1, x2, x3, c0, x5) -> Com_1(f5(x6, x7, x2, 1 + x3, x6, x5)) :|: 0 <= -1 + x2 - x3 && 0 = c0
+)

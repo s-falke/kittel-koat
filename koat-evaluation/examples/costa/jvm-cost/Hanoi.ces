@@ -1,0 +1,13 @@
+eq(pubs_start(A,B),0,[start(A,B)],[]).
+eq(hanoi(A,B),1,[m0(A,B)],[A >= 0]).
+eq(m2(A,B),1,[m1(A,B)],[]).
+eq(m3(A,B),1,[m2(A,B)],[A = 0]).
+eq(m0(A,B),1,[m4(A,B)],[A >= 0]).
+eq(m50(A,B),1,[m2(A,B)],[]).
+eq(m51(A,B),1,[hanoi(A,B)],[]).
+eq(m52(A,B),1,[hanoi(B,B)],[]).
+eq(m5(A,B),1,[m50(D,C),m51(D,C),m52(D,C)],[C >= 0, A >= C + 1, 1 + C >= A, D >= C, C >= D]).
+eq(m4(A,B),1,[m6(A,B)],[A >= 0]).
+eq(m6(A,B),1,[m3(A,B)],[]).
+eq(m6(A,B),1,[m5(A,B)],[]).
+eq(start(A,B),1,[hanoi(A,B)],[]).

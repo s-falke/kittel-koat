@@ -1,0 +1,17 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_rsd_start))
+(VAR nondef_0 v_da.0 v_db.0 v_r)
+(RULES
+    eval_rsd_start(v_r) -> Com_1(eval_rsd_entry_in(v_r))
+    eval_rsd_entry_in(v_r) -> Com_1(eval_rsd_bb_in(v_r)) :|: v_r >= 0
+    eval_rsd_entry_in(v_r) -> Com_1(eval_rsd_return_in()) :|: v_r < 0
+    eval_rsd_bb_in(v_r) -> Com_1(eval_rsd_bb4_in(v_r, 2*v_r, 2*v_r))
+    eval_rsd_bb4_in(v_r, v_db.0, v_da.0) -> Com_1(eval_rsd_bb1_in(v_r, v_db.0, v_da.0)) :|: v_da.0 >= v_r
+    eval_rsd_bb4_in(v_r, v_db.0, v_da.0) -> Com_1(eval_rsd_return_in()) :|: v_da.0 < v_r
+    eval_rsd_bb1_in(v_r, v_db.0, v_da.0) -> Com_1(eval_rsd_bb2_in(v_r, v_db.0, v_da.0)) :|: nondef_0 < 0
+    eval_rsd_bb1_in(v_r, v_db.0, v_da.0) -> Com_1(eval_rsd_bb2_in(v_r, v_db.0, v_da.0)) :|: nondef_0 > 0
+    eval_rsd_bb1_in(v_r, v_db.0, v_da.0) -> Com_1(eval_rsd_bb3_in(v_r, v_db.0, v_da.0)) :|: nondef_0 = 0
+    eval_rsd_bb2_in(v_r, v_db.0, v_da.0) -> Com_1(eval_rsd_bb4_in(v_r, v_db.0, v_da.0 - 1))
+    eval_rsd_bb3_in(v_r, v_db.0, v_da.0) -> Com_1(eval_rsd_bb4_in(v_r, v_db.0 - 1, v_db.0 - 1))
+    eval_rsd_return_in() -> Com_1(eval_rsd_stop())
+)

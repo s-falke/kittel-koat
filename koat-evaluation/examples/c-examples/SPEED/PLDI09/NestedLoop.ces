@@ -1,0 +1,22 @@
+eq(pubs_start(A,B,C,D,E,F,G,H),0,[evalNestedLoopstart(A,B,C,D,E,F,G,H)],[]).
+eq(evalNestedLoopstart(A,B,C,D,E,F,G,H),1,[evalNestedLoopentryin(A,B,C,D,E,F,G,H)],[]).
+eq(evalNestedLoopentryin(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb9in(A,B,C,0,E,F,G,H)],[A >= 0, B >= 0, C >= 0]).
+eq(evalNestedLoopbb9in(A,B,C,D,E,F,G,H),1,[evalNestedLoopreturnin(A,B,C,D,E,F,G,H)],[D >= A]).
+eq(evalNestedLoopbb9in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb10in(A,B,C,D,E,F,G,H)],[A >= D + 1]).
+eq(evalNestedLoopbb10in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb6in(A,B,C,D,0,D,G,H)],[0 >= I + 1]).
+eq(evalNestedLoopbb10in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb6in(A,B,C,D,0,D,G,H)],[I >= 1]).
+eq(evalNestedLoopbb10in(A,B,C,D,E,F,G,H),1,[evalNestedLoopreturnin(A,B,C,D,E,F,G,H)],[]).
+eq(evalNestedLoopbb6in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb8in(A,B,C,D,E,F,G,H)],[E >= B]).
+eq(evalNestedLoopbb6in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb7in(A,B,C,D,E,F,G,H)],[B >= E + 1]).
+eq(evalNestedLoopbb7in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb1in(A,B,C,D,E,F,G,H)],[0 >= I + 1]).
+eq(evalNestedLoopbb7in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb1in(A,B,C,D,E,F,G,H)],[I >= 1]).
+eq(evalNestedLoopbb7in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb8in(A,B,C,D,E,F,G,H)],[]).
+eq(evalNestedLoopbb1in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb3in(A,B,C,D,E,F,E + 1,F)],[]).
+eq(evalNestedLoopbb3in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb6in(A,B,C,D,G,H,G,H)],[H >= C]).
+eq(evalNestedLoopbb3in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb4in(A,B,C,D,E,F,G,H)],[C >= H + 1]).
+eq(evalNestedLoopbb4in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb2in(A,B,C,D,E,F,G,H)],[0 >= I + 1]).
+eq(evalNestedLoopbb4in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb2in(A,B,C,D,E,F,G,H)],[I >= 1]).
+eq(evalNestedLoopbb4in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb6in(A,B,C,D,G,H,G,H)],[]).
+eq(evalNestedLoopbb2in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb3in(A,B,C,D,E,F,G,H + 1)],[]).
+eq(evalNestedLoopbb8in(A,B,C,D,E,F,G,H),1,[evalNestedLoopbb9in(A,B,C,F + 1,E,F,G,H)],[]).
+eq(evalNestedLoopreturnin(A,B,C,D,E,F,G,H),1,[evalNestedLoopstop(A,B,C,D,E,F,G,H)],[]).

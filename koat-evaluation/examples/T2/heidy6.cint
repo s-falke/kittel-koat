@@ -1,0 +1,11 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR p x y x0 x1 x2)
+(RULES
+  f2(p, x, y) -> Com_1(f2(p + 1, x, y)) :|: TRUE
+  f3(p, x, y) -> Com_1(f3(p, x, y - 1)) :|: y > 0
+  f5(p, x, y) -> Com_1(f5(p, 1, y)) :|: TRUE
+  f0(x0, x1, x2) -> Com_1(f2(0, x1, x2)) :|: x1 > 0
+  f0(x0, x1, x2) -> Com_1(f3(0, x1, x2)) :|: x1 < 1
+  f3(x0, x1, x2) -> Com_1(f5(0, x1, x2)) :|: x2 < 1
+)

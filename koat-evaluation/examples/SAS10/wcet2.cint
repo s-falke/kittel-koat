@@ -1,0 +1,15 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR i i__o j j__o tmp tmp_1 tmp_1__o tmp__o)
+(RULES
+  start(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o) -> Com_1(stop(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o)) :|: i>=5 && tmp_1=tmp_1__o && tmp=tmp__o && j=j__o && i=i__o 
+  start(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o) -> Com_1(lbl_9_2(1  + i, 0, i, tmp_1, i__o, j__o, tmp__o, tmp_1__o)) :|: i<=2 && tmp_1=tmp_1__o && tmp=tmp__o && j=j__o && i=i__o 
+  start(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o) -> Com_1(lbl_8_2(i, 1, tmp, 0, i__o, j__o, tmp__o, tmp_1__o)) :|: i>=3 && i<=4 && tmp_1=tmp_1__o && tmp=tmp__o && j=j__o && i=i__o 
+  lbl_9_2(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o) -> Com_1(stop(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o)) :|: i>=5 && i>=i__o+1 && 5*i<=j+15 && j>=0 && i=tmp+1 
+  lbl_9_2(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o) -> Com_1(lbl_9_2(1  + i, 0, i, tmp_1, i__o, j__o, tmp__o, tmp_1__o)) :|: i<=2 && i>=i__o+1 && 5*i<=j+15 && j>=0 && i=tmp+1 
+  lbl_9_2(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o) -> Com_1(lbl_8_2(i, 1, tmp, 0, i__o, j__o, tmp__o, tmp_1__o)) :|: i>=3 && i<=4 && i>=i__o+1 && 5*i<=j+15 && j>=0 && i=tmp+1 
+  lbl_8_2(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o) -> Com_1(lbl_9_2(1  + i, j, i, tmp_1, i__o, j__o, tmp__o, tmp_1__o)) :|: i<=2 && j<=10 && j>=1 && i>=i__o && i>=3 && i<=4 && j=tmp_1+1 
+  lbl_8_2(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o) -> Com_1(lbl_9_2(1  + i, j, i, tmp_1, i__o, j__o, tmp__o, tmp_1__o)) :|: j>=10 && j<=10 && j>=1 && i>=i__o && i>=3 && i<=4 && j=tmp_1+1 
+  lbl_8_2(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o) -> Com_1(lbl_8_2(i, 1  + j, tmp, j, i__o, j__o, tmp__o, tmp_1__o)) :|: i>=3 && j<=9 && j<=10 && j>=1 && i>=i__o && i>=3 && i<=4 && j=tmp_1+1 
+  ____start(i, j, tmp, tmp_1, i__o, j__o, tmp__o, tmp_1__o) -> Com_1(start(i__o, j__o, tmp__o, tmp_1__o, i__o, j__o, tmp__o, tmp_1__o)) :|: TRUE 
+)

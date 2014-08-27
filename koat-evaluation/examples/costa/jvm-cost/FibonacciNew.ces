@@ -1,0 +1,15 @@
+eq(pubs_start(A,B,C,D),0,[fibonacciMethod(A,B,C,D)],[]).
+eq(fibonacciMethod(A,B,C,D),1,[f8(B,B,1,D)],[]).
+eq(f8(A,B,C,D),1,[f2(A,B,C,D)],[A >= C + 1]).
+eq(f8(A,B,C,D),1,[f3(A,B,C,D)],[C >= A]).
+eq(f20(A,B,C,D),1,[pubsSFibonaccifibonacciMethodLBIRBI(A,B - 1,C,D)],[]).
+eq(f21(A,B,C,D),1,[lW9normal(A,B,C,D)],[]).
+eq(f2(A,B,C,D),1,[f20(E,B,F,D),f21(E,B,F,D)],[E >= 1]).
+eq(f3(A,B,C,D),1,[f6(1,B,C,D)],[]).
+eq(pubsSFibonaccifibonacciMethodLBIRBI(A,B,C,D),1,[f8(B,B,1,D)],[]).
+eq(f9normal(A,B,C,D),1,[f4(A,B,C,D)],[]).
+eq(f40(A,B,C,D),1,[pubsSFibonaccifibonacciMethodLBIRBI(A,B - 2,C,D)],[]).
+eq(f41(A,B,C,D),1,[lW10normal(A,B,C,D)],[]).
+eq(f4(A,B,C,D),1,[f40(A,B,E,F),f41(A,B,E,F)],[E >= 1]).
+eq(f10normal(A,B,C,D),1,[f7(A,B,C,D)],[]).
+eq(f7(A,B,C,D),1,[f6(A + C,B,C,D)],[]).

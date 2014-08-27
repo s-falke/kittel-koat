@@ -1,0 +1,11 @@
+eq(pubs_start(A,B,C),0,[evalspeedpldi2start(A,B,C)],[]).
+eq(evalspeedpldi2start(A,B,C),1,[evalspeedpldi2entryin(A,B,C)],[]).
+eq(evalspeedpldi2entryin(A,B,C),1,[evalspeedpldi2bb5in(B,0,A)],[A >= 0, B >= 1]).
+eq(evalspeedpldi2entryin(A,B,C),1,[evalspeedpldi2returnin(A,B,C)],[0 >= A + 1]).
+eq(evalspeedpldi2entryin(A,B,C),1,[evalspeedpldi2returnin(A,B,C)],[0 >= B]).
+eq(evalspeedpldi2bb5in(A,B,C),1,[evalspeedpldi2bb2in(A,B,C)],[C >= 1]).
+eq(evalspeedpldi2bb5in(A,B,C),1,[evalspeedpldi2returnin(A,B,C)],[0 >= C]).
+eq(evalspeedpldi2bb2in(A,B,C),1,[evalspeedpldi2bb3in(A,B,C)],[A >= B + 1]).
+eq(evalspeedpldi2bb2in(A,B,C),1,[evalspeedpldi2bb5in(A,0,C)],[B >= A]).
+eq(evalspeedpldi2bb3in(A,B,C),1,[evalspeedpldi2bb5in(A,B + 1,C - 1)],[]).
+eq(evalspeedpldi2returnin(A,B,C),1,[evalspeedpldi2stop(A,B,C)],[]).

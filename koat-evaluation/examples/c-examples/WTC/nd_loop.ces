@@ -1,0 +1,8 @@
+eq(pubs_start(A),0,[evalndloopstart(A)],[]).
+eq(evalndloopstart(A),1,[evalndloopentryin(A)],[]).
+eq(evalndloopentryin(A),1,[evalndloopbbin(0)],[]).
+eq(evalndloopbbin(A),1,[evalndloopbbin(B)],[2 + A >= B, B >= A + 1, 9 >= B]).
+eq(evalndloopbbin(A),1,[evalndloopreturnin(A)],[B >= A + 3]).
+eq(evalndloopbbin(A),1,[evalndloopreturnin(A)],[A >= B]).
+eq(evalndloopbbin(A),1,[evalndloopreturnin(A)],[B >= 10]).
+eq(evalndloopreturnin(A),1,[evalndloopstop(A)],[]).

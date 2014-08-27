@@ -1,0 +1,7 @@
+eq(pubs_start(A),0,[evalndecrstart(A)],[]).
+eq(evalndecrstart(A),1,[evalndecrentryin(A)],[]).
+eq(evalndecrentryin(A),1,[evalndecrbb1in(A - 1)],[]).
+eq(evalndecrbb1in(A),1,[evalndecrbbin(A)],[A >= 2]).
+eq(evalndecrbb1in(A),1,[evalndecrreturnin(A)],[1 >= A]).
+eq(evalndecrbbin(A),1,[evalndecrbb1in(A - 1)],[]).
+eq(evalndecrreturnin(A),1,[evalndecrstop(A)],[]).

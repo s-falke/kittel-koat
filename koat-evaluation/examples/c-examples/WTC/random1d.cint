@@ -1,0 +1,14 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_random1d_start))
+(VAR nondef_0 v_max v_x.0)
+(RULES
+    eval_random1d_start(v_max) -> Com_1(eval_random1d_entry_in(v_max))
+    eval_random1d_entry_in(v_max) -> Com_1(eval_random1d_bb5_in(v_max, 1)) :|: v_max > 0
+    eval_random1d_entry_in(v_max) -> Com_1(eval_random1d_return_in()) :|: v_max <= 0
+    eval_random1d_bb5_in(v_max, v_x.0) -> Com_1(eval_random1d_bb1_in(v_max, v_x.0)) :|: v_x.0 <= v_max
+    eval_random1d_bb5_in(v_max, v_x.0) -> Com_1(eval_random1d_return_in()) :|: v_x.0 > v_max
+    eval_random1d_bb1_in(v_max, v_x.0) -> Com_1(eval_random1d_bb5_in(v_max, v_x.0 + 1)) :|: nondef_0 < 0
+    eval_random1d_bb1_in(v_max, v_x.0) -> Com_1(eval_random1d_bb5_in(v_max, v_x.0 + 1)) :|: nondef_0 > 0
+    eval_random1d_bb1_in(v_max, v_x.0) -> Com_1(eval_random1d_bb5_in(v_max, v_x.0 + 1)) :|: nondef_0 = 0
+    eval_random1d_return_in() -> Com_1(eval_random1d_stop())
+)

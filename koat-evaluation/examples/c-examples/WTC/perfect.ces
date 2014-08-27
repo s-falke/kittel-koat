@@ -1,0 +1,17 @@
+eq(pubs_start(A,B,C,D),0,[evalperfectstart(A,B,C,D)],[]).
+eq(evalperfectstart(A,B,C,D),1,[evalperfectentryin(A,B,C,D)],[]).
+eq(evalperfectentryin(A,B,C,D),1,[evalperfectreturnin(A,B,C,D)],[1 >= A]).
+eq(evalperfectentryin(A,B,C,D),1,[evalperfectbb1in(A,B,C,D)],[A >= 2]).
+eq(evalperfectbb1in(A,B,C,D),1,[evalperfectbb8in(A,A,A - 1,D)],[]).
+eq(evalperfectbb8in(A,B,C,D),1,[evalperfectbb4in(A,B,C,A)],[C >= 1]).
+eq(evalperfectbb8in(A,B,C,D),1,[evalperfectbb9in(B,B,C,D)],[0 >= C]).
+eq(evalperfectbb4in(A,B,C,D),1,[evalperfectbb3in(A,B,C,D)],[D >= C]).
+eq(evalperfectbb4in(A,B,C,D),1,[evalperfectbb5in(A,B,C,D)],[C >= D + 1]).
+eq(evalperfectbb3in(A,B,C,D),1,[evalperfectbb4in(A,B,C,D - C)],[]).
+eq(evalperfectbb5in(A,B,C,D),1,[evalperfectbb8in(A,B - C,C - 1,D)],[D = 0]).
+eq(evalperfectbb5in(A,B,C,D),1,[evalperfectbb8in(A,B,C - 1,D)],[0 >= D + 1]).
+eq(evalperfectbb5in(A,B,C,D),1,[evalperfectbb8in(A,B,C - 1,D)],[D >= 1]).
+eq(evalperfectbb9in(A,B,C,D),1,[evalperfectreturnin(A,B,C,D)],[0 >= A + 1]).
+eq(evalperfectbb9in(A,B,C,D),1,[evalperfectreturnin(A,B,C,D)],[A >= 1]).
+eq(evalperfectbb9in(A,B,C,D),1,[evalperfectreturnin(A,B,C,D)],[A = 0]).
+eq(evalperfectreturnin(A,B,C,D),1,[evalperfectstop(A,B,C,D)],[]).

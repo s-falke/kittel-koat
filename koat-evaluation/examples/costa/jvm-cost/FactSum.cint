@@ -1,0 +1,19 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS doSum))
+(VAR A B)
+(RULES
+ doSum(A) -> Com_1(m9(A)) :|: A>=0
+ m0(A) -> Com_1(m1(A)) :|: A>=0
+ m2(A) -> Com_1(m3(A)) :|: A>= -1
+ m1(A) -> Com_1(m5(A)) :|: A>=0
+ m6(A) -> Com_1(m4()) :|: A>=0 && -A>=0
+ m7(B) -> Com_2(m4(),m0(A)) :|: B>=0 && B+ -A=1 && B>=1
+ m5(A) -> Com_1(m8(A)) :|: A>=0
+ m8(A) -> Com_1(m7(A)) :|: TRUE
+ m8(A) -> Com_1(m6(A)) :|: TRUE
+ n2(A) -> Com_2(n0(),m2(A)) :|: A>=0
+ m9(A) -> Com_1(n2(A)) :|: A>=0
+ n3(A) -> Com_2(m2(B),m0(A)) :|: A>=0 && A+ -B=1
+ m3(A) -> Com_1(n3(A)) :|: TRUE
+ m3(A) -> Com_1(n1(A)) :|: TRUE
+)

@@ -1,0 +1,24 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_realshellsort_start))
+(VAR nondef_0 nondef_1 nondef_2 nondef_4 v_4 v_array_size v_i.0 v_increment.0 v_j.0)
+(RULES
+    eval_realshellsort_start(v_array_size) -> Com_1(eval_realshellsort_entry_in(v_array_size))
+    eval_realshellsort_entry_in(v_array_size) -> Com_1(eval_realshellsort_bb8_in(v_array_size, nondef_0)) :|: v_array_size = 0 && nondef_0 = 0
+    eval_realshellsort_entry_in(v_array_size) -> Com_1(eval_realshellsort_bb8_in(v_array_size, nondef_0)) :|: v_array_size > 0 && nondef_0 >= 0 && v_array_size - 2*nondef_0 >= 0 && v_array_size - 2*nondef_0 < 2
+    eval_realshellsort_entry_in(v_array_size) -> Com_1(eval_realshellsort_bb8_in(v_array_size, nondef_0)) :|: v_array_size < 0 && nondef_0 <= 0 && -v_array_size + 2*nondef_0 >= 0 && -v_array_size + 2*nondef_0 < 2
+    eval_realshellsort_bb8_in(v_array_size, v_increment.0) -> Com_1(eval_realshellsort_bb6_in(v_array_size, v_increment.0, 0)) :|: v_increment.0 > 0
+    eval_realshellsort_bb8_in(v_array_size, v_increment.0) -> Com_1(eval_realshellsort_return_in()) :|: v_increment.0 <= 0
+    eval_realshellsort_bb6_in(v_array_size, v_increment.0, v_i.0) -> Com_1(eval_realshellsort_bb1_in(v_array_size, v_increment.0, v_i.0)) :|: v_i.0 < v_array_size
+    eval_realshellsort_bb6_in(v_array_size, v_increment.0, v_i.0) -> Com_1(eval_realshellsort_bb7_in(v_array_size, v_increment.0, v_i.0)) :|: v_i.0 >= v_array_size
+    eval_realshellsort_bb1_in(v_array_size, v_increment.0, v_i.0) -> Com_1(eval_realshellsort_bb3_in(v_array_size, v_increment.0, v_i.0, nondef_1, v_i.0))
+    eval_realshellsort_bb3_in(v_array_size, v_increment.0, v_i.0, v_4, v_j.0) -> Com_1(eval_realshellsort_bb5_in(v_array_size, v_increment.0, v_i.0, v_4, v_j.0)) :|: v_j.0 < v_increment.0
+    eval_realshellsort_bb3_in(v_array_size, v_increment.0, v_i.0, v_4, v_j.0) -> Com_1(eval_realshellsort_bb4_in(v_array_size, v_increment.0, v_i.0, v_4, v_j.0)) :|: v_j.0 >= v_increment.0
+    eval_realshellsort_bb4_in(v_array_size, v_increment.0, v_i.0, v_4, v_j.0) -> Com_1(eval_realshellsort_bb2_in(v_array_size, v_increment.0, v_i.0, v_4, v_j.0)) :|: nondef_2 > v_4
+    eval_realshellsort_bb4_in(v_array_size, v_increment.0, v_i.0, v_4, v_j.0) -> Com_1(eval_realshellsort_bb5_in(v_array_size, v_increment.0, v_i.0, v_4, v_j.0)) :|: nondef_2 <= v_4
+    eval_realshellsort_bb2_in(v_array_size, v_increment.0, v_i.0, v_4, v_j.0) -> Com_1(eval_realshellsort_bb3_in(v_array_size, v_increment.0, v_i.0, v_4, v_j.0 - v_increment.0))
+    eval_realshellsort_bb5_in(v_array_size, v_increment.0, v_i.0, v_4, v_j.0) -> Com_1(eval_realshellsort_bb6_in(v_array_size, v_increment.0, v_i.0 + 1))
+    eval_realshellsort_bb7_in(v_array_size, v_increment.0, v_i.0) -> Com_1(eval_realshellsort_bb8_in(v_array_size, nondef_4)) :|: v_increment.0 = 0 && nondef_4 = 0
+    eval_realshellsort_bb7_in(v_array_size, v_increment.0, v_i.0) -> Com_1(eval_realshellsort_bb8_in(v_array_size, nondef_4)) :|: v_increment.0 > 0 && nondef_4 >= 0 && v_increment.0 - 2*nondef_4 >= 0 && v_increment.0 - 2*nondef_4 < 2
+    eval_realshellsort_bb7_in(v_array_size, v_increment.0, v_i.0) -> Com_1(eval_realshellsort_bb8_in(v_array_size, nondef_4)) :|: v_increment.0 < 0 && nondef_4 <= 0 && -v_increment.0 + 2*nondef_4 >= 0 && -v_increment.0 + 2*nondef_4 < 2
+    eval_realshellsort_return_in() -> Com_1(eval_realshellsort_stop())
+)

@@ -1,0 +1,40 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS delete))
+(VAR A B C D E F G H I J K L M)
+(RULES
+  delete(A,B,C,D,E,F,G,H,I) -> Com_1(m6(A,B,C,D,E,F,G,H,I)) :|: A >= 0 && B >= 0 && C >= 0 && D >= 0 && E >= A && F >= B
+  m0(A,B,C,D,E,F,G,H,I) -> Com_1(m1(B,C,J,D,F,K,G,H,I)) :|: B >= 0 && C >= F && C >= B && B >= J && J >= B && F >= K && K >= F
+  m2(A,B,C,D,E,F,G,H,I) -> Com_1(m3(A,K,C,D,E,J,G,H,I)) :|: J >= 0 && D >= K + 1 && 1 + K >= D && C >= J && J >= C
+  m4(A,B,C,D,E,F,G,H,I) -> Com_1(m5(A,B,C,D,E,F,J,H,I)) :|: C >= 0 && F >= 0 && D >= 0 && E >= 0 && E >= A && F >= B && D >= J && J >= D
+  m6(A,B,C,D,E,F,G,H,I) -> Com_1(m7(A,B,C,D,E,F,G,H,I)) :|: D >= 0 && C >= 0 && B >= 0 && A >= 0 && F >= B && E >= A
+  m5(A,B,C,D,E,F,G,H,I) -> Com_1(n0(A,B,C,D,E,F,G,H,I))
+  m5(A,B,C,D,E,F,G,H,I) -> Com_1(m9(A,B,C,G,E,F,G,H,I))
+  n1(A,B,C,D,E,F,G,H,I) -> Com_1(m4(A,B,C,J,E,F,G,H,I)) :|: C >= 0 && F >= 0 && E >= 0 && J >= 0 && F >= B && F + E >= B + A + 1 && D >= J + 1 && E >= A
+  m7(A,B,C,D,E,F,G,H,I) -> Com_2(m8(A,B,C,D,E,F,G,H,I),m4(A,B,C,D,E,F,G,H,I)) :|: A >= 0 && B >= 0 && C >= 0 && D >= 0 && E >= A && F >= B
+  n0(A,B,C,D,E,F,G,H,I) -> Com_1(n2(A,B,C,D,E,F,J,K,I)) :|: C >= 0 && F >= 0 && D >= 0 && E >= 0 && F >= B && E >= A && D >= G && G >= D && C >= K && K >= C
+  n2(A,B,C,D,E,F,G,H,I) -> Com_1(n3(A,B,C,D,E,F,G,H,I))
+  n2(A,B,C,D,E,F,G,H,I) -> Com_1(n4(A,B,C,D,E,F,G,H,I))
+  n30(A,B,C,D,E,F,G,H,I) -> Com_1(n1(A,B,C,D,E,F,G,H,I))
+  n31(A,B,C,D,E,F,G,H,I) -> Com_1(n5(A,B,H,G,E,I,G,H,I))
+  n3(A,B,C,D,E,F,G,H,I) -> Com_2(n30(J,B,C,D,E,F,K,L,M),n31(J,B,C,D,E,F,K,L,M)) :|: C >= 0 && F >= 0 && D >= 0 && E >= 0 && E >= L && L >= E && A >= M && M >= A && F >= B && E >= A && G >= C && C >= H && H >= C && A >= J + 1 && 1 + J >= A
+  n40(A,B,C,D,E,F,G,H,I) -> Com_1(n1(A,B,C,D,E,F,G,H,I))
+  n41(A,B,C,D,E,F,G,H,I) -> Com_1(n5(A,B,H,G,E,I,G,H,I))
+  n4(A,B,C,D,E,F,G,H,I) -> Com_2(n40(A,J,C,D,E,F,K,L,M),n41(A,J,C,D,E,F,K,L,M)) :|: C >= 0 && F >= 0 && D >= 0 && E >= 0 && F >= L && L >= F && B >= M && M >= B && F >= B && C >= G + 1 && E >= A && C >= H && H >= C && B >= J + 1 && 1 + J >= B
+  n5(A,B,C,D,E,F,G,H,I) -> Com_1(n6(A,B,C,D,E,F,G,H,I)) :|: C >= 0 && C >= F
+  n6(A,B,C,D,E,F,G,H,I) -> Com_1(n7(A,B,C,D,E,F,G,H,I)) :|: C >= 0 && C >= F
+  n9(A,B,C,D,E,F,G,H,I) -> Com_1(o0(A,B,C,D,E,F,G,H,I)) :|: C >= 0 && C >= F
+  o1(A,B,C,D,E,F,G,H,I) -> Com_1(o0(A,B,C,D,E,F,G,H,I)) :|: C >= D && D >= F && F >= D
+  m1(A,B,C,D,E,F,G,H,I) -> Com_1(n9(A,B,C,D,E,F,G,H,I))
+  m1(A,B,C,D,E,F,G,H,I) -> Com_1(o3(F,A,B,D,C,E,G,H,I))
+  o4(A,B,C,D,E,F,G,H,I) -> Com_1(m0(A,J,C,D,E,F,G,H,I)) :|: B >= 0 && F >= B + 1 && D >= E + 1 && C >= F && D >= A && A >= D && B + 1 >= J && J >= 1 + B
+  m3(A,B,C,D,E,F,G,H,I) -> Com_1(o5(A,B,C,D,E,F,G,H,I))
+  m3(A,B,C,D,E,F,G,H,I) -> Com_1(o2(A,B,B,F,E,F,G,H,I))
+  n70(A,B,C,D,E,F,G,H,I) -> Com_1(n8(A,B,C,D,E,F,G,H,I))
+  n71(A,B,C,D,E,F,G,H,I) -> Com_1(m0(A,0,F,C,E,B,G,H,I))
+  n72(A,B,C,D,E,F,G,H,I) -> Com_1(m2(A,B,E,B,E,F,G,H,I))
+  n7(A,B,C,D,E,F,G,H,I) -> Com_3(n70(A,F,D,J,K,C,G,H,I),n71(A,F,D,J,K,C,G,H,I),n72(A,F,D,J,K,C,G,H,I)) :|: C >= 0 && K >= 0 && C >= F && F >= J + 1 && 1 + J >= F
+  o3(A,B,C,D,E,F,G,H,I) -> Com_1(o6(B,C,J,D,F,K,G,H,I)) :|: B >= 0 && C >= F && F >= B + 1 && B >= E && E >= B && F >= A && A >= F && D >= K && K >= D
+  o6(A,B,C,D,E,F,G,H,I) -> Com_1(o1(A,B,C,D,E,F,G,H,I))
+  o6(A,B,C,D,E,F,G,H,I) -> Com_1(o4(F,A,B,D,C,E,G,H,I))
+  o5(A,B,C,D,E,F,G,H,I) -> Com_1(m2(A,B,J,D,E,F,G,H,I)) :|: J >= 1 && D >= J + 1 && C + 1 >= J && J >= 1 + C && D >= B + 1 && 1 + B >= D && F + 1 >= J && J >= 1 + F
+)

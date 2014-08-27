@@ -1,0 +1,12 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS listReverse))
+(VAR A B C)
+(RULES
+  listReverse(A,B) -> Com_1(m2(A,B))
+  m0(A,B) -> Com_1(m1(A,B)) :|: A >= 0
+  m5(A,B) -> Com_2(m3(0,B),m0(0,B))
+  m2(A,B) -> Com_1(m5(A,B))
+  m6(A,B) -> Com_1(m0(B,C)) :|: A >= 0 && C >= 0 && B >= C + 1
+  m1(A,B) -> Com_1(m6(A,B))
+  m1(A,B) -> Com_1(m4(A,B))
+)

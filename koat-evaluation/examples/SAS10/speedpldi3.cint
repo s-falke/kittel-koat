@@ -1,0 +1,17 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR i i__o j j__o m m__o n n__o)
+(RULES
+  start(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(stop(i, j, m, n, i__o, j__o, m__o, n__o)) :|: m<=0 && n=n__o && m=m__o && j=j__o && i=i__o 
+  start(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(lbl_6(i, j, m, n, i__o, j__o, m__o, n__o)) :|: m>=1 && m>=n && n=n__o && m=m__o && j=j__o && i=i__o 
+  start(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(lbl_12_1(0, 1, m, n, i__o, j__o, m__o, n__o)) :|: m>=1 && m+1<=n && n=n__o && m=m__o && j=j__o && i=i__o 
+  lbl_6(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(stop(i, j, m, n, i__o, j__o, m__o, n__o)) :|: m>=1 && m>=n && i=i__o && j=j__o && m=m__o && n=n__o 
+  lbl_12_1(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(cut(i, j, m, n, i__o, j__o, m__o, n__o)) :|: i>=n && i+1<=n && i+3<=m+n && j<=m && j>=1 && i>=0 && m+1<=n && m=m__o && n=n__o 
+  lbl_12_1(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(lbl_12_1(i, 1  + j, m, n, i__o, j__o, m__o, n__o)) :|: j+1<=m && i+1<=n && i+1<=n && i+3<=m+n && j<=m && j>=1 && i>=0 && m+1<=n && m=m__o && n=n__o 
+  lbl_12_1(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(lbl_14_1(1  + i, 0, m, n, i__o, j__o, m__o, n__o)) :|: j>=m && i+1<=n && i+1<=n && i+3<=m+n && j<=m && j>=1 && i>=0 && m+1<=n && m=m__o && n=n__o 
+  lbl_14_1(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(cut(i, j, m, n, i__o, j__o, m__o, n__o)) :|: i>=n && m>=2 && m+1<=n && i>=1 && i<=n && j=0 && m=m__o && n=n__o 
+  lbl_14_1(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(lbl_12_1(i, 1  + j, m, n, i__o, j__o, m__o, n__o)) :|: j+1<=m && i+1<=n && m>=2 && m+1<=n && i>=1 && i<=n && j=0 && m=m__o && n=n__o 
+  lbl_14_1(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(lbl_14_1(1  + i, 0, m, n, i__o, j__o, m__o, n__o)) :|: j>=m && i+1<=n && m>=2 && m+1<=n && i>=1 && i<=n && j=0 && m=m__o && n=n__o 
+  cut(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(stop(i, j, m, n, i__o, j__o, m__o, n__o)) :|: i>=m+1 && m>=2 && j=0 && i=n && m=m__o && i=n__o 
+  ____start(i, j, m, n, i__o, j__o, m__o, n__o) -> Com_1(start(i__o, j__o, m__o, n__o, i__o, j__o, m__o, n__o)) :|: TRUE 
+)

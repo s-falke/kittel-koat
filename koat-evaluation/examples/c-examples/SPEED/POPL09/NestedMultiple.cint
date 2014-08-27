@@ -1,0 +1,17 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_NestedMultiple_start))
+(VAR nondef_0 v_m v_n v_x0 v_x.0 v_y0 v_y.0 v_y.1)
+(RULES
+    eval_NestedMultiple_start(v_x0, v_y0, v_n, v_m) -> Com_1(eval_NestedMultiple_entry_in(v_x0, v_y0, v_n, v_m))
+    eval_NestedMultiple_entry_in(v_x0, v_y0, v_n, v_m) -> Com_1(eval_NestedMultiple_bb5_in(v_n, v_m, v_x0, v_y0))
+    eval_NestedMultiple_bb5_in(v_n, v_m, v_x.0, v_y.1) -> Com_1(eval_NestedMultiple_bb2_in(v_n, v_m, v_x.0, v_y.1, v_y.1)) :|: v_x.0 < v_n
+    eval_NestedMultiple_bb5_in(v_n, v_m, v_x.0, v_y.1) -> Com_1(eval_NestedMultiple_return_in()) :|: v_x.0 >= v_n
+    eval_NestedMultiple_bb2_in(v_n, v_m, v_x.0, v_y.1, v_y.0) -> Com_1(eval_NestedMultiple_bb4_in(v_n, v_m, v_x.0, v_y.1, v_y.0)) :|: v_y.0 >= v_m
+    eval_NestedMultiple_bb2_in(v_n, v_m, v_x.0, v_y.1, v_y.0) -> Com_1(eval_NestedMultiple_bb3_in(v_n, v_m, v_x.0, v_y.1, v_y.0)) :|: v_y.0 < v_m
+    eval_NestedMultiple_bb3_in(v_n, v_m, v_x.0, v_y.1, v_y.0) -> Com_1(eval_NestedMultiple_bb1_in(v_n, v_m, v_x.0, v_y.1, v_y.0)) :|: nondef_0 < 0
+    eval_NestedMultiple_bb3_in(v_n, v_m, v_x.0, v_y.1, v_y.0) -> Com_1(eval_NestedMultiple_bb1_in(v_n, v_m, v_x.0, v_y.1, v_y.0)) :|: nondef_0 > 0
+    eval_NestedMultiple_bb3_in(v_n, v_m, v_x.0, v_y.1, v_y.0) -> Com_1(eval_NestedMultiple_bb4_in(v_n, v_m, v_x.0, v_y.1, v_y.0)) :|: nondef_0 = 0
+    eval_NestedMultiple_bb1_in(v_n, v_m, v_x.0, v_y.1, v_y.0) -> Com_1(eval_NestedMultiple_bb2_in(v_n, v_m, v_x.0, v_y.1, v_y.0 + 1))
+    eval_NestedMultiple_bb4_in(v_n, v_m, v_x.0, v_y.1, v_y.0) -> Com_1(eval_NestedMultiple_bb5_in(v_n, v_m, v_x.0 + 1, v_y.0))
+    eval_NestedMultiple_return_in() -> Com_1(eval_NestedMultiple_stop())
+)

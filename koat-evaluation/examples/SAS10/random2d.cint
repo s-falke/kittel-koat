@@ -1,0 +1,24 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR N N__o f0 f1 f2 f3 f4 f5 i i__o r r__o x x__o y y__o)
+(RULES
+  start(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(stop(N, 0, r, 0, 0, N__o, i__o, r__o, x__o, y__o)) :|: N<=0 && y=y__o && x=x__o && r=r__o && i=i__o && N=N__o 
+  start(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_8_1(N, 1, f0, 0, 0, N__o, i__o, r__o, x__o, y__o)) :|: N>=1 && y=y__o && x=x__o && r=r__o && i=i__o && N=N__o 
+  lbl_21(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(stop(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o)) :|: N<=i && N>=i && i+x+y>=1 && i+x>=y+1 && i+y>=x+1 && i>=x+y+1 && N=N__o 
+  lbl_21(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_8_1(N, 1  + i, f1, x, y, N__o, i__o, r__o, x__o, y__o)) :|: N>=i+1 && N>=i && i+x+y>=1 && i+x>=y+1 && i+y>=x+1 && i>=x+y+1 && N=N__o 
+  lbl_12_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(stop(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o)) :|: N<=i && N>=i && i+x+y>=2 && i+x>=y+2 && i+y>=x && i>=x+y && r=0 && N=N__o 
+  lbl_12_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_8_1(N, 1  + i, f2, x, y, N__o, i__o, r__o, x__o, y__o)) :|: N>=i+1 && N>=i && i+x+y>=2 && i+x>=y+2 && i+y>=x && i>=x+y && r=0 && N=N__o 
+  lbl_14_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(stop(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o)) :|: N<=i && N>=i && i+x+y>=0 && i+x>=y && i+y>=x+2 && i>=x+y+2 && r=1 && N=N__o 
+  lbl_14_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_8_1(N, 1  + i, f3, x, y, N__o, i__o, r__o, x__o, y__o)) :|: N>=i+1 && N>=i && i+x+y>=0 && i+x>=y && i+y>=x+2 && i>=x+y+2 && r=1 && N=N__o 
+  lbl_17_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(stop(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o)) :|: N<=i && N>=i && i+x+y>=2 && i+x>=y && i+y>=x+2 && i>=x+y && r=2 && N=N__o 
+  lbl_17_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_8_1(N, 1  + i, f4, x, y, N__o, i__o, r__o, x__o, y__o)) :|: N>=i+1 && N>=i && i+x+y>=2 && i+x>=y && i+y>=x+2 && i>=x+y && r=2 && N=N__o 
+  lbl_19_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(stop(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o)) :|: N<=i && N>=i && i+x+y>=0 && i+x>=y+2 && i+y>=x && i>=x+y+2 && r=3 && N=N__o 
+  lbl_19_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_8_1(N, 1  + i, f5, x, y, N__o, i__o, r__o, x__o, y__o)) :|: N>=i+1 && N>=i && i+x+y>=0 && i+x>=y+2 && i+y>=x && i>=x+y+2 && r=3 && N=N__o 
+  lbl_8_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_21(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o)) :|: r+1<=0 && i+x>=y+1 && i+y>=x+1 && i>=x+y+1 && i+x+y>=1 && N>=i && N=N__o 
+  lbl_8_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_21(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o)) :|: r>=4 && i+x>=y+1 && i+y>=x+1 && i>=x+y+1 && i+x+y>=1 && N>=i && N=N__o 
+  lbl_8_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_12_1(N, i, r, 1  + x, y, N__o, i__o, r__o, x__o, y__o)) :|: r=0 && i+x>=y+1 && i+y>=x+1 && i>=x+y+1 && i+x+y>=1 && N>=i && N=N__o 
+  lbl_8_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_14_1(N, i, r, x - 1, y, N__o, i__o, r__o, x__o, y__o)) :|: r=1 && i+x>=y+1 && i+y>=x+1 && i>=x+y+1 && i+x+y>=1 && N>=i && N=N__o 
+  lbl_8_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_17_1(N, i, r, x, 1  + y, N__o, i__o, r__o, x__o, y__o)) :|: r=2 && i+x>=y+1 && i+y>=x+1 && i>=x+y+1 && i+x+y>=1 && N>=i && N=N__o 
+  lbl_8_1(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(lbl_19_1(N, i, r, x, y - 1, N__o, i__o, r__o, x__o, y__o)) :|: r=3 && i+x>=y+1 && i+y>=x+1 && i>=x+y+1 && i+x+y>=1 && N>=i && N=N__o 
+  ____start(N, i, r, x, y, N__o, i__o, r__o, x__o, y__o) -> Com_1(start(N__o, i__o, r__o, x__o, y__o, N__o, i__o, r__o, x__o, y__o)) :|: TRUE 
+)

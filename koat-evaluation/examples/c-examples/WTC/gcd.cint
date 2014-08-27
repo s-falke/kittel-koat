@@ -1,0 +1,17 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_gcd_start))
+(VAR v_x v_x_addr.0 v_y v_y_addr.0)
+(RULES
+    eval_gcd_start(v_x, v_y) -> Com_1(eval_gcd_entry_in(v_x, v_y))
+    eval_gcd_entry_in(v_x, v_y) -> Com_1(eval_gcd_return_in()) :|: v_x <= 0
+    eval_gcd_entry_in(v_x, v_y) -> Com_1(eval_gcd_return_in()) :|: v_y <= 0
+    eval_gcd_entry_in(v_x, v_y) -> Com_1(eval_gcd_bb7_in(v_y, v_x)) :|: v_x > 0 && v_y > 0
+    eval_gcd_bb7_in(v_y_addr.0, v_x_addr.0) -> Com_1(eval_gcd_bb4_in(v_y_addr.0, v_x_addr.0)) :|: v_x_addr.0 < v_y_addr.0
+    eval_gcd_bb7_in(v_y_addr.0, v_x_addr.0) -> Com_1(eval_gcd_bb4_in(v_y_addr.0, v_x_addr.0)) :|: v_x_addr.0 > v_y_addr.0
+    eval_gcd_bb7_in(v_y_addr.0, v_x_addr.0) -> Com_1(eval_gcd_return_in()) :|: v_x_addr.0 = v_y_addr.0
+    eval_gcd_bb4_in(v_y_addr.0, v_x_addr.0) -> Com_1(eval_gcd_bb5_in(v_y_addr.0, v_x_addr.0)) :|: v_x_addr.0 < v_y_addr.0
+    eval_gcd_bb4_in(v_y_addr.0, v_x_addr.0) -> Com_1(eval_gcd_bb6_in(v_y_addr.0, v_x_addr.0)) :|: v_x_addr.0 >= v_y_addr.0
+    eval_gcd_bb5_in(v_y_addr.0, v_x_addr.0) -> Com_1(eval_gcd_bb7_in(v_y_addr.0 - v_x_addr.0, v_x_addr.0))
+    eval_gcd_bb6_in(v_y_addr.0, v_x_addr.0) -> Com_1(eval_gcd_bb7_in(v_y_addr.0, v_x_addr.0 - v_y_addr.0))
+    eval_gcd_return_in() -> Com_1(eval_gcd_stop())
+)

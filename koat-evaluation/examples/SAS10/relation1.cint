@@ -1,0 +1,8 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR f0 x x__o y y__o)
+(RULES
+  start(x, y, x__o, y__o) -> Com_1(lbl_4_1(f0, y, x__o, y__o)) :|: x=x__o && y=y__o 
+  lbl_4_1(x, y, x__o, y__o) -> Com_1(stop(x, x, x__o, y__o)) :|: y=y__o 
+  ____start(x, y, x__o, y__o) -> Com_1(start(x__o, y__o, x__o, y__o)) :|: TRUE 
+)

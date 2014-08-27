@@ -1,0 +1,10 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15 x16 x17 x18 x19)
+(RULES
+  f11(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17) -> Com_1(f54(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x1 + x2)) :|: x2 >= x1
+  f11(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17) -> Com_1(f54(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x1 - x2)) :|: x1 >= 1 + x2
+  f38(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17) -> Com_1(f11(x0, x1, x18, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x10, x10, x17)) :|: x10 >= 1 + x12
+  f38(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17) -> Com_1(f11(x0, x1, x18, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x19, x10, x10, x17)) :|: x12 >= x10
+  f0(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17) -> Com_1(f38(10, 2, 1, x3, x4, x5, x6, x7, x8, x9, 1, 2, 10, x18, x14, x15, x16, x17)) :|: TRUE
+)

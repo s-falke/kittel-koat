@@ -1,0 +1,22 @@
+eq(pubs_start(A,B,C,D,E,F),0,[evenDigits(A,B,C,D,E,F)],[]).
+eq(evenDigits(A,B,C,D,E,F),1,[f2(0,0,C,D,E,F)],[]).
+eq(f20(A,B,C,D,E,F),1,[f2loop(A,B,C,D,E,F)],[]).
+eq(f21(A,B,C,D,E,F),1,[lW15normal(C,D,E,D,E,F)],[]).
+eq(f2(A,B,C,D,E,F),1,[f20(A,B,H,G,I,F),f21(A,B,H,G,I,F)],[G >= F, G >= B]).
+eq(f2loop(A,B,C,D,E,F),1,[f16(A,B,B,F,E,F)],[]).
+eq(f15normal(A,B,C,D,E,F),1,[f6(A,B,A,D,E,F)],[]).
+eq(f16(A,B,C,D,E,F),1,[f3(A,B,C,D,E,F)],[D >= C + 1, B = C, F = D]).
+eq(f16(A,B,C,D,E,F),1,[f2loopnexit(A,B,C,D,E,F)],[C >= D, B = C, F = D]).
+eq(f30(A,B,C,D,E,F),1,[pubsSEvenDigitsdivByTwoLBIRBI(A,B,C,D,E,F)],[]).
+eq(f31(A,B,C,D,E,F),1,[lW14normal(B,F,B,C,E,A)],[]).
+eq(f3(A,B,C,D,E,F),1,[f30(F,A,H,D,E,B),f31(F,A,H,D,E,B)],[]).
+eq(pubsSEvenDigitsdivByTwoLBIRBI(A,B,C,D,E,F),1,[f9(0,B,C,D,E,F)],[]).
+eq(f14normal(A,B,C,D,E,F),1,[f2loop(C + D,B + 1,C,D,E,F)],[C = A]).
+eq(f90(A,B,C,D,E,F),1,[f9loop(A,B,C,D,E,F)],[]).
+eq(f91(A,B,C,D,E,F),1,[lW17normal(C,D,C,D,E,B)],[]).
+eq(f9(A,B,C,D,E,F),1,[f90(A,H,G,I,E,F),f91(A,H,G,I,E,F)],[0 >= H]).
+eq(f9loop(A,B,C,D,E,F),1,[f18(A,F,C,D,E,F)],[]).
+eq(f17normal(A,B,C,D,E,F),1,[f12(A,A,C,D,E,F)],[]).
+eq(f18(A,B,C,D,E,F),1,[f10(A,B,C,D,E,F)],[B >= 1, F = B]).
+eq(f18(A,B,C,D,E,F),1,[f9loopnexit(A,B,C,D,E,F)],[0 >= B, F = B]).
+eq(f10(A,B,C,D,E,F),1,[f9loop(A + 1,B,C,D,E,H)],[2*H + 1 >= F, F >= 2*H]).

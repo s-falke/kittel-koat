@@ -1,0 +1,39 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ms__sort))
+(VAR A B C D E F G H I J K L M)
+(RULES
+ ms__sort(A, B, C, D) -> Com_1(f_27(A, B, C, D, E, C, D)) :|: E=0
+ f_27(A, B, C, D, E, F, G) -> Com_1(f_2(A, B, C, D, E)) :|: F>=G
+ f_27(A, B, C, D, E, F, G) -> Com_1(f_3(A, B, C, D, E)) :|: F+1<=G
+ f_3(A, B, C, D, E) -> Com_2(ms__sort(A, B, C, F),_W28____normal(A, B, C, D, F, G)) :|: H=C+D && H - 2<=2*F && 2*F<=H
+ f_28____normal(A, B, C, D, E, F) -> Com_2(ms__sort(A, B, G, D),_W29____normal(A, B, C, D, E, H)) :|: G=E+1
+ f_29____normal(A, B, C, D, E, F) -> Com_2(testing_Srecursion_Sms____merge__LB_LSBIIII__RBV(A, B, C, D, E),_W30____normal(A, B, C, D, E, G)) :|: 1*B>=0
+ testing_Srecursion_Sms____merge__LB_LSBIIII__RBV(A, B, C, D, E) -> Com_1(f_9(A, B, C, D, E, C, C, F, B)) :|: G=0 && H=0 && I=0 && J=0 && F=E+1 && B>=0 && B>=0
+ f_30____normal(A, B, C, D, E, F) -> Com_1(f_2(A, B, C, D, E)) :|: TRUE
+ f_9(A, B, C, D, E, F, G, H, I) -> Com_2(f_9____loop(A, B, D, E, F, G, H, I),_W38____normal(A, B, C, D, E, J, K, L, I, M)) :|: 1*F+ -1*G+ -1*H+ -1*J+1*K+1*L=0 && -1*D+1*J>=1
+ f_9____loop(A, B, C, D, E, F, G, H) -> Com_1(f_39(A, B, C, D, E, F, G, H, E, C)) :|: TRUE
+ f_38____normal(A, B, C, D, E, F, G, H, I, J) -> Com_1(f_12(A, B, C, D, E, C, G, H, I)) :|: TRUE
+ f_39(A, B, C, D, E, F, G, H, E, C) -> Com_1(f_11(A, B, C, D, E, F, G, H)) :|: E<=C
+ f_39(A, B, C, D, E, F, G, H, E, C) -> Com_1(f_9____loop__nexit(A, B, C, D, E, F, G, H)) :|: E>=C+1
+ f_12(A, B, C, D, E, F, G, H, I) -> Com_2(f_12____loop(A, B, D, F, I),_W36____normal(A, B, C, D, E, J, G, H, I, K)) :|: -1*D+1*J>=1 && -1*F+1*J>=0
+ f_11(A, B, C, D, E, F, G, H) -> Com_2(testing_Srecursion_Sms____COUNTPOINT__LB__RBV(A),_W31____normal(A, B, C, D, E, F, G, H)) :|: TRUE
+ f_12____loop(A, B, C, D, E) -> Com_1(f_37(A, B, C, D, E, D, C)) :|: TRUE
+ f_36____normal(A, B, C, D, E, F, G, H, I, J) -> Com_1(f_18(A, B, C, D, E, F, G, H, I)) :|: TRUE
+ testing_Srecursion_Sms____COUNTPOINT__LB__RBV(A) -> Com_1(f_25(A)) :|: TRUE
+ f_31____normal(A, B, C, D, E, F, G, H) -> Com_1(f_32(A, B, C, D, E, F, G, H, F, D)) :|: TRUE
+ f_37(A, B, C, D, E, D, C) -> Com_1(f_15(A, B, C, D, E)) :|: D<=C
+ f_37(A, B, C, D, E, D, C) -> Com_1(f_12____loop__nexit(A, B, C, D, E)) :|: D>=C+1
+ f_32(A, B, C, D, E, F, G, H, I, J) -> Com_1(f_16(A, B, C, D, E, F, G, H)) :|: I>=J+1
+ f_32(A, B, C, D, E, F, G, H, I, J) -> Com_1(f_17(A, B, C, D, E, F, G, H)) :|: I<=J
+ f_15(A, B, C, D, E) -> Com_2(testing_Srecursion_Sms____COUNTPOINT__LB__RBV(A),_W33____normal(A, B, C, D, E)) :|: TRUE
+ f_16(A, B, C, D, E, F, G, H) -> Com_1(f_20(A, B, C, D, E, F, I, H)) :|: I=G+1
+ f_17(A, B, C, D, E, F, G, H) -> Com_1(f_34(A, B, C, D, E, F, G, H, G, C)) :|: TRUE
+ f_33____normal(A, B, C, D, E) -> Com_1(f_12____loop(A, B, C, F, E)) :|: F=D+1
+ f_20(A, B, C, D, E, F, G, H) -> Com_1(f_9____loop(A, B, C, D, I, F, G, H)) :|: I=E+1
+ f_34(A, B, C, D, E, F, G, H, G, C) -> Com_1(f_21(A, B, C, D, E, F, G, H)) :|: G>=C+1
+ f_34(A, B, C, D, E, F, G, H, G, C) -> Com_1(f_22(A, B, C, D, E, F, G, H)) :|: G<=C
+ f_21(A, B, C, D, E, F, G, H) -> Com_1(f_20(A, B, C, D, E, I, G, H)) :|: I=F+1
+ f_22(A, B, C, D, E, F, G, H) -> Com_1(f_35(A, B, C, D, E, F, G, H, I, J)) :|: TRUE
+ f_35(A, B, C, D, E, F, G, H, I, J) -> Com_1(f_16(A, B, C, D, E, F, G, H)) :|: I<=J
+ f_35(A, B, C, D, E, F, G, H, I, J) -> Com_1(f_21(A, B, C, D, E, F, G, H)) :|: I>=J+1
+)

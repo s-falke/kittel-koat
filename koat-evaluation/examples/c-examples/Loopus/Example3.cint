@@ -1,0 +1,16 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_f_start))
+(VAR v_b v_x v_x_addr.0)
+(RULES
+    eval_f_start(v_x, v_b) -> Com_1(eval_f_entry_in(v_x, v_b))
+    eval_f_entry_in(v_x, v_b) -> Com_1(eval_f_bb3_in(v_b, v_x))
+    eval_f_bb3_in(v_b, v_x_addr.0) -> Com_1(eval_f_bb_in(v_b, v_x_addr.0)) :|: v_x_addr.0 > 0 && v_x_addr.0 <= 254
+    eval_f_bb3_in(v_b, v_x_addr.0) -> Com_1(eval_f_return_in()) :|: v_x_addr.0 <= 0
+    eval_f_bb3_in(v_b, v_x_addr.0) -> Com_1(eval_f_return_in()) :|: v_x_addr.0 > 254
+    eval_f_bb_in(v_b, v_x_addr.0) -> Com_1(eval_f_bb1_in(v_b, v_x_addr.0)) :|: v_b < 0
+    eval_f_bb_in(v_b, v_x_addr.0) -> Com_1(eval_f_bb1_in(v_b, v_x_addr.0)) :|: v_b > 0
+    eval_f_bb_in(v_b, v_x_addr.0) -> Com_1(eval_f_bb2_in(v_b, v_x_addr.0)) :|: v_b = 0
+    eval_f_bb1_in(v_b, v_x_addr.0) -> Com_1(eval_f_bb3_in(v_b, v_x_addr.0 + 1))
+    eval_f_bb2_in(v_b, v_x_addr.0) -> Com_1(eval_f_bb3_in(v_b, v_x_addr.0 - 1))
+    eval_f_return_in() -> Com_1(eval_f_stop())
+)

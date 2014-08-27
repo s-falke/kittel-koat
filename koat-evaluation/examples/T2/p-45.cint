@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f3))
+(VAR result_11 x_13 y_21 t_22 t_16 y_15 $nondet $nondet1 x0 x1 x2 x3 x4 x5 x6 x7)
+(RULES
+  f2(result_11, x_13, y_21, t_22, t_16, y_15) -> Com_1(f2(result_11, -2 + (1 + x_13), $nondet, $nondet1, -2 + y_15, 1 + (-2 + y_15))) :|: y_15 > 0 && x_13 > 0 && 0 < $nondet1 && 0 < $nondet && -2 + (1 + x_13) = -1 + $nondet1 && -2 + y_15 = -2 + $nondet
+  f3(result_11, x_13, y_21, t_22, t_16, y_15) -> Com_1(f2(result_11, x_13, y_21, t_22, t_16, y_15)) :|: TRUE
+  f2(x0, x1, x2, x3, x4, x5) -> Com_1(f4(x6, x7, x2, x3, x4, x5)) :|: x1 < 1 && x7 < 1
+  f2(x0, x1, x2, x3, x4, x5) -> Com_1(f4(x6, x1, x2, x3, x4, x5)) :|: x1 > 0 && x5 < 1
+)

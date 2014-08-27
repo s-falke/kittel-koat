@@ -1,0 +1,11 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR A)
+(RULES
+  minSort(A) -> Com_1(findMin(A)) :|: A = 0
+  minSort0(A) -> Com_1(findMin(A))
+  minSort1(A) -> Com_1(minSort(A - 1))
+  minSort(A) -> Com_2(minSort0(A),minSort1(A)) :|: A >= 1
+  findMin(A) -> Com_1(findMin(A - 1)) :|: A >= 1
+  start(A) -> Com_1(minSort(A))
+)

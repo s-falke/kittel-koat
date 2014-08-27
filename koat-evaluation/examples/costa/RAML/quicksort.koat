@@ -1,0 +1,13 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR A B C D E F G)
+(RULES
+  qs0(A,B,C,D) -> Com_1(append(A,B,C,D))
+  qs1(A,B,C,D) -> Com_1(split(B,B,D - 1,D))
+  qs2(A,B,C,D) -> Com_1(qs(A,B,C,D))
+  qs3(A,B,C,D) -> Com_1(qs(C,B,C,D))
+  qs(A,B,C,D) -> Com_4(qs0(E,G,F,A),qs1(E,G,F,A),qs2(E,G,F,A),qs3(E,G,F,A)) :|: A >= 1 && A >= 1 + E && A >= 1 + F
+  split(A,B,C,D) -> Com_1(split(A,B,C - 1,D)) :|: C >= 2
+  append(A,B,C,D) -> Com_1(append(A - 1,B,C,D)) :|: A >= 1
+  start(A,B,C,D) -> Com_1(qs(A,B,C,D))
+)

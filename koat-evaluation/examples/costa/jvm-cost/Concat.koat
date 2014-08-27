@@ -1,0 +1,19 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS concat))
+(VAR A B C D)
+(RULES
+  concat(A,B) -> Com_1(m4(A,B)) :|: A >= 0 && B >= 0
+  m0(A,B) -> Com_1(m1(A,B)) :|: A >= 0 && B >= A
+  m2(A,B) -> Com_1(m3(A,B)) :|: B >= A
+  m8(A,B) -> Com_1(m0(C,B)) :|: A >= 0 && B >= A + 1 && A + 1 >= C && C >= 1 + A
+  m1(A,B) -> Com_1(m8(A,B))
+  m1(A,B) -> Com_1(m6(A,B))
+  m9(A,B) -> Com_1(m2(C,B)) :|: B >= C && A + 1 >= C && C >= 1 + A
+  m3(A,B) -> Com_1(m9(A,B))
+  m3(A,B) -> Com_1(m7(A,B))
+  n00(A,B) -> Com_1(m5(A,B))
+  n01(A,B) -> Com_1(m0(0,B))
+  n02(A,B) -> Com_1(m2(B,A))
+  n0(A,B) -> Com_3(n00(D,C),n01(D,C),n02(D,C)) :|: C >= 0 && D >= C && B >= C && C >= B && A + C >= D && D >= A + C
+  m4(A,B) -> Com_1(n0(A,B)) :|: A >= 0 && B >= 0
+)

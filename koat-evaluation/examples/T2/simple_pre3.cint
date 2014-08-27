@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR c2 x1 x2 x0)
+(RULES
+  f8(c2, x1, x2) -> Com_1(f12(2, x1, 1)) :|: 2 = c2
+  f8(x0, x1, x2) -> Com_1(f12(x0, x1, 0)) :|: x0 < 2
+  f8(x0, x1, x2) -> Com_1(f12(x0, x1, 0)) :|: x0 > 2
+  f0(x0, x1, x2) -> Com_1(f12(1, 1, 1)) :|: TRUE
+)

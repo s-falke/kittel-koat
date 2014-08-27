@@ -1,0 +1,30 @@
+eq(pubs_start(A,B,C,D),0,[add(A,B,C,D)],[]).
+eq(add(A,B,C,D),1,[n4(A,B,C,D)],[A >= 0]).
+eq(m0(A,B,C,D),1,[m1(A,B,C,D)],[]).
+eq(m2(A,B,C,D),1,[m3(A,B,C,D)],[]).
+eq(m5(A,B,C,D),1,[m4(E,B,C,D)],[A + 1 >= E, E >= 1 + A]).
+eq(m3(A,B,C,D),1,[m5(A,B,C,D)],[]).
+eq(m6(A,B,C,D),1,[m7(A,B,C,D)],[]).
+eq(m9(A,B,C,D),1,[m8(E,B,C,D)],[A + 2 >= E, E >= 2 + A]).
+eq(m7(A,B,C,D),1,[m9(A,B,C,D)],[]).
+eq(n0(A,B,C,D),1,[n1(A,B,C,D)],[]).
+eq(n3(A,B,C,D),1,[n2(E,B,C,D)],[A + 3 >= E, E >= 3 + A]).
+eq(n1(A,B,C,D),1,[n3(A,B,C,D)],[]).
+eq(n7(A,B,C,D),1,[m0(A,B,C,D)],[A + 3 >= B]).
+eq(n80(A,B,C,D),1,[n7(A,B,C,D)],[]).
+eq(n81(A,B,C,D),1,[m2(C,B,C,D)],[]).
+eq(n8(A,B,C,D),1,[n80(A,E,B,D),n81(A,E,B,D)],[A >= B, B + 1 >= E, E >= 1 + B]).
+eq(n90(A,B,C,D),1,[n7(A,B,C,D)],[]).
+eq(n91(A,B,C,D),1,[m6(C,B,C,D)],[]).
+eq(n9(A,B,C,D),1,[n90(A,E,B,D),n91(A,E,B,D)],[A >= B, B + 2 >= E, E >= 2 + B]).
+eq(o00(A,B,C,D),1,[n7(A,B,C,D)],[]).
+eq(o01(A,B,C,D),1,[n0(C,B,C,D)],[]).
+eq(o0(A,B,C,D),1,[o00(A,E,B,D),o01(A,E,B,D)],[A >= B, B + 3 >= E, E >= 3 + B]).
+eq(o1(A,B,C,D),1,[n5(A,0,C,D),m0(A,0,C,D)],[A >= 0]).
+eq(n4(A,B,C,D),1,[o1(A,B,C,D)],[A >= 0]).
+eq(o2(A,B,C,D),1,[o3(A,B,C,D)],[A >= B]).
+eq(o3(A,B,C,D),1,[n8(A,B,C,D)],[]).
+eq(o3(A,B,C,D),1,[n9(A,B,C,D)],[]).
+eq(o3(A,B,C,D),1,[o0(A,B,C,D)],[]).
+eq(m1(A,B,C,D),1,[o2(A,B,C,D)],[]).
+eq(m1(A,B,C,D),1,[n6(A,B,C,B)],[]).

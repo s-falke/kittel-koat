@@ -1,0 +1,15 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_speedFails4_start))
+(VAR v_. v_b v_n v_x v_x_addr.0)
+(RULES
+    eval_speedFails4_start(v_x, v_n, v_b) -> Com_1(eval_speedFails4_entry_in(v_x, v_n, v_b))
+    eval_speedFails4_entry_in(v_x, v_n, v_b) -> Com_1(eval_speedFails4_bb6_in(v_n, v_b, 1, v_x)) :|: v_b > 0
+    eval_speedFails4_entry_in(v_x, v_n, v_b) -> Com_1(eval_speedFails4_bb6_in(v_n, v_b, -1, v_x)) :|: v_b <= 0
+    eval_speedFails4_bb6_in(v_n, v_b, v_., v_x_addr.0) -> Com_1(eval_speedFails4_bb3_in(v_n, v_b, v_., v_x_addr.0)) :|: v_x_addr.0 <= v_n
+    eval_speedFails4_bb6_in(v_n, v_b, v_., v_x_addr.0) -> Com_1(eval_speedFails4_return_in()) :|: v_x_addr.0 > v_n
+    eval_speedFails4_bb3_in(v_n, v_b, v_., v_x_addr.0) -> Com_1(eval_speedFails4_bb4_in(v_n, v_b, v_., v_x_addr.0)) :|: v_b > 0
+    eval_speedFails4_bb3_in(v_n, v_b, v_., v_x_addr.0) -> Com_1(eval_speedFails4_bb5_in(v_n, v_b, v_., v_x_addr.0)) :|: v_b <= 0
+    eval_speedFails4_bb4_in(v_n, v_b, v_., v_x_addr.0) -> Com_1(eval_speedFails4_bb6_in(v_n, v_b, v_., v_x_addr.0 + v_.))
+    eval_speedFails4_bb5_in(v_n, v_b, v_., v_x_addr.0) -> Com_1(eval_speedFails4_bb6_in(v_n, v_b, v_., v_x_addr.0 - v_.))
+    eval_speedFails4_return_in() -> Com_1(eval_speedFails4_stop())
+)

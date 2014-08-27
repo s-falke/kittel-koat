@@ -1,0 +1,12 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 c0)
+(RULES
+  f0(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f5(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)) :|: TRUE
+  f0(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f12(x0, x11, x2, x3, x4, x5, x6, x7, x8, x9, x10)) :|: x12 < 16
+  f12(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f20(x0, x1, x11, x11, x4, x5, x6, x7, x8, x9, x10)) :|: x1 < 0
+  f12(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f20(x0, x1, x11, x11, x4, x5, x6, x7, x8, x9, x10)) :|: x1 > 0
+  f0(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f5(1, x1, x2, x3, x4, x5, x6, x7, x8, x9, 1)) :|: x11 < 16
+  f20(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f12(x0, x1 - 1, x2, x3, 0, 0, x6, x7, x8, x9, x10)) :|: TRUE
+  f12(x0, c0, x2, x3, x4, x5, x6, x7, x8, x9, x10) -> Com_1(f5(0, 0, x2, x3, x4, x5, x11, x11, 0, 0, 0)) :|: 0 = c0
+)

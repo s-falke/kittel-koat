@@ -1,0 +1,13 @@
+eq(pubs_start(A,B,C),0,[random(A,B,C)],[]).
+eq(random(A,B,C),1,[rand(0,B,C)],[]).
+eq(rand(A,B,C),1,[end(A,B,C)],[B = 0]).
+eq(rand0(A,B,C),1,[rand(A,B,C)],[]).
+eq(rand1(A,B,C),1,[idinc(A,C,C)],[]).
+eq(rand(A,B,C),1,[rand0(E,D,A),rand1(E,D,A)],[B >= 1, D + B >= 1, 1 >= B + D]).
+eq(rand2(A,B,C),1,[rand(A,B,C)],[]).
+eq(rand3(A,B,C),1,[iddec(A,C,C)],[]).
+eq(rand(A,B,C),1,[rand2(E,D,A),rand3(E,D,A)],[0 >= B + 1, D + B + 1 >= 0, 0 >= B + 1 + D]).
+eq(idinc(A,B,C),1,[end(A,B,C)],[]).
+eq(idinc(A,B,C),1,[end(A,B,C)],[]).
+eq(iddec(A,B,C),1,[end(A,B,C)],[]).
+eq(iddec(A,B,C),1,[end(A,B,C)],[]).

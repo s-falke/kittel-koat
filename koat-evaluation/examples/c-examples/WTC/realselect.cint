@@ -1,0 +1,16 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_realselect_start))
+(VAR nondef_0 nondef_1 v_array_size v_i.0 v_j.0)
+(RULES
+    eval_realselect_start(v_array_size) -> Com_1(eval_realselect_entry_in(v_array_size))
+    eval_realselect_entry_in(v_array_size) -> Com_1(eval_realselect_bb6_in(v_array_size, 0))
+    eval_realselect_bb6_in(v_array_size, v_i.0) -> Com_1(eval_realselect_bb_in(v_array_size, v_i.0)) :|: v_array_size - 1 > v_i.0
+    eval_realselect_bb6_in(v_array_size, v_i.0) -> Com_1(eval_realselect_return_in()) :|: v_array_size - 1 <= v_i.0
+    eval_realselect_bb_in(v_array_size, v_i.0) -> Com_1(eval_realselect_bb4_in(v_array_size, v_i.0, v_i.0 + 1))
+    eval_realselect_bb4_in(v_array_size, v_i.0, v_j.0) -> Com_1(eval_realselect_bb1_in(v_array_size, v_i.0, v_j.0)) :|: v_j.0 < v_array_size
+    eval_realselect_bb4_in(v_array_size, v_i.0, v_j.0) -> Com_1(eval_realselect_bb5_in(v_array_size, v_i.0, v_j.0)) :|: v_j.0 >= v_array_size
+    eval_realselect_bb1_in(v_array_size, v_i.0, v_j.0) -> Com_1(eval_realselect_bb4_in(v_array_size, v_i.0, v_j.0 + 1)) :|: nondef_0 < nondef_1
+    eval_realselect_bb1_in(v_array_size, v_i.0, v_j.0) -> Com_1(eval_realselect_bb4_in(v_array_size, v_i.0, v_j.0 + 1)) :|: nondef_0 >= nondef_1
+    eval_realselect_bb5_in(v_array_size, v_i.0, v_j.0) -> Com_1(eval_realselect_bb6_in(v_array_size, v_i.0 + 1))
+    eval_realselect_return_in() -> Com_1(eval_realselect_stop())
+)

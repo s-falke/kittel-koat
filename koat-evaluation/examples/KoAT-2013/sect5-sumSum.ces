@@ -1,0 +1,5 @@
+eq(pubs_start(A,B,C,D),0,[l0(A,B,C,D)],[]).
+eq(l0(A,B,C,D),1,[l1(0,B,C,D)],[]).
+eq(l1(A,B,C,D),1,[l2(A,B,0,0)],[B >= 1]).
+eq(l2(A,B,C,D),1,[l2(A,B,C + 1,D + C)],[B >= C + 1]).
+eq(l2(A,B,C,D),1,[l1(A + D,B - 1,C,D)],[C >= B]).

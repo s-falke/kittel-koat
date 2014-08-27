@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eratos))
+(VAR A As B Bs X)
+(RULES
+ eratos(A) -> Com_2(eratos(As),filter(X, As)) :|: A>=1 && As=A - 1
+ out__filter(A, B) -> Com_1(out__filter(A, Bs)) :|: B>=1 && Bs = B - 1
+ out__filter(A, B) -> Com_1(out__filter(A, Bs)) :|: B>=1 && Bs = B - 1
+ filter(A, B) -> Com_1(filter(A, Bs)) :|: B>=1 && Bs = B - 1
+)

@@ -1,0 +1,12 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR ell ell__o i i__o j j__o k k__o)
+(RULES
+  start(ell, i, j, k, ell__o, i__o, j__o, k__o) -> Com_1(stop(ell, i, j, k, ell__o, i__o, j__o, k__o)) :|: i>=101 && k=k__o && j=j__o && i=i__o && ell=ell__o 
+  start(ell, i, j, k, ell__o, i__o, j__o, k__o) -> Com_1(stop(ell, i, j, k, ell__o, i__o, j__o, k__o)) :|: j>=k+1 && k=k__o && j=j__o && i=i__o && ell=ell__o 
+  start(ell, i, j, k, ell__o, i__o, j__o, k__o) -> Com_1(lbl_7_2(i, j, 1  + i, k - 1, ell__o, i__o, j__o, k__o)) :|: j<=k && i<=100 && k=k__o && j=j__o && i=i__o && ell=ell__o 
+  lbl_7_2(ell, i, j, k, ell__o, i__o, j__o, k__o) -> Com_1(stop(ell, i, j, k, ell__o, i__o, j__o, k__o)) :|: i>=101 && i__o<=100 && ell<=100 && i<=k+1 && ell+i>=i__o+j__o && ell+i+k+1>=i__o+2*j__o && ell+1=j && ell+i+k+1=i__o+j__o+k__o 
+  lbl_7_2(ell, i, j, k, ell__o, i__o, j__o, k__o) -> Com_1(stop(ell, i, j, k, ell__o, i__o, j__o, k__o)) :|: j>=k+1 && i__o<=100 && ell<=100 && i<=k+1 && ell+i>=i__o+j__o && ell+i+k+1>=i__o+2*j__o && ell+1=j && ell+i+k+1=i__o+j__o+k__o 
+  lbl_7_2(ell, i, j, k, ell__o, i__o, j__o, k__o) -> Com_1(lbl_7_2(i, j, 1  + i, k - 1, ell__o, i__o, j__o, k__o)) :|: j<=k && i<=100 && i__o<=100 && ell<=100 && i<=k+1 && ell+i>=i__o+j__o && ell+i+k+1>=i__o+2*j__o && ell+1=j && ell+i+k+1=i__o+j__o+k__o 
+  ____start(ell, i, j, k, ell__o, i__o, j__o, k__o) -> Com_1(start(ell__o, i__o, j__o, k__o, ell__o, i__o, j__o, k__o)) :|: TRUE 
+)

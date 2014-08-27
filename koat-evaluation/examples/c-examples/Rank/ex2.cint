@@ -1,0 +1,18 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_f_start))
+(VAR nondef_0 v_1 v_m v_x.0 v_y.0 v_y.1)
+(RULES
+    eval_f_start(v_m) -> Com_1(eval_f_entry_in(v_m))
+    eval_f_entry_in(v_m) -> Com_1(eval_f_bb5_in(v_m, v_m))
+    eval_f_bb5_in(v_x.0, v_y.1) -> Com_1(eval_f_bb_in(v_x.0, v_y.1)) :|: v_x.0 > 1
+    eval_f_bb5_in(v_x.0, v_y.1) -> Com_1(eval_f_return_in()) :|: v_x.0 <= 1
+    eval_f_bb_in(v_x.0, v_y.1) -> Com_1(eval_f_bb2_in(v_x.0, v_y.1, v_x.0 - 1, v_y.1 + v_x.0 - 1))
+    eval_f_bb2_in(v_x.0, v_y.1, v_1, v_y.0) -> Com_1(eval_f_bb4_in(v_x.0, v_y.1, v_1, v_y.0)) :|: v_y.0 < v_1
+    eval_f_bb2_in(v_x.0, v_y.1, v_1, v_y.0) -> Com_1(eval_f_bb3_in(v_x.0, v_y.1, v_1, v_y.0)) :|: v_y.0 >= v_1
+    eval_f_bb3_in(v_x.0, v_y.1, v_1, v_y.0) -> Com_1(eval_f_bb1_in(v_x.0, v_y.1, v_1, v_y.0)) :|: nondef_0 < 0
+    eval_f_bb3_in(v_x.0, v_y.1, v_1, v_y.0) -> Com_1(eval_f_bb1_in(v_x.0, v_y.1, v_1, v_y.0)) :|: nondef_0 > 0
+    eval_f_bb3_in(v_x.0, v_y.1, v_1, v_y.0) -> Com_1(eval_f_bb4_in(v_x.0, v_y.1, v_1, v_y.0)) :|: nondef_0 = 0
+    eval_f_bb1_in(v_x.0, v_y.1, v_1, v_y.0) -> Com_1(eval_f_bb2_in(v_x.0, v_y.1, v_1, v_y.0 - 1))
+    eval_f_bb4_in(v_x.0, v_y.1, v_1, v_y.0) -> Com_1(eval_f_bb5_in(v_1 - 1, v_y.0 - v_1 + 1))
+    eval_f_return_in() -> Com_1(eval_f_stop())
+)

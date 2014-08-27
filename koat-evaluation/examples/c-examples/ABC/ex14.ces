@@ -1,0 +1,16 @@
+eq(pubs_start(A,B,C,D,E),0,[evalfstart(A,B,C,D,E)],[]).
+eq(evalfstart(A,B,C,D,E),1,[evalfentryin(A,B,C,D,E)],[]).
+eq(evalfentryin(A,B,C,D,E),1,[evalfbb10in(B,A,C,D,E)],[]).
+eq(evalfbb10in(A,B,C,D,E),1,[evalfbb8in(A,B,1,D,E)],[B >= 1]).
+eq(evalfbb10in(A,B,C,D,E),1,[evalfreturnin(A,B,C,D,E)],[0 >= B]).
+eq(evalfbb8in(A,B,C,D,E),1,[evalfbb6in(A,B,C,B,E)],[A >= C]).
+eq(evalfbb8in(A,B,C,D,E),1,[evalfbb9in(A,B,C,D,E)],[C >= A + 1]).
+eq(evalfbb6in(A,B,C,D,E),1,[evalfbb4in(A,B,C,D,1)],[B + C >= D]).
+eq(evalfbb6in(A,B,C,D,E),1,[evalfbb7in(A,B,C,D,E)],[D >= B + C + 1]).
+eq(evalfbb4in(A,B,C,D,E),1,[evalfbb3in(A,B,C,D,E)],[D >= E]).
+eq(evalfbb4in(A,B,C,D,E),1,[evalfbb5in(A,B,C,D,E)],[E >= D + 1]).
+eq(evalfbb3in(A,B,C,D,E),1,[evalfbb4in(A,B,C,D,E + 1)],[]).
+eq(evalfbb5in(A,B,C,D,E),1,[evalfbb6in(A,B,C,D + 1,E)],[]).
+eq(evalfbb7in(A,B,C,D,E),1,[evalfbb8in(A,B,C + 1,D,E)],[]).
+eq(evalfbb9in(A,B,C,D,E),1,[evalfbb10in(A,B - 1,C,D,E)],[]).
+eq(evalfreturnin(A,B,C,D,E),1,[evalfstop(A,B,C,D,E)],[]).

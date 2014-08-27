@@ -1,0 +1,8 @@
+eq(pubs_start(A,B,C),0,[random(A,B,C)],[]).
+eq(random(A,B,C),1,[rand(A,0,C)],[A >= 0]).
+eq(rand(A,B,C),1,[end(A,B,C)],[A = 0]).
+eq(rand0(A,B,C),1,[rand(A - 1,B,C)],[]).
+eq(rand1(A,B,C),1,[idinc(C,B,C)],[]).
+eq(rand(A,B,C),1,[rand0(A,D,B),rand1(A,D,B)],[A >= 1]).
+eq(idinc(A,B,C),1,[end(A,B,C)],[]).
+eq(idinc(A,B,C),1,[end(A,B,C)],[]).

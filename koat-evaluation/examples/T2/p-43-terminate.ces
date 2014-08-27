@@ -1,0 +1,53 @@
+eq(pubs_start(A,B,C,D,E,F,G,H,I,J),0,[f8(A,B,C,D,E,F,G,H,I,J)],[]).
+eq(f13(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,E,F,G,H,I,J)],[0 >= K + 1]).
+eq(f13(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,E,F,G,H,I,J)],[K >= 1]).
+eq(f13(A,B,C,D,E,F,G,H,I,J),1,[f29(L,0,-2 + D,-1 + D,E,F,G,H,I,J)],[]).
+eq(f19(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,E,F,G,H,I,J)],[0 >= K + 1]).
+eq(f19(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,E,F,G,H,I,J)],[K >= 1]).
+eq(f19(A,B,C,D,E,F,G,H,I,J),1,[f29(L,0,-2 + D,-1 + D,E,F,G,H,I,J)],[]).
+eq(f8(A,B,C,D,E,F,G,H,I,J),1,[f27(A,B,C,D,0,0,G,H,I,J)],[]).
+eq(f27(A,B,C,D,E,F,G,H,I,J),1,[f27(L,0,-2 + D,-1 + D,0,F,0,H,I,J)],[D >= 1, C + D >= 1, C >= 1, E = 0]).
+eq(f27(A,B,C,D,E,F,G,H,I,J),1,[f27(L,K,-1 + C,-1 + C,0,F,0,H,I,J)],[D >= 1, C >= 1, 0 >= K + 1, C + D >= 1, E = 0]).
+eq(f27(A,B,C,D,E,F,G,H,I,J),1,[f27(L,K,-1 + C,-1 + C,0,F,0,H,I,J)],[D >= 1, C >= 1, K >= 1, C + D >= 1, E = 0]).
+eq(f27(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,M,C,D,J)],[D >= 1, C >= 1, C + D >= 1, 0 >= K + 1, 0 >= M + 1, E = 0]).
+eq(f27(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,M,C,D,J)],[D >= 1, C >= 1, C + D >= 1, 0 >= K + 1, M >= 1, E = 0]).
+eq(f27(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,M,C,D,J)],[D >= 1, C >= 1, C + D >= 1, K >= 1, 0 >= M + 1, E = 0]).
+eq(f27(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,M,C,D,J)],[D >= 1, C >= 1, C + D >= 1, K >= 1, M >= 1, E = 0]).
+eq(f27(A,B,C,D,E,F,G,H,I,J),1,[f28(L,0,-2 + D,-1 + D,1,F,K,C,D,J)],[D >= 1, C >= 1, 0 >= K + 1, C + D >= 1, E = 0]).
+eq(f27(A,B,C,D,E,F,G,H,I,J),1,[f28(L,0,-2 + D,-1 + D,1,F,K,C,D,J)],[D >= 1, C >= 1, K >= 1, C + D >= 1, E = 0]).
+eq(f27(A,B,C,D,E,F,G,H,I,J),1,[f9(A,B,C,D,E,F,G,H,I,L)],[0 >= C]).
+eq(f27(A,B,C,D,E,F,G,H,I,J),1,[f9(A,B,C,D,E,F,G,H,I,L)],[C >= 1, 0 >= D]).
+eq(f28(A,B,C,D,E,F,G,H,I,J),1,[f300(A,B,C,D,1,1,G,H,I,J)],[D >= I, C >= H, C + D >= H + I, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f28(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C >= 1, 0 >= K + 1, C + D >= 1, E = 1]).
+eq(f28(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C >= 1, K >= 1, C + D >= 1, E = 1]).
+eq(f28(A,B,C,D,E,F,G,H,I,J),1,[f28(L,0,-2 + D,-1 + D,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f28(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C >= 1, 0 >= K + 1, C + D >= 1, E = 1]).
+eq(f28(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C >= 1, K >= 1, C + D >= 1, E = 1]).
+eq(f28(A,B,C,D,E,F,G,H,I,J),1,[f28(L,0,-2 + D,-1 + D,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f28(A,B,C,D,E,F,G,H,I,J),1,[f9(A,B,C,D,E,F,G,H,I,L)],[0 >= C]).
+eq(f28(A,B,C,D,E,F,G,H,I,J),1,[f9(A,B,C,D,E,F,G,H,I,L)],[C >= 1, 0 >= D]).
+eq(f29(A,B,C,D,E,F,G,H,I,J),1,[f300(A,B,C,D,1,1,G,H,I,J)],[D >= I, C >= H, C + D >= H + I, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f29(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C >= 1, 0 >= K + 1, C + D >= 1, E = 1]).
+eq(f29(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C >= 1, K >= 1, C + D >= 1, E = 1]).
+eq(f29(A,B,C,D,E,F,G,H,I,J),1,[f29(L,0,-2 + D,-1 + D,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f29(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C >= 1, 0 >= K + 1, C + D >= 1, E = 1]).
+eq(f29(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C >= 1, K >= 1, C + D >= 1, E = 1]).
+eq(f29(A,B,C,D,E,F,G,H,I,J),1,[f29(L,0,-2 + D,-1 + D,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f29(A,B,C,D,E,F,G,H,I,J),1,[f9(A,B,C,D,E,F,G,H,I,L)],[0 >= C]).
+eq(f29(A,B,C,D,E,F,G,H,I,J),1,[f9(A,B,C,D,E,F,G,H,I,L)],[C >= 1, 0 >= D]).
+eq(f30(A,B,C,D,E,F,G,H,I,J),1,[f300(A,B,C,D,1,1,G,H,I,J)],[D >= I, C >= H, C + D >= H + I, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f30(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C >= 1, 0 >= K + 1, C + D >= 1, E = 1]).
+eq(f30(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C >= 1, K >= 1, C + D >= 1, E = 1]).
+eq(f30(A,B,C,D,E,F,G,H,I,J),1,[f28(L,0,-2 + D,-1 + D,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f30(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C >= 1, 0 >= K + 1, C + D >= 1, E = 1]).
+eq(f30(A,B,C,D,E,F,G,H,I,J),1,[f30(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C >= 1, K >= 1, C + D >= 1, E = 1]).
+eq(f30(A,B,C,D,E,F,G,H,I,J),1,[f28(L,0,-2 + D,-1 + D,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f30(A,B,C,D,E,F,G,H,I,J),1,[f9(A,B,C,D,E,F,G,H,I,L)],[0 >= C]).
+eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f300(A,B,C,D,1,1,G,H,I,J)],[D >= I, C >= H, C + D >= H + I, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C >= 1, 0 >= K + 1, C + D >= 1, E = 1]).
+eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C >= 1, K >= 1, C + D >= 1, E = 1]).
+eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f29(L,0,-2 + D,-1 + D,1,F,G,H,I,J)],[H >= C + 1, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C >= 1, 0 >= K + 1, C + D >= 1, E = 1]).
+eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f31(L,K,-1 + C,-1 + C,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C >= 1, K >= 1, C + D >= 1, E = 1]).
+eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f29(L,0,-2 + D,-1 + D,1,F,G,H,I,J)],[I >= D + 1, C >= H, D >= 1, C + D >= 1, C >= 1, E = 1]).
+eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f9(A,B,C,D,E,F,G,H,I,L)],[0 >= C]).

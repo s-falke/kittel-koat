@@ -1,0 +1,10 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR x0 x1 x2 x3 x4)
+(RULES
+  f0(x0, x1, x2, x3, x4) -> Com_1(f4(0, x1, x2, x3, x4)) :|: TRUE
+  f20(x0, x1, x2, x3, x4) -> Com_1(f20(x0, x1, x2, x3 + 1, x3)) :|: x3 < 200
+  f20(x0, x1, x2, x3, x4) -> Com_1(f31(x0, x1, x2, x3, x4)) :|: x3 > 199
+  f4(x0, x1, x2, x3, x4) -> Com_1(f4(x0 + 1, x0, x0, x3, x4)) :|: x0 < 100
+  f4(x0, x1, x2, x3, x4) -> Com_1(f20(x0, x1, x2, 100, x4)) :|: x0 > 99
+)

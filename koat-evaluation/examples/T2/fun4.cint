@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR c0 wnt deltaext deltaext_new x0 x1 x2 x3)
+(RULES
+  f0(c0, wnt, deltaext, deltaext_new) -> Com_1(f1(2, wnt, deltaext, deltaext_new)) :|: wnt > -1 && wnt < 4 && deltaext < 4 && deltaext > -1
+  f1(x0, x1, x2, x3) -> Com_1(f1(x0, x1, x2 + 1, x2 + 1)) :|: x0 + x1 > 2 * x2 && x2 != x2 + 1
+  f1(x0, x1, x2, x3) -> Com_1(f1(x0, x1, x2 - 1, x2 - 1)) :|: x0 + x1 < 2 * x2 - 1 && x2 != x2 - 1
+  f1(x0, x1, x2, x3) -> Com_1(f1(x0, x1, x2, x2)) :|: x2 != x2 && x0 + x1 <= 2 * x2 && x0 + x1 >= 2 * x2 - 1
+)

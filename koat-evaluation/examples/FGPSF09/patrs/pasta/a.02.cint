@@ -1,0 +1,7 @@
+(GOAL COMPLEXITY)
+(STARTTERM CONSTRUCTOR-BASED)
+(VAR l u z)
+(RULES
+  eval(l, u) -> Com_1(eval(z, u)) :|: l >= 0 && u >= 0 && u - l - 1 >= 0 && z - ((l + u) / 2 + 1) >= 0 && (l + u) / 2 + 1 - z >= 0
+  eval(l, u) -> Com_1(eval(l, z)) :|: l >= 0 && u >= 0 && u - l - 1 >= 0 && z - (l + u) / 2 >= 0 && (l + u) / 2 - z >= 0
+)

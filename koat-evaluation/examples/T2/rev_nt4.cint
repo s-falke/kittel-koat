@@ -1,0 +1,7 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f28))
+(VAR __patmp1 __patmp2 len_263 k_243 k_208 x0 x1 x2 x3 x4)
+(RULES
+  f12(__patmp1, __patmp2, len_263, k_243, k_208) -> Com_1(f11(__patmp1, __patmp2, len_263, k_243, k_208)) :|: TRUE
+  f28(x0, x1, x2, x3, x4) -> Com_1(f20(1, x4, 1, x4, x4)) :|: x4 > 0
+)

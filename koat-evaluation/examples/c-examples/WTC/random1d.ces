@@ -1,0 +1,10 @@
+eq(pubs_start(A,B),0,[evalrandom1dstart(A,B)],[]).
+eq(evalrandom1dstart(A,B),1,[evalrandom1dentryin(A,B)],[]).
+eq(evalrandom1dentryin(A,B),1,[evalrandom1dbb5in(A,1)],[A >= 1]).
+eq(evalrandom1dentryin(A,B),1,[evalrandom1dreturnin(A,B)],[0 >= A]).
+eq(evalrandom1dbb5in(A,B),1,[evalrandom1dbb1in(A,B)],[A >= B]).
+eq(evalrandom1dbb5in(A,B),1,[evalrandom1dreturnin(A,B)],[B >= A + 1]).
+eq(evalrandom1dbb1in(A,B),1,[evalrandom1dbb5in(A,B + 1)],[0 >= C + 1]).
+eq(evalrandom1dbb1in(A,B),1,[evalrandom1dbb5in(A,B + 1)],[C >= 1]).
+eq(evalrandom1dbb1in(A,B),1,[evalrandom1dbb5in(A,B + 1)],[]).
+eq(evalrandom1dreturnin(A,B),1,[evalrandom1dstop(A,B)],[]).

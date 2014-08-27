@@ -1,0 +1,10 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR A)
+(RULES
+  start(A) -> Com_1(a(A)) :|: A >= 0
+  a0(A) -> Com_1(b(A))
+  a1(A) -> Com_1(a(A - 1))
+  a(A) -> Com_2(a0(A),a1(A)) :|: A >= 1
+  b(A) -> Com_1(b(A - 1)) :|: A >= 1
+)

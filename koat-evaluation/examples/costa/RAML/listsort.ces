@@ -1,0 +1,10 @@
+eq(pubs_start(A,B,C),0,[start(A,B,C)],[]).
+eq(isortlist0(A,B,C),1,[insert(A - 1,C,C)],[]).
+eq(isortlist1(A,B,C),1,[isortlist(C,B,A - 1)],[]).
+eq(isortlist(A,B,C),1,[isortlist0(C,B,A),isortlist1(C,B,A)],[C >= 1]).
+eq(insert(A,B,C),1,[leq(B,B,C)],[A >= 1]).
+eq(insert0(A,B,C),1,[leq(A,B,C)],[]).
+eq(insert1(A,B,C),1,[insert(B - 1,A,C)],[]).
+eq(insert(A,B,C),1,[insert0(B,A,C),insert1(B,A,C)],[A >= 1]).
+eq(leq(A,B,C),1,[leq(A - 1,B,C - 1)],[C >= 1, A >= 1]).
+eq(start(A,B,C),1,[isortlist(A,B,C)],[]).

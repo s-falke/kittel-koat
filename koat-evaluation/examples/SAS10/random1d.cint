@@ -1,0 +1,12 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR a a__o max max__o x x__o)
+(RULES
+  start(a, max, x, a__o, max__o, x__o) -> Com_1(stop(a, max, x, a__o, max__o, x__o)) :|: max<=0 && x=x__o && max=max__o && a=a__o 
+  start(a, max, x, a__o, max__o, x__o) -> Com_1(lbl_10_1(1, max, 2, a__o, max__o, x__o)) :|: max>=1 && x=x__o && max=max__o && a=a__o 
+  start(a, max, x, a__o, max__o, x__o) -> Com_1(lbl_10_1(- 1, max, 2, a__o, max__o, x__o)) :|: max>=1 && x=x__o && max=max__o && a=a__o 
+  lbl_10_1(a, max, x, a__o, max__o, x__o) -> Com_1(stop(a, max, x, a__o, max__o, x__o)) :|: max+1<=x && a+x>=1 && max+1>=x && x>=2 && a+1<=x && max=max__o 
+  lbl_10_1(a, max, x, a__o, max__o, x__o) -> Com_1(lbl_10_1(1  + a, max, 1  + x, a__o, max__o, x__o)) :|: max>=x && a+x>=1 && max+1>=x && x>=2 && a+1<=x && max=max__o 
+  lbl_10_1(a, max, x, a__o, max__o, x__o) -> Com_1(lbl_10_1(a - 1, max, 1  + x, a__o, max__o, x__o)) :|: max>=x && a+x>=1 && max+1>=x && x>=2 && a+1<=x && max=max__o 
+  ____start(a, max, x, a__o, max__o, x__o) -> Com_1(start(a__o, max__o, x__o, a__o, max__o, x__o)) :|: TRUE 
+)

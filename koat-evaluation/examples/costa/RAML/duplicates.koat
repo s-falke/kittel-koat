@@ -1,0 +1,14 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR A B C D E F)
+(RULES
+  eq(A,B,C,D) -> Com_1(eq(A - 1,B - 1,C,D)) :|: A >= 1 && B >= 1
+  nub0(A,B,C,D) -> Com_1(remove(A,B - 1,C,D))
+  nub1(A,B,C,D) -> Com_1(nub(C,D,C,D))
+  nub(A,B,C,D) -> Com_2(nub0(F,A,E,B),nub1(F,A,E,B)) :|: A >= 1 && A >= 1 + E
+  remove0(A,B,C,D) -> Com_1(eq(A,B,C,D))
+  remove1(A,B,C,D) -> Com_1(remove(A,D - 1,C,B))
+  remove(A,B,C,D) -> Com_2(remove0(A,D,C,B),remove1(A,D,C,B)) :|: B >= 1
+  remove(A,B,C,D) -> Com_1(remove(A,B - 1,C,D)) :|: B >= 1
+  start(A,B,C,D) -> Com_1(eq(A,B,C,D))
+)

@@ -1,0 +1,19 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR x x__o y y__o)
+(RULES
+  start(x, y, x__o, y__o) -> Com_1(stop(x, y, x__o, y__o)) :|: x<=0 && y=y__o && x=x__o 
+  start(x, y, x__o, y__o) -> Com_1(lbl_6(x, y, x__o, y__o)) :|: x>=1 && y<=0 && y=y__o && x=x__o 
+  start(x, y, x__o, y__o) -> Com_1(cut(x, y, x__o, y__o)) :|: x>=1 && x=y && y=y__o && x=x__o 
+  start(x, y, x__o, y__o) -> Com_1(lbl_10_1(x, y - x, x__o, y__o)) :|: x>=1 && x+1<=y && y=y__o && x=x__o 
+  start(x, y, x__o, y__o) -> Com_1(lbl_11_1(x - y, y, x__o, y__o)) :|: x>=y+1 && y>=1 && y=y__o && x=x__o 
+  lbl_6(x, y, x__o, y__o) -> Com_1(stop(x, y, x__o, y__o)) :|: x>=1 && y<=0 && x=x__o && y=y__o 
+  lbl_10_1(x, y, x__o, y__o) -> Com_1(cut(x, y, x__o, y__o)) :|: x=y && x<=x__o && y>=1 && x>=1 && x+y<=y__o 
+  lbl_10_1(x, y, x__o, y__o) -> Com_1(lbl_10_1(x, y - x, x__o, y__o)) :|: x+1<=y && x<=x__o && y>=1 && x>=1 && x+y<=y__o 
+  lbl_10_1(x, y, x__o, y__o) -> Com_1(lbl_11_1(x - y, y, x__o, y__o)) :|: x>=y+1 && x<=x__o && y>=1 && x>=1 && x+y<=y__o 
+  lbl_11_1(x, y, x__o, y__o) -> Com_1(cut(x, y, x__o, y__o)) :|: x=y && y<=y__o && y>=1 && x>=1 && x+y<=x__o 
+  lbl_11_1(x, y, x__o, y__o) -> Com_1(lbl_10_1(x, y - x, x__o, y__o)) :|: x+1<=y && y<=y__o && y>=1 && x>=1 && x+y<=x__o 
+  lbl_11_1(x, y, x__o, y__o) -> Com_1(lbl_11_1(x - y, y, x__o, y__o)) :|: x>=y+1 && y<=y__o && y>=1 && x>=1 && x+y<=x__o 
+  cut(x, y, x__o, y__o) -> Com_1(stop(x, y, x__o, y__o)) :|: x<=x__o && x>=1 && x<=y__o && x=y 
+  ____start(x, y, x__o, y__o) -> Com_1(start(x__o, y__o, x__o, y__o)) :|: TRUE 
+)

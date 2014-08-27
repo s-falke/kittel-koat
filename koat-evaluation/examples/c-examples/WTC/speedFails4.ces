@@ -1,0 +1,11 @@
+eq(pubs_start(A,B,C,D),0,[evalspeedFails4start(A,B,C,D)],[]).
+eq(evalspeedFails4start(A,B,C,D),1,[evalspeedFails4entryin(A,B,C,D)],[]).
+eq(evalspeedFails4entryin(A,B,C,D),1,[evalspeedFails4bb6in(1,C,A,B)],[A >= 1]).
+eq(evalspeedFails4entryin(A,B,C,D),1,[evalspeedFails4bb6in(-1,C,A,B)],[0 >= A]).
+eq(evalspeedFails4bb6in(A,B,C,D),1,[evalspeedFails4bb3in(A,B,C,D)],[B >= D]).
+eq(evalspeedFails4bb6in(A,B,C,D),1,[evalspeedFails4returnin(A,B,C,D)],[D >= B + 1]).
+eq(evalspeedFails4bb3in(A,B,C,D),1,[evalspeedFails4bb4in(A,B,C,D)],[C >= 1]).
+eq(evalspeedFails4bb3in(A,B,C,D),1,[evalspeedFails4bb5in(A,B,C,D)],[0 >= C]).
+eq(evalspeedFails4bb4in(A,B,C,D),1,[evalspeedFails4bb6in(A,B,C,D + A)],[]).
+eq(evalspeedFails4bb5in(A,B,C,D),1,[evalspeedFails4bb6in(A,B,C,D - A)],[]).
+eq(evalspeedFails4returnin(A,B,C,D),1,[evalspeedFails4stop(A,B,C,D)],[]).

@@ -1,0 +1,25 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS mult3))
+(VAR A B C D E F G H I)
+(RULES
+  mult3(A,B,C,D,E,F) -> Com_2(mult(A,B,C,D,E,F),mult(A,B,C,D,E,F))
+  mult(A,B,C,D,E,F) -> Com_1(mult(A - 1,B,C,D,E,F)) :|: A >= 1 && G >= A
+  mult0(A,B,C,D,E,F) -> Com_1(mult(A - 1,B,C,D,E,F))
+  mult1(A,B,C,D,E,F) -> Com_1(add(B,C,C,D,E,F))
+  mult(A,B,C,D,E,F) -> Com_2(mult0(A,B,G,D,E,F),mult1(A,B,G,D,E,F)) :|: A >= 1 && A >= G
+  outmult(A,B,C,D,E,F) -> Com_1(outmult(A - 1,B,C,D,E,F)) :|: A >= 1
+  outmult0(A,B,C,D,E,F) -> Com_1(outmult(A - 1,B,C,D,E,F))
+  outmult1(A,B,C,D,E,F) -> Com_1(outadd(B,C,C,D,E,F))
+  outmult(A,B,C,D,E,F) -> Com_2(outmult0(A,B,G,D,E,F),outmult1(A,B,G,D,E,F)) :|: A >= 1 && A >= G
+  add(A,B,C,D,E,F) -> Com_1(addp(A,B,0,D,E,F))
+  bitToInt(A,B,C,D,E,F) -> Com_1(bitToIntp(A,1,C,D,E,F))
+  bitToIntp(A,B,C,D,E,F) -> Com_1(bitToIntp(A - 1,2*B,C,D,E,F)) :|: A >= 1
+  addp0(A,B,C,D,E,F) -> Com_1(sum(A,B,C,D,E,F))
+  addp1(A,B,C,D,E,F) -> Com_1(addp(D - 1,E - 1,F,D,E,F))
+  addp(A,B,C,D,E,F) -> Com_2(addp0(G,H,C,A,B,I),addp1(G,H,C,A,B,I)) :|: A >= 1 && B >= 1
+  subp0(A,B,C,D,E,F) -> Com_1(diff(A,B,C,D,E,F))
+  subp1(A,B,C,D,E,F) -> Com_1(subp(D - 1,E - 1,F,D,E,F))
+  subp(A,B,C,D,E,F) -> Com_2(subp0(G,H,C,A,B,I),subp1(G,H,C,A,B,I)) :|: A >= 1 && B >= 1
+  leq(A,B,C,D,E,F) -> Com_1(compare(A,B,C,D,E,F)) :|: A >= 0 && B >= 0
+  compare(A,B,C,D,E,F) -> Com_1(compare(A - 1,B - 1,C,D,E,F)) :|: A >= 1 && B >= 1
+)

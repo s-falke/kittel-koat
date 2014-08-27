@@ -1,0 +1,17 @@
+eq(pubs_start(A,B,C,D),0,[evalfstart(A,B,C,D)],[]).
+eq(evalfstart(A,B,C,D),1,[evalfentryin(A,B,C,D)],[]).
+eq(evalfentryin(A,B,C,D),1,[evalfbb7in(0,B,C,D)],[]).
+eq(evalfbb7in(A,B,C,D),1,[evalfbb5in(A,B,0,D)],[B*B*B >= 0, 0 >= B*B*B, 0 >= 1 + A]).
+eq(evalfbb7in(A,B,C,D),1,[evalfbb5in(A,B,0,D)],[B*B*B >= 1, E >= 0, B*B*B >= 2*E, 1 + 2*E >= B*B*B, E >= 1 + A]).
+eq(evalfbb7in(A,B,C,D),1,[evalfbb5in(A,B,0,D)],[0 >= B*B*B + 1, 0 >= E, E >= 1 + A, 2*E >= B*B*B, 1 + B*B*B >= 2*E]).
+eq(evalfbb7in(A,B,C,D),1,[evalfreturnin(A,B,C,D)],[B*B*B >= 0, 0 >= B*B*B, A >= 0]).
+eq(evalfbb7in(A,B,C,D),1,[evalfreturnin(A,B,C,D)],[B*B*B >= 1, E >= 0, B*B*B >= 2*E, 1 + 2*E >= B*B*B, A >= E]).
+eq(evalfbb7in(A,B,C,D),1,[evalfreturnin(A,B,C,D)],[0 >= B*B*B + 1, 0 >= E, A >= E, 2*E >= B*B*B, 1 + B*B*B >= 2*E]).
+eq(evalfbb5in(A,B,C,D),1,[evalfbb3in(A,B,C,0)],[B >= 1 + C]).
+eq(evalfbb5in(A,B,C,D),1,[evalfbb6in(A,B,C,D)],[C >= B]).
+eq(evalfbb3in(A,B,C,D),1,[evalfbb2in(A,B,C,D)],[C >= 1 + D]).
+eq(evalfbb3in(A,B,C,D),1,[evalfbb4in(A,B,C,D)],[D >= C]).
+eq(evalfbb2in(A,B,C,D),1,[evalfbb3in(A,B,C,D + 1)],[]).
+eq(evalfbb4in(A,B,C,D),1,[evalfbb5in(A,B,C + 1,D)],[]).
+eq(evalfbb6in(A,B,C,D),1,[evalfbb7in(A + 1,B,C,D)],[]).
+eq(evalfreturnin(A,B,C,D),1,[evalfstop(A,B,C,D)],[]).

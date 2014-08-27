@@ -1,0 +1,7 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR y x)
+(RULES
+  f0(y, x) -> Com_1(f1(3000, x)) :|: TRUE
+  f1(y, x) -> Com_1(f1(y, x + 1000)) :|: x > -890 && y < 2000
+)

@@ -1,0 +1,19 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_wcet1_start))
+(VAR nondef_0 v_i.0 v_j.0 v_j.2 v_n)
+(RULES
+    eval_wcet1_start(v_n) -> Com_1(eval_wcet1_entry_in(v_n))
+    eval_wcet1_entry_in(v_n) -> Com_1(eval_wcet1_bb_in(v_n, 0, v_n)) :|: v_n > 0
+    eval_wcet1_entry_in(v_n) -> Com_1(eval_wcet1_return_in()) :|: v_n <= 0
+    eval_wcet1_bb_in(v_n, v_j.0, v_i.0) -> Com_1(eval_wcet1_bb1_in(v_n, v_j.0, v_i.0)) :|: nondef_0 < 0
+    eval_wcet1_bb_in(v_n, v_j.0, v_i.0) -> Com_1(eval_wcet1_bb1_in(v_n, v_j.0, v_i.0)) :|: nondef_0 > 0
+    eval_wcet1_bb_in(v_n, v_j.0, v_i.0) -> Com_1(eval_wcet1_bb4_in(v_n, v_j.0, v_i.0)) :|: nondef_0 = 0
+    eval_wcet1_bb1_in(v_n, v_j.0, v_i.0) -> Com_1(eval_wcet1_bb6_in(v_n, v_j.0, v_i.0, 0)) :|: v_j.0 + 1 >= v_n
+    eval_wcet1_bb1_in(v_n, v_j.0, v_i.0) -> Com_1(eval_wcet1_bb6_in(v_n, v_j.0, v_i.0, v_j.0 + 1)) :|: v_j.0 + 1 < v_n
+    eval_wcet1_bb4_in(v_n, v_j.0, v_i.0) -> Com_1(eval_wcet1_bb5_in(v_n, v_j.0, v_i.0)) :|: v_j.0 - 1 <= 0
+    eval_wcet1_bb4_in(v_n, v_j.0, v_i.0) -> Com_1(eval_wcet1_bb6_in(v_n, v_j.0, v_i.0, v_j.0 - 1)) :|: v_j.0 - 1 > 0
+    eval_wcet1_bb5_in(v_n, v_j.0, v_i.0) -> Com_1(eval_wcet1_bb6_in(v_n, v_j.0, v_i.0, 0))
+    eval_wcet1_bb6_in(v_n, v_j.0, v_i.0, v_j.2) -> Com_1(eval_wcet1_bb_in(v_n, v_j.2, v_i.0 - 1)) :|: v_i.0 - 1 > 0
+    eval_wcet1_bb6_in(v_n, v_j.0, v_i.0, v_j.2) -> Com_1(eval_wcet1_return_in()) :|: v_i.0 - 1 <= 0
+    eval_wcet1_return_in() -> Com_1(eval_wcet1_stop())
+)

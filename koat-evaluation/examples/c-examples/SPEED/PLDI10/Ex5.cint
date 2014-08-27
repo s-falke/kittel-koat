@@ -1,0 +1,26 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eval_Ex5_start))
+(VAR nondef_0 nondef_1 v_flag.0 v_i.0 v_n v_.n_addr.0 v_n_addr.0 v_n_addr.1)
+(RULES
+    eval_Ex5_start(v_n) -> Com_1(eval_Ex5_entry_in(v_n))
+    eval_Ex5_entry_in(v_n) -> Com_1(eval_Ex5_bb6_in(0, v_n))
+    eval_Ex5_bb6_in(v_i.0, v_n_addr.1) -> Com_1(eval_Ex5_bb3_in(v_i.0, v_n_addr.1, 0, v_n_addr.1)) :|: v_i.0 < v_n_addr.1
+    eval_Ex5_bb6_in(v_i.0, v_n_addr.1) -> Com_1(eval_Ex5_return_in()) :|: v_i.0 >= v_n_addr.1
+    eval_Ex5_bb3_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb1_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0)) :|: nondef_0 < 0
+    eval_Ex5_bb3_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb1_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0)) :|: nondef_0 > 0
+    eval_Ex5_bb3_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb4_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0)) :|: nondef_0 = 0
+    eval_Ex5_bb1_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb2_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0, v_n_addr.0 - 1)) :|: nondef_1 < 0 && nondef_1 < 0
+    eval_Ex5_bb1_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb2_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0, v_n_addr.0 - 1)) :|: nondef_1 < 0 && nondef_1 > 0
+    eval_Ex5_bb1_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb2_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0, v_n_addr.0 - 1)) :|: nondef_1 > 0 && nondef_1 < 0
+    eval_Ex5_bb1_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb2_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0, v_n_addr.0 - 1)) :|: nondef_1 > 0 && nondef_1 > 0
+    eval_Ex5_bb1_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb3_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0 - 1)) :|: nondef_1 < 0 && nondef_1 = 0
+    eval_Ex5_bb1_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb3_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0 - 1)) :|: nondef_1 > 0 && nondef_1 = 0
+    eval_Ex5_bb1_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb2_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0, v_n_addr.0)) :|: nondef_1 = 0 && nondef_1 < 0
+    eval_Ex5_bb1_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb2_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0, v_n_addr.0)) :|: nondef_1 = 0 && nondef_1 > 0
+    eval_Ex5_bb1_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb3_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0)) :|: nondef_1 = 0 && nondef_1 = 0
+    eval_Ex5_bb2_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0, v_.n_addr.0) -> Com_1(eval_Ex5_bb3_in(v_i.0, v_n_addr.1, 1, v_.n_addr.0))
+    eval_Ex5_bb4_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb6_in(v_i.0 + 1, v_n_addr.0)) :|: v_flag.0 = 0
+    eval_Ex5_bb4_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb6_in(v_i.0, v_n_addr.0)) :|: v_flag.0 < 0
+    eval_Ex5_bb4_in(v_i.0, v_n_addr.1, v_flag.0, v_n_addr.0) -> Com_1(eval_Ex5_bb6_in(v_i.0, v_n_addr.0)) :|: v_flag.0 > 0
+    eval_Ex5_return_in() -> Com_1(eval_Ex5_stop())
+)

@@ -1,0 +1,7 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR x0 x1 x2 x3 x4 x5 x6 x7 x8)
+(RULES
+  f0(x0, x1, x2, x3, x4) -> Com_1(f23(0, 1, x5, x6, x7)) :|: x8 < 100
+  f0(x0, x1, x2, x3, x4) -> Com_1(f23(0, 1, x5, x6, x7)) :|: TRUE
+)

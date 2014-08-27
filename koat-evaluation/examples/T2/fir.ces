@@ -1,0 +1,10 @@
+eq(pubs_start(A,B,C,D,E,F,G,H),0,[f0(A,B,C,D,E,F,G,H)],[]).
+eq(f0(A,B,C,D,E,F,G,H),1,[f15(10,35,285,I,I,0,G,H)],[]).
+eq(f15(A,B,C,D,E,F,G,H),1,[f25(A,B,C,D,E,F,I,1)],[A >= F + 1]).
+eq(f25(A,B,C,D,E,F,G,H),1,[f25(A,B,C,D,E,F,I,H + 1)],[E >= H + 1]).
+eq(f41(A,B,C,D,E,F,G,H),1,[f15(A,B,C,D,E,F + 1,G,H)],[E >= B]).
+eq(f41(A,B,C,D,E,F,G,H),1,[f15(A,B,C,D,E + 1,F + 1,G,H)],[B >= E + 1]).
+eq(f25(A,B,C,D,E,F,G,H),1,[f41(A,B,C,D,E,F,G,H)],[H >= E, I >= J + 1]).
+eq(f25(A,B,C,D,E,F,G,H),1,[f41(A,B,C,D,E,F,G,H)],[H >= E]).
+eq(f25(A,B,C,D,E,F,G,H),1,[f15(A,B,C,D,E - 1,F + 1,G,H)],[H >= E]).
+eq(f15(A,B,C,D,E,F,G,H),1,[f48(A,B,C,D,E,F,G,H)],[F >= A]).

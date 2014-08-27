@@ -1,0 +1,16 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR A B C D)
+(RULES
+  fibonacciMethod(A,B) -> Com_1(m0(A,B)) :|: A >= 0
+  m0(A,B) -> Com_1(m2(A,B)) :|: A >= 0
+  m3(A,B) -> Com_1(m1(A,B)) :|: A >= 0 && 1 >= A
+  m40(A,B) -> Com_1(m1(A,B))
+  m41(A,B) -> Com_1(fibonacciMethod(A,B))
+  m42(A,B) -> Com_1(fibonacciMethod(B,B))
+  m4(A,B) -> Com_3(m40(D,C),m41(D,C),m42(D,C)) :|: A >= 2 && A >= C + 2 && 2 + C >= A && A >= D + 1 && 1 + D >= A
+  m2(A,B) -> Com_1(m5(A,B)) :|: A >= 0
+  m5(A,B) -> Com_1(m4(A,B))
+  m5(A,B) -> Com_1(m3(A,B))
+  start(A,B) -> Com_1(fibonacciMethod(A,B))
+)

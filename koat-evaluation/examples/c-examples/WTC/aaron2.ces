@@ -1,0 +1,13 @@
+eq(pubs_start(A,B,C),0,[evalaaron2start(A,B,C)],[]).
+eq(evalaaron2start(A,B,C),1,[evalaaron2entryin(A,B,C)],[]).
+eq(evalaaron2entryin(A,B,C),1,[evalaaron2bb6in(A,C,B)],[A >= 0]).
+eq(evalaaron2entryin(A,B,C),1,[evalaaron2returnin(A,B,C)],[0 >= A + 1]).
+eq(evalaaron2bb6in(A,B,C),1,[evalaaron2returnin(A,B,C)],[B >= C + 1]).
+eq(evalaaron2bb6in(A,B,C),1,[evalaaron2returnin(A,B,C)],[0 >= A + 1]).
+eq(evalaaron2bb6in(A,B,C),1,[evalaaron2bb3in(A,B,C)],[C >= B, A >= 0]).
+eq(evalaaron2bb3in(A,B,C),1,[evalaaron2bb4in(A,B,C)],[0 >= D + 1]).
+eq(evalaaron2bb3in(A,B,C),1,[evalaaron2bb4in(A,B,C)],[D >= 1]).
+eq(evalaaron2bb3in(A,B,C),1,[evalaaron2bb5in(A,B,C)],[]).
+eq(evalaaron2bb4in(A,B,C),1,[evalaaron2bb6in(A,B,C - A - 1)],[]).
+eq(evalaaron2bb5in(A,B,C),1,[evalaaron2bb6in(A,B + A + 1,C)],[]).
+eq(evalaaron2returnin(A,B,C),1,[evalaaron2stop(A,B,C)],[]).

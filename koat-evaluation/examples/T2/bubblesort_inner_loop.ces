@@ -1,0 +1,6 @@
+eq(pubs_start(A,B,C,D),0,[f0(A,B,C,D)],[]).
+eq(f0(A,B,C,D),1,[f8(0,B,C,D)],[]).
+eq(f8(A,B,C,D),1,[f8(A + 1,B,C,D)],[3 >= A]).
+eq(f8(A,B,C,D),1,[f8(A + 1,A,A + 1,E)],[3 >= A]).
+eq(f8(A,B,C,D),1,[f23(A,B,C,D)],[A >= 4, 0 >= E + 1]).
+eq(f8(A,B,C,D),1,[f23(A,B,C,D)],[A >= 4]).

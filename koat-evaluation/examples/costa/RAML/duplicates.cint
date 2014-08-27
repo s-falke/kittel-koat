@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS eq))
+(VAR X L1 L2 Ls1 L3 Ls1 Ls2)
+(RULES
+ eq(L1, L2) -> Com_1(eq(Ls1, Ls2)) :|: L1>=1 && L2>=1 && Ls1=L1 - 1 && Ls2=L2 - 1
+ nub(L1, L2) -> Com_2(remove(X, Ls1, L2),nub(L3, L2)) :|: L1>=1 && Ls1 = L1 - 1 && L3 <= Ls1
+ remove(X, L1, L2) -> Com_2(eq(X, L2),remove(X, Ls1, L2)) :|: L1>=1 && Ls1 = L1 - 1
+ remove(X, L1, L2) -> Com_1(remove(X, Ls1, L2)) :|: L1>=1 && Ls1 = L1 - 1
+)

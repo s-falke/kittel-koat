@@ -1,0 +1,16 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR m m__o n n__o v1 v1__o v2 v2__o)
+(RULES
+  start(m, n, v1, v2, m__o, n__o, v1__o, v2__o) -> Com_1(stop(m, n, v1, v2, m__o, n__o, v1__o, v2__o)) :|: m<=0 && v2=v2__o && v1=v1__o && n=n__o && m=m__o 
+  start(m, n, v1, v2, m__o, n__o, v1__o, v2__o) -> Com_1(stop(m, n, v1, v2, m__o, n__o, v1__o, v2__o)) :|: n+1<=0 && v2=v2__o && v1=v1__o && n=n__o && m=m__o 
+  start(m, n, v1, v2, m__o, n__o, v1__o, v2__o) -> Com_1(stop(m, n, n, 0, m__o, n__o, v1__o, v2__o)) :|: m>=1 && n=0 && v2=v2__o && v1=v1__o && n=n__o && m=m__o 
+  start(m, n, v1, v2, m__o, n__o, v1__o, v2__o) -> Com_1(M_1(m, n, n - 1, 1, m__o, n__o, v1__o, v2__o)) :|: m>=1 && n>=1 && v2=v2__o && v1=v1__o && n=n__o && m=m__o 
+  M_1(m, n, v1, v2, m__o, n__o, v1__o, v2__o) -> Com_1(stop(m, n, v1, v2, m__o, n__o, v1__o, v2__o)) :|: v1<=0 && m>=v2 && n>=v1+v2 && v2>=1 && v1>=0 && m=m__o && n=n__o 
+  M_1(m, n, v1, v2, m__o, n__o, v1__o, v2__o) -> Com_1(ZZ_1(m, n, v1, 0, m__o, n__o, v1__o, v2__o)) :|: v1>=1 && m<=v2 && m>=v2 && n>=v1+v2 && v2>=1 && v1>=0 && m=m__o && n=n__o 
+  M_1(m, n, v1, v2, m__o, n__o, v1__o, v2__o) -> Com_1(M_1(m, n, v1 - 1, 1  + v2, m__o, n__o, v1__o, v2__o)) :|: m>=v2+1 && v1>=1 && m>=v2 && n>=v1+v2 && v2>=1 && v1>=0 && m=m__o && n=n__o 
+  ZZ_1(m, n, v1, v2, m__o, n__o, v1__o, v2__o) -> Com_1(stop(m, n, v1, v2, m__o, n__o, v1__o, v2__o)) :|: v1<=0 && m+v1<=n && m>=2 && v1>=1 && v2=0 && m=m__o && n=n__o 
+  ZZ_1(m, n, v1, v2, m__o, n__o, v1__o, v2__o) -> Com_1(ZZ_1(m, n, v1, 0, m__o, n__o, v1__o, v2__o)) :|: v1>=1 && m<=v2 && m+v1<=n && m>=2 && v1>=1 && v2=0 && m=m__o && n=n__o 
+  ZZ_1(m, n, v1, v2, m__o, n__o, v1__o, v2__o) -> Com_1(M_1(m, n, v1 - 1, 1  + v2, m__o, n__o, v1__o, v2__o)) :|: m>=v2+1 && v1>=1 && m+v1<=n && m>=2 && v1>=1 && v2=0 && m=m__o && n=n__o 
+  ____start(m, n, v1, v2, m__o, n__o, v1__o, v2__o) -> Com_1(start(m__o, n__o, v1__o, v2__o, m__o, n__o, v1__o, v2__o)) :|: TRUE 
+)

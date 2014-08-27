@@ -1,0 +1,7 @@
+eq(pubs_start(A),0,[start(A)],[]).
+eq(minSort(A),1,[findMin(A)],[A = 0]).
+eq(minSort0(A),1,[findMin(A)],[]).
+eq(minSort1(A),1,[minSort(A - 1)],[]).
+eq(minSort(A),1,[minSort0(A),minSort1(A)],[A >= 1]).
+eq(findMin(A),1,[findMin(A - 1)],[A >= 1]).
+eq(start(A),1,[minSort(A)],[]).

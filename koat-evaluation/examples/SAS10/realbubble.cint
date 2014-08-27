@@ -1,0 +1,18 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR f0 f1 f2 i i__o j j__o length length__o temp temp__o test test__o tmp tmp__o)
+(RULES
+  start(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(stop(length - 1, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: length<=1 && tmp=tmp__o && test=test__o && temp=temp__o && length=length__o && j=j__o && i=i__o 
+  start(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(lbl_7_1(length - 1, 0, length, f0, 0, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: length>=2 && tmp=tmp__o && test=test__o && temp=temp__o && length=length__o && j=j__o && i=i__o 
+  start(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(lbl_5_3(length - 1, 1, length, temp, 0, 0, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: length>=2 && tmp=tmp__o && test=test__o && temp=temp__o && length=length__o && j=j__o && i=i__o 
+  lbl_7_1(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(lbl_5_3(i, 1  + j, length, temp, 1, j, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: test>=0 && j>=test && i>=j+1 && i+1<=length && length=length__o 
+  lbl_5_3(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(stop(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: i<=j && test=0 && j>=1 && test>=0 && i>=j && test<=1 && i+1<=length && j=tmp+1 && length=length__o 
+  lbl_5_3(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(lbl_1_3(i - 1, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: test+1<=0 && i<=j && j>=1 && test>=0 && i>=j && test<=1 && i+1<=length && j=tmp+1 && length=length__o 
+  lbl_5_3(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(lbl_1_3(i - 1, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: test>=1 && i<=j && j>=1 && test>=0 && i>=j && test<=1 && i+1<=length && j=tmp+1 && length=length__o 
+  lbl_5_3(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(lbl_7_1(i, j, length, f1, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: i>=j+1 && j>=1 && test>=0 && i>=j && test<=1 && i+1<=length && j=tmp+1 && length=length__o 
+  lbl_5_3(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(lbl_5_3(i, 1  + j, length, temp, test, j, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: i>=j+1 && j>=1 && test>=0 && i>=j && test<=1 && i+1<=length && j=tmp+1 && length=length__o 
+  lbl_1_3(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(stop(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: i<=0 && i>=0 && i+2<=length && test=1 && length=length__o && i+1=j && i=tmp 
+  lbl_1_3(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(lbl_7_1(i, 0, length, f2, 0, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: i>=1 && i>=0 && i+2<=length && test=1 && length=length__o && i+1=j && i=tmp 
+  lbl_1_3(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(lbl_5_3(i, 1, length, temp, 0, 0, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: i>=1 && i>=0 && i+2<=length && test=1 && length=length__o && i+1=j && i=tmp 
+  ____start(i, j, length, temp, test, tmp, i__o, j__o, length__o, temp__o, test__o, tmp__o) -> Com_1(start(i__o, j__o, length__o, temp__o, test__o, tmp__o, i__o, j__o, length__o, temp__o, test__o, tmp__o)) :|: TRUE 
+)

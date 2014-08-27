@@ -1,0 +1,13 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR f0 m m__o n n__o)
+(RULES
+  start(m, n, m__o, n__o) -> Com_1(stop1(m, n, m__o, n__o)) :|: m<=0 && m__o>=0 && n__o>=0 && n>=0 && m+1>0 && m<=m__o 
+  start(m, n, m__o, n__o) -> Com_1(cont1(m, n, m__o, n__o)) :|: m>0 && m__o>=0 && n__o>=0 && n>=0 && m+1>0 && m<=m__o 
+  cont1(m, n, m__o, n__o) -> Com_1(stop2(m - 1, 1, m__o, n__o)) :|: n<=0 && m>0 && n>=0 && n__o>=0 && m<=m__o 
+  cont1(m, n, m__o, n__o) -> Com_1(a(m, n - 1, m__o, n__o)) :|: n>0 && m>0 && n>=0 && n__o>=0 && m<=m__o 
+  a(m, n, m__o, n__o) -> Com_1(b(m - 1, f0, m__o, n__o)) :|: m<=m__o && n__o>=0 && n+1>0 && m>0 
+  b(m, n, m__o, n__o) -> Com_1(start(m, n, m__o, n__o)) :|: n>=0 && m+1>0 && n__o>=0 && m+1<=m__o 
+  b(m, n, m__o, n__o) -> Com_1(stop3(m, n, m__o, n__o)) :|: n<0 && m+1>0 && n__o>=0 && m+1<=m__o 
+  ____start(m, n, m__o, n__o) -> Com_1(start(m__o, n__o, m__o, n__o)) :|: m__o>=0 && n__o>=0 
+)

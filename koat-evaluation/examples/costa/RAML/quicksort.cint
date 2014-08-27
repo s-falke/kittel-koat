@@ -1,0 +1,8 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS qs))
+(VAR L Ls P L1 L2 L1p)
+(RULES
+ qs(L) -> Com_4(append(L1, L2),split(P, Ls),qs(L1),qs(L2)) :|: L>=1 && Ls=L - 1 && L1<= L - 1 && L2<=L - 1
+ split(P, L) -> Com_1(split(P, Ls)) :|: Ls>=1 && Ls = L - 1
+ append(L1, L2) -> Com_1(append(L1p, L2)) :|: L1>=1 && L1p = L1 - 1
+)

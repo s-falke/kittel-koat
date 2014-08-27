@@ -1,0 +1,36 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS listInter))
+(VAR A B C D E F)
+(RULES
+ listInter(A, B) -> Com_1(m9(A, B)) :|: B>=0 && A>=0
+ m0(A, B) -> Com_1(m1(A, B)) :|: B>=0
+ m2(A, B, C) -> Com_1(m3(A, B, C)) :|: C>=0 && B>=1 && A>=0
+ m4(A) -> Com_1(m5(A)) :|: A>=1
+ m5(A) -> Com_1(m8(A)) :|: A>=1
+ n1(A, B, C, D) -> Com_1(n2(A, B, C)) :|: C>=0 && B>=1 && -D>= -1 && D>=0 && A>=0
+ n2(A, B, D) -> Com_1(m2(A, B, C)) :|: D+ -C>=1 && C>=0 && B>=1 && A>=0
+ m3(A, B, C) -> Com_1(n4(A, B, C)) :|: TRUE
+ m3(B, C, A) -> Com_1(n3(A)) :|: TRUE
+ n5(D, B) -> Com_3(n0(),m4(A),m2(B, C, D)) :|: C>=1 && A>=1 && B>=0 && D>=0
+ m9(A, B) -> Com_1(n5(A, B)) :|: B>=0 && A>=0
+ n6(B, E, D, F) -> Com_2(n2(B, C, D),m4(A)) :|: A>=1 && C>=1 && D>=0 && E>=1 && B>=0 && F=1
+ n4(A, C, D) -> Com_2(n8(A, C, D, E),n7(A, B)) :|: D>=0 && C>=1 && -E>= -1 && E>=0 && A>=0
+ n8(A, B, C, D) -> Com_1(n1(A, B, C, D)) :|: TRUE
+ n8(A, B, C, D) -> Com_1(n6(A, B, C, D)) :|: TRUE
+ n7(A, B) -> Com_1(n9(A, B)) :|: A>=0
+ o1(A, B) -> Com_1(o0(A)) :|: B>=0 && B=0
+ o2(A, B) -> Com_1(o0(A)) :|: A+ -B=0
+ n9(A, B) -> Com_1(o3(A, B)) :|: A>=0
+ o4(A) -> Com_1(m6(0)) :|: A=0
+ o5(A) -> Com_1(m6(1)) :|: A>=0
+ o3(B, A) -> Com_2(o6(C),m0(A, B)) :|: B+ -C>=0 && C>=0
+ o6(A) -> Com_1(o4(A)) :|: TRUE
+ o6(A) -> Com_1(o5(A)) :|: TRUE
+ m1(A, B) -> Com_1(o1(A, B)) :|: TRUE
+ m1(A, B) -> Com_1(o7(A, B)) :|: TRUE
+ o8(A, C, D) -> Com_1(m0(A, B)) :|: C>=0 && C+ -B>=1 && C>=1 && B>=0
+ o7(A, C) -> Com_1(o9(A, B, C)) :|: C>=0
+ o9(A, B, C) -> Com_1(o2(A, B)) :|: TRUE
+ o9(A, C, B) -> Com_1(o8(A, B, C)) :|: TRUE
+ m8(A) -> Com_2(m7(),p0()) :|: A>=1
+)

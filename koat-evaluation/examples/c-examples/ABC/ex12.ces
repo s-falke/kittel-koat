@@ -1,0 +1,10 @@
+eq(pubs_start(A,B,C),0,[evalfstart(A,B,C)],[]).
+eq(evalfstart(A,B,C),1,[evalfentryin(A,B,C)],[]).
+eq(evalfentryin(A,B,C),1,[evalfbb4in(B,A,C)],[]).
+eq(evalfbb4in(A,B,C),1,[evalfbb2in(A,B,A)],[B >= 1]).
+eq(evalfbb4in(A,B,C),1,[evalfreturnin(A,B,C)],[0 >= B]).
+eq(evalfbb2in(A,B,C),1,[evalfbb1in(A,B,C)],[C >= A]).
+eq(evalfbb2in(A,B,C),1,[evalfbb3in(A,B,C)],[A >= C + 1]).
+eq(evalfbb1in(A,B,C),1,[evalfbb2in(A,B,C - 1)],[]).
+eq(evalfbb3in(A,B,C),1,[evalfbb4in(A,B - 1,C)],[]).
+eq(evalfreturnin(A,B,C),1,[evalfstop(A,B,C)],[]).

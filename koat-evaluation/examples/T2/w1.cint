@@ -1,0 +1,7 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR x $nondet $nondet1)
+(RULES
+  f0(x) -> Com_1(f1($nondet)) :|: 1 < $nondet
+  f1(x) -> Com_1(f1($nondet1)) :|: 2 > $nondet1 && -2 < $nondet1 && 1 < $nondet
+)

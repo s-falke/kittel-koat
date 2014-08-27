@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f2))
+(VAR rt_11 i_13 j_15 st_14 x0 x1 x2 x3 x4)
+(RULES
+  f1(rt_11, i_13, j_15) -> Com_1(f3(st_14, i_13, j_15)) :|: i_13 > 499
+  f1(rt_11, i_13, j_15) -> Com_1(f1(rt_11, 1 + i_13, j_15)) :|: i_13 < 500
+  f2(x0, x1, x2) -> Com_1(f3(x3, x4, x4)) :|: x4 > 499
+  f2(x0, x1, x2) -> Com_1(f1(x0, 1 + x3, x3)) :|: x3 < 500
+)

@@ -1,0 +1,9 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS __start))
+(VAR N M)
+(RULES
+ __start(N) -> Com_1(a(N)) :|: N>=1
+ __start(N) -> Com_1(a(N)) :|: N>=2
+ __start(N) -> Com_1(a(N)) :|: N>=4
+ a(N) -> Com_1(a(M)) :|: N>=2 && (2 * M = N || 2 * M + 1 = N)
+)

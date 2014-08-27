@@ -1,0 +1,14 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR A B C)
+(RULES
+  isortlist0(A,B,C) -> Com_1(insert(A - 1,C,C))
+  isortlist1(A,B,C) -> Com_1(isortlist(C,B,A - 1))
+  isortlist(A,B,C) -> Com_2(isortlist0(C,B,A),isortlist1(C,B,A)) :|: C >= 1
+  insert(A,B,C) -> Com_1(leq(B,B,C)) :|: A >= 1
+  insert0(A,B,C) -> Com_1(leq(A,B,C))
+  insert1(A,B,C) -> Com_1(insert(B - 1,A,C))
+  insert(A,B,C) -> Com_2(insert0(B,A,C),insert1(B,A,C)) :|: A >= 1
+  leq(A,B,C) -> Com_1(leq(A - 1,B,C - 1)) :|: C >= 1 && A >= 1
+  start(A,B,C) -> Com_1(isortlist(A,B,C))
+)

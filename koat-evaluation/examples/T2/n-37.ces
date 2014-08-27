@@ -1,0 +1,6 @@
+eq(pubs_start(A,B,C,D,E,F),0,[f10(A,B,C,D,E,F)],[]).
+eq(f10(A,B,C,D,E,F),1,[f4(4,0,0,D,E,F)],[]).
+eq(f4(A,B,C,D,E,F),1,[f9(A,B,C,C,C,F)],[]).
+eq(f7(A,B,C,D,E,F),1,[f4(A,1 + B,G,H,E,G)],[]).
+eq(f4(A,B,C,D,E,F),1,[f4(A,1 + B,G,H,E,G)],[]).
+eq(f6(A,B,C,D,E,F),1,[f4(A,1 + B,G,H,E,G)],[]).

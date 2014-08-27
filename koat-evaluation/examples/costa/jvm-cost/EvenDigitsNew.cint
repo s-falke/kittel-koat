@@ -1,0 +1,20 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS evenDigits))
+(VAR A B C D E F)
+(RULES
+ evenDigits(A) -> Com_1(f_2(A, 0, 0)) :|: B=0 && C=0
+ f_2(A, B, C) -> Com_2(f_2____loop(A, B, C),_W15____normal(A, D, E, F)) :|: -1*A+1*E>=0 && -1*C+1*E>=0
+ f_2____loop(A, B, C) -> Com_1(f_16(A, B, C, C, A)) :|: TRUE
+ f_15____normal(A, B, C, D) -> Com_1(f_6(A, B, C, B)) :|: TRUE
+ f_16(A, B, C, C, A) -> Com_1(f_3(A, B, C)) :|: C+1<=A
+ f_16(A, B, C, C, A) -> Com_1(f_2____loop__nexit(A, B, C)) :|: C>=A
+ f_3(A, B, C) -> Com_2(pubs_SEvenDigits____divByTwo__LBI__RBI(C),_W14____normal(A, B, C, B, D)) :|: TRUE
+ pubs_SEvenDigits____divByTwo__LBI__RBI(A) -> Com_1(f_9(A, 0)) :|: B=0
+ f_14____normal(A, B, C, B, D) -> Com_1(f_2____loop(A, E, F)) :|: E=B+D && F=C+1
+ f_9(A, B) -> Com_2(f_9____loop(A, B),_W17____normal(C, D, E)) :|: -1*C>=0
+ f_9____loop(A, B) -> Com_1(f_18(A, B, A)) :|: TRUE
+ f_17____normal(A, B, C) -> Com_1(f_12(A, B, B)) :|: TRUE
+ f_18(A, B, A) -> Com_1(f_10(A, B)) :|: A>=1
+ f_18(A, B, A) -> Com_1(f_9____loop__nexit(A, B)) :|: A<=0
+ f_10(A, B) -> Com_1(f_9____loop(C, D)) :|: A - 2+1<=2*C && 2*C<=A && D=B+1
+)

@@ -1,0 +1,36 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR A B C D)
+(RULES
+  matrixmult0(A,B,C,D) -> Com_1(transAcc(B,B,0,D))
+  matrixmult1(A,B,C,D) -> Com_1(matrixmultp(B,A,A + D,C))
+  matrixmult2(A,B,C,D) -> Com_1(makeBase(A,B,C,D))
+  matrixmult(A,B,C,D) -> Com_3(matrixmult0(B,A,D,C),matrixmult1(B,A,D,C),matrixmult2(B,A,D,C)) :|: B >= 0 && D >= 0 && A >= 0 && C >= 0
+  transAcc0(A,B,C,D) -> Com_1(attach(A + D - 1,B,C,D - 1))
+  transAcc1(A,B,C,D) -> Com_1(transAcc(C,D - 1,A,B))
+  transAcc(A,B,C,D) -> Com_2(transAcc0(C,D,A,B),transAcc1(C,D,A,B)) :|: B >= 1
+  out1transAcc(A,B,C,D) -> Com_1(out1transAcc(A,B - 1,C,D)) :|: B >= 1
+  out2transAcc(A,B,C,D) -> Com_1(out2transAcc(A,B - 1,C,D)) :|: B >= 1
+  attach(A,B,C,D) -> Com_1(attach(A,B - 1,C,D - 1)) :|: B >= 1
+  makeBase(A,B,C,D) -> Com_1(mkBase(A,D,C,D)) :|: B >= 1
+  mkBase(A,B,C,D) -> Com_1(mkBase(A,B - 1,C,D)) :|: B >= 1
+  out1split(A,B,C,D) -> Com_1(out1split(A,B - 1,C,D)) :|: B >= 1
+  out2split(A,B,C,D) -> Com_1(out2split(A,B - 1,C,D)) :|: B >= 1
+  out3split(A,B,C,D) -> Com_1(out3split(A,B - 1,C,D)) :|: B >= 1
+  split(A,B,C,D) -> Com_1(split(A,B - 1,C,D)) :|: B >= 1
+  out1makeBase(A,B,C,D) -> Com_1(outmkBase(A,D,C,D)) :|: B = 0
+  outmkBase(A,B,C,D) -> Com_1(outmkBase(A,B - 1,C,D)) :|: B >= 1
+  matrixmult3(A,B,C,D) -> Com_1(matrixmult(A,B,C,D))
+  matrixmultp0(A,B,C,D) -> Com_1(linemult(A,B,C,D))
+  matrixmultp1(A,B,C,D) -> Com_1(matrixmultp(D,C - 1,A,B))
+  matrixmultp(A,B,C,D) -> Com_2(matrixmultp0(C,D,B,A),matrixmultp1(C,D,B,A)) :|: B >= 1
+  linemult0(A,B,C,D) -> Com_1(mult(A,B,C,D))
+  linemult1(A,B,C,D) -> Com_1(linemult(D,B,C,A - 1))
+  linemult(A,B,C,D) -> Com_2(linemult0(D,B,C,A),linemult1(D,B,C,A)) :|: D >= 1
+  mult(A,B,C,D) -> Com_1(mult(A,B - 1,C,D - 1)) :|: B >= 1 && D >= 1
+  transpose(A,B,C,D) -> Com_1(split(A,B,C,D)) :|: B >= 1 && D = 1
+  transpose0(A,B,C,D) -> Com_1(split(A,B,C,D))
+  transpose1(A,B,C,D) -> Com_1(transpose(A,B,C,D - 1))
+  transpose(A,B,C,D) -> Com_2(transpose0(A,B,C,D),transpose1(A,B,C,D)) :|: B >= 1 && D >= 2
+  start(A,B,C,D) -> Com_1(matrixmult(A,B,C,D))
+)

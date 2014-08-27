@@ -1,0 +1,39 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR nDim bDomain bNoCapture tmp ni tmp___0 nj tmp___1 tmp___2 tmp___3 $nondet1 $nondet x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 c0 x11 x41)
+(RULES
+  f30(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3) -> Com_1(f31(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3)) :|: bNoCapture < 0
+  f30(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3) -> Com_1(f31(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3)) :|: bNoCapture > 0
+  f36(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3) -> Com_1(f37(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3)) :|: bNoCapture < 0
+  f36(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3) -> Com_1(f37(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3)) :|: bNoCapture > 0
+  f37(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3) -> Com_1(f38(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3)) :|: nj + $nondet1 >= ni + $nondet + 1
+  f37(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3) -> Com_1(f38(nDim, bDomain, bNoCapture, tmp, ni, tmp___0, nj, tmp___1, tmp___2, tmp___3)) :|: ni + $nondet >= 1 + (nj + $nondet1)
+  f0(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f10(9, 1, 1, x10, 0, x5, x6, x7, x8, x9)) :|: TRUE
+  f10(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f10(x0, x1, x2, x3, x4 + 1, x5, x6, x7, x8, x9)) :|: x4 + 1 <= x0
+  f16(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f19(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9)) :|: x1 < 0 && x4 + 1 <= x0
+  f16(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f19(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9)) :|: x1 > 0 && x4 + 1 <= x0
+  f19(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f27(x0, 1, x2, x3, x4, 1, 0, x7, x8, x9)) :|: x10 + 1 <= x0
+  f19(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f27(x0, 0, x2, x3, x4, 0, 0, x7, x8, x9)) :|: TRUE
+  f19(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f27(x0, 0, x2, x3, x4, 0, 0, x7, x8, x9)) :|: x10 < 0
+  f16(x0, c0, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f27(x0, 0, x2, x3, x4, 0, 0, x7, x8, x9)) :|: x4 + 1 <= x0 && 0 = c0
+  f27(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f30(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9)) :|: x6 + 1 <= x0 && x6 >= x4 + 1
+  f27(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f30(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9)) :|: x4 >= 1 + x6 && x6 + 1 <= x0
+  f31(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f36(x0, x1, 1, x3, x4, x5, x6, 1, x8, x9)) :|: x11 >= x10 + 1
+  f31(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f36(x0, x1, 1, x3, x4, x5, x6, 1, x8, x9)) :|: TRUE
+  f31(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f36(x0, x1, 0, x3, x4, x5, x6, 0, x8, x9)) :|: TRUE
+  f30(x0, x1, c0, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f36(x0, x1, 0, x3, x4, x5, x6, 0, x8, x9)) :|: 0 = c0
+  f27(x0, x1, x2, x3, x4, x5, x41, x7, x8, x9) -> Com_1(f27(x0, x1, x2, x3, x4, x5, x4 + 1, x7, x8, x9)) :|: x4 + 1 <= x0 && x4 = x41
+  f38(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f27(x0, x1, 1, x3, x4, x5, x6 + 1, x7, 1, x9)) :|: x6 + x11 >= x4 + x10 + 1
+  f38(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f27(x0, x1, 1, x3, x4, x5, x6 + 1, x7, 1, x9)) :|: x4 + x10 >= 1 + (x6 + x11)
+  f38(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f27(x0, x1, 0, x3, x4, x5, x6 + 1, x7, 0, x9)) :|: x6 + x11 = x4 + x10
+  f37(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f27(x0, x1, 0, x3, x4, x5, x6 + 1, x7, 0, x9)) :|: x6 + x11 = x4 + x10
+  f36(x0, x1, c0, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f27(x0, x1, 0, x3, x4, x5, x6 + 1, x7, 0, x9)) :|: 0 = c0
+  f49(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f56(x0, x1, x2, x3, x4, x5, x6, x7, x8, 0)) :|: x2 < 0
+  f49(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f56(x0, x1, x2, x3, x4, x5, x6, x7, x8, 0)) :|: x2 > 0
+  f49(x0, x1, c0, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f56(x0, x1, 0, x3, x4, x5, x6, x7, x8, 1)) :|: 0 = c0
+  f27(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f16(x0, x1, x2, x3, x4 + 1, x5, x6, x7, x8, x9)) :|: x6 >= x0
+  f16(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f49(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9)) :|: x1 < 0 && x4 >= x0
+  f16(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f49(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9)) :|: x1 > 0 && x4 >= x0
+  f16(x0, c0, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f56(x0, 0, x2, x3, x4, x5, x6, x7, x8, 1)) :|: x4 >= x0 && 0 = c0
+  f10(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f16(x0, x1, x2, x3, 0, x5, x6, x7, x8, x9)) :|: x4 >= x0
+)

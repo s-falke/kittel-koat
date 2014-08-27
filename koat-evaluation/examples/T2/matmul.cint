@@ -1,0 +1,16 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR x0 x1 x2)
+(RULES
+  f0(x0, x1, x2) -> Com_1(f10(1, x1, x2)) :|: TRUE
+  f10(x0, x1, x2) -> Com_1(f13(x0, 1, x2)) :|: x0 < 6
+  f13(x0, x1, x2) -> Com_1(f13(x0, x1 + 1, x2)) :|: x1 < 6
+  f21(x0, x1, x2) -> Com_1(f24(x0, 1, x2)) :|: x0 < 6
+  f24(x0, x1, x2) -> Com_1(f27(x0, x1, 1)) :|: x1 < 6
+  f27(x0, x1, x2) -> Com_1(f27(x0, x1, x2 + 1)) :|: x2 < 6
+  f27(x0, x1, x2) -> Com_1(f24(x0, x1 + 1, x2)) :|: x2 > 5
+  f24(x0, x1, x2) -> Com_1(f21(x0 + 1, x1, x2)) :|: x1 > 5
+  f21(x0, x1, x2) -> Com_1(f39(x0, x1, x2)) :|: x0 > 5
+  f13(x0, x1, x2) -> Com_1(f10(x0 + 1, x1, x2)) :|: x1 > 5
+  f10(x0, x1, x2) -> Com_1(f21(1, x1, x2)) :|: x0 > 5
+)

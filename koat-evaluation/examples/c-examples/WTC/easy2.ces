@@ -1,0 +1,7 @@
+eq(pubs_start(A),0,[evaleasy2start(A)],[]).
+eq(evaleasy2start(A),1,[evaleasy2entryin(A)],[]).
+eq(evaleasy2entryin(A),1,[evaleasy2bb1in(A)],[]).
+eq(evaleasy2bb1in(A),1,[evaleasy2bbin(A)],[A >= 1]).
+eq(evaleasy2bb1in(A),1,[evaleasy2returnin(A)],[0 >= A]).
+eq(evaleasy2bbin(A),1,[evaleasy2bb1in(A - 1)],[]).
+eq(evaleasy2returnin(A),1,[evaleasy2stop(A)],[]).

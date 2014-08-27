@@ -1,0 +1,24 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS multiply))
+(VAR A B C D E F G)
+(RULES
+  multiply(A,B,C,D,E) -> Com_1(m6(A,B,C,D,E))
+  m0(A,B,C,D,E) -> Com_1(m1(A,B,F,G,E)) :|: A >= 1 && F >= 0 && A >= F && A >= G && G >= A && B >= F && F >= B
+  m2(A,B,C,D,E) -> Com_1(m3(A,B,F,G,E)) :|: F >= 0 && A >= G && G >= A && B >= F && F >= B
+  m4(A,B,C,D,E) -> Com_1(m5(A,B,C,F,G)) :|: B >= G && G >= B && C >= F && F >= C
+  m6(A,B,C,D,E) -> Com_1(m7(A,B,C,D,E))
+  m5(A,B,C,D,E) -> Com_1(n2(A,B,C,D,E))
+  m5(A,B,C,D,E) -> Com_1(m9(D,E,C,D,E))
+  m3(A,B,C,D,E) -> Com_1(n3(A,B,C,D,E))
+  m3(A,B,C,D,E) -> Com_1(n0(C,D,C,D,E))
+  m1(A,B,C,D,E) -> Com_1(n4(A,B,C,D,E))
+  m1(A,B,C,D,E) -> Com_1(n1(C,D,C,D,E))
+  n20(A,B,C,D,E) -> Com_1(m4(A,B,C,D,E))
+  n21(A,B,C,D,E) -> Com_1(m2(A,0,C,D,E))
+  n2(A,B,C,D,E) -> Com_2(n20(A,B,F,D,E),n21(A,B,F,D,E)) :|: B >= F && C + 1 >= F && F >= 1 + C && B >= E && E >= B && D + 1 >= F && F >= 1 + D
+  n30(A,B,C,D,E) -> Com_1(m2(A,B,C,D,E))
+  n31(A,B,C,D,E) -> Com_1(m0(A,0,C,D,E))
+  n3(A,B,C,D,E) -> Com_2(n30(A,F,C,D,E),n31(A,F,C,D,E)) :|: F >= 1 && A >= F && C + 1 >= F && F >= 1 + C && B + 1 >= F && F >= 1 + B && A >= D && D >= A
+  m7(A,B,C,D,E) -> Com_2(m8(F,G,0,D,E),m4(F,G,0,D,E)) :|: B >= G && G >= B && A >= F && F >= A
+  n4(A,B,C,D,E) -> Com_1(m0(A,F,C,D,E)) :|: F >= 1 && A >= F && B + 1 >= F && F >= 1 + B && C + 1 >= F && F >= 1 + C && A >= D && D >= A
+)

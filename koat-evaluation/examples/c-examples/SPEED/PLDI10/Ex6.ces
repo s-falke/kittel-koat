@@ -1,0 +1,10 @@
+eq(pubs_start(A,B,C),0,[evalEx6start(A,B,C)],[]).
+eq(evalEx6start(A,B,C),1,[evalEx6entryin(A,B,C)],[]).
+eq(evalEx6entryin(A,B,C),1,[evalEx6bb3in(B,A,C)],[]).
+eq(evalEx6bb3in(A,B,C),1,[evalEx6bbin(A,B,C)],[C >= B + 1]).
+eq(evalEx6bb3in(A,B,C),1,[evalEx6returnin(A,B,C)],[B >= C]).
+eq(evalEx6bbin(A,B,C),1,[evalEx6bb1in(A,B,C)],[A >= B + 1]).
+eq(evalEx6bbin(A,B,C),1,[evalEx6bb2in(A,B,C)],[B >= A]).
+eq(evalEx6bb1in(A,B,C),1,[evalEx6bb3in(A,B + 1,C)],[]).
+eq(evalEx6bb2in(A,B,C),1,[evalEx6bb3in(A + 1,B,C)],[]).
+eq(evalEx6returnin(A,B,C),1,[evalEx6stop(A,B,C)],[]).

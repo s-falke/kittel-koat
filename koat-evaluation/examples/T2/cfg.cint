@@ -1,0 +1,8 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR x x0)
+(RULES
+  f0(x) -> Com_1(f2(x + 200)) :|: x > -100
+  f0(x0) -> Com_1(f2(x0 + 500)) :|: x0 > 0
+  f2(x0) -> Com_1(f2(x0 + 700)) :|: x0 > -200
+)

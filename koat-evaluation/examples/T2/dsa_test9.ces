@@ -1,0 +1,2 @@
+eq(pubs_start(A,B,C),0,[f0(A,B,C)],[]).
+eq(f0(A,B,C),1,[f24(D,E,F)],[]).

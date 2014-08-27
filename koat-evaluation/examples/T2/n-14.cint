@@ -1,0 +1,10 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f300))
+(VAR tmp_6 x_5 Result_4 $nondet $nondet1)
+(RULES
+  f2(tmp_6, x_5, Result_4) -> Com_1(f2($nondet, -1 + x_5, Result_4)) :|: $nondet != 0 && x_5 > 1
+  f2(tmp_6, x_5, Result_4) -> Com_1(f1($nondet, -1 + x_5, $nondet1)) :|: $nondet != 0 && x_5 < 2
+  f2(tmp_6, x_5, Result_4) -> Com_1(f2(0, x_5, Result_4)) :|: x_5 > 0
+  f2(tmp_6, x_5, Result_4) -> Com_1(f1(0, x_5, $nondet1)) :|: x_5 < 1
+  f300(tmp_6, x_5, Result_4) -> Com_1(f2(tmp_6, x_5, Result_4)) :|: TRUE
+)

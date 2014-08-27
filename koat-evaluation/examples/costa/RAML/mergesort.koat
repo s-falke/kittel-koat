@@ -1,0 +1,16 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR A B C D E)
+(RULES
+  mergeSort0(A,B,C) -> Com_1(msplit(A,B,C))
+  mergeSort1(A,B,C) -> Com_1(mergeSort(B,B,C))
+  mergeSort2(A,B,C) -> Com_1(mergeSort(C,B,C))
+  mergeSort3(A,B,C) -> Com_1(merge(B,C,C))
+  mergeSort(A,B,C) -> Com_4(mergeSort0(A,D,E),mergeSort1(A,D,E),mergeSort2(A,D,E),mergeSort3(A,D,E)) :|: A >= 2 && D >= 0 && E >= 0 && A + 1 >= 2*D && 2*D >= A && A >= 2*E && 2*E + 1 >= A
+  out2msplit(A,B,C) -> Com_1(out2msplit(A - 2,B,C)) :|: A >= 2
+  out1msplit(A,B,C) -> Com_1(out1msplit(A - 2,B,C)) :|: A >= 2
+  msplit(A,B,C) -> Com_1(msplit(A - 2,B,C)) :|: A >= 2
+  merge(A,B,C) -> Com_1(merge(A - 1,B,C)) :|: A >= 1 && B >= 1
+  merge(A,B,C) -> Com_1(merge(A,B - 1,C)) :|: A >= 1 && B >= 1
+  start(A,B,C) -> Com_1(mergeSort(A,B,C))
+)

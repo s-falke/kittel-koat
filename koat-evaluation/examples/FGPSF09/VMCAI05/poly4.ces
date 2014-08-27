@@ -1,0 +1,6 @@
+eq(pubs_start(A,B,C,D,E),0,[start(A,B,C,D,E)],[]).
+eq(eval(A,B,C,D,E),1,[eval(A,B + 1,C,D,E + 1)],[A >= B + 1, C >= D + 1]).
+eq(eval(A,B,C,D,E),1,[eval(A,B,C,D + 1,E + 1)],[A >= B + 1, C >= D + 1]).
+eq(eval(A,B,C,D,E),1,[eval(A,B,C,D + 1,E + 1)],[B >= A, C >= D + 1]).
+eq(eval(A,B,C,D,E),1,[eval(A,B + 1,C,D,E + 1)],[A >= B + 1, D >= C]).
+eq(start(A,B,C,D,E),1,[eval(A,B,C,D,E)],[]).

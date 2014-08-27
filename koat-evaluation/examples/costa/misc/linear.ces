@@ -1,0 +1,4 @@
+eq(pubs_start(A),0,[start(A)],[]).
+eq(start(A),1,[a(A)],[A >= 1]).
+eq(start(A),1,[a(100)],[A = 100]).
+eq(a(A),1,[a(A - 1)],[A >= 1]).

@@ -1,0 +1,26 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS evenDigits))
+(VAR A B C D E F G H I)
+(RULES
+  evenDigits(A,B,C,D,E,F) -> Com_1(f2(0,0,C,D,E,F))
+  f20(A,B,C,D,E,F) -> Com_1(f2loop(A,B,C,D,E,F))
+  f21(A,B,C,D,E,F) -> Com_1(lW15normal(C,D,E,D,E,F))
+  f2(A,B,C,D,E,F) -> Com_2(f20(A,B,H,G,I,F),f21(A,B,H,G,I,F)) :|: G >= F && G >= B
+  f2loop(A,B,C,D,E,F) -> Com_1(f16(A,B,B,F,E,F))
+  f15normal(A,B,C,D,E,F) -> Com_1(f6(A,B,A,D,E,F))
+  f16(A,B,C,D,E,F) -> Com_1(f3(A,B,C,D,E,F)) :|: D >= C + 1 && B = C && F = D
+  f16(A,B,C,D,E,F) -> Com_1(f2loopnexit(A,B,C,D,E,F)) :|: C >= D && B = C && F = D
+  f30(A,B,C,D,E,F) -> Com_1(pubsSEvenDigitsdivByTwoLBIRBI(A,B,C,D,E,F))
+  f31(A,B,C,D,E,F) -> Com_1(lW14normal(B,F,B,C,E,A))
+  f3(A,B,C,D,E,F) -> Com_2(f30(F,A,H,D,E,B),f31(F,A,H,D,E,B))
+  pubsSEvenDigitsdivByTwoLBIRBI(A,B,C,D,E,F) -> Com_1(f9(0,B,C,D,E,F))
+  f14normal(A,B,C,D,E,F) -> Com_1(f2loop(C + D,B + 1,C,D,E,F)) :|: C = A
+  f90(A,B,C,D,E,F) -> Com_1(f9loop(A,B,C,D,E,F))
+  f91(A,B,C,D,E,F) -> Com_1(lW17normal(C,D,C,D,E,B))
+  f9(A,B,C,D,E,F) -> Com_2(f90(A,H,G,I,E,F),f91(A,H,G,I,E,F)) :|: 0 >= H
+  f9loop(A,B,C,D,E,F) -> Com_1(f18(A,F,C,D,E,F))
+  f17normal(A,B,C,D,E,F) -> Com_1(f12(A,A,C,D,E,F))
+  f18(A,B,C,D,E,F) -> Com_1(f10(A,B,C,D,E,F)) :|: B >= 1 && F = B
+  f18(A,B,C,D,E,F) -> Com_1(f9loopnexit(A,B,C,D,E,F)) :|: 0 >= B && F = B
+  f10(A,B,C,D,E,F) -> Com_1(f9loop(A + 1,B,C,D,E,H)) :|: 2*H + 1 >= F && F >= 2*H
+)

@@ -1,0 +1,10 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR A B C D)
+(RULES
+  dyade0(A,B,C) -> Com_1(mult(A,B,C))
+  dyade1(A,B,C) -> Com_1(dyade(B - 1,B,C))
+  dyade(A,B,C) -> Com_2(dyade0(D,A,C),dyade1(D,A,C)) :|: A >= 1
+  mult(A,B,C) -> Com_1(mult(A,B,C - 1)) :|: C >= 1
+  start(A,B,C) -> Com_1(dyade(A,B,C))
+)

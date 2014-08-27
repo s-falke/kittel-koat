@@ -1,0 +1,17 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS start))
+(VAR A B C D)
+(RULES
+  hanoi(A,B) -> Com_1(m0(A,B)) :|: A >= 0
+  m2(A,B) -> Com_1(m1(A,B))
+  m3(A,B) -> Com_1(m2(A,B)) :|: A = 0
+  m0(A,B) -> Com_1(m4(A,B)) :|: A >= 0
+  m50(A,B) -> Com_1(m2(A,B))
+  m51(A,B) -> Com_1(hanoi(A,B))
+  m52(A,B) -> Com_1(hanoi(B,B))
+  m5(A,B) -> Com_3(m50(D,C),m51(D,C),m52(D,C)) :|: C >= 0 && A >= C + 1 && 1 + C >= A && D >= C && C >= D
+  m4(A,B) -> Com_1(m6(A,B)) :|: A >= 0
+  m6(A,B) -> Com_1(m3(A,B))
+  m6(A,B) -> Com_1(m5(A,B))
+  start(A,B) -> Com_1(hanoi(A,B))
+)

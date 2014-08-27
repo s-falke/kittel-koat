@@ -1,0 +1,15 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR wakend __rho_1_ got_SIGHUP a33 __rho_2_ ret_XLogArchivingActive44 tmp2 tt1 a55 tmp66 ret_time77 last_copy_time a88 tmp99 ret_time1010 curtime __rho_4_ x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15 x16 x17 x18)
+(RULES
+  f21(wakend, __rho_1_, got_SIGHUP, a33, __rho_2_, ret_XLogArchivingActive44, tmp2, tt1, a55, tmp66, ret_time77, last_copy_time, a88, tmp99, ret_time1010, curtime, __rho_4_) -> Com_1(f29(wakend, __rho_1_, got_SIGHUP, a33, __rho_2_, ret_XLogArchivingActive44, tmp2, tt1, a55, tmp66, ret_time77, last_copy_time, a88, tmp99, ret_time1010, curtime, __rho_4_)) :|: wakend < 1
+  f41(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) -> Com_1(f41(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16)) :|: TRUE
+  f43(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) -> Com_1(f46(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16)) :|: TRUE
+  f29(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) -> Com_1(f41(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x17)) :|: x0 > 0
+  f29(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) -> Com_1(f41(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, 0, x17, x17, x17, x18)) :|: x0 < 1 && x17 - x11 <= 999
+  f29(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) -> Com_1(f41(1, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, 0, x17, x17, x17, x18)) :|: x0 < 1 && x17 - x11 >= 1000
+  f21(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) -> Com_1(f29(0, x1, x2, x3, x4, x5, x6, x7, 0, x17, x17, x17, x12, x13, x14, x15, x16)) :|: x0 > 0
+  f0(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) -> Com_1(f21(1, x17, x4, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16)) :|: x4 < 1
+  f0(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) -> Com_1(f21(1, x17, 0, 1, x18, x18, x18, x18, x8, x9, x10, x11, x12, x13, x14, x15, x16)) :|: x18 > 0 && x4 > 0
+  f0(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) -> Com_1(f41(1, x17, 0, 1, x18, x18, x18, x18, x8, x9, x10, x11, x12, x13, x14, x15, x16)) :|: x18 < 1 && x4 > 0
+)

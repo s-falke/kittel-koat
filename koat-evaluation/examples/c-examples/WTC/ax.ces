@@ -1,0 +1,11 @@
+eq(pubs_start(A,B,C),0,[evalaxstart(A,B,C)],[]).
+eq(evalaxstart(A,B,C),1,[evalaxentryin(A,B,C)],[]).
+eq(evalaxentryin(A,B,C),1,[evalaxbbin(0,B,C)],[]).
+eq(evalaxbbin(A,B,C),1,[evalaxbb2in(A,0,C)],[]).
+eq(evalaxbb2in(A,B,C),1,[evalaxbb1in(A,B,C)],[C >= 2 + B]).
+eq(evalaxbb2in(A,B,C),1,[evalaxbb3in(A,B,C)],[B + 1 >= C]).
+eq(evalaxbb1in(A,B,C),1,[evalaxbb2in(A,B + 1,C)],[]).
+eq(evalaxbb3in(A,B,C),1,[evalaxbbin(A + 1,B,C)],[B + 1 >= C, C >= 3 + A]).
+eq(evalaxbb3in(A,B,C),1,[evalaxreturnin(A,B,C)],[C >= 2 + B]).
+eq(evalaxbb3in(A,B,C),1,[evalaxreturnin(A,B,C)],[A + 2 >= C]).
+eq(evalaxreturnin(A,B,C),1,[evalaxstop(A,B,C)],[]).

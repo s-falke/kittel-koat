@@ -1,0 +1,8 @@
+eq(pubs_start(A),0,[arrayReverse(A)],[]).
+eq(arrayReverse(A),1,[m2(A)],[]).
+eq(m0(A),1,[m1(A)],[]).
+eq(m5(A),1,[m3(B),m0(B)],[A >= B, B >= A]).
+eq(m2(A),1,[m5(A)],[]).
+eq(m6(A),1,[m0(B)],[B >= 0, A >= B + 1, 1 + B >= A]).
+eq(m1(A),1,[m6(A)],[]).
+eq(m1(A),1,[m4(A)],[]).

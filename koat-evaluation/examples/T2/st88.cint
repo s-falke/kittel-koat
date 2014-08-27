@@ -1,0 +1,17 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR WItemsNum tmp1 x0 x1 x2)
+(RULES
+  f9(WItemsNum, tmp1) -> Com_1(f10(WItemsNum, tmp1)) :|: WItemsNum < 6
+  f25(WItemsNum, tmp1) -> Com_1(f2(WItemsNum, tmp1)) :|: TRUE
+  f2(WItemsNum, tmp1) -> Com_1(f2(WItemsNum, tmp1)) :|: TRUE
+  f9(x0, x1) -> Com_1(f10(x0, x2)) :|: x0 > 5 && x2 < 0
+  f9(x0, x1) -> Com_1(f10(x0, x2)) :|: x0 > 5 && x2 > 0
+  f10(x0, x1) -> Com_1(f9(x0 + 1, x1)) :|: x0 > 5
+  f27(x0, x1) -> Com_1(f29(x0, x1)) :|: TRUE
+  f19(x0, x1) -> Com_1(f19(x0 - 1, x1)) :|: x0 > 2
+  f19(x0, x1) -> Com_1(f9(x0, x1)) :|: x0 < 3
+  f10(x0, x1) -> Com_1(f9(x0 + 1, x1)) :|: x0 < 6
+  f9(x0, x1) -> Com_1(f19(x0, 0)) :|: x0 > 5
+  f0(x0, x1) -> Com_1(f9(x2, x1)) :|: TRUE
+)

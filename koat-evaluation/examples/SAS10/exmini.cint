@@ -1,0 +1,12 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS ____start))
+(VAR i i__o j j__o k k__o tmp tmp__o)
+(RULES
+  start(i, j, k, tmp, i__o, j__o, k__o, tmp__o) -> Com_1(stop(i, j, k, tmp, i__o, j__o, k__o, tmp__o)) :|: i>=101 && tmp=tmp__o && k=k__o && j=j__o && i=i__o 
+  start(i, j, k, tmp, i__o, j__o, k__o, tmp__o) -> Com_1(stop(i, j, k, tmp, i__o, j__o, k__o, tmp__o)) :|: j>=k+1 && tmp=tmp__o && k=k__o && j=j__o && i=i__o 
+  start(i, j, k, tmp, i__o, j__o, k__o, tmp__o) -> Com_1(lbl_7_1(j, 1  + i, k - 1, i, i__o, j__o, k__o, tmp__o)) :|: j<=k && i<=100 && tmp=tmp__o && k=k__o && j=j__o && i=i__o 
+  lbl_7_1(i, j, k, tmp, i__o, j__o, k__o, tmp__o) -> Com_1(stop(i, j, k, tmp, i__o, j__o, k__o, tmp__o)) :|: i>=101 && i+j>=i__o+j__o+1 && i__o<=100 && i+j+k>=i__o+2*j__o && i<=k+1 && j<=101 && j=tmp+1 && i+j+k=i__o+j__o+k__o 
+  lbl_7_1(i, j, k, tmp, i__o, j__o, k__o, tmp__o) -> Com_1(stop(i, j, k, tmp, i__o, j__o, k__o, tmp__o)) :|: j>=k+1 && i+j>=i__o+j__o+1 && i__o<=100 && i+j+k>=i__o+2*j__o && i<=k+1 && j<=101 && j=tmp+1 && i+j+k=i__o+j__o+k__o 
+  lbl_7_1(i, j, k, tmp, i__o, j__o, k__o, tmp__o) -> Com_1(lbl_7_1(j, 1  + i, k - 1, i, i__o, j__o, k__o, tmp__o)) :|: j<=k && i<=100 && i+j>=i__o+j__o+1 && i__o<=100 && i+j+k>=i__o+2*j__o && i<=k+1 && j<=101 && j=tmp+1 && i+j+k=i__o+j__o+k__o 
+  ____start(i, j, k, tmp, i__o, j__o, k__o, tmp__o) -> Com_1(start(i__o, j__o, k__o, tmp__o, i__o, j__o, k__o, tmp__o)) :|: TRUE 
+)

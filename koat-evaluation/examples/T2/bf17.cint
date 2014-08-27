@@ -1,0 +1,19 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR x0 x1 x2 x3 x4 x5 x6 x21 x7 x8)
+(RULES
+  f0(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f61(5, 17, 0, 0, x4, x5, x6)) :|: TRUE
+  f61(x0, x1, x2, x21, x4, x5, x6) -> Com_1(f61(x0, x1, x2, x2 + 1, x4, x5, x6)) :|: x2 + 1 <= x0 && x2 = x21
+  f61(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f61(x0, x1, x2, x3 + 1, x4, x5, x6)) :|: x3 + 1 <= x0 && x3 + 1 <= x2
+  f61(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f61(x0, x1, x2, x3 + 1, x4, x5, x6)) :|: x3 + 1 <= x0 && x3 >= 1 + x2
+  f69(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f72(x0, x1, x2, x3, 0, x5, x6)) :|: x3 + 1 <= x0
+  f72(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f72(x0, x1, x2, x3, x4 + 1, x7, x8)) :|: x4 + 1 <= x1
+  f83(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f89(x0, x1, x2, x3, x4, x7, x8)) :|: x3 + 1 <= x1
+  f83(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f83(x0, x1, x2, x3 + 1, x4, x7, x8)) :|: x3 + 1 <= x1
+  f93(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f93(x0, x1, x2, x3 + 1, x4, x5, x6)) :|: x3 + 1 <= x0
+  f93(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f89(x0, x1, x2, x3, x4, x5, x6)) :|: x3 >= x0
+  f83(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f93(x0, x1, x2, 0, x4, x5, x6)) :|: x3 >= x1
+  f72(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f69(x0, x1, x2, x3 + 1, x4, x5, x6)) :|: x4 >= x1
+  f69(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f83(x0, x1, x2, 0, x4, x5, x6)) :|: x3 >= x0
+  f61(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f69(x0, x1, x2, 0, x4, x5, x6)) :|: x3 >= x0
+)

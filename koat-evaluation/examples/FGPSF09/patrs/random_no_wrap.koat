@@ -1,0 +1,12 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS random))
+(VAR A B C D)
+(RULES
+  random(A,B,C) -> Com_1(rand(A,0,C)) :|: A >= 0
+  rand(A,B,C) -> Com_1(end(A,B,C)) :|: A = 0
+  rand0(A,B,C) -> Com_1(rand(A - 1,B,C))
+  rand1(A,B,C) -> Com_1(idinc(C,B,C))
+  rand(A,B,C) -> Com_2(rand0(A,D,B),rand1(A,D,B)) :|: A >= 1
+  idinc(A,B,C) -> Com_1(end(A,B,C))
+  idinc(A,B,C) -> Com_1(end(A,B,C))
+)

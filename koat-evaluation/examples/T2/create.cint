@@ -1,0 +1,10 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f3))
+(VAR nondet_12 result_dot_nondet_sdv_special_RETURN_VALUE_13 length_16 head_19 i_17 result_dot_SLAyer_malloc_sdv_special_RETURN_VALUE_20 tmp_21 temp_24 temp0_18 result_11 head_15 rcd_77 i_83 rcd_47 $nondet2 $nondet $nondet1 $nondet4 $nondet5 $nondet6 $nondet7 $nondet3 temp0_14 x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15 x16 x17 x18 x19 x20 x21 x22 x23 x24 x26)
+(RULES
+  f1(nondet_12, result_dot_nondet_sdv_special_RETURN_VALUE_13, length_16, head_19, i_17, result_dot_SLAyer_malloc_sdv_special_RETURN_VALUE_20, tmp_21, temp_24, temp0_18, result_11, head_15, rcd_77, i_83, rcd_47) -> Com_1(f1(nondet_12, result_dot_nondet_sdv_special_RETURN_VALUE_13, length_16, temp_24, 1 + i_17, result_dot_SLAyer_malloc_sdv_special_RETURN_VALUE_20, temp_24, $nondet2, temp0_18, result_11, head_15, $nondet, -1 + (1 + i_17), rcd_47)) :|: length_16 > i_17 && length_16 > -1 + (1 + i_17) && 1 + i_17 = 1 + (-1 + (1 + i_17)) && i_17 > -1
+  f1(nondet_12, result_dot_nondet_sdv_special_RETURN_VALUE_13, length_16, head_19, i_17, result_dot_SLAyer_malloc_sdv_special_RETURN_VALUE_20, tmp_21, temp_24, temp0_18, result_11, head_15, rcd_77, i_83, rcd_47) -> Com_1(f4(nondet_12, $nondet, $nondet1, $nondet4, $nondet2, $nondet5, $nondet6, $nondet7, $nondet3, temp0_14, head_19, rcd_77, i_83, rcd_47)) :|: length_16 <= i_17 && i_17 > -1 && $nondet2 >= $nondet && 1 < $nondet
+  f3(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13) -> Com_1(f4(x14, x15, x16, x17, x18, x19, x20, x21, x22, x23, 0, x11, x12, x13)) :|: x15 < 1 && x24 < 1
+  f3(x0, x1, x2, x3, x4, x5, x6, x22, x8, x9, x10, x11, x12, x13) -> Com_1(f1(x14, x15, x15, x17, 2, x17, x17, x19, x8, x9, x10, x11, x12, x20)) :|: x15 > 1
+  f3(x0, x1, x2, x3, x4, x5, x6, x26, x8, x9, x10, x11, x12, x13) -> Com_1(f4(x14, 1, x16, x17, x18, x19, x20, x21, x22, x23, x26, x11, x12, x13)) :|: x24 < 2 && x24 > 0
+)

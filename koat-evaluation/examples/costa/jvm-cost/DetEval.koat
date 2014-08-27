@@ -1,0 +1,106 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS lDetdetLBLSBLSBDRBD))
+(VAR A B C D E F G H I J K L M N O P Q R S T U V W X Y Z A1 B1 C1 D1 E1)
+(RULES
+  lDetdetLBLSBLSBDRBD(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(lDetgaussianLBLSBLSBDLSBIRBV(A,A,A,0,0,0,0,0,V,J,K,L,M,N,O,P,Q,R,S,T,U),lW50normal(A,A,A,0,0,0,0,0,V,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: A >= 0
+  lDetgaussianLBLSBLSBDLSBIRBV(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f15(A,B,B,B,0,0,0,0,0,0,0,0,0,N,O,P,Q,R,S,T,U)) :|: B >= 0
+  f50normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f2(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f150(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f15loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f151(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(lW73normal(D,A,B,E,F,G,H,I,J,K,L,M,N,O,O,P,Q,R,S,T,U))
+  f15(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(f150(B,C,E,A,D,V,F,G,H,I,J,K,L,M,W,P,Q,R,S,T,U),f151(B,C,E,A,D,V,F,G,H,I,J,K,L,M,W,P,Q,R,S,T,U)) :|: V >= C && V >= E
+  f21(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f4loop(A,B,C,D,E,0,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f22(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(lW55normal(A,B,C,F,G,H,I,J,K,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f2(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(f21(A,B,C,V,W,Y,Z,X,G,H,A1,L,M,N,O,P,Q,R,S,T,U),f22(A,B,C,V,W,Y,Z,X,G,H,A1,L,M,N,O,P,Q,R,S,T,U)) :|: X >= B && X >= 0
+  f15loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f74(A,B,C,C,B,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f73normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f18(A,B,C,D,0,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f4loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f56(A,B,C,D,E,F,F,B,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f55normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f7(A,B,C,D,E,1,0,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f74(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f17(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: E >= D + 1 && C = D && B = E
+  f74(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f15loopnexit(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: D >= E && C = D && B = E
+  f180(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f18loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f181(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(lW71normal(A,J,B,C,K,L,M,N,O,P,Q,R,S,T,O,P,Q,R,S,T,U))
+  f18(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(f180(A,C,D,E,F,G,H,I,J,B,V,W,Y,Z,X,A1,K,L,M,B1,U),f181(A,C,D,E,F,G,H,I,J,B,V,W,Y,Z,X,A1,K,L,M,B1,U)) :|: V >= C && V >= E
+  f56(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f6(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: H >= G + 1 && F = G && B = H
+  f56(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f4loopnexit(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: G >= H && F = G && B = H
+  f71(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f7loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f73(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(lW53normal(F,A,B,G,H,I,J,K,L,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f7(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(f71(B,C,F,G,H,A,D,E,V,W,Y,Z,M,N,O,P,Q,R,S,T,U),f73(B,C,F,G,H,A,D,E,V,W,Y,Z,M,N,O,P,Q,R,S,T,U)) :|: W >= B && W >= G
+  f17(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f15loop(A,B,C + 1,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f18loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f72(A,B,C,D,E,F,G,H,I,D,B,L,M,N,O,P,Q,R,S,T,U))
+  f71normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f19(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f6(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f4loop(A,B,C,V,W,F + 1,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f7loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f54(A,B,C,D,E,D,A,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f53normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f10(A,B,C,D,E,F,G,H,V,W,K,L,M,N,O,P,Q,R,S,T,U))
+  f72(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f20(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: K >= J + 1 && D = J && B = K
+  f72(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f18loopnexit(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: J >= K && D = J && B = K
+  f190(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f21loop(A,B,C,D,0,0,E,F,G,H,I,J,K,N,O,P,Q,R,S,T,U))
+  f191(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(lW67normal(A,B,C,D,L,M,N,O,P,Q,R,S,T,U,O,P,Q,R,S,T,U))
+  f19(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(f190(A,B,C,D,G,H,I,J,K,L,M,V,W,Y,Z,X,A1,B1,C1,D1,E1),f191(A,B,C,D,G,H,I,J,K,L,M,V,W,Y,Z,X,A1,B1,C1,D1,E1)) :|: W >= 0
+  f54(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f9(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: G >= F + 1 && D = F && A = G
+  f54(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f7loopnexit(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: F >= G && D = F && A = G
+  f200(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f22loop(A,B,C,D,E,0,F,G,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f201(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(lW69normal(A,B,H,C,I,J,K,L,M,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f20(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(f200(A,B,D,V,W,H,I,C,Y,Z,X,A1,B1,N,O,P,Q,R,S,T,U),f201(A,B,D,V,W,H,I,C,Y,Z,X,A1,B1,N,O,P,Q,R,S,T,U)) :|: X >= B && X >= 0
+  f21loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f68(A,B,C,D,E,F,G,H,I,J,K,L,M,F,C - 1,P,Q,R,S,T,U))
+  f67normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f23(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f9(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f51(A,B,C,D,E,D,V,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f22loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f70(A,B,C,D,E,F,G,H,F,B,K,L,M,N,O,P,Q,R,S,T,U))
+  f69normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f25(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f68(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f24(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: O >= N + 1 && F = N
+  f68(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f21loopnexit(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: N >= O && F = N
+  f51(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f11(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: G >= F + 1 && D = F
+  f51(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f12(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: F >= G && D = F
+  f70(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f26(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: J >= I + 1 && F = I && B = J
+  f70(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f22loopnexit(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: I >= J && F = I && B = J
+  f25(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f18loop(A,B,C,D + 1,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f240(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f28loop(A,B,C,D,E,F,G,E,H,I,K,L,M,N,O,P,Q,R,S,T,U))
+  f241(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(lW65normal(A,B,C,D,J,E,K,L,M,N,O,P,Q,N,O,P,Q,R,S,T,U))
+  f24(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(f240(A,B,C,D,F,V,W,J,K,Y,Z,X,A1,B1,C1,L,M,R,S,T,U),f241(A,B,C,D,F,V,W,J,K,Y,Z,X,A1,B1,C1,L,M,R,S,T,U)) :|: A1 >= C && A1 >= F
+  f11(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f13(A,B,-C,D,V,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f12(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f52(A,B,C,D,E,D,V,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f260(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(javaSlangSMathabsLBDRBD(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f261(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(lW57normal(C,D,E,F,G,H,I,J,K,L,K,L,M,N,O,P,Q,R,S,T,U))
+  f26(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(f260(V,W,A,B,C,D,E,F,G,H,Y,Z,M,N,O,P,Q,R,S,T,U),f261(V,W,A,B,C,D,E,F,G,H,Y,Z,M,N,O,P,Q,R,S,T,U))
+  f28loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f66(A,B,C,D,E,F,G,H,I,J,H,C,M,N,O,P,Q,R,S,T,U))
+  f65normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f31(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f13(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f7loop(A,B,C,D + 1,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f52(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f13(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: G >= F && D = F
+  f52(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f11(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: F >= G + 1 && D = F
+  javaSlangSMathabsLBDRBD(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f75(A,B,V,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f57normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f29(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f66(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f32(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: L >= K + 1 && H = K && C = L
+  f66(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f28loopnexit(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: K >= L && H = K && C = L
+  f310(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f35loop(A,B,C,D,D + 1,E,F,G,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f311(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(lW63normal(A,B,C,H,I,D,J,K,L,M,N,O,P,N,O,P,Q,R,S,T,U))
+  f31(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(f310(A,B,C,F,K,L,M,D,E,G,H,V,W,Y,Z,X,Q,R,S,T,U),f311(A,B,C,F,K,L,M,D,E,G,H,V,W,Y,Z,X,Q,R,S,T,U)) :|: W >= C && W >= F + 1
+  f75(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f45(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: C >= 1
+  f75(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f46(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: 0 >= C
+  f29(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f58(A,B,C,D,E,F,I,J,V,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f320(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(javaSlangSMathabsLBDRBD(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f321(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(lW59normal(C,D,E,F,G,H,I,J,K,L,M,N,M,N,O,P,Q,R,S,T,U))
+  f32(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(f320(V,W,A,B,C,D,E,F,G,H,I,J,Y,Z,O,P,Q,R,S,T,U),f321(V,W,A,B,C,D,E,F,G,H,I,J,Y,Z,O,P,Q,R,S,T,U))
+  f35loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f64(A,B,C,D,E,F,G,H,E,C,K,L,M,N,O,P,Q,R,S,T,U))
+  f63normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f21loop(A,B,C,D,E,F + 1,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f45(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f47(A,B,A,B,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f46(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f47(A,B,V,W,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f58(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f33(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: 0 >= I
+  f58(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f34(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: I >= 1
+  f59normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f36(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f64(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f38(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: J >= I + 1 && E = I && C = J
+  f64(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f35loopnexit(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: I >= J && E = I && C = J
+  f33(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f22loop(A,B,C,D,E,F + 1,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f34(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f33(A,B,C,G,H,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f36(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f60(A,B,C,D,E,F,G,H,V,W,Y,L,M,N,O,P,Q,R,S,T,U))
+  f380(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f41loop(A,B,C,D,E,F,G,D + 1,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f381(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(lW61normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f38(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_2(f380(A,B,C,D,E,V,W,Y,I,J,K,L,M,N,O,P,Q,R,S,T,U),f381(A,B,C,D,E,V,W,Y,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: Y >= C && Y >= D + 1
+  f60(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f39(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: 0 >= K
+  f60(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f40(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: K >= 1
+  f41loop(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f62(A,B,C,D,E,F,G,H,H,C,K,L,M,N,O,P,Q,R,S,T,U))
+  f61normal(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f35loop(A,B,C,D,E + 1,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f39(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f28loop(A,B,C,D,E,F,G,H + 1,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f40(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f39(A,B,C,D,E,I,J,H,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+  f62(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f43(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: J >= I + 1 && H = I && C = J
+  f62(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f41loopnexit(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) :|: I >= J && H = I && C = J
+  f43(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U) -> Com_1(f41loop(A,B,C,D,E,F,G,H + 1,I,J,K,L,M,N,O,P,Q,R,S,T,U))
+)

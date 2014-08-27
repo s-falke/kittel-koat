@@ -1,0 +1,8 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f1))
+(VAR pc_Loop x0)
+(RULES
+  f8(pc_Loop) -> Com_1(f8(2)) :|: TRUE
+  f1(x0) -> Com_1(f4(3)) :|: TRUE
+  f4(x0) -> Com_1(f4(3)) :|: TRUE
+)

@@ -1,0 +1,103 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS Inverse____invert__LB_LSB_LSBD__RB_LSB_LSBD))
+(VAR A B C D E F G H I J K L M N O P Q R S T U V W)
+(RULES
+ Inverse____invert__LB_LSB_LSBD__RB_LSB_LSBD(A) -> Com_1(f_2(A, A, A, A, A, 0, B, C)) :|: D=0 && E=0 && F=0 && G=0 && H=0 && B=0 && C=0 && A>=0 && A>=0 && A>=0 && A>=0
+ f_2(A, B, C, D, E, F, G, H) -> Com_2(f_2____loop(B, D, F),_W75____normal(A, B, C, D, E, I, G, H, J)) :|: -1*B+1*I>=0 && -1*F+1*I>=0
+ f_2____loop(A, B, C) -> Com_1(f_76(A, B, C, C, A)) :|: TRUE
+ f_75____normal(A, B, C, D, E, F, G, H, I) -> Com_2(Inverse____gaussian__LB_LSB_LSBD_LSBI__RBV(A, E),_W62____normal(A, B, C, D, E, F, G, H, J)) :|: 1*E>=0
+ f_76(A, B, C, C, A) -> Com_1(f_4(A, B, C)) :|: C+1<=A
+ f_76(A, B, C, C, A) -> Com_1(f_2____loop__nexit(A, B, C)) :|: C>=A
+ Inverse____gaussian__LB_LSB_LSBD_LSBI__RBV(A, B) -> Com_1(f_27(A, B, B, B, 0, C, D, E, F, G, H, I, J)) :|: K=0 && L=0 && M=0 && C=0 && D=0 && E=0 && F=0 && G=0 && H=0 && I=0 && J=0 && B>=0 && B>=0
+ f_62____normal(A, B, C, D, E, F, G, H, I) -> Com_1(f_5(A, B, C, D, E, F, G, H)) :|: TRUE
+ f_4(A, B, C) -> Com_1(f_2____loop(A, B, D)) :|: D=C+1
+ f_27(A, B, C, D, E, F, G, H, I, J, K, L, M) -> Com_2(f_27____loop(B, C, E),_W93____normal(A, B, C, D, N, F, G, H, I, J, K, L, M, O)) :|: -1*C+1*N>=0 && -1*E+1*N>=0
+ f_5(A, B, C, D, E, F, G, H) -> Com_2(f_7____loop(A, B, D, E, 0, G, H),_W73____normal(A, B, C, D, E, I, J, K, L)) :|: -1*0+1*I>=0
+ f_27____loop(A, B, C) -> Com_1(f_94(A, B, C, C, B)) :|: TRUE
+ f_93____normal(A, B, C, D, E, F, G, H, I, J, K, L, M, N) -> Com_1(f_30(A, B, C, D, 0, F, G, H, I, J, K, L, M)) :|: TRUE
+ f_7____loop(A, B, C, D, E, F, G) -> Com_1(f_74(A, B, C, D, E, F, G, E, H)) :|: H=B - 1
+ f_73____normal(A, B, C, D, E, F, G, H, I) -> Com_1(f_10(A, B, C, D, E, 0, G, H)) :|: TRUE
+ f_94(A, B, C, C, B) -> Com_1(f_29(A, B, C)) :|: C+1<=B
+ f_94(A, B, C, C, B) -> Com_1(f_27____loop__nexit(A, B, C)) :|: C>=B
+ f_30(A, B, C, D, E, F, G, H, I, J, K, L, M) -> Com_2(f_30____loop(A, C, D, E, F, G, H, I, J),_W91____normal(A, B, C, D, N, O, P, Q, R, S, K, L, M, T)) :|: -1*C+1*N>=0 && -1*E+1*N>=0
+ f_74(A, B, C, D, E, F, G, E, H) -> Com_1(f_9(A, B, C, D, E, F, G)) :|: E+1<=H
+ f_74(A, B, C, D, E, F, G, E, H) -> Com_1(f_7____loop__nexit(A, B, C, D, E, F, G)) :|: E>=H
+ f_10(A, B, C, D, E, F, G, H) -> Com_2(f_10____loop(A, B, C, D, E, F, G, H),_W67____normal(A, B, C, D, E, I, J, K, L)) :|: -1*B+1*I>=0 && -1*F+1*I>=0
+ f_29(A, B, C) -> Com_1(f_27____loop(A, B, D)) :|: D=C+1
+ f_30____loop(A, B, C, D, E, F, G, H, I) -> Com_1(f_92(A, B, C, D, E, F, G, H, I, D, B)) :|: TRUE
+ f_91____normal(A, B, C, D, E, F, G, H, I, J, K, L, M, N) -> Com_1(f_31(A, B, C, D, E, F, G, H, I, J, K, L, M)) :|: TRUE
+ f_9(A, B, C, D, E, F, G) -> Com_2(f_11____loop(A, B, C, D, E, H, G),_W71____normal(A, B, C, D, E, I, J)) :|: H=E+1 && -1*B+1*I>=0 && -1*H+1*I>=0
+ f_10____loop(A, B, C, D, E, F, G, H) -> Com_1(f_68(A, B, C, D, E, F, G, H, F, B)) :|: TRUE
+ f_67____normal(A, B, C, D, E, F, G, H, I) -> Com_1(f_16(A, B, C, D, E, F, G, H, C)) :|: TRUE
+ f_92(A, B, C, D, E, F, G, H, I, D, B) -> Com_1(f_32(A, B, C, D, E, F, G, H, I)) :|: D+1<=B
+ f_92(A, B, C, D, E, F, G, H, I, D, B) -> Com_1(f_30____loop__nexit(A, B, C, D, E, F, G, H, I)) :|: D>=B
+ f_31(A, B, C, D, E, F, G, H, I, J, K, L, M) -> Com_2(f_33____loop(A, B, C, D, 0, 0, G, H, I, J, K, L, M),_W87____normal(A, B, C, D, N, O, P, Q, R, S, T, U, V, W)) :|: -1*0+1*O>=0
+ f_11____loop(A, B, C, D, E, F, G) -> Com_1(f_72(A, B, C, D, E, F, G, F, B)) :|: TRUE
+ f_71____normal(A, B, C, D, E, F, G) -> Com_1(f_7____loop(A, B, C, D, H, F, G)) :|: H=E+1
+ f_68(A, B, C, D, E, F, G, H, F, B) -> Com_1(f_13(A, B, C, D, E, F, G, H)) :|: F+1<=B
+ f_68(A, B, C, D, E, F, G, H, F, B) -> Com_1(f_10____loop__nexit(A, B, C, D, E, F, G, H)) :|: F>=B
+ f_32(A, B, C, D, E, F, G, H, I) -> Com_2(f_34____loop(A, B, D, J, K, 0, H, I),_W89____normal(A, B, C, D, L, M, N, O, P)) :|: -1*B+1*N>=0 && -1*0+1*N>=0
+ f_33____loop(A, B, C, D, E, F, G, H, I, J, K, L, M) -> Com_1(f_88(A, B, C, D, E, F, G, H, I, J, K, L, M, F, N)) :|: N=C - 1
+ f_87____normal(A, B, C, D, E, F, G, H, I, J, K, L, M, N) -> Com_1(f_35(A, B, C, D, E, F, G, H, I, J, K, L, M)) :|: TRUE
+ f_72(A, B, C, D, E, F, G, F, B) -> Com_1(f_15(A, B, C, D, E, F, G)) :|: F+1<=B
+ f_72(A, B, C, D, E, F, G, F, B) -> Com_1(f_11____loop__nexit(A, B, C, D, E, F, G)) :|: F>=B
+ f_13(A, B, C, D, E, F, G, H) -> Com_2(f_17____loop(A, B, C, D, E, F, I, H),_W65____normal(A, B, C, D, E, F, J, K)) :|: L=B - 1 && M=B - 1 && N=B - 1 && O=B - 1 && I=B - 2 && -1*J>=1 && 1*I+ -1*J>=0
+ f_34____loop(A, B, C, D, E, F, G, H) -> Com_1(f_90(A, B, C, D, E, F, G, H, F, B)) :|: TRUE
+ f_89____normal(A, B, C, D, E, F, G, H, I) -> Com_1(f_37(A, B, C, D, E, F, G, H, I)) :|: TRUE
+ f_88(A, B, C, D, E, F, G, H, I, J, K, L, M, F, N) -> Com_1(f_36(A, B, C, D, E, F, G, H, I, J, K, L, M)) :|: F+1<=N
+ f_88(A, B, C, D, E, F, G, H, I, J, K, L, M, F, N) -> Com_1(f_33____loop__nexit(A, B, C, D, E, F, G, H, I, J, K, L, M)) :|: F>=N
+ f_15(A, B, C, D, E, F, G) -> Com_2(f_18____loop(A, B, C, D, E, F, 0),_W69____normal(A, B, C, D, E, F, H)) :|: -1*B+1*H>=0 && -1*0+1*H>=0
+ f_17____loop(A, B, C, D, E, F, G, H) -> Com_1(f_66(A, B, C, D, E, F, G, H, G)) :|: TRUE
+ f_65____normal(A, B, C, D, E, F, G, H) -> Com_1(f_10____loop(A, B, C, D, E, I, G, H)) :|: I=F+1
+ f_90(A, B, C, D, E, F, G, H, F, B) -> Com_1(f_38(A, B, C, D, E, F, G, H)) :|: F+1<=B
+ f_90(A, B, C, D, E, F, G, H, F, B) -> Com_1(f_34____loop__nexit(A, B, C, D, E, F, G, H)) :|: F>=B
+ f_37(A, B, C, D, E, F, G, H, I) -> Com_1(f_30____loop(A, B, C, J, E, F, G, H, I)) :|: J=D+1
+ f_36(A, B, C, D, E, F, G, H, I, J, K, L, M) -> Com_2(f_40____loop(A, B, C, D, F, N, O, F, J, K),_W85____normal(A, B, C, D, P, F, Q, R, S, T, U, L, M)) :|: -1*C+1*S>=0 && -1*F+1*S>=0
+ f_18____loop(A, B, C, D, E, F, G) -> Com_1(f_70(A, B, C, D, E, F, G, G, B)) :|: TRUE
+ f_69____normal(A, B, C, D, E, F, G) -> Com_1(f_11____loop(A, B, C, D, E, H, G)) :|: H=F+1
+ f_66(A, B, C, D, E, F, G, H, G) -> Com_1(f_20(A, B, C, D, E, F, G, H)) :|: G>=0
+ f_66(A, B, C, D, E, F, G, H, G) -> Com_1(f_17____loop__nexit(A, B, C, D, E, F, G, H)) :|: G<= -1
+ f_38(A, B, C, D, E, F, G, H) -> Com_2(java_Slang_SMath____abs__LBD__RBD(I, J),_W77____normal(A, B, C, D, E, F, G, H, K, L)) :|: TRUE
+ f_40____loop(A, B, C, D, E, F, G, H, I, J) -> Com_1(f_86(A, B, C, D, E, F, G, H, I, J, H, C)) :|: TRUE
+ f_85____normal(A, B, C, D, E, F, G, H, I, J, K, L, M) -> Com_1(f_43(A, B, C, D, E, F, G, H, I, J, K, L, M)) :|: TRUE
+ f_70(A, B, C, D, E, F, G, G, B) -> Com_1(f_22(A, B, C, D, E, F, G)) :|: G+1<=B
+ f_70(A, B, C, D, E, F, G, G, B) -> Com_1(f_18____loop__nexit(A, B, C, D, E, F, G)) :|: G>=B
+ f_20(A, B, C, D, E, F, G, H) -> Com_2(f_23____loop(A, B, C, E, F, G, I),_W63____normal(A, B, C, D, E, F, G, J)) :|: I=G+1 && -1*B+1*J>=0 && -1*I+1*J>=0
+ java_Slang_SMath____abs__LBD__RBD(A, B) -> Com_1(f_95(A, B, C)) :|: TRUE
+ f_77____normal(A, B, C, D, E, F, G, H, I, J) -> Com_1(f_41(A, B, C, D, E, F, G, H, I, J)) :|: TRUE
+ f_86(A, B, C, D, E, F, G, H, I, J, H, C) -> Com_1(f_44(A, B, C, D, E, F, G, H, I, J)) :|: H+1<=C
+ f_86(A, B, C, D, E, F, G, H, I, J, H, C) -> Com_1(f_40____loop__nexit(A, B, C, D, E, F, G, H, I, J)) :|: H>=C
+ f_43(A, B, C, D, E, F, G, H, I, J, K, L, M) -> Com_2(f_47____loop(A, B, C, F, N, K, L, M),_W83____normal(A, B, C, D, E, F, G, H, O, P, Q, R, S)) :|: N=F+1 && -1*C+1*P>=0 && -1*N+1*P>=0
+ f_22(A, B, C, D, E, F, G) -> Com_1(f_18____loop(A, B, C, D, E, F, H)) :|: H=G+1
+ f_23____loop(A, B, C, D, E, F, G) -> Com_1(f_64(A, B, C, D, E, F, G, G, B)) :|: TRUE
+ f_63____normal(A, B, C, D, E, F, G, H) -> Com_1(f_17____loop(A, B, C, D, E, F, I, H)) :|: I=G+ -1
+ f_95(A, B, C) -> Com_1(f_57(A, B)) :|: C>=1
+ f_95(A, B, C) -> Com_1(f_58(A, B)) :|: C<=0
+ f_41(A, B, C, D, E, F, G, H, I, J) -> Com_1(f_78(A, B, C, D, E, F, I, J, K)) :|: TRUE
+ f_44(A, B, C, D, E, F, G, H, I, J) -> Com_2(java_Slang_SMath____abs__LBD__RBD(K, L),_W79____normal(A, B, C, D, E, F, G, H, I, J, M, N)) :|: TRUE
+ f_47____loop(A, B, C, D, E, F, G, H) -> Com_1(f_84(A, B, C, D, E, F, G, H, E, C)) :|: TRUE
+ f_83____normal(A, B, C, D, E, F, G, H, I, J, K, L, M) -> Com_1(f_33____loop(A, B, C, D, E, N, G, H, I, J, K, L, M)) :|: N=F+1
+ f_64(A, B, C, D, E, F, G, G, B) -> Com_1(f_25(A, B, C, D, E, F, G)) :|: G+1<=B
+ f_64(A, B, C, D, E, F, G, G, B) -> Com_1(f_23____loop__nexit(A, B, C, D, E, F, G)) :|: G>=B
+ f_57(A, B) -> Com_1(f_59(A, B, A, B)) :|: TRUE
+ f_58(A, B) -> Com_1(f_59(A, B, C, D)) :|: TRUE
+ f_78(A, B, C, D, E, F, G, H, I) -> Com_1(f_45(A, B, C, D, E, F, G, H)) :|: I<=0
+ f_78(A, B, C, D, E, F, G, H, I) -> Com_1(f_46(A, B, C, D, E, F, G, H)) :|: I>=1
+ f_79____normal(A, B, C, D, E, F, G, H, I, J, K, L) -> Com_1(f_48(A, B, C, D, E, F, G, H, I, J, K, L)) :|: TRUE
+ f_84(A, B, C, D, E, F, G, H, E, C) -> Com_1(f_50(A, B, C, D, E, F, G, H)) :|: E+1<=C
+ f_84(A, B, C, D, E, F, G, H, E, C) -> Com_1(f_47____loop__nexit(A, B, C, D, E, F, G, H)) :|: E>=C
+ f_25(A, B, C, D, E, F, G) -> Com_1(f_23____loop(A, B, C, D, E, F, H)) :|: H=G+1
+ f_45(A, B, C, D, E, F, G, H) -> Com_1(f_34____loop(A, B, C, D, E, I, G, H)) :|: I=F+1
+ f_46(A, B, C, D, E, F, G, H) -> Com_1(f_45(A, B, C, G, H, F, G, H)) :|: TRUE
+ f_48(A, B, C, D, E, F, G, H, I, J, K, L) -> Com_1(f_80(A, B, C, D, E, F, G, H, M, N, O)) :|: TRUE
+ f_50(A, B, C, D, E, F, G, H) -> Com_2(f_53____loop(A, B, C, D, E, I, J, K),_W81____normal(A, B, C, D, E, I, J, L)) :|: K=D+1 && -1*C+1*L>=0 && -1*K+1*L>=0
+ f_80(A, B, C, D, E, F, G, H, I, J, K) -> Com_1(f_51(A, B, C, D, E, F, G, H, I, J)) :|: K<=0
+ f_80(A, B, C, D, E, F, G, H, I, J, K) -> Com_1(f_52(A, B, C, D, E, F, G, H, I, J)) :|: K>=1
+ f_53____loop(A, B, C, D, E, F, G, H) -> Com_1(f_82(A, B, C, D, E, F, G, H, H, C)) :|: TRUE
+ f_81____normal(A, B, C, D, E, F, G, H) -> Com_1(f_47____loop(A, B, C, D, I, F, G, H)) :|: I=E+1
+ f_51(A, B, C, D, E, F, G, H, I, J) -> Com_1(f_40____loop(A, B, C, D, E, F, G, K, I, J)) :|: K=H+1
+ f_52(A, B, C, D, E, F, G, H, I, J) -> Com_1(f_51(A, B, C, D, E, I, J, H, I, J)) :|: TRUE
+ f_82(A, B, C, D, E, F, G, H, H, C) -> Com_1(f_55(A, B, C, D, E, F, G, H)) :|: H+1<=C
+ f_82(A, B, C, D, E, F, G, H, H, C) -> Com_1(f_53____loop__nexit(A, B, C, D, E, F, G, H)) :|: H>=C
+ f_55(A, B, C, D, E, F, G, H) -> Com_1(f_53____loop(A, B, C, D, E, F, G, I)) :|: I=H+1
+)

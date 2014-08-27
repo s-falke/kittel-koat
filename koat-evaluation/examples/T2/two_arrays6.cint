@@ -1,0 +1,22 @@
+(GOAL COMPLEXITY)
+(STARTTERM (FUNCTIONSYMBOLS f0))
+(VAR x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11)
+(RULES
+  f0(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f17(0, x10, x11, 0, x4, x5, x6, x7, x8, x9)) :|: TRUE
+  f17(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f17(x0, x1, x2, x3 + 1, x4, x5, x6, x7, x8, x9)) :|: x4 >= x3 + 1
+  f27(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f27(x0, x1, x2, x3, x4, x5 - 1, x6, x7, x8, x9)) :|: x5 > -1
+  f37(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f37(x0, x1, x2, x3, x4, x5, x6 + 1, x7, x8, x9)) :|: x6 + 1 <= x4
+  f45(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f45(x0 + 1, x1, x2, x3, x4, x5, x6, x7, x8, x9)) :|: x4 >= x0 + 1
+  f55(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f55(x0, x1, x2, x3, x4, x5, x6, x7 + 1, x8, x9)) :|: x7 + 1 <= x4
+  f65(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f65(x0, x1, x2, x3, x4, x5, x6, x7, x8 - 1, x9)) :|: x8 > -1
+  f75(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f75(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9 + 1)) :|: x9 + 1 <= x4
+  f83(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f83(x0 - 1, x1, x2, x3, x4, x5, x6, x7, x8, x9)) :|: x0 > -1
+  f83(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f93(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9)) :|: x0 < 0
+  f75(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f83(x4 - 1, x1, x2, x3, x4, x5, x6, x7, x8, x9)) :|: x9 >= x4
+  f65(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f75(x0, x1, x2, x3, x4, x5, x6, x7, x8, 0)) :|: x8 < 0
+  f55(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f65(x0, x1, x2, x3, x4, x5, x6, x7, x4 - 1, x9)) :|: x7 >= x4
+  f45(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f55(x0, x1, x2, x3, x4, x5, x6, 0, x8, x9)) :|: x4 <= x0
+  f37(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f45(0, x1, x2, x3, x4, x5, x6, x7, x8, x9)) :|: x6 >= x4
+  f27(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f37(x0, x1, x2, x3, x4, x5, 0, x7, x8, x9)) :|: x5 < 0
+  f17(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9) -> Com_1(f27(x0, x1, x2, x3, x4, x4 - 1, x6, x7, x8, x9)) :|: x4 <= x3
+)

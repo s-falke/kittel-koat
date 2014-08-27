@@ -1,0 +1,12 @@
+eq(pubs_start(A,B,C),0,[evalrealselectstart(A,B,C)],[]).
+eq(evalrealselectstart(A,B,C),1,[evalrealselectentryin(A,B,C)],[]).
+eq(evalrealselectentryin(A,B,C),1,[evalrealselectbb6in(0,B,C)],[]).
+eq(evalrealselectbb6in(A,B,C),1,[evalrealselectbbin(A,B,C)],[B >= 2 + A]).
+eq(evalrealselectbb6in(A,B,C),1,[evalrealselectreturnin(A,B,C)],[A + 1 >= B]).
+eq(evalrealselectbbin(A,B,C),1,[evalrealselectbb4in(A,B,A + 1)],[]).
+eq(evalrealselectbb4in(A,B,C),1,[evalrealselectbb1in(A,B,C)],[B >= C + 1]).
+eq(evalrealselectbb4in(A,B,C),1,[evalrealselectbb5in(A,B,C)],[C >= B]).
+eq(evalrealselectbb1in(A,B,C),1,[evalrealselectbb4in(A,B,C + 1)],[D >= E + 1]).
+eq(evalrealselectbb1in(A,B,C),1,[evalrealselectbb4in(A,B,C + 1)],[E >= D]).
+eq(evalrealselectbb5in(A,B,C),1,[evalrealselectbb6in(A + 1,B,C)],[]).
+eq(evalrealselectreturnin(A,B,C),1,[evalrealselectstop(A,B,C)],[]).
