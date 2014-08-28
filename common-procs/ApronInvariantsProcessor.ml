@@ -359,7 +359,7 @@ module Make(RuleT : AbstractRule) = struct
       None
     else
       (
-        let man = Box.manager_alloc () in
+        let man = Oct.manager_alloc () in
 
         match add_invariants man ctrsobl.ctrs.rules [ctrsobl.ctrs.startFun] with
         | None ->
