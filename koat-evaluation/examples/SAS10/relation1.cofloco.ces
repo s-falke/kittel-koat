@@ -1,0 +1,4 @@
+eq(start0(A,B,C,D),1,[start(B,B,D,D)],[]).
+eq(start(A,B,C,D),1,[lbl41(E,B,C,D)],[A=B,C=D]).
+eq(lbl41(A,B,C,D),1,[stop(A,B,A,D)],[C=D]).
+eq(stop(A,B,C,D),0,[],[]).

@@ -1,0 +1,13 @@
+eq(f0(A,B),1,[f7(C,1,D,E),loop_cont_f7(D,E)],[]).
+eq(f13(A,B),1,[f13(A,B)],[]).
+eq(f15(A,B),1,[f17(A,B)],[]).
+eq(loop_cont_f7(A,B),0,[f13(A,B)],[]).
+eq(f7(A,B,C,D),1,[f7(E,B,C,D)],[0>=A+1]).
+eq(f7(A,B,C,D),1,[f7(E,B,C,D)],[A>=1]).
+eq(f7(A,B,C,D),1,[loop_exit_f7(0,1,C,D)],[A=0]).
+eq(loop_exit_f7(A,B,C,D),0,[],[A=C,B=D]).
+eq(loop_exit_f13(A,B),0,[],[]).
+eq(f17(A,B),0,[],[]).
+eq(f7(A,B),1,[f7(C,B)],[0>=A+1]).
+eq(f7(A,B),1,[f7(C,B)],[A>=1]).
+eq(f7(A,B),1,[loop_exit_f7(0,1)],[A=0]).

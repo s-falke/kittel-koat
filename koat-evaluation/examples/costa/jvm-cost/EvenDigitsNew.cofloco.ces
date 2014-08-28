@@ -1,0 +1,19 @@
+eq(evenDigits(A),5,['2'(A,0,0)],[B=0, C=0]).
+eq('2'(A,B,C),0,['2_loop'(A,B,C), '15_normal'(A,D,E,F)],[-1*A+1*E>=0, -1*C+1*E>=0]).
+eq('2_loop'(A,B,C),3,['16'(A,B,C,C,A)],[]).
+eq('15_normal'(A,B,C,D),2,['6'(A,B,C,B)],[]).
+eq('16'(A,B,C,C,A),0,['3'(A,B,C)],[C+1=<A]).
+eq('16'(A,B,C,C,A),0,['2_loop_nexit'(A,B,C)],[C>=A]).
+eq('6'(A,B,C,D),0,[],[]).
+eq('3'(A,B,C),3,['pubs/EvenDigits_divByTwo(I)I'(C), '14_normal'(A,B,C,B,D)],[]).
+eq('2_loop_nexit'(A,B,C),0,[],[]).
+eq('pubs/EvenDigits_divByTwo(I)I'(A),3,['9'(A,0)],[B=0]).
+eq('14_normal'(A,B,C,B,D),3,['2_loop'(A,E,F)],[E=B+D, F=C+1]).
+eq('9'(A,B),0,['9_loop'(A,B), '17_normal'(C,D,E)],[-1*C>=0]).
+eq('9_loop'(A,B),2,['18'(A,B,A)],[]).
+eq('17_normal'(A,B,C),2,['12'(A,B,B)],[]).
+eq('18'(A,B,A),0,['10'(A,B)],[A>=1]).
+eq('18'(A,B,A),0,['9_loop_nexit'(A,B)],[A=<0]).
+eq('12'(A,B,C),0,[],[]).
+eq('10'(A,B),5,['9_loop'(C,D)],[A-2+1=<2*C, 2*C=<A, D=B+1]).
+eq('9_loop_nexit'(A,B),0,[],[]).

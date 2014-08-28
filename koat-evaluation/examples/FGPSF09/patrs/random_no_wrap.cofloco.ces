@@ -1,0 +1,9 @@
+eq(random(A,B,C),1,[rand(A,0,C,D,E,F),loop_cont_rand(D,E,F)],[A>=0]).
+eq(rand1(A,B,C),1,[idinc(C,B,C)],[]).
+eq(idinc(A,B,C),1,[end(A,B,C)],[]).
+eq(loop_cont_rand(A,B,C),0,[end(A,B,C)],[]).
+eq(rand(A,B,C,D,E,F),1,[rand0(A,G,B,D,E,F),rand(A,G,B)],[A>=1]).
+eq(rand(A,B,C,D,E,F),1,[loop_exit_rand(A,B,C,D,E,F)],[A=0]).
+eq(rand0(A,B,C,D,E,F),1,[rand(A-1,B,C,D,E,F)],[]).
+eq(loop_exit_rand(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
+eq(end(A,B,C),0,[],[]).

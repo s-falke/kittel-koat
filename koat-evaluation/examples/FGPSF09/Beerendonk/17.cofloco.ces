@@ -1,0 +1,10 @@
+eq(start(A,B),1,[eval(A,B,C,D),loop_cont_eval(C,D)],[]).
+eq(eval(A,B,C,D),1,[eval(A-1,B,C,D)],[A+B>=1,A>=B+1]).
+eq(eval(A,B,C,D),1,[eval(A-1,B,C,D)],[2*A>=1,B=A]).
+eq(eval(A,B,C,D),1,[eval(A,B-1,C,D)],[A+B>=1,B>=A,B>=A+1]).
+eq(eval(A,B,C,D),1,[eval(A,B-1,C,D)],[A+B>=1,B>=A,A>=B+1]).
+eq(loop_exit_eval(A,B,C,D),0,[],[A=C,B=D]).
+eq(eval(A,B),1,[eval(A-1,B)],[A+B>=1,A>=B+1]).
+eq(eval(A,B),1,[eval(A-1,B)],[2*A>=1,B=A]).
+eq(eval(A,B),1,[eval(A,B-1)],[A+B>=1,B>=A,B>=A+1]).
+eq(eval(A,B),1,[eval(A,B-1)],[A+B>=1,B>=A,A>=B+1]).

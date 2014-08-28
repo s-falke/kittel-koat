@@ -1,0 +1,6 @@
+eq(eval0(A,B,C),1,[eval1(A,B,C,D,E,F),loop_cont_eval1(D,E,F)],[A>=1]).
+eq(eval1(A,B,C,D,E,F),1,[eval1(A,B+A,C,D,E,F)],[A>=B+1,C>=A+1,A>=1]).
+eq(eval1(A,B,C,D,E,F),1,[eval1(A,B,B-A,D,E,F)],[A>=B+1,C>=A+1,A>=1]).
+eq(loop_exit_eval1(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
+eq(eval1(A,B,C),1,[eval1(A,B+A,C)],[A>=B+1,C>=A+1,A>=1]).
+eq(eval1(A,B,C),1,[eval1(A,B,B-A)],[A>=B+1,C>=A+1,A>=1]).

@@ -1,0 +1,8 @@
+eq(qs(L),1,[],[L=0]).
+eq(qs(L),1,[append(L1,L2),split(P,Ls),qs(L1),qs(L2)],[L>=1,Ls=L-1,L1=< L-1, L2=<L-1]).
+
+eq(split(P,L),1,[],[L=0]).
+eq(split(P,L),1,[split(P,Ls)],[Ls>=1,Ls = L-1]).
+
+eq(append(L1,L2),1,[],[L=0]).
+eq(append(L1,L2),1,[append(L1p,L2)],[L1>=1,L1p = L1-1]).

@@ -1,0 +1,4 @@
+eq(f0(A,B),1,[f1(A,B,C,D),loop_cont_f1(C,D)],[]).
+eq(f1(A,B,C,D),1,[f1(E+1,E+1,C,D)],[]).
+eq(loop_exit_f1(A,B,C,D),0,[],[A=C,B=D]).
+eq(f1(A,B),1,[f1(C+1,C+1)],[]).

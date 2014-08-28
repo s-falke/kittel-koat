@@ -1,0 +1,91 @@
+eq('Det_det([[D)D'(A),9,['Det_gaussian([[D[I)V'(A,A), '50_normal'(A,A,A,B,C,D,E,F,G)],[H=0, I=0, B=0, C=0, D=0, E=0, F=0, A>=0, A>=0, 1*A>=0]).
+eq('Det_gaussian([[D[I)V'(A,B),8,['15'(A,B,B,B,0,C,D,E,F,G,H,I,J)],[K=0, L=0, M=0, C=0, D=0, E=0, F=0, G=0, H=0, I=0, J=0, B>=0, B>=0]).
+eq('50_normal'(A,B,C,D,E,F,G,H,I),0,['2'(A,B,C,D,E,F,G,H)],[]).
+eq('15'(A,B,C,D,E,F,G,H,I,J,K,L,M),0,['15_loop'(B,C,E), '73_normal'(A,B,C,D,N,F,G,H,I,J,K,L,M,O)],[-1*C+1*N>=0, -1*E+1*N>=0]).
+eq('2'(A,B,C,D,E,F,G,H),4,['4_loop'(A,B,C,I,J,0), '55_normal'(A,B,C,K,L,M,G,H,N)],[-1*B+1*M>=0, -1*0+1*M>=0]).
+eq('15_loop'(A,B,C),3,['74'(A,B,C,C,B)],[]).
+eq('73_normal'(A,B,C,D,E,F,G,H,I,J,K,L,M,N),2,['18'(A,B,C,D,0,F,G,H,I,J,K,L,M)],[]).
+eq('4_loop'(A,B,C,D,E,F),3,['56'(A,B,C,D,E,F,F,B)],[]).
+eq('55_normal'(A,B,C,D,E,F,G,H,I),4,['7'(A,B,C,D,E,1,0,H)],[]).
+eq('74'(A,B,C,C,B),0,['17'(A,B,C)],[C+1=<B]).
+eq('74'(A,B,C,C,B),0,['15_loop_nexit'(A,B,C)],[C>=B]).
+eq('18'(A,B,C,D,E,F,G,H,I,J,K,L,M),0,['18_loop'(A,C,D,E,F,G,H,I,J), '71_normal'(A,B,C,D,N,O,P,Q,R,S,K,L,M,T)],[-1*C+1*N>=0, -1*E+1*N>=0]).
+eq('56'(A,B,C,D,E,F,F,B),0,['6'(A,B,C,D,E,F)],[F+1=<B]).
+eq('56'(A,B,C,D,E,F,F,B),0,['4_loop_nexit'(A,B,C,D,E,F)],[F>=B]).
+eq('7'(A,B,C,D,E,F,G,H),0,['7_loop'(B,C,F,G,H), '53_normal'(A,B,C,D,E,I,J,K,L)],[-1*B+1*J>=0, -1*G+1*J>=0]).
+eq('17'(A,B,C),6,['15_loop'(A,B,D)],[D=C+1]).
+eq('15_loop_nexit'(A,B,C),0,[],[]).
+eq('18_loop'(A,B,C,D,E,F,G,H,I),3,['72'(A,B,C,D,E,F,G,H,I,D,B)],[]).
+eq('71_normal'(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,['19'(A,B,C,D,E,F,G,H,I,J,K,L,M)],[]).
+eq('6'(A,B,C,D,E,F),12,['4_loop'(A,B,C,G,H,I)],[I=F+1]).
+eq('4_loop_nexit'(A,B,C,D,E,F),0,[],[]).
+eq('7_loop'(A,B,C,D,E),3,['54'(A,B,C,D,E,D,A)],[]).
+eq('53_normal'(A,B,C,D,E,F,G,H,I),5,['10'(A,B,C,D,E,F,G,H,J,K)],[]).
+eq('72'(A,B,C,D,E,F,G,H,I,D,B),0,['20'(A,B,C,D,E,F,G,H,I)],[D+1=<B]).
+eq('72'(A,B,C,D,E,F,G,H,I,D,B),0,['18_loop_nexit'(A,B,C,D,E,F,G,H,I)],[D>=B]).
+eq('19'(A,B,C,D,E,F,G,H,I,J,K,L,M),4,['21_loop'(A,B,C,D,0,0,G,H,I,J,K,L,M), '67_normal'(A,B,C,D,N,O,P,Q,R,S,T,U,V,W)],[-1*0+1*O>=0]).
+eq('54'(A,B,C,D,E,D,A),0,['9'(A,B,C,D,E)],[D+1=<A]).
+eq('54'(A,B,C,D,E,D,A),0,['7_loop_nexit'(A,B,C,D,E)],[D>=A]).
+eq('10'(A,B,C,D,E,F,G,H,I,J),0,[],[]).
+eq('20'(A,B,C,D,E,F,G,H,I),4,['22_loop'(A,B,D,J,K,0,H,I), '69_normal'(A,B,C,D,L,M,N,O,P)],[-1*B+1*N>=0, -1*0+1*N>=0]).
+eq('18_loop_nexit'(A,B,C,D,E,F,G,H,I),0,[],[]).
+eq('21_loop'(A,B,C,D,E,F,G,H,I,J,K,L,M),5,['68'(A,B,C,D,E,F,G,H,I,J,K,L,M,F,N)],[N=C-1]).
+eq('67_normal'(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,['23'(A,B,C,D,E,F,G,H,I,J,K,L,M)],[]).
+eq('9'(A,B,C,D,E),5,['51'(A,B,C,D,E,D,F)],[]).
+eq('7_loop_nexit'(A,B,C,D,E),0,[],[]).
+eq('22_loop'(A,B,C,D,E,F,G,H),3,['70'(A,B,C,D,E,F,G,H,F,B)],[]).
+eq('69_normal'(A,B,C,D,E,F,G,H,I),0,['25'(A,B,C,D,E,F,G,H,I)],[]).
+eq('68'(A,B,C,D,E,F,G,H,I,J,K,L,M,F,N),0,['24'(A,B,C,D,E,F,G,H,I,J,K,L,M)],[F+1=<N]).
+eq('68'(A,B,C,D,E,F,G,H,I,J,K,L,M,F,N),0,['21_loop_nexit'(A,B,C,D,E,F,G,H,I,J,K,L,M)],[F>=N]).
+eq('23'(A,B,C,D,E,F,G,H,I,J,K,L,M),1,[],[]).
+eq('51'(A,B,C,D,E,D,F),0,['11'(A,B,C,D,E)],[D+1=<F]).
+eq('51'(A,B,C,D,E,D,F),0,['12'(A,B,C,D,E)],[D>=F]).
+eq('70'(A,B,C,D,E,F,G,H,F,B),0,['26'(A,B,C,D,E,F,G,H)],[F+1=<B]).
+eq('70'(A,B,C,D,E,F,G,H,F,B),0,['22_loop_nexit'(A,B,C,D,E,F,G,H)],[F>=B]).
+eq('25'(A,B,C,D,E,F,G,H,I),6,['18_loop'(A,B,C,J,E,F,G,H,I)],[J=D+1]).
+eq('24'(A,B,C,D,E,F,G,H,I,J,K,L,M),4,['28_loop'(A,B,C,D,F,N,O,F,J,K), '65_normal'(A,B,C,D,P,F,Q,R,S,T,U,L,M)],[-1*C+1*S>=0, -1*F+1*S>=0]).
+eq('21_loop_nexit'(A,B,C,D,E,F,G,H,I,J,K,L,M),0,[],[]).
+eq('11'(A,B,C,D,E),17,['13'(A,B,F,D,G)],[F= -1*C]).
+eq('12'(A,B,C,D,E),5,['52'(A,B,C,D,E,D,F)],[]).
+eq('26'(A,B,C,D,E,F,G,H),6,['java/lang/Math_abs(D)D'(I,J), '57_normal'(A,B,C,D,E,F,G,H,K,L)],[]).
+eq('22_loop_nexit'(A,B,C,D,E,F,G,H),0,[],[]).
+eq('28_loop'(A,B,C,D,E,F,G,H,I,J),3,['66'(A,B,C,D,E,F,G,H,I,J,H,C)],[]).
+eq('65_normal'(A,B,C,D,E,F,G,H,I,J,K,L,M),0,['31'(A,B,C,D,E,F,G,H,I,J,K,L,M)],[]).
+eq('13'(A,B,C,D,E),2,['7_loop'(A,B,C,F,E)],[F=D+1]).
+eq('52'(A,B,C,D,E,D,F),0,['13'(A,B,C,D,E)],[D=<F]).
+eq('52'(A,B,C,D,E,D,F),0,['11'(A,B,C,D,E)],[D>=F+1]).
+eq('java/lang/Math_abs(D)D'(A,B),4,['75'(A,B,C)],[]).
+eq('57_normal'(A,B,C,D,E,F,G,H,I,J),0,['29'(A,B,C,D,E,F,G,H,I,J)],[]).
+eq('66'(A,B,C,D,E,F,G,H,I,J,H,C),0,['32'(A,B,C,D,E,F,G,H,I,J)],[H+1=<C]).
+eq('66'(A,B,C,D,E,F,G,H,I,J,H,C),0,['28_loop_nexit'(A,B,C,D,E,F,G,H,I,J)],[H>=C]).
+eq('31'(A,B,C,D,E,F,G,H,I,J,K,L,M),18,['35_loop'(A,B,C,F,N,K,L,M), '63_normal'(A,B,C,D,E,F,G,H,O,P,Q,R,S)],[N=F+1, -1*C+1*P>=0, -1*N+1*P>=0]).
+eq('75'(A,B,C),0,['45'(A,B)],[C>=1]).
+eq('75'(A,B,C),0,['46'(A,B)],[C=<0]).
+eq('29'(A,B,C,D,E,F,G,H,I,J),5,['58'(A,B,C,D,E,F,I,J,K)],[]).
+eq('32'(A,B,C,D,E,F,G,H,I,J),8,['java/lang/Math_abs(D)D'(K,L), '59_normal'(A,B,C,D,E,F,G,H,I,J,M,N)],[]).
+eq('28_loop_nexit'(A,B,C,D,E,F,G,H,I,J),0,[],[]).
+eq('35_loop'(A,B,C,D,E,F,G,H),3,['64'(A,B,C,D,E,F,G,H,E,C)],[]).
+eq('63_normal'(A,B,C,D,E,F,G,H,I,J,K,L,M),2,['21_loop'(A,B,C,D,E,N,G,H,I,J,K,L,M)],[N=F+1]).
+eq('45'(A,B),1,['47'(A,B,A,B)],[]).
+eq('46'(A,B),4,['47'(A,B,C,D)],[]).
+eq('58'(A,B,C,D,E,F,G,H,I),0,['33'(A,B,C,D,E,F,G,H)],[I=<0]).
+eq('58'(A,B,C,D,E,F,G,H,I),0,['34'(A,B,C,D,E,F,G,H)],[I>=1]).
+eq('59_normal'(A,B,C,D,E,F,G,H,I,J,K,L),0,['36'(A,B,C,D,E,F,G,H,I,J,K,L)],[]).
+eq('64'(A,B,C,D,E,F,G,H,E,C),0,['38'(A,B,C,D,E,F,G,H)],[E+1=<C]).
+eq('64'(A,B,C,D,E,F,G,H,E,C),0,['35_loop_nexit'(A,B,C,D,E,F,G,H)],[E>=C]).
+eq('47'(A,B,C,D),1,[],[]).
+eq('33'(A,B,C,D,E,F,G,H),2,['22_loop'(A,B,C,D,E,I,G,H)],[I=F+1]).
+eq('34'(A,B,C,D,E,F,G,H),2,['33'(A,B,C,G,H,F,G,H)],[]).
+eq('36'(A,B,C,D,E,F,G,H,I,J,K,L),13,['60'(A,B,C,D,E,F,G,H,M,N,O)],[]).
+eq('38'(A,B,C,D,E,F,G,H),28,['41_loop'(A,B,C,D,E,I,J,K), '61_normal'(A,B,C,D,E,I,J,L)],[K=D+1, -1*C+1*L>=0, -1*K+1*L>=0]).
+eq('35_loop_nexit'(A,B,C,D,E,F,G,H),0,[],[]).
+eq('60'(A,B,C,D,E,F,G,H,I,J,K),0,['39'(A,B,C,D,E,F,G,H,I,J)],[K=<0]).
+eq('60'(A,B,C,D,E,F,G,H,I,J,K),0,['40'(A,B,C,D,E,F,G,H,I,J)],[K>=1]).
+eq('41_loop'(A,B,C,D,E,F,G,H),3,['62'(A,B,C,D,E,F,G,H,H,C)],[]).
+eq('61_normal'(A,B,C,D,E,F,G,H),2,['35_loop'(A,B,C,D,I,F,G,H)],[I=E+1]).
+eq('39'(A,B,C,D,E,F,G,H,I,J),2,['28_loop'(A,B,C,D,E,F,G,K,I,J)],[K=H+1]).
+eq('40'(A,B,C,D,E,F,G,H,I,J),4,['39'(A,B,C,D,E,I,J,H,I,J)],[]).
+eq('62'(A,B,C,D,E,F,G,H,H,C),0,['43'(A,B,C,D,E,F,G,H)],[H+1=<C]).
+eq('62'(A,B,C,D,E,F,G,H,H,C),0,['41_loop_nexit'(A,B,C,D,E,F,G,H)],[H>=C]).
+eq('43'(A,B,C,D,E,F,G,H),21,['41_loop'(A,B,C,D,E,F,G,I)],[I=H+1]).
+eq('41_loop_nexit'(A,B,C,D,E,F,G,H),0,[],[]).

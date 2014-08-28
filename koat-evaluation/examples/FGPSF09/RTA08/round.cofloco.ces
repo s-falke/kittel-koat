@@ -1,0 +1,5 @@
+eq(start(A,B),1,[f(A,B,C,D),loop_cont_f(C,D)],[]).
+eq(round(A,B),1,[end(A,B)],[]).
+eq(f(A,B,C,D),1,[f(A,E,C,D),round(A,E)],[A>=1,B+1=A]).
+eq(loop_exit_f(A,B),0,[],[]).
+eq(end(A,B),0,[],[]).

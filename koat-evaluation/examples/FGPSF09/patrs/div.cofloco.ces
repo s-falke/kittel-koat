@@ -1,0 +1,6 @@
+eq(start(A,B),1,[A div B],[]).
+eq(A div B,1,[end(A,B)],[0>=A]).
+eq(A div B,1,[end(A,B)],[A>=B]).
+eq(A div B,1,[A div B-A],[B>=A+1,A>=1]).
+eq(A-B,0,[],[]).
+eq(end(A,B),0,[],[]).

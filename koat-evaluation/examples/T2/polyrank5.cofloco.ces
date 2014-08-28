@@ -1,0 +1,6 @@
+eq(f0(A,B,C,D),1,[f1(A,B,C,D,E,F,G,H),loop_cont_f1(E,F,G,H)],[]).
+eq(f1(A,B,C,D,E,F,G,H),1,[f1(A+B,B+C,C+D,D-1,E,F,G,H)],[A>=1]).
+eq(f1(A,B,C,D,E,F,G,H),1,[f1(A-1,B,C,D,E,F,G,H)],[A>=1]).
+eq(loop_exit_f1(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
+eq(f1(A,B,C,D),1,[f1(A+B,B+C,C+D,D-1)],[A>=1]).
+eq(f1(A,B,C,D),1,[f1(A-1,B,C,D)],[A>=1]).

@@ -1,0 +1,12 @@
+eq(f0(A,B,C,D,E),1,[f4(0,B,C,D,E,F,G,H,I,J),loop_cont_f4(F,G,H,I,J)],[]).
+eq(f20(A,B,C,D,E),1,[f20(A,B+1,B,D,E)],[199>=B]).
+eq(loop_cont_f4(A,B,C,D,E),0,[f20(A,B,C,D,E)],[]).
+eq(f20(A,B,C,D,E),1,[loop_exit_f20(A,B,C,D,E)],[B>=200]).
+eq(loop_cont_f20(A,B,C,D,E),0,[f31(A,B,C,D,E)],[]).
+eq(f4(A,B,C,D,E,F,G,H,I,J),1,[f4(A+1,B,C,A,A,F,G,H,I,J)],[99>=A]).
+eq(f4(A,B,C,D,E,F,G,H,I,J),1,[loop_exit_f4(A,100,C,D,E,F,G,H,I,J)],[A>=100]).
+eq(loop_exit_f4(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
+eq(loop_exit_f20(A,B,C,D,E),0,[],[]).
+eq(f31(A,B,C,D,E),0,[],[]).
+eq(f4(A,B,C,D,E),1,[f4(A+1,B,C,A,A)],[99>=A]).
+eq(f4(A,B,C,D,E),1,[loop_exit_f4(A,100,C,D,E)],[A>=100]).

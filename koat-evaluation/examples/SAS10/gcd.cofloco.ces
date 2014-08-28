@@ -1,0 +1,17 @@
+eq(start0(A,B,C,D),1,[start(A,C,C,A)],[]).
+eq(start(A,B,C,D),1,[stop(A,B,C,D)],[0>=A,B=C,D=A]).
+eq(start(A,B,C,D),1,[lbl6(A,B,C,D)],[A>=1,0>=C,B=C,D=A]).
+eq(start(A,B,C,D),1,[cut(A,B,C,D)],[A>=1,D=A,B=A,C=A]).
+eq(start(A,B,C,D),1,[lbl101(A,B-D,C,D)],[A>=1,C>=A+1,B=C,D=A]).
+eq(start(A,B,C,D),1,[lbl111(A,B,C,D-B)],[A>=C+1,C>=1,B=C,D=A]).
+eq(lbl6(A,B,C,D),1,[stop(A,B,C,D)],[A>=1,0>=C,D=A,B=C]).
+eq(lbl101(A,B,C,D),1,[cut(A,B,C,D)],[A>=B,B>=1,C>=2*B,D=B]).
+eq(lbl101(A,B,C,D),1,[lbl101(A,B-D,C,D)],[B>=D+1,A>=D,B>=1,D>=1,C>=D+B]).
+eq(lbl101(A,B,C,D),1,[lbl111(A,B,C,D-B)],[D>=B+1,A>=D,B>=1,D>=1,C>=D+B]).
+eq(lbl111(A,B,C,D),1,[cut(A,B,C,D)],[C>=B,B>=1,A>=2*B,D=B]).
+eq(lbl111(A,B,C,D),1,[lbl101(A,B-D,C,D)],[B>=D+1,C>=B,B>=1,D>=1,A>=D+B]).
+eq(lbl111(A,B,C,D),1,[lbl111(A,B,C,D-B)],[D>=B+1,C>=B,B>=1,D>=1,A>=D+B]).
+eq(cut(A,B,C,D),1,[stop(A,B,C,D)],[A>=B,B>=1,C>=B,D=B]).
+eq(loop_exit_lbl101(A,B,C,D),0,[],[]).
+eq(loop_exit_lbl111(A,B,C,D),0,[],[]).
+eq(stop(A,B,C,D),0,[],[]).

@@ -1,0 +1,8 @@
+eq(f3(A,B),1,[f1(A,B,C,D),loop_cont_f1(C,D)],[]).
+eq(loop_cont_f1(A,B),0,[f300(A,B)],[]).
+eq(f1(A,B,C,D),1,[f1(1+A,B,C,D)],[A>=0]).
+eq(f1(A,B,C,D),1,[loop_exit_f1(A,E,C,D)],[0>=A+1]).
+eq(loop_exit_f1(A,B,C,D),0,[],[A=C,B=D]).
+eq(f300(A,B),0,[],[]).
+eq(f1(A,B),1,[f1(1+A,B)],[A>=0]).
+eq(f1(A,B),1,[loop_exit_f1(A,C)],[0>=A+1]).

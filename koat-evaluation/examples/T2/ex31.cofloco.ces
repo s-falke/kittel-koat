@@ -1,0 +1,10 @@
+eq(f0(A,B),1,[f4(0,99,C,D),loop_cont_f4(C,D)],[]).
+eq(loop_cont_f4(A,B),0,[f11(A,B)],[]).
+eq(f4(A,B,C,D),1,[f4(E,B,C,D)],[B>=A+1,F>=G+1]).
+eq(f4(A,B,C,D),1,[f4(A,E,C,D)],[B>=A+1]).
+eq(f4(A,B,C,D),1,[loop_exit_f4(A,B,C,D)],[A>=B]).
+eq(loop_exit_f4(A,B,C,D),0,[],[A=C,B=D]).
+eq(f11(A,B),0,[],[]).
+eq(f4(A,B),1,[f4(C,B)],[B>=A+1,D>=E+1]).
+eq(f4(A,B),1,[f4(A,C)],[B>=A+1]).
+eq(f4(A,B),1,[loop_exit_f4(A,B)],[A>=B]).

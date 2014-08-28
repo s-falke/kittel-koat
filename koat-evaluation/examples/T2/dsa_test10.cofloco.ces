@@ -1,0 +1,12 @@
+eq(f0(A,B,C,D,E),1,[f12(0,B,C,F,G,H,I,J,K,L),loop_cont_f12(H,I,J,K,L)],[]).
+eq(f25(A,B,C,D,E),1,[f25(A,B+1,C,D,E)],[9>=B]).
+eq(loop_cont_f12(A,B,C,D,E),0,[f25(A,B,C,D,E)],[]).
+eq(f25(A,B,C,D,E),1,[loop_exit_f25(A,B,C,D,E)],[B>=10]).
+eq(loop_cont_f25(A,B,C,D,E),0,[f36(A,B,C,D,E)],[]).
+eq(f12(A,B,C,D,E,F,G,H,I,J),1,[f12(A+1,B,C,D,E,F,G,H,I,J)],[9>=A]).
+eq(f12(A,B,C,D,E,F,G,H,I,J),1,[loop_exit_f12(A,0,K,D,E,F,G,H,I,J)],[A>=10]).
+eq(loop_exit_f12(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
+eq(loop_exit_f25(A,B,C,D,E),0,[],[]).
+eq(f36(A,B,C,D,E),0,[],[]).
+eq(f12(A,B,C,D,E),1,[f12(A+1,B,C,D,E)],[9>=A]).
+eq(f12(A,B,C,D,E),1,[loop_exit_f12(A,0,F,D,E)],[A>=10]).

@@ -1,0 +1,15 @@
+eq(f3(A,B,C),1,[f300(A,B,C,D,E,F),loop_cont_f300(D,E,F)],[]).
+eq(loop_cont_f300(A,B,C),0,[f1(A,B,C)],[]).
+eq(f2(A,B,C,D,E,F),1,[f2(A,-1+B,C,D,E,F)],[29>=A]).
+eq(f2(A,B,C,D,E,F),1,[loop_exit_f2(A,-1+B,C,D,E,F)],[A>=30]).
+eq(f300(A,B,C,D,E,F),1,[f2(A,B,C,G,H,I),loop_cont_f2(G,H,I,D,E,F)],[19>=B]).
+eq(f300(A,B,C,D,E,F),1,[loop_exit_f300(A,B,G,D,E,F)],[B>=20]).
+eq(loop_cont_f2(A,B,C,D,E,F),0,[f300(A,B,C,D,E,F)],[]).
+eq(loop_exit_f2(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
+eq(loop_exit_f300(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
+eq(f1(A,B,C),0,[],[]).
+eq(f2(A,B,C),1,[f2(A,-1+B,C)],[29>=A]).
+eq(f300(A,B,C),1,[f2(A,B,C,D,E,F),loop_cont_f2(D,E,F)],[19>=B]).
+eq(f2(A,B,C),1,[loop_exit_f2(A,-1+B,C)],[A>=30]).
+eq(loop_cont_f2(A,B,C),0,[f300(A,B,C)],[]).
+eq(f300(A,B,C),1,[loop_exit_f300(A,B,D)],[B>=20]).

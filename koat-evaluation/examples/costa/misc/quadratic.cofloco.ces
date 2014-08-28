@@ -1,0 +1,10 @@
+% ENTRIES
+%
+entry(a(N) : [N>=0]).
+% EQUATIONS
+%
+eq(a(N),3,[],         [N=0]).
+eq(a(N),4,[b(N),a(N1)], [N>=1,N1=N-1]).
+
+eq(b(N),1,[],       [N=0]).
+eq(b(N),2,[b(N1)],  [N>=1,N1=N-1]).

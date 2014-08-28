@@ -1,0 +1,14 @@
+eq(evalterminatestart(A,B,C),1,[evalterminateentryin(A,B,C)],[]).
+eq(evalterminatereturnin(A,B,C),1,[evalterminatestop(A,B,C)],[]).
+eq(evalterminateentryin(A,B,C),1,[evalterminatebb1in(B,A,C,D,E,F),loop_cont_evalterminatebb1in(D,E,F)],[]).
+eq(loop_cont_evalterminatebb1in(A,B,C),0,[evalterminatereturnin(A,B,C)],[]).
+eq(evalterminatebb1in(A,B,C,D,E,F),1,[evalterminatebbin(A,B,C,D,E,F)],[100>=B,A>=C]).
+eq(evalterminatebb1in(A,B,C,D,E,F),1,[loop_exit_evalterminatebb1in(A,B,C,D,E,F)],[B>=101]).
+eq(evalterminatebb1in(A,B,C,D,E,F),1,[loop_exit_evalterminatebb1in(A,B,C,D,E,F)],[C>=A+1]).
+eq(evalterminatebbin(A,B,C,D,E,F),1,[evalterminatebb1in(A-1,C,B+1,D,E,F)],[]).
+eq(loop_exit_evalterminatebb1in(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
+eq(evalterminatestop(A,B,C),0,[],[]).
+eq(evalterminatebb1in(A,B,C),1,[evalterminatebbin(A,B,C)],[100>=B,A>=C]).
+eq(evalterminatebbin(A,B,C),1,[evalterminatebb1in(A-1,C,B+1)],[]).
+eq(evalterminatebb1in(A,B,C),1,[loop_exit_evalterminatebb1in(A,B,C)],[B>=101]).
+eq(evalterminatebb1in(A,B,C),1,[loop_exit_evalterminatebb1in(A,B,C)],[C>=A+1]).

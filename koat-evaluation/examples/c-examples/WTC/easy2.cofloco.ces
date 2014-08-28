@@ -1,0 +1,12 @@
+eq(evaleasy2start(A),1,[evaleasy2entryin(A)],[]).
+eq(evaleasy2returnin(A),1,[evaleasy2stop(A)],[]).
+eq(evaleasy2entryin(A),1,[evaleasy2bb1in(A,B),loop_cont_evaleasy2bb1in(B)],[]).
+eq(loop_cont_evaleasy2bb1in(A),0,[evaleasy2returnin(A)],[]).
+eq(evaleasy2bb1in(A,B),1,[evaleasy2bbin(A,B)],[A>=1]).
+eq(evaleasy2bb1in(A,B),1,[loop_exit_evaleasy2bb1in(A,B)],[0>=A]).
+eq(evaleasy2bbin(A,B),1,[evaleasy2bb1in(A-1,B)],[]).
+eq(loop_exit_evaleasy2bb1in(A,B),0,[],[A=B]).
+eq(evaleasy2stop(A),0,[],[]).
+eq(evaleasy2bb1in(A),1,[evaleasy2bbin(A)],[A>=1]).
+eq(evaleasy2bbin(A),1,[evaleasy2bb1in(A-1)],[]).
+eq(evaleasy2bb1in(A),1,[loop_exit_evaleasy2bb1in(A)],[0>=A]).

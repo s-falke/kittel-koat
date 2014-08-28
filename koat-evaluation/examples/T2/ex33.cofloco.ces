@@ -1,0 +1,4 @@
+eq(f0(A,B,C,D,E,F),1,[f17(G,H,I,D,E,F)],[0>=2+H]).
+eq(f0(A,B,C,D,E,F),1,[f17(G,H,I,D,E,F)],[H>=0]).
+eq(f0(A,B,C,D,E,F),1,[f17(G,-1,C,0,H,I)],[]).
+eq(f17(A,B,C,D,E,F),0,[],[]).

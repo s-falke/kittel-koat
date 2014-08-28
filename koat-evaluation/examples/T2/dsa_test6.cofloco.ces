@@ -1,0 +1,8 @@
+eq(f0(A,B),1,[f6(C,0,D,E),loop_cont_f6(D,E)],[]).
+eq(loop_cont_f6(A,B),0,[f15(A,B)],[]).
+eq(f6(A,B,C,D),1,[f6(A,B+1,C,D)],[9>=B]).
+eq(f6(A,B,C,D),1,[loop_exit_f6(A,B,C,D)],[B>=10]).
+eq(loop_exit_f6(A,B,C,D),0,[],[A=C,B=D]).
+eq(f15(A,B),0,[],[]).
+eq(f6(A,B),1,[f6(A,B+1)],[9>=B]).
+eq(f6(A,B),1,[loop_exit_f6(A,B)],[B>=10]).

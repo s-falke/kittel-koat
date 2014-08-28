@@ -1,0 +1,30 @@
+eq(mult3(A,B,C),1,[mult(A,B),mult(A,B)],[]).
+eq(mult(B1,B2),1,[],[B1=0]). 
+eq(mult(B1,B2),1,[mult(B1s,B2)],[B1>=1,B1s = B1-1,Zs >=1+B1s]). 
+eq(mult(B1,B2),1,[mult(B1s,B2),add(B2,Zs)],[B1>=1,B1s = B1-1,Zs =< B1s+1]). 
+
+eq(out_mult(B1,B2),0,[],[B1=0]). 
+eq(out_mult(B1,B2),1,[out_mult(B1s,B2)],[B1>=1,B1s=B1-1]). 
+eq(out_mult(B1,B2),0,[out_mult(B1s,B2),outadd(B2,Zs)],[B1>=1,B1s=B1-1,Zs=< B1s+1]). 
+eq(add(B1,B2),1,[addp(B1,B2,I)],[I=0]).
+
+eq(bitToInt(A),1,[bitToIntp(A,I)],[I=1]).
+eq(bitToIntp(B,N),1,[],[B=0]).
+eq(bitToIntp(B,N),1,[bitToIntp(Bs,M)],[B>=1,Bs=B-1,M=N*2]).
+eq(addp(B1,B2,R),1,[],[B1=0]).
+eq(addp(B1,B2,R),1,[],[B1>=1,B2=0]).
+eq(addp(B1,B2,R),1,[sum(X,Y,R),addp(B1s,B2s,Rs)],[B1>=1,B2>=1,B1s=B1-1,B2s=B2-1]).
+ 
+eq(sum(X,Y,R),1,[],[]).
+eq(subp(B1,B2,R),1,[],[B1=0]).
+eq(subp(B1,B2,R),1,[],[B1>=1,B2=0]).
+eq(subp(B1,B2,R),1,[diff(X,Y,R),subp(B1s,B2s,Rp)],[B1>=1,B2>=1,B1s=B1-1,B2s=B2-1]).
+ 
+eq(diff(A,B,C),1,[],[]).
+eq(leq(B1,B2),0,[compare(B1,B2)],[B1>=0,B2>=0]).
+eq(compare(B1,B2),1,[],[B1=0]).
+eq(compare(B1,B2),1,[],[B1>=1,B2=0]).
+eq(compare(B1,B2),1,[compare(B1s,B2s)],[B1>=1,B2>=1,B1s=B1-1,B2s=B2-1]).
+
+ 
+ 

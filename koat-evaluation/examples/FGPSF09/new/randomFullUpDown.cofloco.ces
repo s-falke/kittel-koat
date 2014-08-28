@@ -1,0 +1,13 @@
+eq(random(A,B,C),1,[rand(0,B,C,D,E,F),loop_cont_rand(D,E,F)],[]).
+eq(rand1(A,B,C),1,[idinc(A,C,C)],[]).
+eq(rand3(A,B,C),1,[iddec(A,C,C)],[]).
+eq(idinc(A,B,C),1,[end(A,B,C)],[]).
+eq(iddec(A,B,C),1,[end(A,B,C)],[]).
+eq(loop_cont_rand(A,B,C),0,[end(A,B,C)],[]).
+eq(rand(A,B,C,D,E,F),1,[rand0(G,H,A,D,E,F),rand1(G,H,A)],[B>=1,H+B>=1,1>=B+H]).
+eq(rand(A,B,C,D,E,F),1,[rand2(G,H,A,D,E,F),rand3(G,H,A)],[0>=B+1,H+B+1>=0,0>=B+1+H]).
+eq(rand(A,B,C,D,E,F),1,[loop_exit_rand(A,B,C,D,E,F)],[B=0]).
+eq(rand0(A,B,C,D,E,F),1,[rand(A,B,C,D,E,F)],[]).
+eq(rand2(A,B,C,D,E,F),1,[rand(A,B,C,D,E,F)],[]).
+eq(loop_exit_rand(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
+eq(end(A,B,C),0,[],[]).

@@ -1,0 +1,10 @@
+eq(f0(A,B,C),1,[f8(0,10,0,D,E,F),loop_cont_f8(D,E,F)],[]).
+eq(loop_cont_f8(A,B,C),0,[f6(A,B,C)],[]).
+eq(f8(A,B,C,D,E,F),1,[f8(A+2,B,C+1,D,E,F)],[B>=C+1]).
+eq(f8(A,B,C,D,E,F),1,[loop_exit_f8(A,B,C,D,E,F)],[2*B>=A+1,C>=B]).
+eq(f8(A,B,C,D,E,F),1,[loop_exit_f8(A,B,C,D,E,F)],[A>=2*B,C>=B]).
+eq(loop_exit_f8(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
+eq(f6(A,B,C),0,[],[]).
+eq(f8(A,B,C),1,[f8(A+2,B,C+1)],[B>=C+1]).
+eq(f8(A,B,C),1,[loop_exit_f8(A,B,C)],[2*B>=A+1,C>=B]).
+eq(f8(A,B,C),1,[loop_exit_f8(A,B,C)],[A>=2*B,C>=B]).

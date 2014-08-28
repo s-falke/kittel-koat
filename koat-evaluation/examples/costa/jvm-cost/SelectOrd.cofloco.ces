@@ -1,0 +1,19 @@
+eq(selectOrd(A),0,[m4(A)],[A>=0]).
+eq(m0(A,B,C),6,[m1(A,B,C,D)],[A+ -C>=1,-B+C>=1,A+ -D=1]).
+eq(m2(A,B),6,[m3(A,B,C)],[A+ -C=2]).
+eq(m5,0,[],[]).
+eq(m6(A,B,C,D,E),0,[m7(A,B,C)],[-B+C>=1,A+ -C>=2,D+ -E>=0]).
+eq(m8(A,B),0,[],[]).
+eq(m9(A,B,C),0,[],[]).
+eq(n0(A,B,C,D),2,[m7(A,B,B)],[-C+D>=1,A+ -B>=2]).
+eq(m7(A,B,D),2,[m0(A,B,C)],[-B+D>=0,A+ -D>=2,D+ -C= -1]).
+eq(n1(A),3,[m5,m2(A,0)],[A>=0]).
+eq(m4(A),0,[n1(A)],[A>=0]).
+eq(n2(A,B,C,F),7,[n3(A,B,C,D,E)],[-B+C>=1,A+ -C>=2,A+ -F=1]).
+eq(n3(A,B,C,D,E),0,[m6(A,B,C,D,E)],[]).
+eq(n3(A,E,B,C,D),0,[n0(A,B,C,D)],[]).
+eq(m1(A,B,C,D),0,[n2(A,B,C,D)],[]).
+eq(m1(A,D,B,C),0,[m9(A,B,C)],[]).
+eq(n4(A,B,E),22,[m2(A,D),m0(A,B,C)],[A+ -C>=2,B+ -C= -1,D+ -C=0,A+ -E=2]).
+eq(m3(A,B,C),0,[n4(A,B,C)],[]).
+eq(m3(C,A,B),0,[m8(A,B)],[]).

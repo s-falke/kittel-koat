@@ -1,0 +1,15 @@
+eq(start0(A,B,C,D),1,[start(B,B,D,D)],[]).
+eq(start(A,B,C,D),1,[lbl51(E,B,0,D,F,G,H,I),loop_cont_lbl51(F,G,H,I)],[A=B,C=D]).
+eq(loop_cont_lbl51(A,B,C,D),0,[stop(A,B,C,D)],[]).
+eq(lbl51(A,B,C,D,E,F,G,H),1,[cut(A,B,C,D,E,F,G,H)],[A>=C+1,C+2>=A,9>=A,C>=0,9>=C]).
+eq(lbl51(A,B,C,D,E,F,G,H),1,[loop_exit_lbl51(A,B,C,D,E,F,G,H)],[C>=A,C>=0,9>=C]).
+eq(lbl51(A,B,C,D,E,F,G,H),1,[loop_exit_lbl51(A,B,C,D,E,F,G,H)],[A>=C+3,C>=0,9>=C]).
+eq(lbl51(A,B,C,D,E,F,G,H),1,[loop_exit_lbl51(A,B,C,D,E,F,G,H)],[A>=10,A>=C+1,C+2>=A,C>=0,9>=C]).
+eq(cut(A,B,C,D,E,F,G,H),1,[lbl51(I,B,A,D,E,F,G,H)],[C+2>=A,9>=A,C>=0,A>=C+1]).
+eq(loop_exit_lbl51(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
+eq(stop(A,B,C,D),0,[],[]).
+eq(lbl51(A,B,C,D),1,[cut(A,B,C,D)],[A>=C+1,C+2>=A,9>=A,C>=0,9>=C]).
+eq(cut(A,B,C,D),1,[lbl51(E,B,A,D)],[C+2>=A,9>=A,C>=0,A>=C+1]).
+eq(lbl51(A,B,C,D),1,[loop_exit_lbl51(A,B,C,D)],[C>=A,C>=0,9>=C]).
+eq(lbl51(A,B,C,D),1,[loop_exit_lbl51(A,B,C,D)],[A>=C+3,C>=0,9>=C]).
+eq(lbl51(A,B,C,D),1,[loop_exit_lbl51(A,B,C,D)],[A>=10,A>=C+1,C+2>=A,C>=0,9>=C]).

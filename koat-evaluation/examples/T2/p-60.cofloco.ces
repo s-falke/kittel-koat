@@ -1,0 +1,9 @@
+eq(f2(A,B,C,D,E),1,[f3(0,B,0,0,0)],[0>=B]).
+eq(f2(A,B,C,D,E),1,[f300(1,B,C,D,E,F,G,H,I,J),loop_cont_f300(F,G,H,I,J)],[B>=1]).
+eq(loop_cont_f300(A,B,C,D,E),0,[f3(A,B,C,D,E)],[]).
+eq(f300(A,B,C,D,E,F,G,H,I,J),1,[f300(1+A,B,C,D,E,F,G,H,I,J)],[100>=A,B>=1]).
+eq(f300(A,B,C,D,E,F,G,H,I,J),1,[loop_exit_f300(A,B,0,0,0,F,G,H,I,J)],[A>=101]).
+eq(loop_exit_f300(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
+eq(f3(A,B,C,D,E),0,[],[]).
+eq(f300(A,B,C,D,E),1,[f300(1+A,B,C,D,E)],[100>=A,B>=1]).
+eq(f300(A,B,C,D,E),1,[loop_exit_f300(A,B,0,0,0)],[A>=101]).

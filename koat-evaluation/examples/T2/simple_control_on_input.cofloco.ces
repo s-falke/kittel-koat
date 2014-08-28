@@ -1,0 +1,9 @@
+eq(f0(A),1,[f12(B)],[0>=B]).
+eq(f0(A),1,[f5(B,C),loop_cont_f5(C)],[B>=1]).
+eq(loop_cont_f5(A),0,[f12(A)],[]).
+eq(f5(A,B),1,[f5(A+1,B)],[19>=A]).
+eq(f5(A,B),1,[loop_exit_f5(A,B)],[A>=20]).
+eq(loop_exit_f5(A,B),0,[],[A=B]).
+eq(f12(A),0,[],[]).
+eq(f5(A),1,[f5(A+1)],[19>=A]).
+eq(f5(A),1,[loop_exit_f5(A)],[A>=20]).

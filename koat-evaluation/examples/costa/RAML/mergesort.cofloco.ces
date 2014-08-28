@@ -1,0 +1,22 @@
+eq(mergeSort(N),1,[],[N =< 1]).
+eq(mergeSort(N),1,[msplit(N),
+mergeSort(L1),mergeSort(L2),merge(L1,L2)],[N>=2,L1>=0,L2>=0,2*L1 =<
+N+1,2*L1 >=N,2*L2=< N, 2*L2 >=N-1]).
+
+eq(out2_msplit(N),0,[],[N=0]).
+eq(out2_msplit(N),0,[],[N=1]).
+eq(out2_msplit(N),1,[out2_msplit(Np)],[N>=2,Np = N-2]).
+
+eq(out1_msplit(N),0,[],[N=0]).
+eq(out1_msplit(N),1,[],[N=1]).
+eq(out1_msplit(N),1,[out1_msplit(Np)],[N>=2,Np = N-2]).
+
+eq(msplit(N),1,[],[N=0]).
+eq(msplit(N),1,[],[N=1]).
+eq(msplit(N),1,[msplit(Np)],[N>=2,Np = N-2]).
+
+eq(merge(N1,N2),1,[],[N1=0]).
+eq(merge(N1,N2),1,[],[N1 >=1,N2=0]).
+eq(merge(N1,N2),1,[merge(N1p,N2)],[N1>=1,N2>=1,N1p=N1-1]).
+eq(merge(N1,N2),1,[merge(N1,N2p)],[N1>=1,N2>=1,N2p=N2-1]).
+

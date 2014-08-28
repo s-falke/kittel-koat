@@ -1,0 +1,8 @@
+eq(fibonacciMethod(A),0,[m0(A)],[A>=0]).
+eq(m1,0,[],[]).
+eq(m0(A),0,[m2(A)],[A>=0]).
+eq(m3(A),2,[m1],[A>=0,-A>= -1]).
+eq(m4(C),10,[m1,fibonacciMethod(A),fibonacciMethod(B)],[C>=2,C+ -B=2,C+ -A=1]).
+eq(m2(A),3,[m5(A)],[A>=0]).
+eq(m5(A),0,[m4(A)],[]).
+eq(m5(A),0,[m3(A)],[]).

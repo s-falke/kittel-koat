@@ -1,0 +1,39 @@
+eq(ms_sort(A,B,C,D),0,['27'(A,B,C,D,E,C,D)],[E=0]).
+eq('27'(A,B,C,D,E,F,G),0,['2'(A,B,C,D,E)],[F>=G]).
+eq('27'(A,B,C,D,E,F,G),0,['3'(A,B,C,D,E)],[F+1=<G]).
+eq('2'(A,B,C,D,E),0,[],[]).
+eq('3'(A,B,C,D,E),0,[ms_sort(A,B,C,F), '28_normal'(A,B,C,D,F,G)],[H=C+D,H-2=<2*F,2*F=<H]).
+eq('28_normal'(A,B,C,D,E,F),0,[ms_sort(A,B,G,D), '29_normal'(A,B,C,D,E,H)],[G=E+1]).
+eq('29_normal'(A,B,C,D,E,F),0,['testing/recursion/ms_merge([IIII)V'(A,B,C,D,E), '30_normal'(A,B,C,D,E,G)],[1*B>=0]).
+eq('testing/recursion/ms_merge([IIII)V'(A,B,C,D,E),0,['9'(A,B,C,D,E,C,C,F,B)],[G=0,H=0,I=0,J=0,F=E+1,B>=0,B>=0]).
+eq('30_normal'(A,B,C,D,E,F),0,['2'(A,B,C,D,E)],[]).
+eq('9'(A,B,C,D,E,F,G,H,I),0,['9_loop'(A,B,D,E,F,G,H,I), '38_normal'(A,B,C,D,E,J,K,L,I,M)],[1*F+ -1*G+ -1*H+ -1*J+1*K+1*L=0,-1*D+1*J>=1]).
+eq('9_loop'(A,B,C,D,E,F,G,H),0,['39'(A,B,C,D,E,F,G,H,E,C)],[]).
+eq('38_normal'(A,B,C,D,E,F,G,H,I,J),0,['12'(A,B,C,D,E,C,G,H,I)],[]).
+eq('39'(A,B,C,D,E,F,G,H,E,C),0,['11'(A,B,C,D,E,F,G,H)],[E=<C]).
+eq('39'(A,B,C,D,E,F,G,H,E,C),0,['9_loop_nexit'(A,B,C,D,E,F,G,H)],[E>=C+1]).
+eq('12'(A,B,C,D,E,F,G,H,I),0,['12_loop'(A,B,D,F,I), '36_normal'(A,B,C,D,E,J,G,H,I,K)],[-1*D+1*J>=1,-1*F+1*J>=0]).
+eq('11'(A,B,C,D,E,F,G,H),1,['testing/recursion/ms_COUNTPOINT()V'(A), '31_normal'(A,B,C,D,E,F,G,H)],[]).
+eq('9_loop_nexit'(A,B,C,D,E,F,G,H),0,[],[]).
+eq('12_loop'(A,B,C,D,E),0,['37'(A,B,C,D,E,D,C)],[]).
+eq('36_normal'(A,B,C,D,E,F,G,H,I,J),0,['18'(A,B,C,D,E,F,G,H,I)],[]).
+eq('testing/recursion/ms_COUNTPOINT()V'(A),0,['25'(A)],[]).
+eq('31_normal'(A,B,C,D,E,F,G,H),0,['32'(A,B,C,D,E,F,G,H,F,D)],[]).
+eq('37'(A,B,C,D,E,D,C),0,['15'(A,B,C,D,E)],[D=<C]).
+eq('37'(A,B,C,D,E,D,C),0,['12_loop_nexit'(A,B,C,D,E)],[D>=C+1]).
+eq('18'(A,B,C,D,E,F,G,H,I),0,[],[]).
+eq('25'(A),0,[],[]).
+eq('32'(A,B,C,D,E,F,G,H,I,J),0,['16'(A,B,C,D,E,F,G,H)],[I>=J+1]).
+eq('32'(A,B,C,D,E,F,G,H,I,J),0,['17'(A,B,C,D,E,F,G,H)],[I=<J]).
+eq('15'(A,B,C,D,E),1,['testing/recursion/ms_COUNTPOINT()V'(A), '33_normal'(A,B,C,D,E)],[]).
+eq('12_loop_nexit'(A,B,C,D,E),0,[],[]).
+eq('16'(A,B,C,D,E,F,G,H),0,['20'(A,B,C,D,E,F,I,H)],[I=G+1]).
+eq('17'(A,B,C,D,E,F,G,H),0,['34'(A,B,C,D,E,F,G,H,G,C)],[]).
+eq('33_normal'(A,B,C,D,E),0,['12_loop'(A,B,C,F,E)],[F=D+1]).
+eq('20'(A,B,C,D,E,F,G,H),0,['9_loop'(A,B,C,D,I,F,G,H)],[I=E+1]).
+eq('34'(A,B,C,D,E,F,G,H,G,C),0,['21'(A,B,C,D,E,F,G,H)],[G>=C+1]).
+eq('34'(A,B,C,D,E,F,G,H,G,C),0,['22'(A,B,C,D,E,F,G,H)],[G=<C]).
+eq('21'(A,B,C,D,E,F,G,H),0,['20'(A,B,C,D,E,I,G,H)],[I=F+1]).
+eq('22'(A,B,C,D,E,F,G,H),0,['35'(A,B,C,D,E,F,G,H,I,J)],[]).
+eq('35'(A,B,C,D,E,F,G,H,I,J),0,['16'(A,B,C,D,E,F,G,H)],[I=<J]).
+eq('35'(A,B,C,D,E,F,G,H,I,J),0,['21'(A,B,C,D,E,F,G,H)],[I>=J+1]).

@@ -1,0 +1,9 @@
+eq(eq(L1,L2),1,[],[L1=0]).
+eq(eq(L1,L2),1,[],[L1>=1,L2=0]).
+eq(eq(L1,L2),1,[eq(Ls1,Ls2)],[L1>=1,L2>=1,Ls1=L1-1,Ls2=L2-1]).
+eq(nub(L1,L2),1,[],[L1=0]).
+eq(nub(L1,L2),1,[remove(X,Ls1,L2),nub(L3,L2)],[L1>=1,Ls1 = L1-1, L3 =< Ls1]).
+eq(remove(X,L1,L2),1,[],[L1=0]).
+eq(remove(X,L1,L2),1,[eq(X,L2),remove(X,Ls1,L2)],[L1>=1,Ls1 = L1-1]).
+eq(remove(X,L1,L2),1,[remove(X,Ls1,L2)],[L1>=1,Ls1 = L1-1]).
+

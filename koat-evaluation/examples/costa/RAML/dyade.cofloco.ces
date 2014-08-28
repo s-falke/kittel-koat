@@ -1,0 +1,4 @@
+eq(dyade(N,M),1,[],[N =0]).
+eq(dyade(N,M),1,[mult(X,M),dyade(Np,M)],[N >=1,Np = N-1]).
+eq(mult(N,M),1,[],[M=0]).
+eq(mult(N,M),1,[mult(N,Mp)],[M>=1,Mp = M-1]).

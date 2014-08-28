@@ -1,0 +1,4 @@
+eq(f1(A),1,[f0(A,B),loop_cont_f0(B)],[]).
+eq(f0(A,B),1,[f0(A-1,B)],[A>=0]).
+eq(loop_exit_f0(A,B),0,[],[A=B]).
+eq(f0(A),1,[f0(A-1)],[A>=0]).

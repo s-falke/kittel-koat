@@ -1,0 +1,4 @@
+eq(start(A),1,[f(A,B),loop_cont_f(B)],[]).
+eq(f(A,B),1,[f(A,B)],[0>=A*A+1]).
+eq(loop_exit_f(A,B),0,[],[A=B]).
+eq(f(A),1,[f(A)],[0>=A*A+1]).

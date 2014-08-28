@@ -1,0 +1,13 @@
+eq(matrixMult(L1r,L1c,L2r,L2c),1,[],[L1r=0]).
+eq(matrixMult(L1r,L1c,L2r,L2c),1,[computeLine(L1c,L2r,L2c,L3),matrixMult(L1rp,L1c,L2r,L2c)],[L1r>=1,L3=0,L1rp = L1r-1]).
+eq(computeLine(L,Mr,Mc,Acc),1,[],[L=0]).
+eq(computeLine(L,Mr,Mc,Acc),1,[],[L>=1,Mr=0]).
+eq(computeLine(L,Mr,Mc,Acc),1,[lineMult(X,Mc,Acc),computeLine(Lp,Mrp,Mc,Acc)],[L>=1,Mr>=1,Lp=L-1,Mrp=Mr-1]).
+eq(size_lineMult(A,L1,L2),0,[],[L1=0]).
+eq(size_lineMult(A,L1,L2),1,[size_lineMult(A,L1p,L2p)],[L1>=1,L2=0,L1p =
+L1-1,L2p=0]).
+eq(size_lineMult(A,L1,L2),1,[size_lineMult(A,L1p,L2p)],[L1>=1,L2=0,L1p = L1-1,L2p=L2-1]).
+eq(lineMult(A,L1,L2),1,[],[L1=0]).
+eq(lineMult(A,L1,L2),1,[lineMult(A,L1p,L2p)],[L1>=1,L2=0,L1p =
+L1-1,L2p=0]).
+eq(lineMult(A,L1,L2),1,[lineMult(A,L1p,L2p)],[L1>=1,L2=0,L1p = L1-1,L2p=L2-1]).

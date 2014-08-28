@@ -1,0 +1,17 @@
+eq(evalrandom1dstart(A,B),1,[evalrandom1dentryin(A,B)],[]).
+eq(evalrandom1dentryin(A,B),1,[evalrandom1dreturnin(A,B)],[0>=A]).
+eq(evalrandom1dreturnin(A,B),1,[evalrandom1dstop(A,B)],[]).
+eq(evalrandom1dentryin(A,B),1,[evalrandom1dbb5in(A,1,C,D),loop_cont_evalrandom1dbb5in(C,D)],[A>=1]).
+eq(loop_cont_evalrandom1dbb5in(A,B),0,[evalrandom1dreturnin(A,B)],[]).
+eq(evalrandom1dbb5in(A,B,C,D),1,[evalrandom1dbb1in(A,B,C,D)],[A>=B]).
+eq(evalrandom1dbb5in(A,B,C,D),1,[loop_exit_evalrandom1dbb5in(A,B,C,D)],[B>=A+1]).
+eq(evalrandom1dbb1in(A,B,C,D),1,[evalrandom1dbb5in(A,B+1,C,D)],[0>=E+1]).
+eq(evalrandom1dbb1in(A,B,C,D),1,[evalrandom1dbb5in(A,B+1,C,D)],[E>=1]).
+eq(evalrandom1dbb1in(A,B,C,D),1,[evalrandom1dbb5in(A,B+1,C,D)],[]).
+eq(loop_exit_evalrandom1dbb5in(A,B,C,D),0,[],[A=C,B=D]).
+eq(evalrandom1dstop(A,B),0,[],[]).
+eq(evalrandom1dbb5in(A,B),1,[evalrandom1dbb1in(A,B)],[A>=B]).
+eq(evalrandom1dbb1in(A,B),1,[evalrandom1dbb5in(A,B+1)],[0>=C+1]).
+eq(evalrandom1dbb1in(A,B),1,[evalrandom1dbb5in(A,B+1)],[C>=1]).
+eq(evalrandom1dbb1in(A,B),1,[evalrandom1dbb5in(A,B+1)],[]).
+eq(evalrandom1dbb5in(A,B),1,[loop_exit_evalrandom1dbb5in(A,B)],[B>=A+1]).

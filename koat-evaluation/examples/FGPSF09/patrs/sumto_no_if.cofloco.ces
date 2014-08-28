@@ -1,0 +1,8 @@
+eq(start(A,B),1,[sumto(A,B,C,D),loop_cont_sumto(C,D)],[]).
+eq(loop_cont_sumto(A,B),0,[end(A,B)],[]).
+eq(sumto(A,B,C,D),1,[sumto(A+1,B,C,D)],[B>=A]).
+eq(sumto(A,B,C,D),1,[loop_exit_sumto(A,B,C,D)],[A>=B+1]).
+eq(loop_exit_sumto(A,B,C,D),0,[],[A=C,B=D]).
+eq(end(A,B),0,[],[]).
+eq(sumto(A,B),1,[sumto(A+1,B)],[B>=A]).
+eq(sumto(A,B),1,[loop_exit_sumto(A,B)],[A>=B+1]).

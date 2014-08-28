@@ -1,0 +1,9 @@
+eq(f0(A,B,C),1,[f5(A,0,C)],[A>=128]).
+eq(f0(A,B,C),1,[f7(A,0,D,E,F,G),loop_cont_f7(E,F,G)],[127>=A]).
+eq(loop_cont_f7(A,B,C),0,[f5(A,B,C)],[]).
+eq(f7(A,B,C,D,E,F),1,[f7(A,B+1,C+1,D,E,F)],[35>=B]).
+eq(f7(A,B,C,D,E,F),1,[loop_exit_f7(A,B,C,D,E,F)],[B>=36]).
+eq(loop_exit_f7(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
+eq(f5(A,B,C),0,[],[]).
+eq(f7(A,B,C),1,[f7(A,B+1,C+1)],[35>=B]).
+eq(f7(A,B,C),1,[loop_exit_f7(A,B,C)],[B>=36]).

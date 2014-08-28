@@ -1,0 +1,6 @@
+eq(f3(A,B),1,[f0(2,B,C,D),loop_cont_f0(C,D)],[]).
+eq(f0(A,B,C,D),1,[f0(A+1,E,C,D)],[E>=1]).
+eq(f0(A,B,C,D),1,[f0(A-1,E,C,D)],[0>=E]).
+eq(loop_exit_f0(A,B,C,D),0,[],[A=C,B=D]).
+eq(f0(A,B),1,[f0(A+1,C)],[C>=1]).
+eq(f0(A,B),1,[f0(A-1,C)],[0>=C]).

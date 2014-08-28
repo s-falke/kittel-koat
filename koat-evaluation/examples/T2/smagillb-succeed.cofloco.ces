@@ -1,0 +1,13 @@
+eq(f0(A,B,C,D,E,F,G),1,[f14(2*H+1,I,0,D,I,2*H+1,H,J,K,L,M,N,O,P),loop_cont_f14(J,K,L,M,N,O,P)],[I>=1,2*H>=0]).
+eq(f24(A,B,C,D,E,F,G),1,[f24(A,B,C,D,E,F,G)],[]).
+eq(f26(A,B,C,D,E,F,G),1,[f29(A,B,C,D,E,F,G)],[]).
+eq(loop_cont_f14(A,B,C,D,E,F,G),0,[f24(A,B,C,D,E,F,G)],[]).
+eq(f14(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f14(A-1,B-1,C+1,O,E,F,G,H,I,J,K,L,M,N)],[A>=1,O>=1]).
+eq(f14(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f14(A-1,B,C,O,E,F,G,H,I,J,K,L,M,N)],[0>=O,A>=1,A>=B+1]).
+eq(f14(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[loop_exit_f14(A,B,C,D,E,F,G,H,I,J,K,L,M,N)],[0>=A]).
+eq(loop_exit_f14(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F=M,G=N]).
+eq(loop_exit_f24(A,B,C,D,E,F,G),0,[],[]).
+eq(f29(A,B,C,D,E,F,G),0,[],[]).
+eq(f14(A,B,C,D,E,F,G),1,[f14(A-1,B-1,C+1,H,E,F,G)],[A>=1,H>=1]).
+eq(f14(A,B,C,D,E,F,G),1,[f14(A-1,B,C,H,E,F,G)],[0>=H,A>=1,A>=B+1]).
+eq(f14(A,B,C,D,E,F,G),1,[loop_exit_f14(A,B,C,D,E,F,G)],[0>=A]).

@@ -1,0 +1,6 @@
+eq(zip3(L1,L2,L3),0,[],[L1=0]).
+eq(zip3(L1,L2,L3),0,[],[L1>=1,L2=0]).
+eq(zip3(L1,L2,L3),0,[],[L1>=1,L2>=1,L3=0]).
+eq(zip3(L1,L2,L3),1,[zip3(Ls1,Ls2,Ls3)],[L1>=1,L2>=1,L3>=1,Ls1=L1-1,Ls2=L2-1,Ls3=L3-1]).
+eq(group3(L),0,[],[L=<3]).
+eq(group3(L),1,[group3(Ls)],[L>=4,Ls=L-3]).

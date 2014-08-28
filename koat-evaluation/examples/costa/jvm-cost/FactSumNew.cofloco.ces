@@ -1,0 +1,17 @@
+eq(doSum(A),3,['2'(A,0)],[B=0]).
+eq('2'(A,B),0,['2_loop'(A,B), '15_normal'(C,D,E)],[-1*C>=1, 1*A+ -1*C>=0]).
+eq('2_loop'(A,B),2,['16'(A,B,A)],[]).
+eq('15_normal'(A,B,C),2,['6'(A,B,B)],[]).
+eq('16'(A,B,A),0,['3'(A,B)],[A>=0]).
+eq('16'(A,B,A),0,['2_loop_nexit'(A,B)],[A=< -1]).
+eq('6'(A,B,C),0,[],[]).
+eq('3'(A,B),3,['pubs/FactSum_factorial(I)I'(A), '14_normal'(A,B,B,C)],[]).
+eq('2_loop_nexit'(A,B),0,[],[]).
+eq('pubs/FactSum_factorial(I)I'(A),2,['17'(A,A)],[]).
+eq('14_normal'(A,B,B,C),3,['2_loop'(D,E)],[E=B+C, D=A+ -1]).
+eq('17'(A,B),0,['9'(A)],[B>=1]).
+eq('17'(A,B),0,['10'(A)],[B=<0]).
+eq('9'(A),5,['pubs/FactSum_factorial(I)I'(B), '18_normal'(A,A,C,D)],[B=A-1]).
+eq('10'(A),2,['12'(A,1)],[]).
+eq('18_normal'(A,A,B,C),2,['12'(A,D)],[]).
+eq('12'(A,B),0,[],[]).

@@ -1,0 +1,34 @@
+
+eq(delete(A,B,C,D,E,F),0,[m6(A,B,C,D,E,F)],[E+ -F>=0,F>=0,C+ -D>=0,D>=0,B>=0,A>=0]).
+eq(m0(A,D,E,F),3,[m1(A,B,C,D,E,F)],[F>=0,D+ -E>=0,D+ -F>=0,F+ -B=0,E+ -C=0]).
+eq(m2(A,B),5,[m3(A,B,C,D)],[C>=0,A+ -D=1,B+ -C=0]).
+eq(m4(A,B,C,D,E,F),2,[m5(A,B,C,D,E,F,G)],[E+ -F>=0,C+ -D>=0,B>=0,C>=0,A>=0,E>=0,A+ -G=0]).
+eq(m6(A,B,C,D,E,F),0,[m7(A,B,C,D,E,F)],[A>=0,B>=0,D>=0,C+ -D>=0,F>=0,E+ -F>=0]).
+eq(m8,0,[],[]).
+eq(m9(A),0,[],[]).
+eq(m5(A,B,C,D,E,F,G),0,[n0(A,B,C,D,E,F,G)],[]).
+eq(m5(B,C,D,E,F,G,A),0,[m9(A)],[]).
+eq(n1(G,B,C,D,E,F),4,[m4(A,B,C,D,E,F)],[C+ -D>=0,C+ -D+E+ -F>=1,B>=0,C>=0,G+ -A>=1,E>=0,E+ -F>=0,A>=0]).
+eq(m7(A,B,C,D,E,F),1,[m8,m4(A,B,C,D,E,F)],[E+ -F>=0,F>=0,C+ -D>=0,D>=0,B>=0,A>=0]).
+eq(n0(A,B,C,D,E,F,I),4,[n2(A,B,C,D,E,F,G,H)],[C+ -D>=0,B>=0,C>=0,A>=0,E>=0,E+ -F>=0,A+ -I=0,B+ -H=0]).
+eq(n2(A,B,C,D,E,F,G,H),0,[n3(A,B,C,D,E,F,G,H)],[]).
+eq(n2(A,B,C,D,E,F,G,H),0,[n4(A,B,C,D,E,F,G,H)],[]).
+eq(n3(D,E,F,G,H,J,K,L),6,[n1(D,E,F,G,H,I),n5(A,B,C)],[H+ -B=0,J+ -C=0,F+ -G>=0,E>=0,F>=0,D>=0,H>=0,H+ -J>=0,-E+K>=0,E+ -L=0,J+ -I=1]).
+eq(n4(D,E,F,J,H,I,K,L),7,[n1(D,E,F,G,H,I),n5(A,B,C)],[F+ -B=0,J+ -C=0,F+ -J>=0,E>=0,E+ -K>=1,F>=0,D>=0,H>=0,H+ -I>=0,E+ -L=0,J+ -G=1]).
+eq(n5(A,B,C),0,[n6(A,B,C)],[B+ -C>=0,B>=0]).
+eq(n6(A,B,C),0,[n7(A,B,C)],[B+ -C>=0,B>=0]).
+eq(n8(A),0,[],[]).
+eq(n9(A,B,C),0,[o0(A)],[B+ -C>=0,B>=0]).
+eq(o1(A,B,C),0,[o0(A)],[-A+B>=0,A+ -C=0]).
+eq(o0(A),0,[],[]).
+eq(o2(A,B),0,[],[]).
+eq(m1(A,B,C,D,E,F),0,[n9(A,B,C)],[]).
+eq(m1(A,E,F,B,C,D),0,[o3(A,B,C,D,E,F)],[]).
+eq(o4(A,B,C,E,F,G),2,[m0(A,B,C,D)],[E>=0,C+ -E>=1,A+ -F>=1,B+ -C>=0,A+ -G=0,E+ -D= -1]).
+eq(m3(A,B,C,D),0,[o5(A,B,C,D)],[]).
+eq(m3(C,D,A,B),0,[o2(A,B)],[]).
+eq(n7(A,B,C),8,[n8(F),m0(A,B,C,D),m2(C,E)],[B>=0,B+ -C>=0,E>=0,D=0,C+ -F=1]).
+eq(o3(A,D,E,F,G,H),5,[o6(A,B,C,D,E,F)],[F>=0,D+ -E>=0,E+ -F>=1,F+ -G=0,E+ -H=0,A+ -C=0]).
+eq(o6(A,B,C,D,E,F),0,[o1(A,B,C)],[]).
+eq(o6(A,E,F,B,C,D),0,[o4(A,B,C,D,E,F)],[]).
+eq(o5(A,C,E,D),10,[m2(A,B)],[A+ -B>=1,B>=1,C+ -B= -1,A+ -D=1,E+ -B= -1]).

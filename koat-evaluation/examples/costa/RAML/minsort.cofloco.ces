@@ -1,0 +1,4 @@
+eq(minSort(N),1,[findMin(N)],[N=0]).
+eq(minSort(N),1,[findMin(N),minSort(Ns)],[N>=1,Ns=N-1]).
+eq(findMin(N),1,[],[N=0]).
+eq(findMin(N),1,[findMin(Ns)],[N>=1,Ns=N-1]).

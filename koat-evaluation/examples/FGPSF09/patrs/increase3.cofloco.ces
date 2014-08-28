@@ -1,0 +1,6 @@
+eq(start(A,B,C),1,[f(A,B,C,D,E,F),loop_cont_f(D,E,F)],[]).
+eq(f(A,B,C,D,E,F),1,[f(A,B+1,C,D,E,F)],[A>=B+1,A>=C+1]).
+eq(f(A,B,C,D,E,F),1,[f(A,B,C+1,D,E,F)],[A>=B+1,A>=C+1]).
+eq(loop_exit_f(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
+eq(f(A,B,C),1,[f(A,B+1,C)],[A>=B+1,A>=C+1]).
+eq(f(A,B,C),1,[f(A,B,C+1)],[A>=B+1,A>=C+1]).

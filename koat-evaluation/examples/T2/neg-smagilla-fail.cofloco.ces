@@ -1,0 +1,13 @@
+eq(f0(A,B,C,D,E),1,[f11(8,F,0,D,8,G,H,I,J,K),loop_cont_f11(G,H,I,J,K)],[F>=1]).
+eq(f21(A,B,C,D,E),1,[f21(A,B,C,D,E)],[]).
+eq(f23(A,B,C,D,E),1,[f26(A,B,C,D,E)],[]).
+eq(loop_cont_f11(A,B,C,D,E),0,[f21(A,B,C,D,E)],[]).
+eq(f11(A,B,C,D,E,F,G,H,I,J),1,[f11(A-1,B-1,C+1,K,E,F,G,H,I,J)],[A>=1,K>=1]).
+eq(f11(A,B,C,D,E,F,G,H,I,J),1,[f11(A-1,B,C,K,E,F,G,H,I,J)],[0>=K,A>=1,A>=B+1]).
+eq(f11(A,B,C,D,E,F,G,H,I,J),1,[loop_exit_f11(A,B,C,D,E,F,G,H,I,J)],[0>=A]).
+eq(loop_exit_f11(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
+eq(loop_exit_f21(A,B,C,D,E),0,[],[]).
+eq(f26(A,B,C,D,E),0,[],[]).
+eq(f11(A,B,C,D,E),1,[f11(A-1,B-1,C+1,F,E)],[A>=1,F>=1]).
+eq(f11(A,B,C,D,E),1,[f11(A-1,B,C,F,E)],[0>=F,A>=1,A>=B+1]).
+eq(f11(A,B,C,D,E),1,[loop_exit_f11(A,B,C,D,E)],[0>=A]).

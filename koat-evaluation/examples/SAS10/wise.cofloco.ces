@@ -1,0 +1,15 @@
+eq(start0(A,B,C,D),1,[start(A,C,C,A)],[]).
+eq(start(A,B,C,D),1,[stop(A,B,C,D)],[0>=A+1,B=C,D=A]).
+eq(start(A,B,C,D),1,[stop(A,B,C,D)],[0>=C+1,B=C,D=A]).
+eq(start(A,B,C,D),1,[stop(A,B,C,D)],[A>=0,A+2>=C,C>=0,C+2>=A,B=C,D=A]).
+eq(start(A,B,C,D),1,[lbl81(A,B,C,1+D)],[A>=0,C>=A+3,B=C,D=A]).
+eq(start(A,B,C,D),1,[lbl91(A,1+B,C,D)],[A>=C+3,C>=0,B=C,D=A]).
+eq(lbl81(A,B,C,D),1,[stop(A,B,C,D)],[C>=3+A,A>=0,D+2=C,B=C]).
+eq(lbl81(A,B,C,D),1,[lbl81(A,B,C,1+D)],[C>=D+3,D>=A+1,A>=0,C>=D+2,B=C]).
+eq(lbl81(A,B,C,D),1,[lbl91(A,1+B,C,D)],[D>=C+3,D>=A+1,A>=0,C>=D+2,B=C]).
+eq(lbl91(A,B,C,D),1,[stop(A,B,C,D)],[A>=3+C,C>=0,B+2=A,D=A]).
+eq(lbl91(A,B,C,D),1,[lbl81(A,B,C,1+D)],[B>=A+3,A>=B+2,B>=C+1,C>=0,D=A]).
+eq(lbl91(A,B,C,D),1,[lbl91(A,1+B,C,D)],[A>=B+3,A>=B+2,B>=C+1,C>=0,D=A]).
+eq(loop_exit_lbl81(A,B,C,D),0,[],[]).
+eq(loop_exit_lbl91(A,B,C,D),0,[],[]).
+eq(stop(A,B,C,D),0,[],[]).

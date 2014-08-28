@@ -1,0 +1,36 @@
+Inferred cost of loop_exit_l1(A,B,C,D): 
+loop_exit_l1(A,B,C,D):[12]: 0
+ when [1*A+ -1*C=0,1*B+ -1*D=0,-1*A>=0,-1*A>=0] 
+Inferred cost of l1(A,B,C,D): 
+l1(A,B,C,D):[13]: 1
+ when [-1*A>=0,1*A+ -1*C=0,1*B+ -1*D=0] 
+l1(A,B,C,D):[[16],13]: 1+it1*(1) such that it1=<-1*B+1*D,it1=<1*A,
+ when [1*A+1*B+ -1*D=0,1*C=0,1*A>=1,1*A>=1] 
+Warning: no base case found for predicate l2(_G161,_G162)
+Inferred cost of l2(A,B): 
+l2(A,B):[[19],17]...: 0+it1*(1) such that it1=<1*B,
+ when [1*B>=1] 
+Warning: no base case found for predicate loop_cont_l1(_G141,_G142)
+Inferred cost of loop_cont_l1(A,B): 
+loop_cont_l1(A,B):[20]...: 0+it1*(1) such that it1=<1*B,
+ when [1*B>=1] 
+Warning: no base case found for predicate l0(_G436,_G437)
+Inferred cost of l0(A,B): 
+l0(A,B):[21]...: 2+it1*(1) such that it1=<1*B,
+ when [-1*A>=0,1*B>=1] 
+l0(A,B):[22]...: 2+it1*(1)+it2*(1) such that it2=<1*A+1*B,it1=<1*A,
+ when [1*A+1*B>=1,1*A>=1] 
+Warning: no base case found for predicate $pubs_aux_entry$(_G153,_G154)
+Inferred cost of $pubs_aux_entry$(A,B): 
+$pubs_aux_entry$(A,B):[23]...: 2+it1*(1) such that it1=<1*B,
+ when [-1*A>=0,1*B>=1] 
+$pubs_aux_entry$(A,B):[24]...: 2+it1*(1)+it2*(1) such that it2=<1*A+1*B,it1=<1*A,
+ when [1*A+1*B>=1,1*A>=1] 
+Solved cost expressions of $pubs_aux_entry$(A,B): 
+$pubs_aux_entry$(A,B):[23]...: 1*B+2  when [-1*A>=0,1*B>=1] 
+$pubs_aux_entry$(A,B):[24]...: 2*A+1*B+2  when [1*A+1*B>=1,1*A>=1] 
+Maximum cost of $pubs_aux_entry$(A,B): max([2*A+1*B+2,1*B+2]) 
+Asymptotic class: n 
+Time statistics: 
+Total analysis performed in 219 ms.
+

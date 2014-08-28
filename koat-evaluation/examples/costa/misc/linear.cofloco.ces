@@ -1,0 +1,13 @@
+% ENTRIES
+%
+entry(a(N):[N>=1]).
+entry(a(100):[]).
+
+
+% EQUATIONS
+%
+eq(a(N),9,[a(N-1)], [N>=1]).
+eq(a(N),4
+,[a(N-1)], [N>=1]).
+eq(a(N),1,[],  [N=0]).  % costants are supported via c(...)
+

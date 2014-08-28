@@ -1,0 +1,9 @@
+% ENTRIES
+%
+entry(a(N):[N>=1]).
+entry(a(N):[N>=2]).
+entry(a(N):[N>=4]).
+
+
+eq(a(N),1,[],[N=<1]).
+eq(a(N),2,[a(N2)],[N2*2=N,N>=2]).

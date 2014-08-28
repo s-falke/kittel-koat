@@ -1,0 +1,8 @@
+% ENTRIES
+%
+entry(a(N):[N>=0]).
+
+% EQUATIONS
+%
+eq(a(N),0,[],[N=<1]).
+eq(a(N),nat(N),[a(M1),a(M2)],[N>=1, N >= 2*M1, N >= 2*M2, M1>=0, M2>=0]).
