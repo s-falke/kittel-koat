@@ -2,7 +2,7 @@
 set -e
 PUBS=`pwd`/provers/pubs_static
 CESTOCFG=`pwd`/bin/CEStoCFG.pl
-CFGTOPUBS=`pwd`/provers/cfg2pubs_static
+CFGTOPUBS=`pwd`/bin/cfg2pubs_static
 EXAMPLE_FILE=`pwd`/$1
 TIME_FILE=`pwd`/$2
 STDOUT_FILE=$(echo "${TIME_FILE}" | sed -e 's/.time$/.stdout/')
