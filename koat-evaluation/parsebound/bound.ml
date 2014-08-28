@@ -16,6 +16,7 @@ type bound =
   | Pow of bound * bound
   | Log of bound * bound
   | Max of bound list
+  | Min of bound list
 
 exception NoConstant
 
@@ -37,7 +38,8 @@ let getVars b =
     | Log (b1, b2) ->
       let acc' = getVars' b1 acc in
       getVars' b2 acc'
-    | Max bs ->
+    | Max bs
+    | Min bs ->
       List.fold_left (fun acc b -> getVars' b acc) [] bs in
   getVars' b []
 
@@ -51,6 +53,7 @@ let rec getConst b =
   | Div (b1, b2) -> Big_int.div_big_int (getConst b1) (getConst b2)
   | Pow (b1, b2) -> Big_int.power_big_int_positive_big_int (getConst b1) (getConst b2)
   | Log (b1, b2) -> raise (Invalid_argument "Can't get constant out of logarithm at this time.")
+  | Min bs       -> List.fold_left max Big_int.zero_big_int (List.map getConst bs)
   | Max bs       -> List.fold_left max Big_int.zero_big_int (List.map getConst bs)
 
 let pp b =
@@ -74,7 +77,8 @@ let pp b =
              Printf.sprintf "pow(%s, %s)" (pp 0 b1) (pp 0 b2)
         )
     | Log (b1, b2) -> Printf.sprintf "log(%s, %s)" (pp 0 b1) (pp 0 b2)
-    | Max bs       -> Printf.sprintf "max(%s)" (String.concat ", " (List.map (pp 0) bs)) in
+    | Max bs       -> Printf.sprintf "max(%s)" (String.concat ", " (List.map (pp 0) bs))
+    | Min bs       -> Printf.sprintf "min(%s)" (String.concat ", " (List.map (pp 0) bs)) in
   pp 0 b
 
 let rec tonumdegree b =
@@ -92,3 +96,9 @@ let rec tonumdegree b =
       )
   | Log (b1, b2) -> 0.5 *. (tonumdegree b2)
   | Max bs       -> List.fold_left max 0. (List.map tonumdegree bs)
+  | Min bs       -> 
+    if bs = [] then
+      raise Parsing.Parse_error (* Empty min expression *)
+    else
+      let nbs = (List.map tonumdegree bs) in
+      List.fold_left min (List.hd nbs) (List.tl nbs)

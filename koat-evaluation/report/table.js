@@ -12,6 +12,7 @@
     }
     provers.push({ name: 'PUBS', stdoutext: '.ces.PUBS.stdout.txt', stderrext: '.ces.PUBS.stderr.txt', inputext: '.ces.txt' });
     provers.push({ name: 'SAS10', stdoutext: '.fst.SAS10.rank.stdout.txt', stderrext: '.fst.SAS10.rank.stderr.txt', inputext: '.fst.txt', aspicstdoutext: '.fst.SAS10.aspic.stdout.txt', aspicstderrext: '.fst.SAS10.aspic.stderr.txt' });
+    provers.push({ name: 'CoFloCo', stdoutext: '.cofloco.ces.CoFloCo.stdout.txt', stderrext: '.cofloco.ces.CoFloCo.stderr.txt', inputext: '.cofloco.ces.txt' });
 
 
     function text(t) {

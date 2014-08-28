@@ -21,7 +21,7 @@ function koatresult
         ORIGINAL_BOUND="$( grep '^Complexity upper bound' "$1" | sed 's/^Complexity upper bound //g' | tr '[a-z]' '[A-Z]' )"
         echo -n "'originalBound': \"${ORIGINAL_BOUND}\", "
         echo "${ORIGINAL_BOUND}" | bin/parsebound
-	echo -n ", "
+        echo -n ", "
     fi
 }
 
@@ -32,7 +32,7 @@ function pubsresult
         ORIGINAL_BOUND="$( grep -A2 'pubs_aux_entry.*THE MAIN ENTRY' "$1" | grep 'Non Asymptotic Upper Bound' | sed 's/.*Non Asymptotic Upper Bound: \(.*\)$/\1/' )"
         echo -n "'originalBound': \"${ORIGINAL_BOUND}\", "
         echo "${ORIGINAL_BOUND}" | bin/parsebound
-	echo -n ", "
+        echo -n ", "
     fi
 }
 
@@ -43,6 +43,22 @@ function sas10result
         ORIGINAL_BOUND="$( grep -A10000 'Worst Case Execution Time' "$1" | grep . | grep -v '^[+|\\/]' | tr '\n' ',' | sed 's/^\(.*\),$/max([\1])/' )"
         echo -n "'originalBound': \"${ORIGINAL_BOUND}\", "
         echo "${ORIGINAL_BOUND}" | bin/parsebound
-	echo -n ", "
+        echo -n ", "
     fi
 }
+
+function coflocoresult
+{
+    if [ -f $1 ]
+    then
+        ORIGINAL_BOUND="$( grep '^Maximum cost of ' "$1" | sed 's/^Maximum cost of [^:]\+: \(.*\)$/\1/' )"
+        echo -n "'originalBound': \"${ORIGINAL_BOUND}\", "
+        if [ "${ORIGINAL_BOUND}" = "inf" ] || [ "${ORIGINAL_BOUND}" = "inf " ]; then
+            echo -n "'parseError': 'Could not parse bound'"
+        else
+            echo "${ORIGINAL_BOUND}" | bin/parsebound
+        fi
+        echo -n ", "
+    fi
+}
+

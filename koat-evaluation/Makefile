@@ -1,7 +1,7 @@
 TIMEOUT=60
 EXAMPLE_FILES=$(shell find ./examples -type f -name '*.properties')
 
-PROVERS=KoAT-2014-08-27 PUBS SAS10
+PROVERS=KoAT-2014-08-27 PUBS SAS10 CoFloCo
 
 REPORT_FILES=report/examples.js $(patsubst %,report/results-%.js,$(PROVERS))
 
@@ -32,6 +32,9 @@ report/results-PUBS.js: $(patsubst ./examples/%.properties,./runs/COSTA/%.ces.CO
 report/results-SAS10.js: $(patsubst ./examples/%.properties,./runs/SAS10/%.fst.SAS10.time,$(EXAMPLE_FILES)) bin/parsebound bin/generate_benchmark_report.sh bin/output_funs.sh
 	./bin/generate_benchmark_report.sh "SAS10" > $@
 
+report/results-CoFloCo.js: $(patsubst ./examples/%.properties,./runs/CoFloCo/%.cofloco.ces.CoFloCo.time,$(EXAMPLE_FILES)) bin/parsebound bin/generate_benchmark_report.sh bin/output_funs.sh
+	./bin/generate_benchmark_report.sh "CoFloCo" > $@
+
 ### Actually running the provers:
 
 runs/KoAT%.time:
@@ -57,7 +60,12 @@ runs/KoAT%.time:
 	@mkdir -p $(shell dirname "$@")
 	timeout ${TIMEOUT} bash -c "time ./bin/SAS10-wrapper.sh '$(EXAMPLE)' '$@'" 2> "${T}" || :
 	@mv "${T}" $@
-
+%.ces.CoFloCo.time:
+	$(eval T := $(shell mktemp ))
+	$(eval EXAMPLE := $(patsubst runs/CoFloCo/%.ces.CoFloCo.time,examples/%.ces,$@))
+	@mkdir -p $(shell dirname "$@")
+	timeout ${TIMEOUT} bash -c "time ./bin/CoFloCo-wrapper.sh '$(EXAMPLE)' '$@'" 2> "${T}" || :
+	@mv "${T}" $@
 ### Our little helper:
 bin/parsebound: parsebound/*
 	cd parsebound && make

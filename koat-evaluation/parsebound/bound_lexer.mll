@@ -33,6 +33,7 @@ rule token = parse
   | ['l' 'L'] ['o' 'O'] ['g' 'G'] { pos := !pos + 3; LOG }
   | ['p' 'P'] ['o' 'O'] ['w' 'W'] { pos := !pos + 3; POW }
   | ['m' 'M'] ['a' 'A'] ['x' 'X'] { pos := !pos + 3; MAX }
+  | ['m' 'M'] ['i' 'I'] ['n' 'N'] { pos := !pos + 3; MIN }
   | ['n' 'N'] ['a' 'A'] ['t' 'T'] { pos := !pos + 3; NAT }
 
   | ','                           { pos := !pos + 1; COMMA }

@@ -8,7 +8,7 @@ echo "results['${RUN_NAME}'] = {"
 for TIME_FILE in `find runs/${RUN_NAME}/ -name \*.time`; do
     STDOUT_FILE=$(echo "${TIME_FILE}" | sed -e 's/.time$/.stdout/')
     STDERR_FILE=$(echo "${TIME_FILE}" | sed -e 's/.time$/.stderr/')
-    EXAMPLE=$(echo "${TIME_FILE}" | cut -d "/" -f 3- | sed -e 's/.\(koat.KoAT\|ces.PUBS\|ces.COSTA\|fst.SAS10\).*//')
+    EXAMPLE=$(echo "${TIME_FILE}" | cut -d "/" -f 3- | sed -e 's/.\(koat.KoAT\|ces.PUBS\|ces.COSTA\|fst.SAS10\|cofloco.ces.CoFloCo\).*//')
 
     echo -n " '$EXAMPLE': { "
 
@@ -33,6 +33,13 @@ for TIME_FILE in `find runs/${RUN_NAME}/ -name \*.time`; do
         echo -n $(reporttime "${TIME_FILE}")
     fi
 
+    if [ $RUN_NAME = "CoFloCo" ]; then
+        test -f "${STDERR_FILE}" && test $(stat -c%s "${STDERR_FILE}") -gt 0 && echo -n '"errors": true, '
+        echo -n "'stdout': true, "
+        coflocoresult "${STDOUT_FILE}"
+        echo -n $(reporttime "${TIME_FILE}")
+    fi
+
     if [ $RUN_NAME = "SAS10" ]; then
         ASPIC_ERR_FILE=$(echo "${TIME_FILE}" | sed -e 's/.fst.SAS10.*/.fst.SAS10.aspic.stderr/')
         ASPIC_OUT_FILE=$(echo "${TIME_FILE}" | sed -e 's/.fst.SAS10.*/.fst.SAS10.aspic.stdout/')
@@ -50,42 +57,3 @@ for TIME_FILE in `find runs/${RUN_NAME}/ -name \*.time`; do
 
 done
 echo "}"
-
-
-#SOLVERS=$(ls -1 **/*.time | sed 's/.*\.\([^.]*\)\.time$/\1/g' | sort -u)
-#
-#for SOLVER in $SOLVERS
-#do
-#    OUTFILE="report/${SOLVER}.js"
-#    test -f "$OUTFILE" && rm "$OUTFILE"
-#
-#
-#    for i in **/*.$SOLVER.time
-#    do
-#
-#        BN=${i%.*.$SOLVER.time}
-#
-#        # for SAS10 only view
-#        # test -f ${BN}.fst || continue
-#
-#        # out "{ 'filename': '$BN'," $(cat ${BN}.properties) "results: {"
-#
-#    out '};'
-#done
-#
-#
-#OUTFILE='report/results.js'
-#
-#out 'var files = ['
-#for i in **/*.PUBS.time
-#do
-#
-#    BN=${i%.*.PUBS.time}
-#
-#    # for SAS10 only view
-#    # test -f ${BN}.fst || continue
-#
-#    out "{ 'filename': '$BN'," $(cat ${BN}.properties) "},"
-#done
-#out '];'
-#out 'var results = {};'

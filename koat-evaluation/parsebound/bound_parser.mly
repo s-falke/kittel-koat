@@ -8,7 +8,7 @@
 
 %token EOL EOF
 %token PLUS MINUS TIMES DIV POWER 
-%token LOG POW MAX NAT
+%token LOG POW MAX MIN NAT
 %token COMMA LPAREN RPAREN LBRACK RBRACK
 
 %token <Big_int.big_int> INT
@@ -41,6 +41,9 @@ bound_expr:
 | MAX LPAREN bound_expr_list RPAREN               { Bound.Max $3 }
 | MAX LBRACK bound_expr_list RBRACK               { Bound.Max $3 }
 | MAX LPAREN LBRACK bound_expr_list RBRACK RPAREN { Bound.Max $4 }
+| MIN LPAREN bound_expr_list RPAREN               { Bound.Min $3 }
+| MIN LBRACK bound_expr_list RBRACK               { Bound.Min $3 }
+| MIN LPAREN LBRACK bound_expr_list RBRACK RPAREN { Bound.Min $4 }
 | NAT LPAREN bound_expr RPAREN                    { Bound.Max [ Bound.Num Big_int.zero_big_int ; $3 ] }
 
 | LPAREN bound_expr RPAREN                        { $2 }
