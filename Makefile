@@ -31,6 +31,9 @@ koat.d.byte: make_git_sha1 force_look
 convert: force_look
 	ocamlbuild ${OPTS} ${LIBPATH} ${LIBS} convert.native
 
+koatCConv: force_look
+	ocamlbuild ${OPTS} ${LIBPATH} ${LIBS} koatCConv.native
+
 clean: force_look
 	ocamlbuild -clean
 	rm -f git_sha1.ml
