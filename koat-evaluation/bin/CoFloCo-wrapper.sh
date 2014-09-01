@@ -11,6 +11,6 @@ STDERR_FILE=$(echo "${TIME_FILE}" | sed -e 's/.time$/.stderr/')
 TEMPDIR=$(mktemp -d)
 cd "$TEMPDIR"
 cp "$EXAMPLE_FILE" main.cofloco
-"$COFLOCO" -i main.cofloco > "${STDOUT_FILE}" 2> "${STDERR_FILE}" || :
+"$COFLOCO" -fill_base_cases -v 2 -stats  -n_rankings 2 -assume_sequential -maximize_fast 9 -i main.cofloco > "${STDOUT_FILE}" 2> "${STDERR_FILE}" || :
 cd - >/dev/null
 rm -rf "$TEMPDIR"
