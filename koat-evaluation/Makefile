@@ -1,7 +1,7 @@
 TIMEOUT=60
 EXAMPLE_FILES=$(shell find ./examples -type f -name '*.properties')
 
-PROVERS=KoAT-2014-08-27 KoAT-2014-08-28-Oct PUBS SAS10 CoFloCo Loopus
+PROVERS=KoAT-TACAS KoAT-2014-08-28 PUBS SAS10 CoFloCo Loopus
 
 REPORT_FILES=report/examples.js $(patsubst %,report/results-%.js,$(PROVERS))
 

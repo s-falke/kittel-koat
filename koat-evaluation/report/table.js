@@ -5,14 +5,50 @@
         if (!results.hasOwnProperty(provername)) {
             continue;
         }
-        if (provername.substr(0,4) !== 'KoAT') {
-            continue;
+        if (provername.substr(0,4) == 'KoAT') {
+            provers.push({ name: provername
+                         , supports_nonlinear: true
+                         , supports_recursion: true
+                         , stdoutext: '.koat.' + provername + '.stdout.txt'
+                         , stderrext: '.koat.' + provername + '.stderr.txt'
+                         , inputext: '.koat.' + provername + '.input.txt'
+                         });
+        } else if (provername.substr(0,4) == 'PUBS') {
+            provers.push({ name: provername
+                         , supports_nonlinear: false
+                         , supports_recursion: true
+                         , stdoutext: '.ces.' + provername + '.stdout.txt'
+                         , stderrext: '.ces.' + provername + '.stderr.txt'
+                         , inputext: '.ces.' + provername + '.input.txt'
+                         });
+        } else if (provername.substr(0,5) == 'SAS10') {
+            provers.push({ name: provername
+                         , supports_nonlinear: false
+                         , supports_recursion: true
+                         , stdoutext: '.fst.' + provername + '.rank.stdout.txt'
+                         , stderrext: '.fst.' + provername + '.rank.stderr.txt'
+                         , aspicstdoutext: '.fst.' + provername + '.aspic.stdout.txt'
+                         , aspicstderrext: '.fst.' + provername + '.aspic.stderr.txt'
+                         , inputext: '.fst.' + provername + '.input.txt'
+                         });
+        } else if (provername.substr(0,7) == 'CoFloCo') {
+            provers.push({ name: provername
+                         , supports_nonlinear: true
+                         , supports_recursion: true
+                         , stdoutext: '.cofloco.ces.' + provername + '.stdout.txt'
+                         , stderrext: '.cofloco.ces.' + provername + '.stderr.txt'
+                         , inputext: '.cofloco.ces.' + provername + '.input.txt'
+                         });
+        } else if (provername.substr(0,6) == 'Loopus') {
+            provers.push({ name: provername
+                         , supports_nonlinear: true
+                         , supports_recursion: false
+                         , stdoutext: '.koat.Loopus.c.stdout.txt'
+                         , stderrext: '.koat.Loopus.c.stderr.txt'
+                         , inputext: '.koat.Loopus.c.input.txt' 
+                         });
         }
-        provers.push({ name: provername, stdoutext: '.koat.' + provername + '.stdout.txt', stderrext: '.koat.' + provername + '.stderr.txt', inputext: '.koat.txt' });
     }
-    provers.push({ name: 'PUBS', stdoutext: '.ces.PUBS.stdout.txt', stderrext: '.ces.PUBS.stderr.txt', inputext: '.ces.txt' });
-    provers.push({ name: 'SAS10', stdoutext: '.fst.SAS10.rank.stdout.txt', stderrext: '.fst.SAS10.rank.stderr.txt', inputext: '.fst.txt', aspicstdoutext: '.fst.SAS10.aspic.stdout.txt', aspicstderrext: '.fst.SAS10.aspic.stderr.txt' });
-    provers.push({ name: 'CoFloCo', stdoutext: '.cofloco.ces.CoFloCo.stdout.txt', stderrext: '.cofloco.ces.CoFloCo.stderr.txt', inputext: '.cofloco.ces.txt' });
 
 
     function text(t) {
@@ -73,7 +109,7 @@
         var td = el('td');
         if (res.hasOwnProperty('degree')) {
             td.setAttribute('class', 'hasBound');
-            var n = res.hasOwnProperty('normalizedBound') ? res.normalizedBound : res.originalBound;
+            var n = res.hasOwnProperty('parsedBound') ? res.parsedBound : res.originalBound;
             if (n.length > 30) {
                 var s = el('span');
                 s.setAttribute('title', n);
@@ -101,34 +137,34 @@
             s.appendChild(text(', #vars: ' + res.variableCount));
         }
         e = el('a');
-        e.setAttribute('href', file + prover.inputext);
+        e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.inputext);
         e.appendChild(text('input'));
         s.appendChild(text(', '));
         s.appendChild(e);
         if (res.hasOwnProperty('aspic_stdout')) {
             var e = el('a');
-            e.setAttribute('href', file + prover.aspicstdoutext);
+            e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.aspicstdoutext);
             e.appendChild(text('aspic'));
             s.appendChild(text(', '));
             s.appendChild(e);
         }
         if (res.hasOwnProperty('aspic_stderr')) {
             var e = el('a');
-            e.setAttribute('href', file + prover.aspicstderrext);
+            e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.aspicstderrext);
             e.appendChild(text('aspic (errors)'));
             s.appendChild(text(', '));
             s.appendChild(e);
         }
         if (res.hasOwnProperty('stdout')) {
             var e = el('a');
-            e.setAttribute('href', file + prover.stdoutext);
-            e.appendChild(text('proof'));
+            e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.stdoutext);
+            e.appendChild(text('output'));
             s.appendChild(text(', '));
             s.appendChild(e);
         }
         if (res.hasOwnProperty('errors')) {
             var e = el('a');
-            e.setAttribute('href', file + prover.stderrext);
+            e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.stderrext);
             e.appendChild(text('errors'));
             s.appendChild(text(', '));
             s.appendChild(e);
@@ -161,13 +197,18 @@
             var provername = prover.name;
             var pr = results[provername];
             var filename = example.filename;
-            if (pr.hasOwnProperty(filename)) {
-                tr.appendChild(generateResultCell(pr[filename], prover, filename));
-            } else {
+            if (!prover.supports_recursion && example.recursive) {
                 td = el('td');
                 td.setAttribute('class', 'incompatible');
-                td.appendChild(text('Recursive example not handled by Rank.'));
+                td.appendChild(text('Recursive example not handled by prover.'));
                 tr.appendChild(td);
+            } else if (!prover.supports_nonlinear && example.nonlinear) {
+                td = el('td');
+                td.setAttribute('class', 'incompatible');
+                td.appendChild(text('Non-linear example not handled by prover.'));
+                tr.appendChild(td);
+            } else {
+                tr.appendChild(generateResultCell(pr[filename], prover, filename));
             }
         }
         return tr;
@@ -258,14 +299,17 @@
             var result = res[i];
         }
 
-        var div = document.getElementById('overview_table');
-        while (div.childNodes.length > 0) {
-            div.removeChild(div.childNodes[0]);
+        var tableBox = document.getElementById('overview_table');
+        while (tableBox.childNodes.length > 0) {
+            tableBox.removeChild(tableBox.childNodes[0]);
         }
-        var p = el('p');
-        p.appendChild(text(numEx + ' examples selected.'));
-        div.appendChild(p);
-        div.appendChild(t);
+        tableBox.appendChild(t);
+
+        var messageBox = document.getElementById('example_selection_message');
+        while (messageBox.childNodes.length > 0) {
+            messageBox.removeChild(messageBox.childNodes[0]);
+        }
+        messageBox.appendChild(text(numEx + ' examples selected.'));
     }
 
     function generateBenchmarkTable(res) {
@@ -505,6 +549,17 @@
 
         var maxdegree = 0;
 
+        var recursive = getCheckBox('recursive');
+        var nonrecursive = getCheckBox('nonrecursive');
+        var linear = getCheckBox('linear');
+        var nonlinear = getCheckBox('nonlinear');
+
+        var solves = {};
+        for (var i in provers) {
+            var provername = provers[i].name;
+            solves[provername] = getSelectValue(provername + 'Solves');
+        }
+
         function addResult (a, b, i) {
             maxdegree = Math.max(maxdegree, a);
             maxdegree = Math.max(maxdegree, b);
@@ -522,6 +577,15 @@
 
         for (var f in files) {
             var filename = files[f].filename;
+            var example = window.files[f];
+            if ( (example.recursive && !recursive)
+              || (!example.recursive && !nonrecursive)
+              || (example.nonlinear && !nonlinear)
+              || (!example.nonlinear && !linear)
+            ) {
+                continue;
+            }
+
             var a = -1;
             var b = -1;
             if (results[proverA].hasOwnProperty(filename) && results[proverA][filename].hasOwnProperty('degree')) {
@@ -650,6 +714,11 @@
         document.getElementById('cmp_prover_table').appendChild(t);
     }
 
+    function updateExampleSet() {
+            updateControls();
+            updateProverComparisonControls();
+    }
+
     function setUp() {
         if (document.getElementById('benchmark_table') !== null) {
             createProverTable();
@@ -666,6 +735,7 @@
         if (document.getElementById('sortByProverSelector') !== null) {
             createSortByProver();
         }
+        document.getElementById('example_control_form').onchange = updateExampleSet;
     }
 
     window.onload = setUp;
