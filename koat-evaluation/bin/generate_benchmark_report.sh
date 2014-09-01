@@ -8,7 +8,7 @@ echo "results['${RUN_NAME}'] = {"
 for TIME_FILE in `find runs/${RUN_NAME}/ -name \*.time`; do
     STDOUT_FILE=$(echo "${TIME_FILE}" | sed -e 's/.time$/.stdout/')
     STDERR_FILE=$(echo "${TIME_FILE}" | sed -e 's/.time$/.stderr/')
-    EXAMPLE=$(echo "${TIME_FILE}" | cut -d "/" -f 3- | sed -e 's/.\(koat.KoAT\|ces.PUBS\|ces.COSTA\|fst.SAS10\|cofloco.ces.CoFloCo\).*//')
+    EXAMPLE=$(echo "${TIME_FILE}" | cut -d "/" -f 3- | sed -e 's/.\(koat.KoAT\|ces.PUBS\|ces.COSTA\|fst.SAS10\|cofloco.ces.CoFloCo\|koat.Loopus.c\).*//')
 
     echo -n " '$EXAMPLE': { "
 
@@ -37,6 +37,13 @@ for TIME_FILE in `find runs/${RUN_NAME}/ -name \*.time`; do
         test -f "${STDERR_FILE}" && test $(stat -c%s "${STDERR_FILE}") -gt 0 && echo -n '"errors": true, '
         echo -n "'stdout': true, "
         coflocoresult "${STDOUT_FILE}"
+        echo -n $(reporttime "${TIME_FILE}")
+    fi
+
+    if [ $RUN_NAME = "Loopus" ]; then
+        test -f "${STDERR_FILE}" && test $(stat -c%s "${STDERR_FILE}") -gt 0 && echo -n '"errors": true, '
+        echo -n "'stdout': true, "
+        loopusresult "${STDOUT_FILE}"
         echo -n $(reporttime "${TIME_FILE}")
     fi
 

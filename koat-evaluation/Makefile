@@ -1,7 +1,7 @@
 TIMEOUT=60
 EXAMPLE_FILES=$(shell find ./examples -type f -name '*.properties')
 
-PROVERS=KoAT-2014-08-27 PUBS SAS10 CoFloCo
+PROVERS=KoAT-2014-08-27 KoAT-2014-08-28-Oct PUBS SAS10 CoFloCo Loopus
 
 REPORT_FILES=report/examples.js $(patsubst %,report/results-%.js,$(PROVERS))
 
@@ -35,6 +35,9 @@ report/results-SAS10.js: $(patsubst ./examples/%.properties,./runs/SAS10/%.fst.S
 report/results-CoFloCo.js: $(patsubst ./examples/%.properties,./runs/CoFloCo/%.cofloco.ces.CoFloCo.time,$(EXAMPLE_FILES)) bin/parsebound bin/generate_benchmark_report.sh bin/output_funs.sh
 	./bin/generate_benchmark_report.sh "CoFloCo" > $@
 
+report/results-Loopus.js: $(patsubst ./examples/%.properties,./runs/Loopus/%.koat.Loopus.c.time,$(EXAMPLE_FILES)) bin/parsebound bin/generate_benchmark_report.sh bin/output_funs.sh
+	./bin/generate_benchmark_report.sh "Loopus" > $@
+
 ### Actually running the provers:
 
 runs/KoAT%.time:
@@ -65,6 +68,12 @@ runs/KoAT%.time:
 	$(eval EXAMPLE := $(patsubst runs/CoFloCo/%.ces.CoFloCo.time,examples/%.ces,$@))
 	@mkdir -p $(shell dirname "$@")
 	timeout ${TIMEOUT} bash -c "time ./bin/CoFloCo-wrapper.sh '$(EXAMPLE)' '$@'" 2> "${T}" || :
+	@mv "${T}" $@
+%.koat.Loopus.c.time:
+	$(eval T := $(shell mktemp ))
+	$(eval EXAMPLE := $(patsubst runs/Loopus/%.koat.Loopus.c.time,examples/%.koat,$@))
+	@mkdir -p $(shell dirname "$@")
+	timeout ${TIMEOUT} bash -c "time ./bin/Loopus-wrapper.sh '$(TIMEOUT)' '$(EXAMPLE)' '$@'" 2> "${T}" || :
 	@mv "${T}" $@
 ### Our little helper:
 bin/parsebound: parsebound/*

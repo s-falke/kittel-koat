@@ -62,3 +62,18 @@ function coflocoresult
     fi
 }
 
+function loopusresult
+{
+    if [ -f $1 ]
+    then
+	ORIGINAL_BOUND="$( grep '^Total Bound: ' "$1" | sed -e 's/^Total Bound: //' -e 's/×/*/g'i )"
+        echo -n "'originalBound': \"${ORIGINAL_BOUND}\", "
+        if [ "${ORIGINAL_BOUND}" = "inf" ] || [ "${ORIGINAL_BOUND}" = "inf " ]; then
+            echo -n "'parseError': 'Could not parse bound'"
+        else
+            echo "${ORIGINAL_BOUND}" | bin/parsebound
+        fi
+        echo -n ", "
+    fi
+}
+
