@@ -50,7 +50,7 @@ let rec getConst b =
   | Add (b1, b2) -> Big_int.add_big_int (getConst b1) (getConst b2)
   | Sub (b1, b2) -> Big_int.sub_big_int (getConst b1) (getConst b2)
   | Mul (b1, b2) -> Big_int.mult_big_int (getConst b1) (getConst b2)
-  | Div (b1, b2) -> Big_int.div_big_int (getConst b1) (getConst b2)
+  | Div (b1, b2) -> raise (Invalid_argument "Can't get constant out of division at this time.")
   | Pow (b1, b2) -> Big_int.power_big_int_positive_big_int (getConst b1) (getConst b2)
   | Log (b1, b2) -> raise (Invalid_argument "Can't get constant out of logarithm at this time.")
   | Min bs       -> List.fold_left max Big_int.zero_big_int (List.map getConst bs)
@@ -60,25 +60,50 @@ let pp b =
   let protect strength force s =
     if strength >= force then s else "(" ^ s ^ ")" in
   let rec pp force b =
-    match b with
-    | Num i -> Big_int.string_of_big_int i
-    | Var v -> v
-    | Add (b1, b2) -> protect 1 force (Printf.sprintf "%s + %s" (pp 1 b1) (pp 1 b2))
-    | Sub (b1, b2) -> protect 1 force (Printf.sprintf "%s - %s" (pp 1 b1) (pp 2 b2))
-    | Mul (b1, b2) -> protect 2 force (Printf.sprintf "%s * %s" (pp 2 b1) (pp 2 b2))
-    | Div (b1, b2) -> protect 2 force (Printf.sprintf "%s / %s" (pp 2 b1) (pp 2 b2))
-    | Pow (b1, b2) -> 
-        (
-         try 
-           let c = getConst b2 in
-           Printf.sprintf "%s^%s" (pp 3 b1) (Big_int.string_of_big_int c)
-         with
-         | _ ->
-             Printf.sprintf "pow(%s, %s)" (pp 0 b1) (pp 0 b2)
-        )
-    | Log (b1, b2) -> Printf.sprintf "log(%s, %s)" (pp 0 b1) (pp 0 b2)
-    | Max bs       -> Printf.sprintf "max(%s)" (String.concat ", " (List.map (pp 0) bs))
-    | Min bs       -> Printf.sprintf "min(%s)" (String.concat ", " (List.map (pp 0) bs)) in
+    try
+      let bconst = getConst b in
+      Big_int.string_of_big_int bconst
+    with
+    | _ ->
+      (
+        match b with
+        | Num i -> Big_int.string_of_big_int i
+        | Var v -> v
+        | Add (b1, b2) -> protect 1 force (Printf.sprintf "%s + %s" (pp 1 b1) (pp 1 b2))
+        | Sub (b1, b2) -> protect 1 force (Printf.sprintf "%s - %s" (pp 1 b1) (pp 2 b2))
+        | Mul (b1, b2) -> 
+          (
+            match b1 with
+            | Num i -> 
+              if Big_int.eq_big_int Big_int.unit_big_int i then
+                (pp force b2)
+              else
+                protect 2 force (Printf.sprintf "%s * %s" (pp 2 b1) (pp 2 b2))
+            | _ -> 
+              protect 2 force (Printf.sprintf "%s * %s" (pp 2 b1) (pp 2 b2))
+          )
+        | Div (b1, b2) -> protect 2 force (Printf.sprintf "%s / %s" (pp 2 b1) (pp 2 b2))
+        | Pow (b1, b2) -> 
+          (
+            try 
+              let c = getConst b2 in
+              Printf.sprintf "%s^%s" (pp 3 b1) (Big_int.string_of_big_int c)
+            with
+            | _ ->
+              Printf.sprintf "pow(%s, %s)" (pp 0 b1) (pp 0 b2)
+          )
+        | Log (b1, b2) -> Printf.sprintf "log(%s, %s)" (pp 0 b1) (pp 0 b2)
+        | Max bs       -> 
+          if List.length bs = 1 then
+            pp force (List.hd bs)
+          else
+            Printf.sprintf "max(%s)" (String.concat ", " (List.map (pp 0) bs))
+        | Min bs       -> 
+          if List.length bs = 1 then
+            pp force (List.hd bs)
+          else
+            Printf.sprintf "min(%s)" (String.concat ", " (List.map (pp 0) bs))
+      ) in
   pp 0 b
 
 let rec tonumdegree b =
