@@ -1,0 +1,79 @@
+This README documents the steps needed to reproduce our experimental evaluation.
+
+Preparing the environment:
+ - Place compiled versions of "KoAT" and "koatCConv" in the directory "bin".
+
+ - Place yices1 into a directory listed in the PATH.
+
+ - Download clang-2.9
+
+ - Get executables of the respective analyzers from the tool authors and place
+   them in the directories "provers" and "lib":
+
+    * For "SAS10":
+      This is Rank (with aspic as frontend), from the paper
+        Christophe Alias, Alain Darte, Paul Feautrier, and Laure Gonnord.
+        Multi-dimensional Rankings, Program Termination, and Complexity Bounds of Flowchart Programs.
+        In SAS 2010.
+      A web interface is found at
+        http://compsys-tools.ens-lyon.fr/rank/
+      We use the following files:
+        - provers/aspic64          (for conversion/preprocessing)
+        - provers/rank             (for the actual complexity analysis)
+
+    * For "PUBS": 
+      This is the backend of the COSTA termination and complexity prover,
+      documented in many papers, e.g.
+        Elvira Albert, Puri Arenas, Samir Genaim, Germán Puebla, and Damiano Zanardini. 
+        Cost Analysis of Object-Oriented Bytecode Programs. 
+        In TCS 413, 1 (2012), 142–159.
+      The website is
+        http://costa.ls.fi.upm.es/web/
+      We use the following files:
+        - provers/cfg2pubs_static   (to convert a CFG representation of a program to a CES file, extracting loops)
+        - provers/pubs_static       (for the actual complexity analysis)
+
+    * For "CoFloCo":
+      This is the implementation of the paper
+        Antonio Flores-Montoya and Reiner Haehnle. 
+        Resource Analysis of Complex Programs with Cost Equations.
+        In APLAS ’14.
+      The website is 
+        https://www.se.tu-darmstadt.de/se/group-members/antonio-flores-montoya/cofloco/
+      We use the following files:
+        - provers/cofloco           (for the actual complexity analysis)
+        - lib/libppl.so.12
+          lib/libswipl.so.6
+          lib/libgmpxx.so.4         (support libraries)
+      (At the moment of writing, CoFloCo also requires libGMP to be installed)
+
+    * For "Loopus":
+      This is the implementation of the paper
+        Moritz Sinn, Florian Zuleger, and Helmut Veith.
+        A Simple and Scalable Static Analysis for Bound Analysis and Amortized Complexity Analysis.
+        In CAV ’14.
+      The website is
+        http://forsyte.at/static/people/sinn/loopus/CAV14/index.html
+      We use the following files:
+        - provers/loopus            (for the actual complexity analysis)
+        - lib/libz3.so              (support library)
+      (At the moment of writing, Loopus also requires libGOMP to be installed)
+
+      We additionally use clang-2.9 to compile the generated C files into Loopus' LLVM input.
+      For this, download clang-2.9 from http://llvm.org/releases/download.html and put it
+      into the directory "clang-2.9" (such that "clang-2.9/bin/clang" is the clang compiler).
+
+Running the experiments:
+ - Execute "make report".
+   After this finished, results are available as report/report.html (which uses support files
+   from report/).
+
+How to add support for new provers:
+ - Create a wrapper that sets up the environment and produces the needed output,
+   to be called from the Makefule (look at the existing ones as example).
+ - Add a corresponding targets to the Makefile:
+    * Add a target for the report/results-PROVER.js file, depending on the *.time files
+    * Add a target for the *time files
+ - Add a new case to bin/generate_benchmark_report.sh (and bin/output_funs.sh/parsebound)
+ - Include the new results-PROVER.js in report/report.html
+ - Add knowledge about the prover (what it supports, file extensions) to report/table.js
