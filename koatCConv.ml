@@ -75,16 +75,16 @@ let ppTerm (monomials, const) =
           Printf.sprintf "%s" (ppMonomial mon)
         else
           Printf.sprintf "%s * %s" (string_of_big_int (abs_big_int coeff)) (ppMonomial mon) in
-  
+
   if monomials = [] then
     Printf.sprintf "%s" (string_of_big_int const)
   else
-    let constPrefix = 
+    let constPrefix =
       if (eq_big_int const zero_big_int) then
         ""
       else
         Printf.sprintf "%s + " (string_of_big_int const) in
-    
+
     constPrefix ^ (String.concat " + " (List.map ppMonomialCoeff monomials))
 
 let ppCond atoms =
@@ -153,7 +153,7 @@ let print_rule preVars postVars rule =
   printf "   if (nondet_bool()) {\n";
   (* Reset those post variables that are not simply staying the same *)
   let (cleanedCond, unchangedPreVars, varResets, varDefs) =
-    List.fold_left 
+    List.fold_left
       (fun (cleanedCond, unchangedPreVars, varResets, varDefs) (preVar, postVar) ->
         match splitOutDefEq cleanedCond postVar with
         | Some (defTerm, c) ->

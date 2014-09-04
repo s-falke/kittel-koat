@@ -104,7 +104,7 @@ let toString e =
 
   let summands = getSummands e in
   let grouped_summands = groupSummands summands in
-  let e' = 
+  let e' =
     if grouped_summands = [] then
       zero
     else
