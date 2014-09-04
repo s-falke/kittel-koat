@@ -216,7 +216,8 @@
 
     function generateOverviewTable(res) {
         var degrees = {};
-        var times = {};
+        var solvedtimes = {};
+        var alltimes = {};
         var solvedExamples = {};
         var useddegrees = {};
         var maxdegree = 0;
@@ -224,7 +225,8 @@
 
         for (var pi in provers) {
             degrees[provers[pi].name] = {};
-            times[provers[pi].name] = 0;
+            solvedtimes[provers[pi].name] = 0;
+            alltimes[provers[pi].name] = 0;
             solvedExamples[provers[pi].name] = 0;
         }
 
@@ -243,9 +245,10 @@
                     useddegrees[deg] = true;
                     var count = degrees[name].hasOwnProperty(deg) ? degrees[name][deg] : 0;
                     degrees[name][deg] = count + 1;
-                    times[name] += proof.time;
+                    solvedtimes[name] += proof.time;
                     solvedExamples[name]++;
                 }
+                alltimes[name] += proof.time;
             }
         }
 
@@ -283,11 +286,11 @@
                 td.appendChild(text(count));
                 tr.appendChild(td);
             }
-            var avgTime = solvedExamples[name] > 0 ? Math.floor(times[name] / solvedExamples[name]) + 'ms' : '-';
+            var avgTime = solvedExamples[name] > 0 ? Math.floor(solvedtimes[name] / solvedExamples[name]) + 'ms' : '-';
             td = el('td');
             td.appendChild(text(avgTime));
             tr.appendChild(td);
-            var avgTimeAll = numEx > 0 ? Math.floor((times[name] + (numEx - solvedExamples[name]) * 60000) / numEx) + 'ms' : '-';
+            var avgTimeAll = numEx > 0 ? Math.floor(alltimes[name] / numEx) + 'ms' : '-';
             td = el('td');
             td.appendChild(text(avgTimeAll));
             tr.appendChild(td);
