@@ -8,9 +8,9 @@ frontend [llvm2KITTeL](https://github.com/s-falke/llvm2kittel).
 
 KoAT is an automatic complexity analyzer taking the same kinds of inputs.
 
-## Author
+## Authors
 
-Stephan Falke
+Stephan Falke, Marc Brockschmidt
 
 ## Papers
 
