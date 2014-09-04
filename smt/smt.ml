@@ -20,24 +20,23 @@
 
 type solver = Yices | Z3 | Mathsat | CVC4 | Yices2
 
-type formula =
-          And of (formula list)
-        | AndA of (Pc.atom list) (* shortcut because conj of atoms is so common *)
-        | Or of (formula list)
-        | Not of formula
-        | Atom of Pc.atom
+type term =
+| AtomT of Poly.poly
+| Ite of formula * term * term
+and formula =
+| And of (formula list)
+| AndA of (Pc.atom list) (* shortcut because conj of atoms is so common *)
+| Or of (formula list)
+| Not of formula
+| Atom of Pc.atom
+| Let of Poly.var * term * formula (* let var = term in formula *)
+
 
 let docleanup = true
 
 let smt_solver = ref Yices
 
 let smt_time = ref 0.0
-
-let header = "(benchmark kittel_formula\n  :status unknown\n  :logic QF_LIA\n"
-
-let midder = "  :formula "
-
-let footer = "\n)"
 
 let input_line_no_cr ic =
   let str = input_line ic in
@@ -215,35 +214,54 @@ let rec formula_to_smt_file file formula =
   match formula with
     | And []
     | AndA [] ->
-            output_string file "true"
+      output_string file "true"
     | And fs ->
-            output_string file "(and " ;
-            List.iter (formula_to_smt_file file) fs ;
-            output_string file ")" ;
+      output_string file "(and " ;
+      List.iter (formula_to_smt_file file) fs ;
+      output_string file ")" ;
     | AndA atoms ->
-            output_string file "(and ";
-            List.iter (fun a -> output_string file (Pc.atomSMT a)) atoms;
-            output_string file ")"
+      output_string file "(and ";
+      List.iter (fun a -> output_string file (Pc.atomSMT a)) atoms;
+      output_string file ")"
     | Or fs ->
-            output_string file "(or " ;
-            List.iter (formula_to_smt_file file) fs ;
-            output_string file ")" ;
+      output_string file "(or " ;
+      List.iter (formula_to_smt_file file) fs ;
+      output_string file ")" ;
     | Not f ->
-            output_string file "(not " ;
-            formula_to_smt_file file f ;
-            output_string file ")" ;
+      output_string file "(not " ;
+      formula_to_smt_file file f ;
+      output_string file ")" ;
     | Atom atom ->
-            output_string file (Pc.atomSMT atom)
+      output_string file (Pc.atomSMT atom)
+    | Let (var, term, formula) ->
+      output_string file ("(let (" ^ var ^ " ") ;
+      term_to_smt_file file term ;
+      output_string file ") (" ;
+      formula_to_smt_file file formula ;
+      output_string file "))"
+and term_to_smt_file file term =
+  match term with
+  | AtomT term ->
+    output_string file (Poly.toSMT term)
+  | Ite (condFormula, thenTerm, elseTerm) ->
+    output_string file "(ite (" ;
+    formula_to_smt_file file condFormula ;
+    output_string file ") (" ;
+    term_to_smt_file file thenTerm ;
+    output_string file ") (" ;
+    term_to_smt_file file elseTerm ;
+    output_string file "))"
 
 let write_smt_file vars formula =
   let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_1_" ".smt" in
-    output_string formulafile header;
-    output_var_string formulafile vars;
-    output_string formulafile midder;
-    formula_to_smt_file formulafile formula;
-    output_string formulafile footer;
-    close_out formulafile;
-    thefilename
+  output_string formulafile "(benchmark kittel_formula\n  :status unknown\n  :logic QF_LIA\n" ;
+  output_var_string formulafile vars;
+  output_string formulafile "  :formula " ;
+  formula_to_smt_file formulafile formula;
+  output_string formulafile "\n)" ;
+  close_out formulafile;
+  thefilename
+
 
 let smt_file_check_satisfiable filename =
     let solver =
@@ -354,198 +372,235 @@ let isSatisfiableFarkasPoloMinimal minrestrictions minimplications weakconds wea
   let filename = write_smt_file vars formula in
   smt_file_get_model filename
 
-(* sizebound stuff *)
-let rec isConstantBound cond t c =
-  let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_2_" ".smt"
-  and absTerms = getAbsTerms [(t, "T")] in
-    output_string formulafile header;
-    output_var_string formulafile (Utils.remdup ((Poly.getVars t) @ (Pc.getVars cond)));
-    output_string formulafile (midder ^ "\n");
-    output_string formulafile (letifyAbsTerms absTerms);
-    output_string formulafile "(and ";
-    conj_to_smt cond formulafile;
-    output_string formulafile " ";
-    output_string formulafile (absIsGtrC (getAbsForT absTerms) c);
-    output_string formulafile ")\n";
-    output_string formulafile (closes ((List.length absTerms) + 1));
-    output_string formulafile footer;
-    close_out formulafile;
-    match (smt_file_check_satisfiable thefilename) with
-      | Ynm.No -> true
-      | _ -> false
-and absIsGtrC name c =
-  "(> ?" ^ name ^ " " ^ (Poly.toSMT ([], c)) ^ ")"
-and getAbsForT absTerms =
-  (fst (snd (List.hd absTerms))) ^ "_abs"
-and getAbsTerms ts =
-  List.map (function (t, name) -> (t, (name, getAbs t name))) ts
-and getAbs t name =
-  if name.[0] = 'T' then
-    "(ite (>= ?" ^ name ^ " 0) ?" ^ name ^ " (~ ?" ^ name ^ "))"
-  else
-    "(ite (>= " ^ name ^ " 0) " ^ name ^ " (~ " ^ name ^ "))"
-and letifyAbsTerms absterms =
-  String.concat "" (List.map letifyAbsTerm absterms)
-and letifyAbsTerm (t, (name, defn)) =
-  if name.[0] = 'T' then
-    "(let (?" ^ name ^ " " ^ (Poly.toSMT t) ^ ")\n" ^
-    "(let (?" ^ name ^ "_abs " ^ defn ^ ")\n"
-  else
-    "(let (?" ^ name ^ "_abs " ^ defn ^ ")\n"
-and closes n =
-  if n > 0 then
-    ")" ^ (closes (n - 1))
-  else
-    ""
 
-let rec isMaxBound cond t c a =
-  if a = [] then
-    false
+(* Sizebound stuff. First the little helpers for absolute values and maximum computation, then the actual checks. *)
+
+let getAbsVarName var =
+  "." ^ var ^ "_abs"
+let getAbsValueFormulaForTerm term =
+  Ite (Atom (Pc.Geq (term, Poly.zero)), AtomT term, AtomT (Poly.negate term))
+
+(* Constructs a formula such that var is assigned the maximum value of term in innerFormula *)
+let setToAbsValue var term innerFormula =
+  let termVarName = ".T." ^ var in
+  Let (termVarName, AtomT term,
+       Let (var, getAbsValueFormulaForTerm (Poly.fromVar termVarName),
+            innerFormula))
+
+(* Constructs a sequence of (let (.VAR_abs (...) )) statements, with innerFormula in the middle: *)
+let absifyVars vars innerFormula =
+  List.fold_left
+    (fun resFormula var ->
+      let absVarName = getAbsVarName var in
+      Let (absVarName, getAbsValueFormulaForTerm (Poly.fromVar var), resFormula))
+    innerFormula
+    vars
+
+(* Constructs a formula that encloses innerFormula, computes the max of the absolutes of a list of variables vars, and sets maxVar to that value. *)
+let setToAbsMaxOf maxVar vars innerFormula =
+  let maxVarNamePrefix = ".MAX_" in
+  let varNum = List.length vars in
+  (* Set the maxVar to the computed maximal value. *)
+  let resFormula =
+    Let (maxVar, AtomT (Poly.fromVar (maxVarNamePrefix ^ (string_of_int varNum))), innerFormula) in
+  (* Compute the maximal value of the absolutes, by doing pairwise max using If-then-else *)
+  let resFormula =
+    Let (maxVarNamePrefix ^ "0",
+         AtomT Poly.zero,
+         (fst (List.fold_left
+                 (fun (resFormula, idx) var ->
+                   let previousMaxVar = maxVarNamePrefix ^ (string_of_int (idx - 1)) in
+                   (Let (maxVarNamePrefix ^ (string_of_int idx),
+                         Ite (Atom (Pc.Gtr (Poly.fromVar previousMaxVar, Poly.fromVar (getAbsVarName var))), 
+                              AtomT (Poly.fromVar previousMaxVar), 
+                              AtomT (Poly.fromVar (getAbsVarName var))),
+                         resFormula),
+                    idx - 1))
+                 (resFormula, varNum)
+                 vars))) in
+  (* Finally define all the _abs variables *)
+  absifyVars vars resFormula
+
+(* Constructs a formula that encloses innerFormula, computes the sum of the absolutes of a list of variables vars, and sets sumVar to that value. *)
+let setToAbsSumOf sumVar vars innerFormula =
+  (* Define the sum: *)
+  let resFormula =
+    Let (sumVar, AtomT (List.fold_left Poly.add Poly.zero (List.map (fun v -> Poly.fromVar (getAbsVarName v)) vars)), innerFormula) in
+  (* Define the absolutes: *)
+  absifyVars vars resFormula
+
+(* Check if cond -> argument <= constBound *)
+let isConstantBound cond argument constBound =
+  (* We construct 
+     (let (.T argument) 
+      (let (.T_abs (ite (>= .T 0) .T (- .T))) 
+       (and cond (> ?T_abs constBound))))
+     and then check if this is UNSAT.
+     If yes, maxBound is a constant bound.
+     We use "." as prefix because we do not allow variables from the input to start with "." 
+   *)
+  let absArgumentVarName = getAbsVarName ".T" in
+
+  let checkFormula = AndA ((Pc.Gtr ((Poly.fromVar absArgumentVarName), (Poly.fromConstant constBound))) :: cond) in
+  let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
+  let vars = Utils.remdup ((Pc.getVars cond) @ (Poly.getVars argument)) in
+
+  let filename = write_smt_file vars checkFormula in
+  match (smt_file_check_satisfiable filename) with
+  | Ynm.No -> true
+  | _ -> false
+
+(* Check if cond -> argument <= max { abs(v) | v \in (constBound :: inVars) } *)
+let isMaxBound cond argument constBound inVars =
+  if inVars = [] then
+    false (* should be a constant bound then, which we check first. *)
   else
-    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_3_" ".smt"
-    and aPolys = List.map (fun x -> (Poly.fromVar x, x)) a in
-      let absTerms = getAbsTerms ((t, "T")::aPolys)
-      and cond' = List.filter (fun c -> Utils.containsOne a (Pc.getVarsAtom c)) cond in
-        let maxTerms = getMaxTerms aPolys 0 in
-          output_string formulafile header;
-          output_var_string formulafile (Utils.remdup ((Poly.getVars t) @ (Pc.getVars cond')));
-          output_string formulafile (midder ^ "\n");
-          output_string formulafile (letifyAbsTerms absTerms);
-          output_string formulafile (letifyMaxTerms (List.rev maxTerms));
-          output_string formulafile (finalMax c (getMax maxTerms));
-          output_string formulafile "(and ";
-          conj_to_smt cond' formulafile;
-          output_string formulafile " ";
-          output_string formulafile (absIsGtrMax (getAbsForT absTerms) "?THEMAX");
-          output_string formulafile ")\n";
-          output_string formulafile (closes ((List.length absTerms) + 1));
-          output_string formulafile (closes ((List.length maxTerms) + 1));
-          output_string formulafile footer;
-          close_out formulafile;
-          match (smt_file_check_satisfiable thefilename) with
-            | Ynm.No -> true
-            | _ -> false
-and absIsGtrMax tabs max =
-  "(> ?" ^ tabs ^ " " ^ max ^ ")"
-and finalMax c varmax =
-  "(let (?THEMAX " ^ (getIte (Big_int.string_of_big_int c) varmax) ^ ")\n"
-and getMax maxTerms =
-  fst (List.hd maxTerms)
-and getMaxTerms aPolys i =
-  match aPolys with
-    | [] -> []
-    | [(_, x)] -> [("?MAX_" ^ (string_of_int i), "?" ^ x ^ "_abs")]
-    | (_, x)::rest -> let maxRest = getMaxTerms rest (i + 1) in
-                        ("?MAX_" ^ (string_of_int i), getIte ("?" ^ x ^ "_abs") (fst (List.hd maxRest)))::maxRest
-and getIte a b =
-  "(ite (> " ^ a ^ " " ^ b ^ ") " ^ a ^ " " ^ b ^ ")"
-and letifyMaxTerms maxTerms =
-  String.concat "" (List.map letifyMaxTerm maxTerms)
-and letifyMaxTerm (name, defn) =
-  "(let (" ^ name ^ " " ^ defn ^ ")\n"
+    (* We construct
+       (let (.T argument)
+        (let (.T_abs (ite (>= T. 0) .T (- .T)))
+         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1))) 
+          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2))) 
+           ...
+           (let (.VARK_abs (ite (>= VARK 0) VARK (- VARK))) 
+            (let (.MAX_0 0)
+             (let (.MAX_1 (ite (> .MAX_0 .VAR1_abs) .MAX_0 .VAR1_abs))
+              (let (.MAX_2 (ite (> .MAX_1 .VAR2_abs) .MAX_1 .VAR2_abs))
+              ...
+               (let (.MAX_K (ite (> .MAX_{K-1} .VARK_abs) .MAX_{K-1} .VARK_abs))
+                (let (.MAX (ite (> .MAX_K constBound) .MAX_K constBound))
+                 (and cond (> .T_abs .MAX))))))))))))
+       and check for UNSAT. If yes, then we have a max-bound.
+       We use "." as prefix because we do not allow variables from the input to start with ".".
+    *)
+    let maxVarName = ".MAX" in
+    let absArgumentVarName = getAbsVarName ".T" in
 
-let rec isMaxPlusConstantBound cond t c a =
-  if a = [] then
-    false
+    (* We build this from the inner part out, starting wit the actual check: *)
+    let checkFormula = AndA ((Pc.Gtr (Poly.fromVar absArgumentVarName, Poly.fromVar maxVarName)) :: cond) in
+
+    (* Now define the .MAX variable as max(.MAX_VALUES, constBound) *)
+    let checkFormula =
+      Let (maxVarName,
+           (Ite (Atom (Pc.Gtr (Poly.fromVar ".MAX_VALUES", Poly.fromConstant constBound)),
+                 AtomT (Poly.fromVar ".MAX_VALUES"),
+                 AtomT (Poly.fromConstant constBound))),
+           checkFormula) in
+
+    (* Compute the .MAX_VALUES variable: *)
+    let checkFormula = setToAbsMaxOf ".MAX_VALUES" inVars checkFormula in
+
+    (* Finally define the thing that we want to bound *)
+    let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
+
+    let vars = Utils.remdup ((Pc.getVars cond) @ (Poly.getVars argument) @ inVars) in
+    let filename = write_smt_file vars checkFormula in
+    match (smt_file_check_satisfiable filename) with
+    | Ynm.No -> true
+    | _ -> false
+
+(* Check if cond -> argument <= max { abs(v) | v \in inVars } + constSum *)
+let isMaxPlusConstantBound cond argument constSum inVars =
+  if inVars = [] then
+    false (* should be a constant bound then, which we check first. *)
   else
-    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_4_" ".smt"
-    and aPolys = List.map (fun x -> (Poly.fromVar x, x)) a in
-      let absTerms = getAbsTerms ((t, "T")::aPolys)
-      and cond' = List.filter (fun c -> Utils.containsOne a (Pc.getVarsAtom c)) cond in
-        let maxTerms = getMaxTerms aPolys 0 in
-          output_string formulafile header;
-          output_var_string formulafile (Utils.remdup ((Poly.getVars t) @ (Pc.getVars cond')));
-          output_string formulafile (midder ^ "\n");
-          output_string formulafile (letifyAbsTerms absTerms);
-          output_string formulafile (letifyMaxTerms (List.rev maxTerms));
-          output_string formulafile "(and ";
-          conj_to_smt cond' formulafile;
-          output_string formulafile " ";
-          output_string formulafile (absIsGtrMaxPlusConstant (getAbsForT absTerms) (getMax maxTerms) c);
-          output_string formulafile ")\n";
-          output_string formulafile (closes ((List.length absTerms) + 1));
-          output_string formulafile (closes (List.length maxTerms));
-          output_string formulafile footer;
-          close_out formulafile;
-          match (smt_file_check_satisfiable thefilename) with
-            | Ynm.No -> true
-            | _ -> false
+    (* We construct
+       (let (.T argument)
+        (let (.T_abs (ite (>= T. 0) .T (- .T)))
+         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1))) 
+          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2))) 
+           ...
+           (let (.VARK_abs (ite (>= VARK 0) VARK (- VARK))) 
+            (let (.MAX0 0)
+             (let (.MAX1 (ite (> .MAX0 .VAR1_abs) .MAX0 .VAR1_abs))
+              (let (.MAX2 (ite (> .MAX1 .VAR2_abs) .MAX1 .VAR2_abs))
+              ...
+               (let (.MAXK (ite (> .MAX{K-1} .VARK_abs) .MAX{K-1} .VARK_abs))
+                (and cond (> .T_abs (+ .MAXK constBound)))))))))))
+       and check for UNSAT. If yes, then we have a constant add-bound.
+    *)
+    let absArgumentVarName = getAbsVarName ".T" in
+    let maxVarName = ".MAX" in
 
-and absIsGtrMaxPlusConstant tabs max c =
-  "(> ?" ^ tabs ^ " (+ " ^ max ^ " " ^ (Big_int.string_of_big_int c) ^ "))"
+    (* We build this from the inner part out, starting wit the actual check: *)
+    let checkFormula = AndA (Pc.Gtr (Poly.fromVar absArgumentVarName, (Poly.add (Poly.fromVar maxVarName) (Poly.fromConstant constSum))) :: cond) in
 
-let rec isSumPlusConstantBound cond t c a =
-  if a = [] then
-    false
+    (* Compute the .MAX_VALUES variable: *)
+    let checkFormula = setToAbsMaxOf maxVarName inVars checkFormula in    
+
+    (* Define the absolute value of the thing that we want to bound *)
+    let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
+
+    let vars = Utils.remdup ((Pc.getVars cond) @ (Poly.getVars argument) @ inVars) in
+    let filename = write_smt_file vars checkFormula in
+    match (smt_file_check_satisfiable filename) with
+    | Ynm.No -> true
+    | _ -> false
+
+
+(* Check if cond -> argument <= sum { abs(v) | v \in inVars } + constSum *)
+let isSumPlusConstantBound cond argument constSum inVars =
+  if inVars = [] then
+    false (* Should be a constant bound then, which we check first. *)
   else
-    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_5_" ".smt"
-    and aPolys = List.map (fun x -> (Poly.fromVar x, x)) a in
-      let absTerms = getAbsTerms ((t, "T")::aPolys)
-      and cond' = List.filter (fun c -> Utils.containsOne a (Pc.getVarsAtom c)) cond in
-        let sumTerm = getSumTerm (List.tl absTerms) in
-          output_string formulafile header;
-          output_var_string formulafile (Utils.remdup ((Poly.getVars t) @ (Pc.getVars cond')));
-          output_string formulafile (midder ^ "\n");
-          output_string formulafile (letifyAbsTerms absTerms);
-          output_string formulafile (letifySumTerm sumTerm);
-          output_string formulafile "(and ";
-          conj_to_smt cond' formulafile;
-          output_string formulafile " ";
-          output_string formulafile (absIsGtrSumPlusConstant (getAbsForT absTerms) (getSum sumTerm) c);
-          output_string formulafile ")\n";
-          output_string formulafile (closes ((List.length absTerms) + 2));
-          output_string formulafile footer;
-          close_out formulafile;
-          match (smt_file_check_satisfiable thefilename) with
-            | Ynm.No -> true
-            | _ -> false
+    (* We construct
+       (let (.T argument)
+        (let (.T_abs (ite (>= T. 0) .T (- .T)))
+         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1))) 
+          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2))) 
+           ...
+           (let (.VARK_abs (ite (>= VARK 0) VARK (- VARK)))
+            (let (.SUM_abs (+ (+ ... (+ VAR1_abs VAR2_abs) VAR3_abs) ...))
+             (and cond (> argument (+ .SUM_abs constSum)))))))))
+       and check for UNSAT. If yes, then we have a sum-bound.
+    *)
+    let absArgumentVarName = getAbsVarName ".T" in
+    let sumVarName = ".SUM" in
 
-and absIsGtrSumPlusConstant tabs sum c =
-  "(> ?" ^ tabs ^ " (+ " ^ sum ^ " " ^ (Big_int.string_of_big_int c) ^ "))"
-and getSumTerm absTerms =
-  let sumterm = getTheSum absTerms in
-    ("?SUM", sumterm)
-and getTheSum absTerms =
-  match absTerms with
-    | [] -> "0"
-    | [(_, (x, _))] -> "?" ^ x ^ "_abs"
-    | _ -> "(+ " ^ (String.concat " " (List.map (fun (_, (x, _)) -> "?" ^ x ^ "_abs") absTerms)) ^ ")"
-and getSum (name, _) =
-  name
-and letifySumTerm (name, defn) =
-  "(let (" ^ name ^ " " ^ defn ^ ")\n"
+    (* We build this from the inner part out, starting wit the actual check: *)
+    let checkFormula = AndA (Pc.Gtr (Poly.fromVar absArgumentVarName, (Poly.add (Poly.fromVar sumVarName) (Poly.fromConstant constSum))) :: cond) in
 
-let rec isScaledSumPlusConstantBound cond t c s a =
-  if a = [] then
-    false
+    (* Compute the .SUM variable: *)
+    let checkFormula = setToAbsSumOf sumVarName inVars checkFormula in    
+
+    (* Define the absolute value of the thing that we want to bound *)
+    let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
+
+    let vars = Utils.remdup ((Pc.getVars cond) @ (Poly.getVars argument) @ inVars) in
+    let filename = write_smt_file vars checkFormula in
+    match (smt_file_check_satisfiable filename) with
+    | Ynm.No -> true
+    | _ -> false
+
+(* Check if cond -> argument <= (constScale * sum { abs(v) | v \in inVars } + constSum) *)
+let isScaledSumPlusConstantBound cond argument constSum constScale inVars =
+  if inVars = [] then
+    false (* Should be a constant bound then, which we check first. *)
   else
-    let (thefilename, formulafile) = Filename.open_temp_file "FORMULA_6_" ".smt"
-    and aPolys = List.map (fun x -> (Poly.fromVar x, x)) a in
-      let absTerms = getAbsTerms ((t, "T")::aPolys)
-      and cond' = List.filter (fun c -> Utils.containsOne a (Pc.getVarsAtom c)) cond in
-        let scaledSumTerm = getScaledSumTerm (List.tl absTerms) s in
-          output_string formulafile header;
-          output_var_string formulafile (Utils.remdup ((Poly.getVars t) @ (Pc.getVars cond')));
-          output_string formulafile (midder ^ "\n");
-          output_string formulafile (letifyAbsTerms absTerms);
-          output_string formulafile (letifyScaledSumTerm scaledSumTerm);
-          output_string formulafile "(and ";
-          conj_to_smt cond' formulafile;
-          output_string formulafile " ";
-          output_string formulafile (absIsGtrScaledSumPlusConstant (getAbsForT absTerms) (getScaledSum scaledSumTerm) c);
-          output_string formulafile ")\n";
-          output_string formulafile (closes ((List.length absTerms) + 2));
-          output_string formulafile footer;
-          close_out formulafile;
-          match (smt_file_check_satisfiable thefilename) with
-            | Ynm.No -> true
-            | _ -> false
-and absIsGtrScaledSumPlusConstant tabs sum c =
-  "(> ?" ^ tabs ^ " (+ " ^ sum ^ " " ^ (Big_int.string_of_big_int c) ^ "))"
-and getScaledSumTerm absTerms s =
-  let sumterm = getTheSum absTerms in
-    ("?SUM", "(* " ^ (Big_int.string_of_big_int s) ^ " " ^ sumterm ^ ")")
-and getScaledSum (name, _) =
-  name
-and letifyScaledSumTerm (name, defn) =
-  "(let (" ^ name ^ " " ^ defn ^ ")\n"
+    (* We construct
+       (let (.T argument)
+        (let (.T_abs (ite (>= T. 0) .T (- .T)))
+         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1))) 
+          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2))) 
+           ...
+           (let (.VARK_abs (ite (>= VARK 0) VARK (- VARK)))
+            (let (.SUM_abs (+ (+ ... (+ VAR1_abs VAR2_abs) VAR3_abs) ...))
+             (and cond (> argument ( * constScale (+ .SUM_abs constSum))))))))))
+       and check for UNSAT. If yes, then we have a sum-bound.
+    *)
+    let absArgumentVarName = getAbsVarName ".T" in
+    let sumVarName = ".SUM" in
+
+    (* We build this from the inner part out, starting wit the actual check: *)
+    let checkFormula = AndA (Pc.Gtr (Poly.fromVar absArgumentVarName, (Poly.constmult (Poly.add (Poly.fromVar sumVarName) (Poly.fromConstant constSum)) constScale)) :: cond) in
+
+    (* Compute the .SUM variable: *)
+    let checkFormula = setToAbsSumOf sumVarName inVars checkFormula in    
+
+    (* Define the absolute value of the thing that we want to bound *)
+    let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
+
+    let vars = Utils.remdup ((Pc.getVars cond) @ (Poly.getVars argument) @ inVars) in
+    let filename = write_smt_file vars checkFormula in
+    match (smt_file_check_satisfiable filename) with
+    | Ynm.No -> true
+    | _ -> false
