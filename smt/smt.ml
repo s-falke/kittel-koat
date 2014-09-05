@@ -454,8 +454,8 @@ let isSatisfiableFormula f vars =
     let filename = write_smt_file vars f in
     smt_file_check_satisfiable filename
 
-(* Get model for given formula *)
-let getModelForFormula f vars =
+(* Get model for given formula. If supported by the solver, tries to find a model that makes as many of the opt_conds true as possible. *)
+let getModelForFormulaOpt f vars opt_conds =
   match !smt_solver with
   | Z3_Internal ->
     (
@@ -466,17 +466,38 @@ let getModelForFormula f vars =
       Solver.set_parameters solver z3_params;
       let z3_formula = formula_to_z3 VarMap.empty f in
       Solver.add solver [z3_formula];
+      Solver.push solver;
       let res = Solver.check solver [] in
       smt_time := !smt_time +. (Unix.gettimeofday () -. start);
 
       match res with
       | SATISFIABLE ->
         (
+          (* Now try to get more things true. Simple one-pass optimization
+           * strategy, avoiding cardinality constraints in the solver.
+           * Might be interesting to play around with the Max-SMT/opt branch. *)
+          List.iter
+            (fun optCond ->
+              let start = Unix.gettimeofday() in
+              Solver.push solver;
+              Solver.add solver [formula_to_z3 VarMap.empty optCond];
+              (
+                match Solver.check solver [] with
+                | SATISFIABLE ->
+                  (* Got this one, leave it in. *)
+                  ();
+                | _ ->
+                  (* Well, worth a try. Remove this, try next one. *)
+                  Solver.pop solver 1;
+              );
+              smt_time := !smt_time +. (Unix.gettimeofday () -. start))
+            opt_conds;
+          ignore (Solver.check solver []); (* This will always come out as SAT *)
           match Solver.get_model solver with
           | Some model ->
             let consts = Model.get_const_decls model in
             Some (List.fold_left
-                    (fun assignment func_decl -> 
+                    (fun assignment func_decl ->
                       let name = Symbol.get_string (FuncDecl.get_name func_decl) in
                       let value = Utils.unboxOption (Model.get_const_interp model func_decl) in
                       let value_string = Str.replace_first neg_re "-\\1" (Expr.to_string value) in
@@ -497,8 +518,8 @@ let isSatisfiableFormula f vars =
   let filename = write_smt_file vars f in
   smt_file_check_satisfiable filename
 
-(* Get model for given formula *)
-let getModelForFormula f vars =
+(* Get model for given formula. If supported by the solver, tries to find a model that makes as many of the opt_conds true as possible. *)
+let getModelForFormulaOpt f vars _ =
   let filename = write_smt_file vars f in
   smt_file_get_model filename
 END
@@ -515,7 +536,7 @@ let isSatisfiableWithNegations f f's =
 
 (* Determines whether a list of atoms is conjunctively satisfiable and returns a model *)
 let getModel f =
-  getModelForFormula (AndA f) (Pc.getVars f)
+  getModelForFormulaOpt (AndA f) (Pc.getVars f) []
 
 (* Determines satisfiability for polynomial interpretations *)
 let isSatisfiablePolo polyconditions polystrict boundconditions extraconditions vars =
@@ -524,7 +545,7 @@ let isSatisfiablePolo polyconditions polystrict boundconditions extraconditions 
   let autoStrictFormula = (Or
     (List.map2 (fun pc bc -> And [onePolyCondForm pc; onePolyCondForm bc]) polystrict boundconditions)) in
   let formula = (And [polyCondFormula ; autoStrictFormula ; AndA extraconditions]) in
-  getModelForFormula formula vars
+  getModelForFormulaOpt formula vars []
 
 (* Determines satisfiability for Farkas-based polynomial interpretations *)
 let isSatisfiableFarkasPolo weakconds strictconds vars =
@@ -535,15 +556,17 @@ let isSatisfiableFarkasPolo weakconds strictconds vars =
           (Or (List.map (fun c -> AndA c) strictconds))
       in
   let formula = (And [ (AndA weakconds) ; farkasAutostrict ]) in
-  getModelForFormula formula vars
+  getModelForFormulaOpt formula vars (List.map (fun oneCond -> AndA oneCond) strictconds)
 
 (* Determines satisfiability for Farkas-based polynomial interpretations with minimal elements *)
 let isSatisfiableFarkasPoloMinimal minrestrictions minimplications weakconds weakminconds boundconds strictconds strictminconds vars =
-  let getFarkasMinimalAutostrict =
+  let (getFarkasMinimalAutostrict, optConds) =
     if strictconds = [] then
-      (Atom (Pc.Equ (Poly.zero, Poly.zero)))
+      ((Atom (Pc.Equ (Poly.zero, Poly.zero))), [])
     else
-      (Or (Utils.map3 (fun bound strict strictmin -> And [ (AndA bound) ; (Or [ (AndA strict) ; (AndA strictmin) ]) ]) boundconds strictconds strictminconds))
+      let boundedAndStrictConds =
+        (Utils.map3 (fun bound strict strictmin -> And [ (AndA bound) ; (Or [ (AndA strict) ; (AndA strictmin) ]) ]) boundconds strictconds strictminconds) in
+      ((Or boundedAndStrictConds), boundedAndStrictConds)
     in
   let formula =
     (And [ (AndA minrestrictions)
@@ -551,7 +574,7 @@ let isSatisfiableFarkasPoloMinimal minrestrictions minimplications weakconds wea
          ; (And (List.map2 (fun weak weakmin -> Or [ (AndA weak) ; (Atom weakmin) ]) weakconds weakminconds))
          ; getFarkasMinimalAutostrict ])
   in
-  getModelForFormula formula vars
+  getModelForFormulaOpt formula vars optConds
 
 (* Sizebound stuff. First the little helpers for absolute values and maximum computation, then the actual checks. *)
 
