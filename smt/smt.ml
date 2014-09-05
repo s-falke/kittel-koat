@@ -28,11 +28,11 @@ open Z3.Solver
 open Z3.Arithmetic
 open Z3.Arithmetic.Integer
 
-let z3_ctx = 
+let z3_ctx =
   let z3_cfg = [("model", "true"); ("proof", "false")] in
   ref (mk_context z3_cfg)
 
-let z3_params = 
+let z3_params =
   let params = Params.mk_params !z3_ctx in
   Params.add_bool params (Symbol.mk_string !z3_ctx "model_completion") true;
   params
@@ -123,7 +123,7 @@ let yices_assignment thefilename =
       get_yices_assignment icc (parse_yices_line (input_line_no_cr icc) assignment)
     with
       End_of_file -> assignment in
-  get_smt_assignment ("yices -smt -e " ^ thefilename) get_yices_assignment 
+  get_smt_assignment ("yices -smt -e " ^ thefilename) get_yices_assignment
 
 (* Executes z3 on a formula in a file and gives a satisfying assignment *)
 let z3_assignment thefilename =
@@ -192,7 +192,7 @@ let cvc4_assignment thefilename =
     with
       End_of_file -> assignment in
   get_smt_assignment ("cvc4 --produce-models --dump-models --lang=smt1 " ^ thefilename) get_cvc4_assignment
-    
+
 (* Executes yices2 on a formula in a file and gives a satisfying assignment *)
 let yices2_assignment thefilename =
   let rec get_yices2_assignment icc assignment =
@@ -235,7 +235,7 @@ let get_smt_model_provider () =
   | Mathsat -> mathsat_assignment
   | CVC4 -> cvc4_assignment
   | Yices2 -> yices2_assignment
-  | Z3_Internal -> assert(false)  (* Control flow should never end up here. *)  
+  | Z3_Internal -> assert(false)  (* Control flow should never end up here. *)
 ELSE
 let setSolver solver =
   match solver with
@@ -285,8 +285,8 @@ let poly_to_z3 varBindings (coeff_monomial_list, const) =
   let bi_to_z3 i =
     Integer.mk_numeral_s !z3_ctx (Big_int.string_of_big_int i) in
   let coeff_monomial_to_z3 (coeff, monomial) =
-    Arithmetic.mk_mul !z3_ctx 
-      ((bi_to_z3 coeff) 
+    Arithmetic.mk_mul !z3_ctx
+      ((bi_to_z3 coeff)
        :: (Utils.concatMap (fun (var, exp) -> Utils.getCopies (get_z3_var_binding varBindings var) exp) monomial)) in
   if coeff_monomial_list = [] then
     bi_to_z3 const
@@ -297,12 +297,12 @@ let atom_to_z3 varBindings atom =
   match atom with
   | Pc.Equ (p1, p2) ->
     let (z3p1, z3p2) = (poly_to_z3 varBindings p1, poly_to_z3 varBindings p2) in
-    Boolean.mk_and !z3_ctx 
+    Boolean.mk_and !z3_ctx
       [Arithmetic.mk_le !z3_ctx z3p1 z3p2
       ;Arithmetic.mk_le !z3_ctx z3p2 z3p1]
   | Pc.Neq (p1, p2) ->
     let (z3p1, z3p2) = (poly_to_z3 varBindings p1, poly_to_z3 varBindings p2) in
-    Boolean.mk_or !z3_ctx 
+    Boolean.mk_or !z3_ctx
       [Arithmetic.mk_gt !z3_ctx z3p1 z3p2
       ;Arithmetic.mk_gt !z3_ctx z3p2 z3p1]
   | Pc.Gtr (p1, p2) ->
@@ -460,7 +460,7 @@ let getModelForFormulaOpt f vars opt_conds =
   | Z3_Internal ->
     (
       let neg_re = Str.regexp "(- \\([0-9]+\\))" in
-      
+
       let start = Unix.gettimeofday() in
       let solver = Solver.mk_simple_solver !z3_ctx in
       Solver.set_parameters solver z3_params;
@@ -614,8 +614,8 @@ let setToAbsMaxOf maxVar vars innerFormula =
                  (fun (resFormula, idx) var ->
                    let previousMaxVar = maxVarNamePrefix ^ (string_of_int (idx - 1)) in
                    (Let (maxVarNamePrefix ^ (string_of_int idx),
-                         Ite (Atom (Pc.Gtr (Poly.fromVar previousMaxVar, Poly.fromVar (getAbsVarName var))), 
-                              AtomT (Poly.fromVar previousMaxVar), 
+                         Ite (Atom (Pc.Gtr (Poly.fromVar previousMaxVar, Poly.fromVar (getAbsVarName var))),
+                              AtomT (Poly.fromVar previousMaxVar),
                               AtomT (Poly.fromVar (getAbsVarName var))),
                          resFormula),
                     idx - 1))
@@ -634,13 +634,13 @@ let setToAbsSumOf sumVar vars innerFormula =
 
 (* Check if cond -> argument <= constBound *)
 let isConstantBound cond argument constBound =
-  (* We construct 
-     (let (.T argument) 
-      (let (.T_abs (ite (>= .T 0) .T (- .T))) 
+  (* We construct
+     (let (.T argument)
+      (let (.T_abs (ite (>= .T 0) .T (- .T)))
        (and cond (> ?T_abs constBound))))
      and then check if this is UNSAT.
      If yes, maxBound is a constant bound.
-     We use "." as prefix because we do not allow variables from the input to start with "." 
+     We use "." as prefix because we do not allow variables from the input to start with "."
    *)
   let absArgumentVarName = getAbsVarName ".T" in
 
@@ -660,10 +660,10 @@ let isMaxBound cond argument constBound inVars =
     (* We construct
        (let (.T argument)
         (let (.T_abs (ite (>= T. 0) .T (- .T)))
-         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1))) 
-          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2))) 
+         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1)))
+          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2)))
            ...
-           (let (.VARK_abs (ite (>= VARK 0) VARK (- VARK))) 
+           (let (.VARK_abs (ite (>= VARK 0) VARK (- VARK)))
             (let (.MAX_0 0)
              (let (.MAX_1 (ite (> .MAX_0 .VAR1_abs) .MAX_0 .VAR1_abs))
               (let (.MAX_2 (ite (> .MAX_1 .VAR2_abs) .MAX_1 .VAR2_abs))
@@ -707,10 +707,10 @@ let isMaxPlusConstantBound cond argument constSum inVars =
     (* We construct
        (let (.T argument)
         (let (.T_abs (ite (>= T. 0) .T (- .T)))
-         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1))) 
-          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2))) 
+         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1)))
+          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2)))
            ...
-           (let (.VARK_abs (ite (>= VARK 0) VARK (- VARK))) 
+           (let (.VARK_abs (ite (>= VARK 0) VARK (- VARK)))
             (let (.MAX0 0)
              (let (.MAX1 (ite (> .MAX0 .VAR1_abs) .MAX0 .VAR1_abs))
               (let (.MAX2 (ite (> .MAX1 .VAR2_abs) .MAX1 .VAR2_abs))
@@ -726,7 +726,7 @@ let isMaxPlusConstantBound cond argument constSum inVars =
     let checkFormula = AndA (Pc.Gtr (Poly.fromVar absArgumentVarName, (Poly.add (Poly.fromVar maxVarName) (Poly.fromConstant constSum))) :: cond) in
 
     (* Compute the .MAX_VALUES variable: *)
-    let checkFormula = setToAbsMaxOf maxVarName inVars checkFormula in    
+    let checkFormula = setToAbsMaxOf maxVarName inVars checkFormula in
 
     (* Define the absolute value of the thing that we want to bound *)
     let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
@@ -744,8 +744,8 @@ let isSumPlusConstantBound cond argument constSum inVars =
     (* We construct
        (let (.T argument)
         (let (.T_abs (ite (>= T. 0) .T (- .T)))
-         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1))) 
-          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2))) 
+         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1)))
+          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2)))
            ...
            (let (.VARK_abs (ite (>= VARK 0) VARK (- VARK)))
             (let (.SUM_abs (+ (+ ... (+ VAR1_abs VAR2_abs) VAR3_abs) ...))
@@ -759,7 +759,7 @@ let isSumPlusConstantBound cond argument constSum inVars =
     let checkFormula = AndA (Pc.Gtr (Poly.fromVar absArgumentVarName, (Poly.add (Poly.fromVar sumVarName) (Poly.fromConstant constSum))) :: cond) in
 
     (* Compute the .SUM variable: *)
-    let checkFormula = setToAbsSumOf sumVarName inVars checkFormula in    
+    let checkFormula = setToAbsSumOf sumVarName inVars checkFormula in
 
     (* Define the absolute value of the thing that we want to bound *)
     let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
@@ -777,8 +777,8 @@ let isScaledSumPlusConstantBound cond argument constSum constScale inVars =
     (* We construct
        (let (.T argument)
         (let (.T_abs (ite (>= T. 0) .T (- .T)))
-         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1))) 
-          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2))) 
+         (let (.VAR1_abs (ite (>= VAR1 0) VAR1 (- VAR1)))
+          (let (.VAR2_abs (ite (>= VAR2 0) VAR2 (- VAR2)))
            ...
            (let (.VARK_abs (ite (>= VARK 0) VARK (- VARK)))
             (let (.SUM_abs (+ (+ ... (+ VAR1_abs VAR2_abs) VAR3_abs) ...))
@@ -792,7 +792,7 @@ let isScaledSumPlusConstantBound cond argument constSum constScale inVars =
     let checkFormula = AndA (Pc.Gtr (Poly.fromVar absArgumentVarName, (Poly.constmult (Poly.add (Poly.fromVar sumVarName) (Poly.fromConstant constSum)) constScale)) :: cond) in
 
     (* Compute the .SUM variable: *)
-    let checkFormula = setToAbsSumOf sumVarName inVars checkFormula in    
+    let checkFormula = setToAbsSumOf sumVarName inVars checkFormula in
 
     (* Define the absolute value of the thing that we want to bound *)
     let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
