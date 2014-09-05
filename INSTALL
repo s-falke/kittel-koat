@@ -4,8 +4,25 @@ Requirements:
   OCamlgraph (reasonably recent version; I use version 1.8.3)
   One or more of the following SMT-solvers:
     yices, yices2, z3, cvc4, mathsat5
-  Optionally: APRON (if you don't have APRON, set "HAVE_APRON" to
-  "false" in the Makefile. This will disable invariant generation).
+  Optionally:
+   * APRON:
+      If you don't have APRON, set "HAVE_APRON" to "false" in the Makefile.
+      This will disable invariant generation.
+   * z3 ML bindings:
+      If you don't have z3, set "HAVE_Z3" to "false" in the Makefile.
+
+      To get z3 to work with kittel/koat directly, install the new ML
+      bindings. At this time (z3 stable version 4.3), they are only
+      available from the z3 source code repository on codeplex, in the
+      "ml-ng" branch.
+      To install them, check out this branch, configure z3 with
+      --ml (you will need ocamlfind, ocamlidl and some other libraries
+      as well, refer to the z3 documentation) and build as usual.
+      "make install" should then install the files into
+      /usr(/local)/lib/ocaml/$VERSION/, where VERSION corresponds to
+      your OCaml version.
+      You may need to add this path to the include path of your compiler,
+      cf. Makefile.
 
 Build instructions:
 -------------------

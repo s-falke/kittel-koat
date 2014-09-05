@@ -68,11 +68,16 @@ let stringToCombine s printer =
     exit 1
   )
 
+IFDEF HAVE_Z3 THEN
+let supportedSmtSolvers = ["yices";"yices2";"z3";"cvc4";"mathsat5";"z3-internal"]
+ELSE
+let supportedSmtSolvers = ["yices";"yices2";"z3";"cvc4";"mathsat5"]
+END
+
 let checkSmtSolver s printer =
-  let supportedSmtSolvers = ["yices";"yices2";"z3";"cvc4";"mathsat5"] in
-    if Utils.contains supportedSmtSolvers s then
-      s
-    else
+  if Utils.contains supportedSmtSolvers s then
+    s
+  else
     (
       Printf.printf "%s\n" (Sys.argv.(0) ^ ": unknown SMT solver `" ^ s ^ "'.");
       printer ();

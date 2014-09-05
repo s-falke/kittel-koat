@@ -76,13 +76,13 @@ let toString e =
     match e with
     | Pol p -> protect 1 force (Poly.toString p)
     | Sum (e1, e2) ->
-      protect 1 force (toString' 1 e1 ^ "+" ^ toString' 1 e2)
+      protect 1 force (toString' 1 e1 ^ " + " ^ toString' 1 e2)
     | Mul (e1, e2) when isConst e1 ->
-      protect 2 force ((Big_int.string_of_big_int (getConstant e1)) ^ "*" ^ toString' 2 e2)
+      protect 2 force ((Big_int.string_of_big_int (getConstant e1)) ^ " * " ^ toString' 2 e2)
     | Mul (e1, e2) when isConst e2 ->
-      protect 2 force ((Big_int.string_of_big_int (getConstant e2)) ^ "*" ^ toString' 2 e1)
+      protect 2 force ((Big_int.string_of_big_int (getConstant e2)) ^ " * " ^ toString' 2 e1)
     | Mul (e1, e2) ->
-      protect 2 force (toString' 2 e1 ^ "*" ^ toString' 2 e2)
+      protect 2 force (toString' 2 e1 ^ " * " ^ toString' 2 e2)
     | Exp (e1, e2) ->
       "pow(" ^ (toString' 0 e1) ^ ", " ^ (toString' 0 e2) ^ ")"
   in
