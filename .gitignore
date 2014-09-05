@@ -4,3 +4,4 @@ _build
 *.d.byte
 git_sha1.ml
 *.koat.proof*
+user.cfg

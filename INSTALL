@@ -5,12 +5,8 @@ Requirements:
   One or more of the following SMT-solvers:
     yices, yices2, z3, cvc4, mathsat5
   Optionally:
-   * APRON:
-      If you don't have APRON, set "HAVE_APRON" to "false" in the Makefile.
-      This will disable invariant generation.
+   * APRON
    * z3 ML bindings:
-      If you don't have z3, set "HAVE_Z3" to "false" in the Makefile.
-
       To get z3 to work with kittel/koat directly, install the new ML
       bindings. At this time (z3 stable version 4.3), they are only
       available from the z3 source code repository on codeplex, in the
@@ -23,6 +19,11 @@ Requirements:
       your OCaml version.
       You may need to add this path to the include path of your compiler,
       cf. Makefile.
+
+  Use of APRON and the z3 ML bindings can be disabled by creating a
+  file "user.cfg".  To disable use of APRON, add a line
+  "HAVE_APRON=false" to that file.  To disable use of the z3 ML
+  bindings, add a line "HAVE_Z3=false" to that file.
 
 Build instructions:
 -------------------

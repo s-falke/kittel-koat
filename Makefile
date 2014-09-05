@@ -1,5 +1,7 @@
-HAVE_APRON=true
-HAVE_Z3=true
+-include user.cfg
+
+HAVE_APRON?=true
+HAVE_Z3?=true
 
 LIBPATH_APRON=
 LIBS_APRON=
