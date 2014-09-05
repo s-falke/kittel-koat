@@ -19,6 +19,7 @@
 *)
 
 type var = string
+module VarMap = Map.Make(String)
 
 (* A monomial, i.e., a product of powers *)
 type monomial = (var * int) list
@@ -373,19 +374,12 @@ and evaluate_aux poly assignment accu =
 and evaluate_mono mon assignment =
   match mon with
     | [] -> Big_int.unit_big_int
-    | (x, p)::l -> Big_int.mult_big_int (power (myAssoc x assignment) p) (evaluate_mono l assignment)
+    | (x, p)::l -> Big_int.mult_big_int (power (VarMap.find x assignment) p) (evaluate_mono l assignment)
 and power x p =
   if p = 0 then
     Big_int.unit_big_int
   else
     Big_int.mult_big_int x (power x (p - 1))
-and myAssoc x assignment =
-  match assignment with
-    | [] -> raise Not_found
-    | (y, v)::rest  -> if x == y || x = y then
-                         v
-                       else
-                         myAssoc x rest
 
 (* Replace variable powers *)
 let rec replaceVarPower (poly, c) (x, i) q =

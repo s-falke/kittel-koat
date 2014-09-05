@@ -18,6 +18,8 @@
   limitations under the License.
 *)
 
+module VarMap = Poly.VarMap
+
 let count = ref 1
 
 type poly_map = string * Parapoly.parapoly
@@ -428,17 +430,9 @@ and fix_model model params =
   let missing = getMissing model params in
     extend_model model missing
 and extend_model model missing =
-  (get_dummies missing) @ model
-and get_dummies missing =
-  List.map (fun x -> (x, Big_int.zero_big_int)) missing
+  List.fold_left (fun model missing_var -> VarMap.add missing_var Big_int.zero_big_int model) model missing
 and getMissing model params =
-  List.flatten (List.map (check_missing_one model) params)
-and check_missing_one model name =
-  try
-    let _ = List.assoc name model in
-      []
-  with
-    | Not_found -> [name]
+  List.filter (fun v -> not(VarMap.mem v model)) params
 
 (* create concrete polo *)
 and get_concrete_poly abs model =

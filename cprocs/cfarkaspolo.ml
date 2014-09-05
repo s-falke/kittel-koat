@@ -23,6 +23,7 @@ module GSC = GlobalSizeComplexity.Make(Rule)
 module TGraph = Tgraph.Make(Rule)
 module CTRSObl = Ctrsobl.Make(Rule)
 module CTRS = CTRSObl.CTRS
+module VarMap = Poly.VarMap
 open CTRSObl
 open CTRS
 
@@ -207,7 +208,7 @@ and get_concrete_poly abs isMINs model =
                           (f, None)::(get_concrete_poly popo isMINs model)
 and isNonMIN isMINs model f =
   let isMINvar = getMINmarker isMINs f in
-    Poly.eq_big_int Big_int.zero_big_int (List.assoc isMINvar model)
+    Poly.eq_big_int Big_int.zero_big_int (VarMap.find isMINvar model)
 
 and forceCoeffForUnknownInputToZero ctrsobl tgraph globalSizeComplexities toOrient abs =
   let vars = CTRS.getVars ctrsobl.ctrs in

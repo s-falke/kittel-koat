@@ -42,7 +42,7 @@ ELSE
 type solver = Yices | Z3 | Mathsat | CVC4 | Yices2
 END
 
-module VarMap = Map.Make(String)
+module VarMap = Poly.VarMap
 
 type term =
 | AtomT of Poly.poly
@@ -100,7 +100,7 @@ let get_smt_assignment cmdline model_extractor =
       (
         smt_time := !smt_time +. (Unix.gettimeofday () -. start);
         if res = "sat" then
-          let model = model_extractor icc [] in
+          let model = model_extractor icc VarMap.empty in
             ignore (Unix.close_process_in icc);
             Some model
         else
@@ -110,105 +110,103 @@ let get_smt_assignment cmdline model_extractor =
         )
       )
 
-(* Executes yices on a formula in a file and gives a satisfying assignment *)
-let rec yices_assignment thefilename =
-  get_smt_assignment ("yices -smt -e " ^ thefilename) get_yices_model
-and get_yices_model icc acc =
-  try
-    get_yices_model icc ((parse_yices (input_line_no_cr icc))::acc)
-  with
-    End_of_file -> acc
-and parse_yices line =
-  let f x s = (x, Big_int.big_int_of_string (String.sub s 0 (String.length s - 1))) in
-    Scanf.sscanf line "(= %s %s" f
-
-(* Executes z3 on a formula in a file and gives a satisfying assignment *)
-let rec z3_assignment thefilename =
-   get_smt_assignment ("z3 -smt " ^ thefilename) get_z3_model
-and get_z3_model icc acc =
-  try
-    get_z3_model icc ((parse_z3 (input_line_no_cr icc))::acc)
-  with
-    End_of_file -> acc
-and parse_z3 line =
-  let (var_s, val_s) = split_z3 line
-  and f x s = (x, Big_int.big_int_of_string s) in
-    Scanf.sscanf (var_s ^ " " ^ val_s) "%s %s" f
-and split_z3 line =
-  let toks = Str.split (Str.regexp " ") line in
-    if (List.nth toks 1 = "->") then
-      if List.length toks = 3 then
-        (List.nth toks 0, List.nth toks 2)
-      else
-        (List.nth toks 0, "-" ^ (drop_last_char (List.nth toks 3)))
-    else
-      failwith "Cannot parse Z3's model"
-and drop_last_char s =
+let drop_last_char s =
   String.sub s 0 ((String.length s) - 1)
 
+(* Executes yices on a formula in a file and gives a satisfying assignment *)
+let yices_assignment thefilename =
+  let rec get_yices_assignment icc assignment =
+    let parse_yices_line line assignment =
+      let f x s = VarMap.add x (Big_int.big_int_of_string (String.sub s 0 (String.length s - 1))) assignment in
+      Scanf.sscanf line "(= %s %s" f in
+    try
+      get_yices_assignment icc (parse_yices_line (input_line_no_cr icc) assignment)
+    with
+      End_of_file -> assignment in
+  get_smt_assignment ("yices -smt -e " ^ thefilename) get_yices_assignment 
+
+(* Executes z3 on a formula in a file and gives a satisfying assignment *)
+let z3_assignment thefilename =
+  let rec get_z3_assignment icc assignment =
+    let parse_z3_line line assignment =
+      let split_z3_line line =
+        let toks = Str.split (Str.regexp " ") line in
+        if (List.nth toks 1 = "->") then
+          if List.length toks = 3 then
+            (List.nth toks 0, List.nth toks 2)
+          else
+            (List.nth toks 0, "-" ^ (drop_last_char (List.nth toks 3)))
+        else
+          failwith "Cannot parse Z3's model" in
+      let (var_s, val_s) = split_z3_line line in
+      VarMap.add var_s (Big_int.big_int_of_string val_s) assignment in
+    try
+      get_z3_assignment icc (parse_z3_line (input_line_no_cr icc) assignment)
+    with
+      End_of_file -> assignment in
+  get_smt_assignment ("z3 -smt " ^ thefilename) get_z3_assignment
+
 (* Executes mathsat on a formula in a file and gives a satisfying assignment *)
-let rec mathsat_assignment thefilename =
-  get_smt_assignment ("mathsat -input=smt -model < " ^ thefilename) get_mathsat_model
-and get_mathsat_model icc acc =
-  try
-    get_mathsat_model icc ((parse_mathsat (input_line_no_cr icc))::acc)
-  with
-    End_of_file -> acc
-and parse_mathsat line =
-  let (var_s, val_s) = split_mathsat line
-  and f x s = (x, Big_int.big_int_of_string s) in
-    Scanf.sscanf (var_s ^ " " ^ val_s ) "%s %s" f
-and split_mathsat line =
-  let toks = Str.split (Str.regexp " ") line in
-    if List.nth toks 0 = "(=" then
-      if List.length toks = 3 then
-        (List.nth toks 1, drop_last_char (List.nth toks 2))
-      else
-        (List.nth toks 1, "-" ^ (drop_last_char (drop_last_char (List.nth toks 3))))
-    else
-      failwith "Cannot parse MathSAT's model"
+let mathsat_assignment thefilename =
+  let rec get_mathsat_assignment icc assignment =
+    let parse_mathsat_line line assignment =
+      let split_mathsat_line line =
+        let toks = Str.split (Str.regexp " ") line in
+        if List.nth toks 0 = "(=" then
+          if List.length toks = 3 then
+            (List.nth toks 1, drop_last_char (List.nth toks 2))
+          else
+            (List.nth toks 1, "-" ^ (drop_last_char (drop_last_char (List.nth toks 3))))
+        else
+          failwith "Cannot parse MathSAT's model" in
+      let (var_s, val_s) = split_mathsat_line line in
+      VarMap.add var_s (Big_int.big_int_of_string val_s) assignment in
+    try
+      get_mathsat_assignment icc (parse_mathsat_line (input_line_no_cr icc) assignment)
+    with
+      End_of_file -> assignment in
+  get_smt_assignment ("mathsat -input=smt -model < " ^ thefilename) get_mathsat_assignment
 
 (* Executes cvc4 on a formula in a file and gives a satisfying assignment *)
-let rec cvc4_assignment thefilename =
-  get_smt_assignment ("cvc4 --produce-models --dump-models --lang=smt1 " ^ thefilename) get_cvc4_model
-and get_cvc4_model icc acc =
-  try
-    get_cvc4_model icc ((parse_cvc4 (input_line_no_cr icc))::acc)
-  with
-    End_of_file -> List.filter (fun (x, _) -> x <> "") acc
-and parse_cvc4 line =
-  if line = "(model" || line = ")" then
-    ("", Big_int.zero_big_int)
-  else
-    let (var_s, val_s) = split_cvc4 line
-    and f x s = (x, Big_int.big_int_of_string s) in
-      Scanf.sscanf (var_s ^ " -> " ^ val_s) "%s -> %s" f
-and split_cvc4 line =
-  let toks = Str.split (Str.regexp " ") line in
-    try
-      if List.length toks = 5 then
-        (List.nth toks 1, drop_last_char (List.nth toks 4))
-      else if (List.nth toks 4) = "(-" then
-        (List.nth toks 1, "-" ^ (drop_last_char (drop_last_char (List.nth toks 5))))
+let cvc4_assignment thefilename =
+  let rec get_cvc4_assignment icc assignment =
+    let parse_cvc4_line line assignment =
+      let split_cvc4_line line =
+        let toks = Str.split (Str.regexp " ") line in
+        try
+          if List.length toks = 5 then
+            (List.nth toks 1, drop_last_char (List.nth toks 4))
+          else if (List.nth toks 4) = "(-" then
+            (List.nth toks 1, "-" ^ (drop_last_char (drop_last_char (List.nth toks 5))))
+          else
+            raise Not_found
+        with
+        | _ -> failwith "Cannot parse CVC4's model" in
+      if line = "(model" || line = ")" then
+        assignment
       else
-        raise Not_found
+        let (var_s, val_s) = split_cvc4_line line in
+        VarMap.add var_s (Big_int.big_int_of_string val_s) assignment in
+    try
+      get_cvc4_assignment icc (parse_cvc4_line (input_line_no_cr icc) assignment)
     with
-      | _ -> failwith "Cannot parse CVC4's model"
-
+      End_of_file -> assignment in
+  get_smt_assignment ("cvc4 --produce-models --dump-models --lang=smt1 " ^ thefilename) get_cvc4_assignment
+    
 (* Executes yices2 on a formula in a file and gives a satisfying assignment *)
-let rec yices2_assignment thefilename =
-  get_smt_assignment ("yices-smt -m " ^ thefilename) get_yices2_model
-and get_yices2_model icc acc =
-  try
-    get_yices2_model icc ((parse_yices2 (input_line_no_cr icc))::acc)
-  with
-    End_of_file -> List.filter (fun (x, _) -> x <> "") acc
-and parse_yices2 line =
-  if line = "" then
-    ("", Big_int.zero_big_int)
-  else
-    let f x s = (x, Big_int.big_int_of_string (String.sub s 0 (String.length s - 1))) in
-      Scanf.sscanf line "(= %s %s" f
+let yices2_assignment thefilename =
+  let rec get_yices2_assignment icc assignment =
+    let parse_yices2_line line assignment =
+      if line = "" then
+        assignment
+      else
+        let f x s = VarMap.add x (Big_int.big_int_of_string (String.sub s 0 (String.length s - 1))) assignment in
+        Scanf.sscanf line "(= %s %s" f in
+    try
+      get_yices2_assignment icc (parse_yices2_line (input_line_no_cr icc) assignment)
+    with
+      End_of_file -> assignment in
+  get_smt_assignment ("yices-smt -m " ^ thefilename) get_yices2_assignment
 
 IFDEF HAVE_Z3 THEN
 let setSolver solver =
@@ -477,12 +475,13 @@ let getModelForFormula f vars =
           match Solver.get_model solver with
           | Some model ->
             let consts = Model.get_const_decls model in
-            Some (List.map 
-                    (fun func_decl -> 
+            Some (List.fold_left
+                    (fun assignment func_decl -> 
                       let name = Symbol.get_string (FuncDecl.get_name func_decl) in
                       let value = Utils.unboxOption (Model.get_const_interp model func_decl) in
                       let value_string = Str.replace_first neg_re "-\\1" (Expr.to_string value) in
-                      (name, Big_int.big_int_of_string value_string))
+                      VarMap.add name (Big_int.big_int_of_string value_string) assignment)
+                    VarMap.empty
                     consts)
           | _ -> assert (false) (* SAT but no model! Oh noes! *)
         )
