@@ -18,7 +18,31 @@
   limitations under the License.
 *)
 
+IFDEF HAVE_Z3 THEN
+open Z3
+open Z3.Symbol
+open Z3.Sort
+open Z3.Expr
+open Z3.Boolean
+open Z3.Solver
+open Z3.Arithmetic
+open Z3.Arithmetic.Integer
+
+let z3_ctx = 
+  let z3_cfg = [("model", "true"); ("proof", "false")] in
+  ref (mk_context z3_cfg)
+
+let z3_params = 
+  let params = Params.mk_params !z3_ctx in
+  Params.add_bool params (Symbol.mk_string !z3_ctx "model_completion") true;
+  params
+
+type solver = Yices | Z3 | Mathsat | CVC4 | Yices2 | Z3_Internal
+ELSE
 type solver = Yices | Z3 | Mathsat | CVC4 | Yices2
+END
+
+module VarMap = Map.Make(String)
 
 type term =
 | AtomT of Poly.poly
@@ -45,15 +69,6 @@ let input_line_no_cr ic =
         String.sub str 0 (len - 1)
       else
         str
-
-let setSolver solver =
-  match solver with
-    | "yices" -> smt_solver := Yices
-    | "z3" -> smt_solver := Z3
-    | "mathsat5" -> smt_solver := Mathsat
-    | "cvc4" -> smt_solver := CVC4
-    | "yices2" -> smt_solver := Yices2
-    | _ -> failwith ("Unsupported SMT solver: " ^ solver)
 
 let get_res_of_cmd cmdline =
   let icc = Unix.open_process_in cmdline in
@@ -195,13 +210,63 @@ and parse_yices2 line =
     let f x s = (x, Big_int.big_int_of_string (String.sub s 0 (String.length s - 1))) in
       Scanf.sscanf line "(= %s %s" f
 
-let model thefilename =
+IFDEF HAVE_Z3 THEN
+let setSolver solver =
+  match solver with
+  | "yices" -> smt_solver := Yices
+  | "z3" -> smt_solver := Z3
+  | "mathsat5" -> smt_solver := Mathsat
+  | "cvc4" -> smt_solver := CVC4
+  | "yices2" -> smt_solver := Yices2
+  | "z3-internal" -> smt_solver := Z3_Internal
+  | _ -> failwith ("Unsupported SMT solver: " ^ solver)
+
+let get_smt_file_checker () =
   match !smt_solver with
-    | Yices -> yices_assignment thefilename
-    | Z3 -> z3_assignment thefilename
-    | Mathsat -> mathsat_assignment thefilename
-    | CVC4 -> cvc4_assignment thefilename
-    | Yices2 -> yices2_assignment thefilename
+  | Yices -> yices
+  | Z3 -> z3
+  | Mathsat -> mathsat
+  | CVC4 -> cvc4
+  | Yices2 -> yices2
+  | Z3_Internal -> assert(false) (* Control flow should never end up here. *)
+
+let get_smt_model_provider () =
+  match !smt_solver with
+  | Yices -> yices_assignment
+  | Z3 -> z3_assignment
+  | Mathsat -> mathsat_assignment
+  | CVC4 -> cvc4_assignment
+  | Yices2 -> yices2_assignment
+  | Z3_Internal -> assert(false)  (* Control flow should never end up here. *)  
+ELSE
+let setSolver solver =
+  match solver with
+  | "yices" -> smt_solver := Yices
+  | "z3" -> smt_solver := Z3
+  | "mathsat5" -> smt_solver := Mathsat
+  | "cvc4" -> smt_solver := CVC4
+  | "yices2" -> smt_solver := Yices2
+  | _ -> failwith ("Unsupported SMT solver: " ^ solver)
+
+let get_smt_file_checker () =
+  match !smt_solver with
+  | Yices -> yices
+  | Z3 -> z3
+  | Mathsat -> mathsat
+  | CVC4 -> cvc4
+  | Yices2 -> yices2
+
+let get_smt_model_provider () =
+  match !smt_solver with
+  | Yices -> yices_assignment
+  | Z3 -> z3_assignment
+  | Mathsat -> mathsat_assignment
+  | CVC4 -> cvc4_assignment
+  | Yices2 -> yices2_assignment
+END
+
+let model thefilename =
+  (get_smt_model_provider ()) thefilename
 
 let output_var_string formulafile vs =
   match vs with
@@ -209,6 +274,73 @@ let output_var_string formulafile vs =
     | _ -> output_string formulafile "  :extrafuns (";
            List.iter (fun v -> output_string formulafile ("(" ^ v ^ " Int) ")) vs;
            output_string formulafile ")\n"
+
+IFDEF HAVE_Z3 THEN
+(* Z3 export of our little formulas. *)
+let get_z3_var_binding varBindings var =
+  if VarMap.mem var varBindings then
+    VarMap.find var varBindings
+  else
+    Integer.mk_const_s !z3_ctx var
+
+let poly_to_z3 varBindings (coeff_monomial_list, const) =
+  let bi_to_z3 i =
+    Integer.mk_numeral_s !z3_ctx (Big_int.string_of_big_int i) in
+  let coeff_monomial_to_z3 (coeff, monomial) =
+    Arithmetic.mk_mul !z3_ctx 
+      ((bi_to_z3 coeff) 
+       :: (Utils.concatMap (fun (var, exp) -> Utils.getCopies (get_z3_var_binding varBindings var) exp) monomial)) in
+  if coeff_monomial_list = [] then
+    bi_to_z3 const
+  else
+    Arithmetic.mk_add !z3_ctx ((bi_to_z3 const) :: (List.map coeff_monomial_to_z3 coeff_monomial_list))
+
+let atom_to_z3 varBindings atom =
+  match atom with
+  | Pc.Equ (p1, p2) ->
+    let (z3p1, z3p2) = (poly_to_z3 varBindings p1, poly_to_z3 varBindings p2) in
+    Boolean.mk_and !z3_ctx 
+      [Arithmetic.mk_le !z3_ctx z3p1 z3p2
+      ;Arithmetic.mk_le !z3_ctx z3p2 z3p1]
+  | Pc.Neq (p1, p2) ->
+    let (z3p1, z3p2) = (poly_to_z3 varBindings p1, poly_to_z3 varBindings p2) in
+    Boolean.mk_or !z3_ctx 
+      [Arithmetic.mk_gt !z3_ctx z3p1 z3p2
+      ;Arithmetic.mk_gt !z3_ctx z3p2 z3p1]
+  | Pc.Gtr (p1, p2) ->
+    Arithmetic.mk_gt !z3_ctx (poly_to_z3 varBindings p1) (poly_to_z3 varBindings p2)
+  | Pc.Geq (p1, p2) ->
+    Arithmetic.mk_ge !z3_ctx (poly_to_z3 varBindings p1) (poly_to_z3 varBindings p2)
+  | Pc.Lss (p1, p2) ->
+    Arithmetic.mk_lt !z3_ctx (poly_to_z3 varBindings p1) (poly_to_z3 varBindings p2)
+  | Pc.Leq (p1, p2) ->
+    Arithmetic.mk_le !z3_ctx (poly_to_z3 varBindings p1) (poly_to_z3 varBindings p2)
+
+let rec term_to_z3 varBindings term =
+  match term with
+  | AtomT atom ->
+    poly_to_z3 varBindings atom
+  | Ite (condFormula, thenTerm, elseTerm) ->
+    Boolean.mk_ite !z3_ctx (formula_to_z3 varBindings condFormula) (term_to_z3 varBindings thenTerm) (term_to_z3 varBindings elseTerm)
+and formula_to_z3 varBindings formula =
+  match formula with
+  | And fs ->
+    Boolean.mk_and !z3_ctx (List.map (formula_to_z3 varBindings) fs)
+  | AndA fs ->
+    Boolean.mk_and !z3_ctx (List.map (atom_to_z3 varBindings) fs)
+  | Or fs ->
+    Boolean.mk_or !z3_ctx (List.map (formula_to_z3 varBindings) fs)
+  | Not f ->
+    Boolean.mk_not !z3_ctx (formula_to_z3 varBindings f)
+  | Atom a ->
+    atom_to_z3 varBindings a
+  | Let (var, term, formula) ->
+    (* There is no let in the z3 API. Instead, we have our little varBindings
+       map which we use to retrieve old expressions and allow hash consing on
+       the other side of the API call. *)
+    let varBindings = VarMap.add var (term_to_z3 varBindings term) varBindings in
+    formula_to_z3 varBindings formula
+END
 
 let rec formula_to_smt_file file formula =
   match formula with
@@ -262,16 +394,9 @@ let write_smt_file vars formula =
   close_out formulafile;
   thefilename
 
-
 let smt_file_check_satisfiable filename =
-    let solver =
-        match !smt_solver with
-            | Yices -> yices
-            | Z3 -> z3
-            | Mathsat -> mathsat
-            | CVC4 -> cvc4
-            | Yices2 -> yices2
-        in
+    let solver = get_smt_file_checker () in
+
     if docleanup then
     (
       at_exit (fun () -> if Sys.file_exists filename then Sys.remove filename);
@@ -284,14 +409,7 @@ let smt_file_check_satisfiable filename =
       res
 
 let smt_file_get_model filename =
-    let solver =
-        match !smt_solver with
-            | Yices -> yices_assignment
-            | Z3 -> z3_assignment
-            | Mathsat -> mathsat_assignment
-            | CVC4 -> cvc4_assignment
-            | Yices2 -> yices2_assignment
-        in
+  let solver = get_smt_model_provider () in
     if docleanup then
     (
       at_exit (fun () -> if Sys.file_exists filename then Sys.remove filename);
@@ -316,22 +434,89 @@ let conj_to_smt f formulafile =
               output_string formulafile "\n)"
             )
 
+IFDEF HAVE_Z3 THEN
+(* Check if a given formula is satisfiable. *)
+let isSatisfiableFormula f vars =
+  match !smt_solver with
+  | Z3_Internal ->
+    (
+      let start = Unix.gettimeofday() in
+      let solver = Solver.mk_simple_solver !z3_ctx in
+      let z3_formula = formula_to_z3 VarMap.empty f in
+      Solver.add solver [z3_formula];
+      let res = Solver.check solver [] in
+      smt_time := !smt_time +. (Unix.gettimeofday () -. start);
+
+      match res with
+      | SATISFIABLE -> Ynm.Yes
+      | UNSATISFIABLE -> Ynm.No
+      | _ -> Ynm.Maybe
+    )
+  | _ ->
+    let filename = write_smt_file vars f in
+    smt_file_check_satisfiable filename
+
+(* Get model for given formula *)
+let getModelForFormula f vars =
+  match !smt_solver with
+  | Z3_Internal ->
+    (
+      let neg_re = Str.regexp "(- \\([0-9]+\\))" in
+      
+      let start = Unix.gettimeofday() in
+      let solver = Solver.mk_simple_solver !z3_ctx in
+      Solver.set_parameters solver z3_params;
+      let z3_formula = formula_to_z3 VarMap.empty f in
+      Solver.add solver [z3_formula];
+      let res = Solver.check solver [] in
+      smt_time := !smt_time +. (Unix.gettimeofday () -. start);
+
+      match res with
+      | SATISFIABLE ->
+        (
+          match Solver.get_model solver with
+          | Some model ->
+            let consts = Model.get_const_decls model in
+            Some (List.map 
+                    (fun func_decl -> 
+                      let name = Symbol.get_string (FuncDecl.get_name func_decl) in
+                      let value = Utils.unboxOption (Model.get_const_interp model func_decl) in
+                      let value_string = Str.replace_first neg_re "-\\1" (Expr.to_string value) in
+                      (name, Big_int.big_int_of_string value_string))
+                    consts)
+          | _ -> assert (false) (* SAT but no model! Oh noes! *)
+        )
+      | UNSATISFIABLE -> None
+      | _ -> None
+    )
+  | _ ->
+    let filename = write_smt_file vars f in
+    smt_file_get_model filename
+ELSE
+(* Check if a given formula is satisfiable. *)
+let isSatisfiableFormula f vars =
+  let filename = write_smt_file vars f in
+  smt_file_check_satisfiable filename
+
+(* Get model for given formula *)
+let getModelForFormula f vars =
+  let filename = write_smt_file vars f in
+  smt_file_get_model filename
+END
+
 (* Determines whether a list of atoms is conjunctively satisfiable *)
 let isSatisfiable f =
-  let filename = write_smt_file (Pc.getVars f) (AndA f) in
-  smt_file_check_satisfiable filename
+  isSatisfiableFormula (AndA f) (Pc.getVars f)
 
 (* Determines whether f conjuncted with the negations of f's is conjunctively satisfiable *)
 let isSatisfiableWithNegations f f's =
   let vars = Utils.remdup ((Pc.getVars f) @ (List.flatten (List.map Pc.getVars f's))) in
   let formula = And ((AndA f)::(List.map (fun atoms -> Not (AndA atoms)) f's)) in
-  let filename = write_smt_file vars formula in
-  smt_file_check_satisfiable filename
+  isSatisfiableFormula formula vars
 
 (* Determines whether a list of atoms is conjunctively satisfiable and returns a model *)
 let getModel f =
-  let filename = write_smt_file (Pc.getVars f) (AndA f) in
-  smt_file_get_model filename
+  getModelForFormula (AndA f) (Pc.getVars f)
 
 (* Determines satisfiability for polynomial interpretations *)
 let isSatisfiablePolo polyconditions polystrict boundconditions extraconditions vars =
@@ -340,8 +525,7 @@ let isSatisfiablePolo polyconditions polystrict boundconditions extraconditions 
   let autoStrictFormula = (Or
     (List.map2 (fun pc bc -> And [onePolyCondForm pc; onePolyCondForm bc]) polystrict boundconditions)) in
   let formula = (And [polyCondFormula ; autoStrictFormula ; AndA extraconditions]) in
-  let filename = write_smt_file vars formula in
-  smt_file_get_model filename
+  getModelForFormula formula vars
 
 (* Determines satisfiability for Farkas-based polynomial interpretations *)
 let isSatisfiableFarkasPolo weakconds strictconds vars =
@@ -352,8 +536,7 @@ let isSatisfiableFarkasPolo weakconds strictconds vars =
           (Or (List.map (fun c -> AndA c) strictconds))
       in
   let formula = (And [ (AndA weakconds) ; farkasAutostrict ]) in
-  let filename = write_smt_file vars formula in
-  smt_file_get_model filename
+  getModelForFormula formula vars
 
 (* Determines satisfiability for Farkas-based polynomial interpretations with minimal elements *)
 let isSatisfiableFarkasPoloMinimal minrestrictions minimplications weakconds weakminconds boundconds strictconds strictminconds vars =
@@ -368,10 +551,8 @@ let isSatisfiableFarkasPoloMinimal minrestrictions minimplications weakconds wea
          ; (And (List.map (function (notMin, paramsZero) -> Or [ (Atom notMin) ; (AndA paramsZero) ]) minimplications))
          ; (And (List.map2 (fun weak weakmin -> Or [ (AndA weak) ; (Atom weakmin) ]) weakconds weakminconds))
          ; getFarkasMinimalAutostrict ])
-    in
-  let filename = write_smt_file vars formula in
-  smt_file_get_model filename
-
+  in
+  getModelForFormula formula vars
 
 (* Sizebound stuff. First the little helpers for absolute values and maximum computation, then the actual checks. *)
 
@@ -445,8 +626,7 @@ let isConstantBound cond argument constBound =
   let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
   let vars = Utils.remdup ((Pc.getVars cond) @ (Poly.getVars argument)) in
 
-  let filename = write_smt_file vars checkFormula in
-  match (smt_file_check_satisfiable filename) with
+  match isSatisfiableFormula checkFormula vars with
   | Ynm.No -> true
   | _ -> false
 
@@ -493,8 +673,7 @@ let isMaxBound cond argument constBound inVars =
     let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
 
     let vars = Utils.remdup ((Pc.getVars cond) @ (Poly.getVars argument) @ inVars) in
-    let filename = write_smt_file vars checkFormula in
-    match (smt_file_check_satisfiable filename) with
+    match isSatisfiableFormula checkFormula vars with
     | Ynm.No -> true
     | _ -> false
 
@@ -531,11 +710,9 @@ let isMaxPlusConstantBound cond argument constSum inVars =
     let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
 
     let vars = Utils.remdup ((Pc.getVars cond) @ (Poly.getVars argument) @ inVars) in
-    let filename = write_smt_file vars checkFormula in
-    match (smt_file_check_satisfiable filename) with
+    match isSatisfiableFormula checkFormula vars with
     | Ynm.No -> true
     | _ -> false
-
 
 (* Check if cond -> argument <= sum { abs(v) | v \in inVars } + constSum *)
 let isSumPlusConstantBound cond argument constSum inVars =
@@ -566,8 +743,7 @@ let isSumPlusConstantBound cond argument constSum inVars =
     let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
 
     let vars = Utils.remdup ((Pc.getVars cond) @ (Poly.getVars argument) @ inVars) in
-    let filename = write_smt_file vars checkFormula in
-    match (smt_file_check_satisfiable filename) with
+    match isSatisfiableFormula checkFormula vars with
     | Ynm.No -> true
     | _ -> false
 
@@ -600,7 +776,6 @@ let isScaledSumPlusConstantBound cond argument constSum constScale inVars =
     let checkFormula = setToAbsValue absArgumentVarName argument checkFormula in
 
     let vars = Utils.remdup ((Pc.getVars cond) @ (Poly.getVars argument) @ inVars) in
-    let filename = write_smt_file vars checkFormula in
-    match (smt_file_check_satisfiable filename) with
+    match isSatisfiableFormula checkFormula vars with
     | Ynm.No -> true
     | _ -> false
