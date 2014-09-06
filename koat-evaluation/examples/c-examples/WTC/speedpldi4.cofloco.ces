@@ -12,9 +12,3 @@ eq(evalspeedpldi4bb3in(A,B,C,D),1,[evalspeedpldi4bb5in(A,B-1,C,D)],[]).
 eq(evalspeedpldi4bb4in(A,B,C,D),1,[evalspeedpldi4bb5in(A,B-A,C,D)],[]).
 eq(loop_exit_evalspeedpldi4bb5in(A,B,C,D),0,[],[A=C,B=D]).
 eq(evalspeedpldi4stop(A,B),0,[],[]).
-eq(evalspeedpldi4bb5in(A,B),1,[evalspeedpldi4bb2in(A,B)],[B>=1]).
-eq(evalspeedpldi4bb2in(A,B),1,[evalspeedpldi4bb3in(A,B)],[A>=B+1]).
-eq(evalspeedpldi4bb2in(A,B),1,[evalspeedpldi4bb4in(A,B)],[B>=A]).
-eq(evalspeedpldi4bb3in(A,B),1,[evalspeedpldi4bb5in(A,B-1)],[]).
-eq(evalspeedpldi4bb4in(A,B),1,[evalspeedpldi4bb5in(A,B-A)],[]).
-eq(evalspeedpldi4bb5in(A,B),1,[loop_exit_evalspeedpldi4bb5in(A,B)],[0>=B]).

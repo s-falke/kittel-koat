@@ -12,5 +12,3 @@ eq(loop_exit_f6(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1,D1,
 eq(loop_exit_f14(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T),0,[],[]).
 eq(loop_exit_f57(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T),0,[],[]).
 eq(f101(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T),0,[],[]).
-eq(f6(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T),1,[f6(U,B+1,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T)],[63>=B]).
-eq(f6(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T),1,[loop_exit_f6(A,B,7,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T)],[B>=64]).

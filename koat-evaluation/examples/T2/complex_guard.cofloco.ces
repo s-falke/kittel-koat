@@ -9,8 +9,3 @@ eq(f5(A,B),1,[f4(A+1,B)],[2>=A]).
 eq(f5(A,B),1,[loop_exit_f4(A,B)],[A>=3]).
 eq(loop_exit_f4(A,B),0,[],[A=B]).
 eq(f14(A),0,[],[]).
-eq(f4(A),1,[f5(A)],[0>=B+1]).
-eq(f4(A),1,[f5(A)],[]).
-eq(f5(A),1,[f4(A+1)],[2>=A]).
-eq(f5(A),1,[loop_exit_f4(A)],[A>=3]).
-eq(f4(A),1,[loop_exit_f4(A)],[]).

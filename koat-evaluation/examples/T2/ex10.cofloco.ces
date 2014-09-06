@@ -8,7 +8,3 @@ eq(f12(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),1,[loop_exit_f12(0,B,C,0,0,F
 eq(f20(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),1,[f12(A-1,B,C,D,E,0,0,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V)],[]).
 eq(loop_exit_f12(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),0,[],[A=L,B=M,C=N,D=O,E=P,F=Q,G=R,H=S,I=T,J=U,K=V]).
 eq(f5(A,B,C,D,E,F,G,H,I,J,K),0,[],[]).
-eq(f12(A,B,C,D,E,F,G,H,I,J,K),1,[f20(A,L,L,D,E,F,G,H,I,J,K)],[0>=A+1]).
-eq(f12(A,B,C,D,E,F,G,H,I,J,K),1,[f20(A,L,L,D,E,F,G,H,I,J,K)],[A>=1]).
-eq(f20(A,B,C,D,E,F,G,H,I,J,K),1,[f12(A-1,B,C,D,E,0,0,H,I,J,K)],[]).
-eq(f12(A,B,C,D,E,F,G,H,I,J,K),1,[loop_exit_f12(0,B,C,0,0,F,G,L,L,0,0)],[A=0]).

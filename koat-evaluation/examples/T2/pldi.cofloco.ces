@@ -10,10 +10,3 @@ eq(loop_cont_f7(A,B,C,D,E,F,G,H),0,[f4(A,B,C,D,E,F,G,H)],[]).
 eq(loop_exit_f7(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(loop_exit_f4(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(f19(A,B,C,D),0,[],[]).
-eq(f7(A,B,C,D),1,[f7(A,B,C+1,0)],[B>=C+1]).
-eq(f7(A,B,C,D),1,[f7(A,B-1,C,E)],[B>=C+1,0>=E+1]).
-eq(f7(A,B,C,D),1,[f7(A,B-1,C,E)],[B>=C+1,E>=1]).
-eq(f4(A,B,C,D),1,[f7(A,B,A+1,D,E,F,G,H),loop_cont_f7(E,F,G,H)],[B>=A+1]).
-eq(f7(A,B,C,D),1,[loop_exit_f7(A+1,B,C,D)],[C>=B]).
-eq(loop_cont_f7(A,B,C,D),0,[f4(A,B,C,D)],[]).
-eq(f4(A,B,C,D),1,[loop_exit_f4(A,B,C,D)],[A>=B]).

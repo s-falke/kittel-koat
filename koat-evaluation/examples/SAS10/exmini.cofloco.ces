@@ -8,6 +8,3 @@ eq(lbl71(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P),1,[loop_exit_lbl71(A,B,C,D,E,F,G,H,I,J
 eq(lbl71(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P),1,[loop_exit_lbl71(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P)],[B>=D,E>=1+D,100>=A,E>=G,2*D+2+B>=A+G+E,100>=B,F=B+1,H+B+1+D=A+G+E]).
 eq(loop_exit_lbl71(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P),0,[],[A=I,B=J,C=K,D=L,E=M,F=N,G=O,H=P]).
 eq(stop(A,B,C,D,E,F,G,H),0,[],[]).
-eq(lbl71(A,B,C,D,E,F,G,H),1,[lbl71(A,H,C,D-1,E,1+H,G,F)],[D>=B+1,101+B+D>=A+G+E,E>=1+D,100>=A,E>=G,2*D+2+B>=A+G+E,100>=B,F=B+1,H+B+1+D=A+G+E]).
-eq(lbl71(A,B,C,D,E,F,G,H),1,[loop_exit_lbl71(A,B,C,D,E,F,G,H)],[A+G+E>=B+102+D,E>=1+D,100>=A,E>=G,2*D+2+B>=A+G+E,100>=B,F=B+1,H+B+1+D=A+G+E]).
-eq(lbl71(A,B,C,D,E,F,G,H),1,[loop_exit_lbl71(A,B,C,D,E,F,G,H)],[B>=D,E>=1+D,100>=A,E>=G,2*D+2+B>=A+G+E,100>=B,F=B+1,H+B+1+D=A+G+E]).

@@ -5,5 +5,3 @@ eq(f2(A,B,C,D,E,F),1,[f2(-B+A,1+B,C,D,E,F)],[A>=1]).
 eq(f2(A,B,C,D,E,F),1,[loop_exit_f2(A,B,G,D,E,F)],[0>=A]).
 eq(loop_exit_f2(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(f4(A,B,C),0,[],[]).
-eq(f2(A,B,C),1,[f2(-B+A,1+B,C)],[A>=1]).
-eq(f2(A,B,C),1,[loop_exit_f2(A,B,D)],[0>=A]).

@@ -19,12 +19,3 @@ eq(evalperfectbb5in(A,B,C,D,E,F,G,H),1,[evalperfectbb8in(A,B,C-1,D,E,F,G,H)],[D>
 eq(loop_exit_evalperfectbb4in(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(loop_exit_evalperfectbb8in(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(evalperfectstop(A,B,C,D),0,[],[]).
-eq(evalperfectbb4in(A,B,C,D),1,[evalperfectbb3in(A,B,C,D)],[D>=C]).
-eq(evalperfectbb3in(A,B,C,D),1,[evalperfectbb4in(A,B,C,D-C)],[]).
-eq(evalperfectbb5in(A,B,C,D),1,[evalperfectbb8in(A,B-C,C-1,D)],[D=0]).
-eq(evalperfectbb5in(A,B,C,D),1,[evalperfectbb8in(A,B,C-1,D)],[0>=D+1]).
-eq(evalperfectbb5in(A,B,C,D),1,[evalperfectbb8in(A,B,C-1,D)],[D>=1]).
-eq(evalperfectbb8in(A,B,C,D),1,[evalperfectbb4in(A,B,C,A,E,F,G,H),loop_cont_evalperfectbb4in(E,F,G,H)],[C>=1]).
-eq(evalperfectbb4in(A,B,C,D),1,[loop_exit_evalperfectbb4in(A,B,C,D)],[C>=D+1]).
-eq(loop_cont_evalperfectbb4in(A,B,C,D),0,[evalperfectbb5in(A,B,C,D)],[]).
-eq(evalperfectbb8in(A,B,C,D),1,[loop_exit_evalperfectbb8in(B,B,C,D)],[0>=C]).

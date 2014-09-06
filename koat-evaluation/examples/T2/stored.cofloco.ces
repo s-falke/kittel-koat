@@ -11,9 +11,3 @@ eq(f9(A,B,C,D,E,F),1,[f6(G,B,C,D,E,F)],[B>=1]).
 eq(f9(A,B,C,D,E,F),1,[loop_exit_f6(A,0,1,D,E,F)],[B=0]).
 eq(loop_exit_f6(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(f24(A,B,C),0,[],[]).
-eq(f6(A,B,C),1,[f9(A,D,C)],[0>=A+1]).
-eq(f6(A,B,C),1,[f9(A,D,C)],[A>=1]).
-eq(f9(A,B,C),1,[f6(D,B,C)],[0>=B+1]).
-eq(f9(A,B,C),1,[f6(D,B,C)],[B>=1]).
-eq(f9(A,B,C),1,[loop_exit_f6(A,0,1)],[B=0]).
-eq(f6(A,B,C),1,[loop_exit_f6(0,B,C)],[A=0]).

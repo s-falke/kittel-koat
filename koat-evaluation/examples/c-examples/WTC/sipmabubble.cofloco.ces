@@ -15,13 +15,3 @@ eq(evalsipmabubblebb5in(A,B,C,D),1,[evalsipmabubblebb6in(A-1,B,C,D)],[]).
 eq(loop_exit_evalsipmabubblebb4in(A,B,C,D),0,[],[A=C,B=D]).
 eq(loop_exit_evalsipmabubblebb6in(A,B,C,D),0,[],[A=C,B=D]).
 eq(evalsipmabubblestop(A,B),0,[],[]).
-eq(evalsipmabubblebb4in(A,B),1,[evalsipmabubblebb1in(A,B)],[A>=1+B]).
-eq(evalsipmabubblebb1in(A,B),1,[evalsipmabubblebb2in(A,B)],[C>=D+1]).
-eq(evalsipmabubblebb1in(A,B),1,[evalsipmabubblebb3in(A,B)],[C>=D]).
-eq(evalsipmabubblebb2in(A,B),1,[evalsipmabubblebb3in(A,B)],[]).
-eq(evalsipmabubblebb3in(A,B),1,[evalsipmabubblebb4in(A,B+1)],[]).
-eq(evalsipmabubblebb5in(A,B),1,[evalsipmabubblebb6in(A-1,B)],[]).
-eq(evalsipmabubblebb6in(A,B),1,[evalsipmabubblebb4in(A,0,C,D),loop_cont_evalsipmabubblebb4in(C,D)],[A>=0]).
-eq(evalsipmabubblebb4in(A,B),1,[loop_exit_evalsipmabubblebb4in(A,B)],[B>=A]).
-eq(loop_cont_evalsipmabubblebb4in(A,B),0,[evalsipmabubblebb5in(A,B)],[]).
-eq(evalsipmabubblebb6in(A,B),1,[loop_exit_evalsipmabubblebb6in(A,B)],[0>=A+1]).

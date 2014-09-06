@@ -4,5 +4,3 @@ eq(f300(A,B,C,D,E,F),1,[f300(1+A,B,C,D,E,F)],[B>=1+A]).
 eq(f300(A,B,C,D,E,F),1,[loop_exit_f300(A,B,G,D,E,F)],[A>=B]).
 eq(loop_exit_f300(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(f1(A,B,C),0,[],[]).
-eq(f300(A,B,C),1,[f300(1+A,B,C)],[B>=1+A]).
-eq(f300(A,B,C),1,[loop_exit_f300(A,B,D)],[A>=B]).

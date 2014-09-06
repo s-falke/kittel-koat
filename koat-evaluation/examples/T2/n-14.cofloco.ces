@@ -8,9 +8,3 @@ eq(f2(A,B,C,D,E,F),1,[loop_exit_f2(-1+A,G,H,D,E,F)],[0>=G+1,1>=A]).
 eq(f2(A,B,C,D,E,F),1,[loop_exit_f2(A,0,G,D,E,F)],[0>=A]).
 eq(loop_exit_f2(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(f1(A,B,C),0,[],[]).
-eq(f2(A,B,C),1,[f2(-1+A,D,C)],[D>=1,A>=2]).
-eq(f2(A,B,C),1,[f2(-1+A,D,C)],[0>=D+1,A>=2]).
-eq(f2(A,B,C),1,[f2(A,0,C)],[A>=1]).
-eq(f2(A,B,C),1,[loop_exit_f2(-1+A,D,E)],[D>=1,1>=A]).
-eq(f2(A,B,C),1,[loop_exit_f2(-1+A,D,E)],[0>=D+1,1>=A]).
-eq(f2(A,B,C),1,[loop_exit_f2(A,0,D)],[0>=A]).

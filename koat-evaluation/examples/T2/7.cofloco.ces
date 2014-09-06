@@ -4,5 +4,3 @@ eq(f4(A,B,C,D,E,F),1,[f4(G,G+1,B,D,E,F)],[]).
 eq(f4(A,B,C,D,E,F),1,[loop_exit_f4(A,B,C,D,E,F)],[A>=B+1]).
 eq(loop_exit_f4(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(f5(A,B,C),0,[],[]).
-eq(f4(A,B,C),1,[f4(D,D+1,B)],[]).
-eq(f4(A,B,C),1,[loop_exit_f4(A,B,C)],[A>=B+1]).

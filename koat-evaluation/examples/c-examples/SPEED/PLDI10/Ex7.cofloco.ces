@@ -9,8 +9,3 @@ eq(evalEx7bbin(A,B,C,D,E,F),1,[evalEx7bb3in(A,B,0,D,E,F)],[C>=B+1]).
 eq(evalEx7bbin(A,B,C,D,E,F),1,[evalEx7bb3in(A,B,C+1,D,E,F)],[B>=C]).
 eq(loop_exit_evalEx7bb3in(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(evalEx7stop(A,B,C),0,[],[]).
-eq(evalEx7bb3in(A,B,C),1,[evalEx7bbin(A,B,C)],[A>=C+1]).
-eq(evalEx7bb3in(A,B,C),1,[evalEx7bbin(A,B,C)],[C>=A+1]).
-eq(evalEx7bbin(A,B,C),1,[evalEx7bb3in(A,B,0)],[C>=B+1]).
-eq(evalEx7bbin(A,B,C),1,[evalEx7bb3in(A,B,C+1)],[B>=C]).
-eq(evalEx7bb3in(A,B,C),1,[loop_exit_evalEx7bb3in(A,B,C)],[C=A]).

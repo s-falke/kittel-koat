@@ -7,6 +7,3 @@ eq(f3(A,B,C,D,E,F,G,H,I,J),1,[f3(A,B,C-2,K,E,F,G,H,I,J)],[C>=1,0>=K]).
 eq(f3(A,B,C,D,E,F,G,H,I,J),1,[loop_exit_f3(A,B,C,D,K,F,G,H,I,J)],[0>=C]).
 eq(loop_exit_f3(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
 eq(loop_exit_f6(A,B,C,D,E),0,[],[]).
-eq(f3(A,B,C,D,E),1,[f3(A,B,C-1,F,E)],[C>=1,F>=1]).
-eq(f3(A,B,C,D,E),1,[f3(A,B,C-2,F,E)],[C>=1,0>=F]).
-eq(f3(A,B,C,D,E),1,[loop_exit_f3(A,B,C,D,F)],[0>=C]).

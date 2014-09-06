@@ -8,9 +8,3 @@ eq(f12(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f6(A,B,E-1,D,E,F,G,H,I,J,K,L,M,N)],[]).
 eq(f12(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f6(A,E+1,C,D,E,F,G,H,I,J,K,L,M,N)],[]).
 eq(loop_exit_f6(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F=M,G=N]).
 eq(f20(A,B,C,D,E,F,G),0,[],[]).
-eq(f6(A,B,C,D,E,F,G),1,[f12(A,B,C,D,H,F,G)],[C>=B,A>=I+1]).
-eq(f6(A,B,C,D,E,F,G),1,[f12(A,B,C,D,H,F,G)],[C>=B]).
-eq(f6(A,B,C,D,E,F,G),1,[f6(A,B,B-1,H,I,F,G)],[C>=B]).
-eq(f12(A,B,C,D,E,F,G),1,[f6(A,B,E-1,D,E,F,G)],[]).
-eq(f12(A,B,C,D,E,F,G),1,[f6(A,E+1,C,D,E,F,G)],[]).
-eq(f6(A,B,C,D,E,F,G),1,[loop_exit_f6(A,B,C,D,E,D,D)],[B>=1+C]).

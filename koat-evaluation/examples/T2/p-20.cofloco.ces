@@ -5,5 +5,3 @@ eq(f2(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),1,[f2(A,W,X,Y,F,F,G,H,I,J,K,L
 eq(f2(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),1,[loop_exit_f2(A,W,X,D,E,F,Y,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V)],[1>=A]).
 eq(loop_exit_f2(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),0,[],[A=L,B=M,C=N,D=O,E=P,F=Q,G=R,H=S,I=T,J=U,K=V]).
 eq(f1(A,B,C,D,E,F,G,H,I,J,K),0,[],[]).
-eq(f2(A,B,C,D,E,F,G,H,I,J,K),1,[f2(A,L,M,N,F,F,G,H,I,J,K)],[A>=2]).
-eq(f2(A,B,C,D,E,F,G,H,I,J,K),1,[loop_exit_f2(A,L,M,D,E,F,N,H,I,J,K)],[1>=A]).

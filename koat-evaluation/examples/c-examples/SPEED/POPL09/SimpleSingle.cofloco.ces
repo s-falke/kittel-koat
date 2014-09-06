@@ -7,6 +7,3 @@ eq(evalSimpleSinglebb3in(A,B,C,D),1,[loop_exit_evalSimpleSinglebb3in(A,B,C,D)],[
 eq(evalSimpleSinglebbin(A,B,C,D),1,[evalSimpleSinglebb3in(A+1,B,C,D)],[]).
 eq(loop_exit_evalSimpleSinglebb3in(A,B,C,D),0,[],[A=C,B=D]).
 eq(evalSimpleSinglestop(A,B),0,[],[]).
-eq(evalSimpleSinglebb3in(A,B),1,[evalSimpleSinglebbin(A,B)],[B>=A+1]).
-eq(evalSimpleSinglebbin(A,B),1,[evalSimpleSinglebb3in(A+1,B)],[]).
-eq(evalSimpleSinglebb3in(A,B),1,[loop_exit_evalSimpleSinglebb3in(A,B)],[A>=B]).

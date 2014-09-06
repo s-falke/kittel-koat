@@ -5,5 +5,3 @@ eq(f1(A,B,C,D,E,F),1,[f1(1+A,B,C,D,E,F)],[499>=A]).
 eq(f1(A,B,C,D,E,F),1,[loop_exit_f1(A,G,C,D,E,F)],[A>=500]).
 eq(loop_exit_f1(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(f3(A,B,C),0,[],[]).
-eq(f1(A,B,C),1,[f1(1+A,B,C)],[499>=A]).
-eq(f1(A,B,C),1,[loop_exit_f1(A,D,C)],[A>=500]).

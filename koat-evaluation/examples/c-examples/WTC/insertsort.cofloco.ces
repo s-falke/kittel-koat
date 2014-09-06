@@ -15,13 +15,3 @@ eq(evalinsertsortbb4in(A,B,C,D,E,F,G,H),1,[evalinsertsortbb5in(A+1,B,C,D,E,F,G,H
 eq(loop_exit_evalinsertsortbb5in(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(loop_exit_evalinsertsortbb2in(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(evalinsertsortstop(A,B,C,D),0,[],[]).
-eq(evalinsertsortbb5in(A,B,C,D),1,[evalinsertsortbbin(A,B,C,D)],[B>=A+1]).
-eq(evalinsertsortbb2in(A,B,C,D),1,[evalinsertsortbb3in(A,B,C,D)],[D>=0]).
-eq(evalinsertsortbb3in(A,B,C,D),1,[evalinsertsortbb1in(A,B,C,D)],[E>=C+1]).
-eq(evalinsertsortbb1in(A,B,C,D),1,[evalinsertsortbb2in(A,B,C,D-1)],[]).
-eq(evalinsertsortbb4in(A,B,C,D),1,[evalinsertsortbb5in(A+1,B,C,D)],[]).
-eq(evalinsertsortbb5in(A,B,C,D),1,[loop_exit_evalinsertsortbb5in(A,B,C,D)],[A>=B]).
-eq(evalinsertsortbbin(A,B,C,D),1,[evalinsertsortbb2in(A,B,E,A-1,F,G,H,I),loop_cont_evalinsertsortbb2in(F,G,H,I)],[]).
-eq(evalinsertsortbb3in(A,B,C,D),1,[loop_exit_evalinsertsortbb2in(A,B,C,D)],[C>=E]).
-eq(loop_cont_evalinsertsortbb2in(A,B,C,D),0,[evalinsertsortbb4in(A,B,C,D)],[]).
-eq(evalinsertsortbb2in(A,B,C,D),1,[loop_exit_evalinsertsortbb2in(A,B,C,D)],[0>=D+1]).

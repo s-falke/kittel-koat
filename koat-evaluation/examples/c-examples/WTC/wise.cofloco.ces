@@ -13,10 +13,3 @@ eq(evalwisebb4in(A,B,C,D),1,[evalwisebb6in(A,B+1,C,D)],[]).
 eq(evalwisebb5in(A,B,C,D),1,[evalwisebb6in(A+1,B,C,D)],[]).
 eq(loop_exit_evalwisebb6in(A,B,C,D),0,[],[A=C,B=D]).
 eq(evalwisestop(A,B),0,[],[]).
-eq(evalwisebb6in(A,B),1,[evalwisebb3in(A,B)],[B>=A+3]).
-eq(evalwisebb6in(A,B),1,[evalwisebb3in(A,B)],[A>=B+3]).
-eq(evalwisebb3in(A,B),1,[evalwisebb4in(A,B)],[A>=B+1]).
-eq(evalwisebb3in(A,B),1,[evalwisebb5in(A,B)],[B>=A]).
-eq(evalwisebb4in(A,B),1,[evalwisebb6in(A,B+1)],[]).
-eq(evalwisebb5in(A,B),1,[evalwisebb6in(A+1,B)],[]).
-eq(evalwisebb6in(A,B),1,[loop_exit_evalwisebb6in(A,B)],[2+A>=B,2+B>=A]).

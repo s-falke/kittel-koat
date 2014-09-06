@@ -19,17 +19,3 @@ eq(evalcomplexbb9in(A,B,C,D,E,F,G,H,I,J),1,[evalcomplexbb10in(C-10,D+2,C,D,E,F,G
 eq(loop_exit_evalcomplexbb8in(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
 eq(loop_exit_evalcomplexbb10in(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
 eq(evalcomplexstop(A,B,C,D,E),0,[],[]).
-eq(evalcomplexbb8in(A,B,C,D,E),1,[evalcomplexbb1in(A,B,C,D,E)],[D>=C+1]).
-eq(evalcomplexbb1in(A,B,C,D,E),1,[evalcomplexbb7in(A,B,C,D,C+7)],[C>=6,2>=C]).
-eq(evalcomplexbb1in(A,B,C,D,E),1,[evalcomplexbb7in(A,B,C,D,C+7)],[C>=6]).
-eq(evalcomplexbb1in(A,B,C,D,E),1,[evalcomplexbb6in(A,B,C,D,C+7)],[C>=6,C>=3,5>=C]).
-eq(evalcomplexbb1in(A,B,C,D,E),1,[evalcomplexbb7in(A,B,C,D,C+2)],[5>=C,7>=C]).
-eq(evalcomplexbb1in(A,B,C,D,E),1,[evalcomplexbb7in(A,B,C,D,C+2)],[5>=C,C>=11]).
-eq(evalcomplexbb1in(A,B,C,D,E),1,[evalcomplexbb6in(A,B,C,D,C+2)],[5>=C,C>=8,10>=C]).
-eq(evalcomplexbb7in(A,B,C,D,E),1,[evalcomplexbb8in(A,B,E,D+1,E)],[]).
-eq(evalcomplexbb6in(A,B,C,D,E),1,[evalcomplexbb8in(A,B,E,D+10,E)],[]).
-eq(evalcomplexbb9in(A,B,C,D,E),1,[evalcomplexbb10in(C-10,D+2,C,D,E)],[]).
-eq(evalcomplexbb10in(A,B,C,D,E),1,[evalcomplexbb8in(A,B,A,B,E,F,G,H,I,J),loop_cont_evalcomplexbb8in(F,G,H,I,J)],[29>=B]).
-eq(evalcomplexbb8in(A,B,C,D,E),1,[loop_exit_evalcomplexbb8in(A,B,C,D,E)],[C>=D]).
-eq(loop_cont_evalcomplexbb8in(A,B,C,D,E),0,[evalcomplexbb9in(A,B,C,D,E)],[]).
-eq(evalcomplexbb10in(A,B,C,D,E),1,[loop_exit_evalcomplexbb10in(A,B,C,D,E)],[B>=30]).

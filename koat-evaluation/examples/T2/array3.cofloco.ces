@@ -8,5 +8,3 @@ eq(f9(A,B,C,D,E,F),1,[loop_exit_f9(0,B,C,D,E,F)],[C>=50]).
 eq(loop_exit_f9(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(loop_exit_f17(A,B,C),0,[],[]).
 eq(f24(A,B,C),0,[],[]).
-eq(f9(A,B,C),1,[f9(A,B,C+1)],[49>=C]).
-eq(f9(A,B,C),1,[loop_exit_f9(0,B,C)],[C>=50]).

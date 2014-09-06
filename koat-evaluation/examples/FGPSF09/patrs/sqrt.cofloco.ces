@@ -4,5 +4,3 @@ eq(f(A,B,C,D,E,F,G,H),1,[f(A+1,B+2,C+B+2,D,E,F,G,H)],[D>=C,B>=0]).
 eq(f(A,B,C,D,E,F,G,H),1,[loop_exit_f(A,B,C,D,E,F,G,H)],[C>=D+1]).
 eq(loop_exit_f(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(end(A,B,C,D),0,[],[]).
-eq(f(A,B,C,D),1,[f(A+1,B+2,C+B+2,D)],[D>=C,B>=0]).
-eq(f(A,B,C,D),1,[loop_exit_f(A,B,C,D)],[C>=D+1]).

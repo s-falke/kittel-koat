@@ -4,5 +4,3 @@ eq(f7(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R),1,[f7(A,B,C+D,C,E+1,C,G,H,I,J,K,L,M,N
 eq(f7(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R),1,[loop_exit_f7(A,B,C,D,E,F,C,C,C,J,K,L,M,N,O,P,Q,R)],[E>=1+B]).
 eq(loop_exit_f7(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R),0,[],[A=J,B=K,C=L,D=M,E=N,F=O,G=P,H=Q,I=R]).
 eq(f19(A,B,C,D,E,F,G,H,I),0,[],[]).
-eq(f7(A,B,C,D,E,F,G,H,I),1,[f7(A,B,C+D,C,E+1,C,G,H,I)],[B>=E]).
-eq(f7(A,B,C,D,E,F,G,H,I),1,[loop_exit_f7(A,B,C,D,E,F,C,C,C)],[E>=1+B]).

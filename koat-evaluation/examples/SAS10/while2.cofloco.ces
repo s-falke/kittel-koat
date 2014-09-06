@@ -11,11 +11,3 @@ eq(start(A,B,C,D,E,F,G,H,I,J,K,L),1,[stop(A,B,C,F,E,F,G,H,I,J,K,L)],[0>=A,B=C,D=
 eq(loop_exit_lbl72(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[A=G,B=H,C=I,D=J,E=K,F=L]).
 eq(loop_exit_lbl62(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[A=G,B=H,C=I,D=J,E=K,F=L]).
 eq(stop(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[A=G,B=H,C=I,D=J,E=K,F=L]).
-eq(start(A,B,C,D,E,F),1,[stop(A,B,C,F,E,F)],[0>=A,B=C,D=E,F=A]).
-eq(lbl72(A,B,C,D,E,F),1,[lbl72(A,F,C,D-1,E,F)],[D>=1,0>=A,D>=0,A>=D+1,B=0,F=A]).
-eq(lbl62(A,B,C,D,E,F),1,[lbl62(A,B-1,C,D,E,F)],[B>=1,A>=D,A>=B+1,B>=0,D>=1,F=A]).
-eq(lbl62(A,B,C,D,E,F),1,[lbl72(A,B,C,D-1,E,F,G,H,I,J,K,L),loop_cont_lbl72(G,H,I,J,K,L)],[A>=D,A>=1,D>=1,B=0,F=A]).
-eq(lbl72(A,B,C,D,E,F),1,[loop_exit_lbl72(A,B,C,D,E,F)],[A>=1,D=0,B=0,F=A]).
-eq(loop_cont_lbl72(A,B,C,D,E,F),0,[stop(A,B,C,D,E,F)],[]).
-eq(lbl72(A,B,C,D,E,F),1,[loop_exit_lbl72(A,F-1,C,D,E,F)],[A>=1,D>=1,D>=0,A>=D+1,B=0,F=A]).
-eq(loop_cont_lbl72(A,B,C,D,E,F),0,[lbl62(A,B,C,D,E,F)],[]).

@@ -480,5 +480,3 @@ eq(loop_exit_f914(A,B,C),0,[],[]).
 eq(loop_exit_f920(A,B,C),0,[],[]).
 eq(loop_exit_f926(A,B,C),0,[],[]).
 eq(f934(A,B,C),0,[],[]).
-eq(f154(A,B,C),1,[f154(A+C,B,C+1)],[2>=C]).
-eq(f154(A,B,C),1,[loop_exit_f154(A,B,0)],[C>=3]).

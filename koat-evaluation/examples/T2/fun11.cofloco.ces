@@ -10,6 +10,3 @@ eq(f2(A,B,C,D,E,F,G,H,I,J,K,L),1,[f2(1+A,M,M,D,E,F,G,H,I,J,K,L)],[0>=M+1,A>=1]).
 eq(f2(A,B,C,D,E,F,G,H,I,J,K,L),1,[loop_exit_f2(A,0,0,M,E,F,G,H,I,J,K,L)],[]).
 eq(loop_exit_f2(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[A=G,B=H,C=I,D=J,E=K,F=L]).
 eq(f0(A,B,C,D,E,F),0,[],[]).
-eq(f2(A,B,C,D,E,F),1,[f2(1+A,G,G,D,E,F)],[G>=1,A>=1]).
-eq(f2(A,B,C,D,E,F),1,[f2(1+A,G,G,D,E,F)],[0>=G+1,A>=1]).
-eq(f2(A,B,C,D,E,F),1,[loop_exit_f2(A,0,0,G,E,F)],[]).

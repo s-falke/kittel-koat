@@ -7,8 +7,3 @@ eq(f1(A,B,C,D,E,F,G,H,I,J),1,[f1(A+11,B+1,1,A,B,F,G,H,I,J)],[100>=A,0>=C,B>=1]).
 eq(f1(A,B,C,D,E,F,G,H,I,J),1,[loop_exit_f1(A,B,C,D,E,F,G,H,I,J)],[D>=A,C>=1,B>=E]).
 eq(loop_exit_f1(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
 eq(f2(A,B,C,D,E),0,[],[]).
-eq(f1(A,B,C,D,E),1,[f1(A-10,B-1,C,D,E)],[B>=1,A>=101]).
-eq(f1(A,B,C,D,E),1,[f1(A+11,B+1,C,D,E)],[B>=1,100>=A]).
-eq(f1(A,B,C,D,E),1,[f1(A-10,B-1,1,A,B)],[A>=101,0>=C,B>=1]).
-eq(f1(A,B,C,D,E),1,[f1(A+11,B+1,1,A,B)],[100>=A,0>=C,B>=1]).
-eq(f1(A,B,C,D,E),1,[loop_exit_f1(A,B,C,D,E)],[D>=A,C>=1,B>=E]).

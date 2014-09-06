@@ -5,6 +5,3 @@ eq(f6(A,B,C,D,E,F,G,H),1,[f6(I,B,C,I,E,F,G,H)],[B>=A+2,C>=I*I]).
 eq(f6(A,B,C,D,E,F,G,H),1,[loop_exit_f6(A,B,C,D,E,F,G,H)],[A+1>=B]).
 eq(loop_exit_f6(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(f16(A,B,C,D),0,[],[]).
-eq(f6(A,B,C,D),1,[f6(A,E,C,E)],[B>=A+2,E*E>=C+1]).
-eq(f6(A,B,C,D),1,[f6(E,B,C,E)],[B>=A+2,C>=E*E]).
-eq(f6(A,B,C,D),1,[loop_exit_f6(A,B,C,D)],[A+1>=B]).

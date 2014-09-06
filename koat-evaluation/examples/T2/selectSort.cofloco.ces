@@ -17,8 +17,3 @@ eq(loop_exit_f22(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P),0,[],[A=I,B=J,C=K,D=L,E=M,F=N,
 eq(loop_exit_f18(A,B,C,D,E,F,G,H),0,[],[]).
 eq(loop_exit_f34(A,B,C,D,E,F,G,H),0,[],[]).
 eq(f43(A,B,C,D,E,F,G,H),0,[],[]).
-eq(f10(A,B,C,D,E,F,G,H),1,[f10(A,B+1,C,D,E,F,G,H)],[C>=B+1]).
-eq(f22(A,B,C,D,E,F,G,H),1,[f22(A,B,C,D,E,F,G+1,H)],[D>=G+1]).
-eq(f22(A,B,C,D,E,F,G,H),1,[f22(A,B,C,D,E,G,G+1,H)],[D>=G+1]).
-eq(f10(A,B,C,D,E,F,G,H),1,[loop_exit_f10(A,B,C,C,0,F,G,H)],[B>=C]).
-eq(f22(A,B,C,D,E,F,G,H),1,[loop_exit_f22(A,B,C,D,E+1,F,G,I)],[G>=D]).

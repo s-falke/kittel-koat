@@ -11,12 +11,3 @@ eq(f2(A,B,C,D,E,F),1,[loop_exit_f2(0,B,G,D,E,F)],[A>=1]).
 eq(f2(A,B,C,D,E,F),1,[loop_exit_f2(A,B,G,D,E,F)],[A=0]).
 eq(loop_exit_f2(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(f300(A,B,C),0,[],[]).
-eq(f2(A,B,C),1,[f2(-1+D,B,C)],[0>=A+1,0>=E,B>=1]).
-eq(f2(A,B,C),1,[f2(-1+D,B,C)],[0>=A+1,0>=E,0>=B]).
-eq(f2(A,B,C),1,[f2(1+D,B,C)],[E>=2,0>=A+1]).
-eq(f2(A,B,C),1,[f2(-1+D,B,C)],[A>=1,0>=2+E,B>=1]).
-eq(f2(A,B,C),1,[f2(-1+D,B,C)],[A>=1,0>=2+E,0>=B]).
-eq(f2(A,B,C),1,[f2(1+D,B,C)],[E>=0,A>=1]).
-eq(f2(A,B,C),1,[loop_exit_f2(0,B,D)],[0>=A+1]).
-eq(f2(A,B,C),1,[loop_exit_f2(0,B,D)],[A>=1]).
-eq(f2(A,B,C),1,[loop_exit_f2(A,B,D)],[A=0]).

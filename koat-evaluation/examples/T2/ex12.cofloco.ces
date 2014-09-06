@@ -4,5 +4,3 @@ eq(f5(A,B,C,D),1,[f5(A+2,A+4,C,D)],[19>=A]).
 eq(f5(A,B,C,D),1,[loop_exit_f5(A,B,C,D)],[A>=20]).
 eq(loop_exit_f5(A,B,C,D),0,[],[A=C,B=D]).
 eq(f8(A,B),0,[],[]).
-eq(f5(A,B),1,[f5(A+2,A+4)],[19>=A]).
-eq(f5(A,B),1,[loop_exit_f5(A,B)],[A>=20]).

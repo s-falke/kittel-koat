@@ -11,9 +11,3 @@ eq(evalspeedFails4bb4in(A,B,C,D,E,F,G,H),1,[evalspeedFails4bb6in(A,B,C,D+A,E,F,G
 eq(evalspeedFails4bb5in(A,B,C,D,E,F,G,H),1,[evalspeedFails4bb6in(A,B,C,D-A,E,F,G,H)],[]).
 eq(loop_exit_evalspeedFails4bb6in(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(evalspeedFails4stop(A,B,C,D),0,[],[]).
-eq(evalspeedFails4bb6in(A,B,C,D),1,[evalspeedFails4bb3in(A,B,C,D)],[B>=D]).
-eq(evalspeedFails4bb3in(A,B,C,D),1,[evalspeedFails4bb4in(A,B,C,D)],[C>=1]).
-eq(evalspeedFails4bb3in(A,B,C,D),1,[evalspeedFails4bb5in(A,B,C,D)],[0>=C]).
-eq(evalspeedFails4bb4in(A,B,C,D),1,[evalspeedFails4bb6in(A,B,C,D+A)],[]).
-eq(evalspeedFails4bb5in(A,B,C,D),1,[evalspeedFails4bb6in(A,B,C,D-A)],[]).
-eq(evalspeedFails4bb6in(A,B,C,D),1,[loop_exit_evalspeedFails4bb6in(A,B,C,D)],[D>=B+1]).

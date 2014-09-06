@@ -6,5 +6,3 @@ eq(f14(A,B,C,D,E,F,G,H),1,[f14(A,B,C+1,D,E,F,G,H)],[I>=C+1]).
 eq(f14(A,B,C,D,E,F,G,H),1,[loop_exit_f14(A,B,C,D,E,F,G,H)],[C>=I]).
 eq(loop_exit_f14(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(f22(A,B,C,D),0,[],[]).
-eq(f14(A,B,C,D),1,[f14(A,B,C+1,D)],[E>=C+1]).
-eq(f14(A,B,C,D),1,[loop_exit_f14(A,B,C,D)],[C>=E]).

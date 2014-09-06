@@ -10,5 +10,3 @@ eq(f19(A,B,C,D,E,F,G,H),1,[loop_exit_f19(A,B,999,D,E,F,G,H)],[0>=B+1]).
 eq(loop_exit_f19(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(loop_exit_f28(A,B,C,D),0,[],[]).
 eq(f36(A,B,C,D),0,[],[]).
-eq(f19(A,B,C,D),1,[f19(A,B-1,C,D)],[B>=0]).
-eq(f19(A,B,C,D),1,[loop_exit_f19(A,B,999,D)],[0>=B+1]).

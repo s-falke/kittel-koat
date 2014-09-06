@@ -24,9 +24,3 @@ eq(loop_exit_f51(A,B,C,D,E,F,G),0,[],[]).
 eq(loop_exit_f65(A,B,C,D,E,F,G),0,[],[]).
 eq(loop_exit_f75(A,B,C,D,E,F,G),0,[],[]).
 eq(f71(A,B,C,D,E,F,G),0,[],[]).
-eq(f43(A,B,C,D,E,F,G),1,[f43(A,B,C,C+1,E,F,G)],[A>=D+1,C=D]).
-eq(f43(A,B,C,D,E,F,G),1,[f43(A,B,C,D+1,E,F,G)],[A>=D+1,C>=D+1]).
-eq(f43(A,B,C,D,E,F,G),1,[f43(A,B,C,D+1,E,F,G)],[A>=D+1,D>=1+C]).
-eq(f54(A,B,C,D,E,F,G),1,[f54(A,B,C,D,E+1,H,I)],[B>=E+1]).
-eq(f43(A,B,C,D,E,F,G),1,[loop_exit_f43(A,B,C,0,E,F,G)],[D>=A]).
-eq(f54(A,B,C,D,E,F,G),1,[loop_exit_f54(A,B,C,D+1,E,F,G)],[E>=B]).

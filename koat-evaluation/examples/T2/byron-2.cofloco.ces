@@ -6,7 +6,3 @@ eq(f0(A,B,C,D,E,F,G,H,I,J,K,L),1,[f0(-1+A,B,M,N,O,F,G,H,I,J,K,L)],[O>=1,A>=1]).
 eq(f0(A,B,C,D,E,F,G,H,I,J,K,L),1,[loop_exit_f0(A,M,C,D,E,F,G,H,I,J,K,L)],[0>=A]).
 eq(loop_exit_f0(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[A=G,B=H,C=I,D=J,E=K,F=L]).
 eq(f2(A,B,C,D,E,F),0,[],[]).
-eq(f0(A,B,C,D,E,F),1,[f0(A,B,-1+C,G,0,H)],[A>=1,C>=3]).
-eq(f0(A,B,C,D,E,F),1,[f0(-1+A,B,G,H,I,F)],[0>=I+1,A>=1]).
-eq(f0(A,B,C,D,E,F),1,[f0(-1+A,B,G,H,I,F)],[I>=1,A>=1]).
-eq(f0(A,B,C,D,E,F),1,[loop_exit_f0(A,G,C,D,E,F)],[0>=A]).

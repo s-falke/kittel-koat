@@ -15,5 +15,3 @@ eq(eval3(A,B,C,D,E,F,G,H),1,[loop_exit_eval3(A,B,C,D,E,F,G,H)],[A>=101]).
 eq(loop_exit_eval3(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(loop_exit_eval5(A,B,C,D),0,[],[]).
 eq(end(A,B,C,D),0,[],[]).
-eq(eval3(A,B,C,D),1,[eval3(A+11,B,C+1,D)],[100>=A]).
-eq(eval3(A,B,C,D),1,[loop_exit_eval3(A,B,C,D)],[A>=101]).

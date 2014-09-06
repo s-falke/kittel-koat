@@ -13,10 +13,3 @@ eq(evalgcdbb5in(A,B,C,D),1,[evalgcdbb7in(A-B,B,C,D)],[]).
 eq(evalgcdbb6in(A,B,C,D),1,[evalgcdbb7in(A,B-A,C,D)],[]).
 eq(loop_exit_evalgcdbb7in(A,B,C,D),0,[],[A=C,B=D]).
 eq(evalgcdstop(A,B),0,[],[]).
-eq(evalgcdbb7in(A,B),1,[evalgcdbb4in(A,B)],[A>=B+1]).
-eq(evalgcdbb7in(A,B),1,[evalgcdbb4in(A,B)],[B>=A+1]).
-eq(evalgcdbb4in(A,B),1,[evalgcdbb5in(A,B)],[A>=B+1]).
-eq(evalgcdbb4in(A,B),1,[evalgcdbb6in(A,B)],[B>=A]).
-eq(evalgcdbb5in(A,B),1,[evalgcdbb7in(A-B,B)],[]).
-eq(evalgcdbb6in(A,B),1,[evalgcdbb7in(A,B-A)],[]).
-eq(evalgcdbb7in(A,B),1,[loop_exit_evalgcdbb7in(A,B)],[B=A]).

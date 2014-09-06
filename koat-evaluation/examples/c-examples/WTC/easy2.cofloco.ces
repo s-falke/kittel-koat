@@ -7,6 +7,3 @@ eq(evaleasy2bb1in(A,B),1,[loop_exit_evaleasy2bb1in(A,B)],[0>=A]).
 eq(evaleasy2bbin(A,B),1,[evaleasy2bb1in(A-1,B)],[]).
 eq(loop_exit_evaleasy2bb1in(A,B),0,[],[A=B]).
 eq(evaleasy2stop(A),0,[],[]).
-eq(evaleasy2bb1in(A),1,[evaleasy2bbin(A)],[A>=1]).
-eq(evaleasy2bbin(A),1,[evaleasy2bb1in(A-1)],[]).
-eq(evaleasy2bb1in(A),1,[loop_exit_evaleasy2bb1in(A)],[0>=A]).

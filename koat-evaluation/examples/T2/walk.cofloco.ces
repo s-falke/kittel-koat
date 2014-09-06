@@ -8,6 +8,3 @@ eq(f17(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1,D1),1,[f17(A
 eq(f17(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1,D1),1,[loop_exit_f17(B,B,C,D,E,F,E1,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1,D1)],[C>=0,D>=0,B=A]).
 eq(loop_exit_f17(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1,D1),0,[],[A=P,B=Q,C=R,D=S,E=T,F=U,G=V,H=W,I=X,J=Y,K=Z,L=A1,M=B1,N=C1,O=D1]).
 eq(f20(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O),0,[],[]).
-eq(f17(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O),1,[f17(A,P,C,1+D,Q,F,G,H,I,J,K,L,M,N,O)],[A>=B+1,C>=0,D>=0]).
-eq(f17(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O),1,[f17(A,P,C,1+D,Q,F,G,H,I,J,K,L,M,N,O)],[B>=A+1,C>=0,D>=0]).
-eq(f17(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O),1,[loop_exit_f17(B,B,C,D,E,F,P,H,I,J,K,L,M,N,O)],[C>=0,D>=0,B=A]).

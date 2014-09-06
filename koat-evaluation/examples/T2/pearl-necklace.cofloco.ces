@@ -13,5 +13,3 @@ eq(loop_exit_f1(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
 eq(loop_exit_f2(A,B,C,D,E),0,[],[]).
 eq(loop_exit_f3(A,B,C,D,E),0,[],[]).
 eq(loop_exit_f4(A,B,C,D,E),0,[],[]).
-eq(f1(A,B,C,D,E),1,[f1(A,B+1,C,D,E)],[A>=B+1]).
-eq(f1(A,B,C,D,E),1,[loop_exit_f1(A,B,B,D,E)],[B>=A]).

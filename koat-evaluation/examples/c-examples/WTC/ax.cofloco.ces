@@ -13,11 +13,3 @@ eq(evalaxbb3in(A,B,C,D,E,F),1,[loop_exit_evalaxbbin(A,B,C,D,E,F)],[A+2>=C]).
 eq(loop_exit_evalaxbb2in(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(loop_exit_evalaxbbin(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(evalaxstop(A,B,C),0,[],[]).
-eq(evalaxbb2in(A,B,C),1,[evalaxbb1in(A,B,C)],[C>=2+B]).
-eq(evalaxbb1in(A,B,C),1,[evalaxbb2in(A,B+1,C)],[]).
-eq(evalaxbb3in(A,B,C),1,[evalaxbbin(A+1,B,C)],[B+1>=C,C>=3+A]).
-eq(evalaxbbin(A,B,C),1,[evalaxbb2in(A,0,C,D,E,F),loop_cont_evalaxbb2in(D,E,F)],[]).
-eq(evalaxbb2in(A,B,C),1,[loop_exit_evalaxbb2in(A,B,C)],[B+1>=C]).
-eq(loop_cont_evalaxbb2in(A,B,C),0,[evalaxbb3in(A,B,C)],[]).
-eq(evalaxbb3in(A,B,C),1,[loop_exit_evalaxbbin(A,B,C)],[C>=2+B]).
-eq(evalaxbb3in(A,B,C),1,[loop_exit_evalaxbbin(A,B,C)],[A+2>=C]).

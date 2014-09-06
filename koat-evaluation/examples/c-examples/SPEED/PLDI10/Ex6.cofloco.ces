@@ -10,9 +10,3 @@ eq(evalEx6bb1in(A,B,C,D,E,F),1,[evalEx6bb3in(A,B+1,C,D,E,F)],[]).
 eq(evalEx6bb2in(A,B,C,D,E,F),1,[evalEx6bb3in(A+1,B,C,D,E,F)],[]).
 eq(loop_exit_evalEx6bb3in(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(evalEx6stop(A,B,C),0,[],[]).
-eq(evalEx6bb3in(A,B,C),1,[evalEx6bbin(A,B,C)],[C>=B+1]).
-eq(evalEx6bbin(A,B,C),1,[evalEx6bb1in(A,B,C)],[A>=B+1]).
-eq(evalEx6bbin(A,B,C),1,[evalEx6bb2in(A,B,C)],[B>=A]).
-eq(evalEx6bb1in(A,B,C),1,[evalEx6bb3in(A,B+1,C)],[]).
-eq(evalEx6bb2in(A,B,C),1,[evalEx6bb3in(A+1,B,C)],[]).
-eq(evalEx6bb3in(A,B,C),1,[loop_exit_evalEx6bb3in(A,B,C)],[B>=C]).

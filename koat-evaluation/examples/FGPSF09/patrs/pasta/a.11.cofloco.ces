@@ -4,7 +4,3 @@ eq(eval2(A,B,C,D,E,F),1,[eval1(A,B+1,C,D,E,F)],[A>=C+1]).
 eq(eval2(A,B,C,D,E,F),1,[eval1(A,B,C+1,D,E,F)],[A>=C+1]).
 eq(eval2(A,B,C,D,E,F),1,[eval1(A-1,B,C,D,E,F)],[C>=A]).
 eq(loop_exit_eval1(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
-eq(eval1(A,B,C),1,[eval2(A,B,C)],[A>=B+1]).
-eq(eval2(A,B,C),1,[eval1(A,B+1,C)],[A>=C+1]).
-eq(eval2(A,B,C),1,[eval1(A,B,C+1)],[A>=C+1]).
-eq(eval2(A,B,C),1,[eval1(A-1,B,C)],[C>=A]).

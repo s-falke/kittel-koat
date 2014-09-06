@@ -8,6 +8,3 @@ eq(f3(A,B,C,D,E,F),1,[loop_exit_f3(0,B,C,D,E,F)],[0>=B]).
 eq(loop_exit_f2(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(loop_exit_f3(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(loop_exit_f5(A,B,C),0,[],[]).
-eq(f2(A,B,C),1,[f2(A+1,B,C)],[]).
-eq(f3(A,B,C),1,[f3(A,B-1,C)],[B>=1]).
-eq(f3(A,B,C),1,[loop_exit_f3(0,B,C)],[0>=B]).

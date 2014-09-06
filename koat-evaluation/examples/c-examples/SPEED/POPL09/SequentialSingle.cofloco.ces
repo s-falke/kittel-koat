@@ -14,14 +14,3 @@ eq(evalSequentialSinglereturnin(A,B,C,D),1,[evalSequentialSinglestop(A,B,C,D)],[
 eq(loop_exit_evalSequentialSinglebb5in(A,B,C,D),0,[],[A=C,B=D]).
 eq(loop_exit_evalSequentialSinglebb1in(A,B,C,D),0,[],[A=C,B=D]).
 eq(evalSequentialSinglestop(A,B,C,D),0,[],[A=C,B=D]).
-eq(evalSequentialSinglebb1in(A,B),1,[evalSequentialSinglebb2in(A,B)],[B>=A+1]).
-eq(evalSequentialSinglebb2in(A,B),1,[evalSequentialSinglebbin(A,B)],[0>=C+1]).
-eq(evalSequentialSinglebb2in(A,B),1,[evalSequentialSinglebbin(A,B)],[C>=1]).
-eq(evalSequentialSinglebbin(A,B),1,[evalSequentialSinglebb1in(A+1,B)],[]).
-eq(evalSequentialSinglebb5in(A,B),1,[evalSequentialSinglebb4in(A,B)],[B>=A+1]).
-eq(evalSequentialSinglebb4in(A,B),1,[evalSequentialSinglebb5in(A+1,B)],[]).
-eq(evalSequentialSinglereturnin(A,B),1,[evalSequentialSinglestop(A,B)],[]).
-eq(evalSequentialSinglebb1in(A,B),1,[evalSequentialSinglebb5in(A,B,C,D),loop_cont_evalSequentialSinglebb5in(C,D)],[A>=B]).
-eq(evalSequentialSinglebb2in(A,B),1,[evalSequentialSinglebb5in(A,B,C,D),loop_cont_evalSequentialSinglebb5in(C,D)],[]).
-eq(evalSequentialSinglebb5in(A,B),1,[loop_exit_evalSequentialSinglebb5in(A,B)],[A>=B]).
-eq(loop_cont_evalSequentialSinglebb5in(A,B),0,[evalSequentialSinglereturnin(A,B)],[]).

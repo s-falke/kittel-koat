@@ -21,17 +21,3 @@ eq(loop_exit_evalfbb6in(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
 eq(loop_exit_evalfbb8in(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
 eq(loop_exit_evalfbb10in(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
 eq(evalfstop(A,B,C,D,E),0,[],[]).
-eq(evalfbb4in(A,B,C,D,E),1,[evalfbb3in(A,B,C,D,E)],[D>=E]).
-eq(evalfbb3in(A,B,C,D,E),1,[evalfbb4in(A,B,C,D,E+1)],[]).
-eq(evalfbb5in(A,B,C,D,E),1,[evalfbb6in(A,B,C,D+1,E)],[]).
-eq(evalfbb7in(A,B,C,D,E),1,[evalfbb8in(A,B,C+1,D,E)],[]).
-eq(evalfbb6in(A,B,C,D,E),1,[evalfbb4in(A,B,C,D,1,F,G,H,I,J),loop_cont_evalfbb4in(F,G,H,I,J)],[B>=D]).
-eq(evalfbb4in(A,B,C,D,E),1,[loop_exit_evalfbb4in(A,B,C,D,E)],[E>=D+1]).
-eq(loop_cont_evalfbb4in(A,B,C,D,E),0,[evalfbb5in(A,B,C,D,E)],[]).
-eq(evalfbb8in(A,B,C,D,E),1,[evalfbb6in(A,B,C,A+1,E,F,G,H,I,J),loop_cont_evalfbb6in(F,G,H,I,J)],[A>=C]).
-eq(evalfbb6in(A,B,C,D,E),1,[loop_exit_evalfbb6in(A,B,C,D,E)],[D>=B+1]).
-eq(loop_cont_evalfbb6in(A,B,C,D,E),0,[evalfbb7in(A,B,C,D,E)],[]).
-eq(evalfbb10in(A,B,C,D,E),1,[evalfbb8in(A,B,1,D,E,F,G,H,I,J),loop_cont_evalfbb8in(F,G,H,I,J)],[B>=A]).
-eq(evalfbb8in(A,B,C,D,E),1,[loop_exit_evalfbb8in(A+1,B,C,D,E)],[C>=A+1]).
-eq(loop_cont_evalfbb8in(A,B,C,D,E),0,[evalfbb10in(A,B,C,D,E)],[]).
-eq(evalfbb10in(A,B,C,D,E),1,[loop_exit_evalfbb10in(A,B,C,D,E)],[A>=B+1]).

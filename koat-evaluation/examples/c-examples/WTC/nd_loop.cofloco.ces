@@ -8,7 +8,3 @@ eq(evalndloopbbin(A,B),1,[loop_exit_evalndloopbbin(A,B)],[A>=C]).
 eq(evalndloopbbin(A,B),1,[loop_exit_evalndloopbbin(A,B)],[C>=10]).
 eq(loop_exit_evalndloopbbin(A,B),0,[],[A=B]).
 eq(evalndloopstop(A),0,[],[]).
-eq(evalndloopbbin(A),1,[evalndloopbbin(B)],[2+A>=B,B>=A+1,9>=B]).
-eq(evalndloopbbin(A),1,[loop_exit_evalndloopbbin(A)],[B>=A+3]).
-eq(evalndloopbbin(A),1,[loop_exit_evalndloopbbin(A)],[A>=B]).
-eq(evalndloopbbin(A),1,[loop_exit_evalndloopbbin(A)],[B>=10]).

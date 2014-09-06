@@ -4,4 +4,3 @@ eq(f300(A,B,C,D,E,F,G,H,I,J,K),1,[f2(A,L,L,M,N,O,G,P,Q,R,K,S,T,U,V,W,X,Y,Z,A1,B1
 eq(f2(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),1,[f2(A,C,C,W,X,Y,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V)],[A>=1]).
 eq(loop_exit_f2(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),0,[],[A=L,B=M,C=N,D=O,E=P,F=Q,G=R,H=S,I=T,J=U,K=V]).
 eq(f1(A,B,C,D,E,F,G,H,I,J,K),0,[],[]).
-eq(f2(A,B,C,D,E,F,G,H,I,J,K),1,[f2(A,C,C,L,M,N,G,H,I,J,K)],[A>=1]).

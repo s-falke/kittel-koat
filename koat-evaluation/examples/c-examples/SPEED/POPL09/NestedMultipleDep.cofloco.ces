@@ -12,10 +12,3 @@ eq(loop_cont_evalNestedMultipleDepbb2in(A,B,C,D,E,F,G,H,I,J),0,[evalNestedMultip
 eq(loop_exit_evalNestedMultipleDepbb2in(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
 eq(loop_exit_evalNestedMultipleDepbb3in(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
 eq(evalNestedMultipleDepstop(A,B,C,D,E),0,[],[]).
-eq(evalNestedMultipleDepbb3in(A,B,C,D,E),1,[evalNestedMultipleDepbbin(A,B,C,D,E)],[B>=A+1]).
-eq(evalNestedMultipleDepbb2in(A,B,C,D,E),1,[evalNestedMultipleDepbb1in(A,B,C,D,E)],[E>=D+1]).
-eq(evalNestedMultipleDepbb1in(A,B,C,D,E),1,[evalNestedMultipleDepbb2in(A,B,C,D+1,E)],[]).
-eq(evalNestedMultipleDepbbin(A,B,C,D,E),1,[evalNestedMultipleDepbb2in(A,B,A+1,0,E,F,G,H,I,J),loop_cont_evalNestedMultipleDepbb2in(F,G,H,I,J)],[]).
-eq(evalNestedMultipleDepbb2in(A,B,C,D,E),1,[loop_exit_evalNestedMultipleDepbb2in(C,B,C,D,E)],[D>=E]).
-eq(loop_cont_evalNestedMultipleDepbb2in(A,B,C,D,E),0,[evalNestedMultipleDepbb3in(A,B,C,D,E)],[]).
-eq(evalNestedMultipleDepbb3in(A,B,C,D,E),1,[loop_exit_evalNestedMultipleDepbb3in(A,B,C,D,E)],[A>=B]).

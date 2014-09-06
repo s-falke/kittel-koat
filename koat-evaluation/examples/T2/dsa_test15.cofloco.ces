@@ -8,5 +8,3 @@ eq(f8(A,B,C,D,E,F),1,[loop_exit_f8(A,B,0,D,E,F)],[B>=10]).
 eq(loop_exit_f8(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(loop_exit_f19(A,B,C),0,[],[]).
 eq(f29(A,B,C),0,[],[]).
-eq(f8(A,B,C),1,[f8(A,B+1,C)],[9>=B]).
-eq(f8(A,B,C),1,[loop_exit_f8(A,B,0)],[B>=10]).

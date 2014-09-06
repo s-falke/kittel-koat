@@ -12,5 +12,3 @@ eq(loop_exit_f18(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[A=G,B=H,C=I,D=J,E=K,F=L]).
 eq(loop_exit_f24(A,B,C,D,E,F),0,[],[]).
 eq(loop_exit_f31(A,B,C,D,E,F),0,[],[]).
 eq(f39(A,B,C,D,E,F),0,[],[]).
-eq(f18(A,B,C,D,E,F),1,[f18(A,B+1,C,D,E,F)],[A>=B+1]).
-eq(f18(A,B,C,D,E,F),1,[loop_exit_f18(A,0,C,D,E,F)],[B>=A]).

@@ -18,16 +18,3 @@ eq(evalEx1bb5in(A,B,C,D,E,F,G,H),1,[evalEx1bb6in(A+1,D,C,D,E,F,G,H)],[]).
 eq(loop_exit_evalEx1bb4in(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(loop_exit_evalEx1bb6in(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(evalEx1stop(A,B,C,D),0,[],[]).
-eq(evalEx1bb6in(A,B,C,D),1,[evalEx1bbin(A,B,C,D)],[B>=A+1]).
-eq(evalEx1bb4in(A,B,C,D),1,[evalEx1bb1in(A,B,C,D)],[D>=C+1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,D-1)],[0>=E+1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,D-1)],[0>=E+1,E>=1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,D-1)],[E>=1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,D)],[0>=1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C+1,D-1)],[0>=1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C+1,D)],[]).
-eq(evalEx1bb5in(A,B,C,D),1,[evalEx1bb6in(A+1,D,C,D)],[]).
-eq(evalEx1bbin(A,B,C,D),1,[evalEx1bb4in(A,B,A+1,B,E,F,G,H),loop_cont_evalEx1bb4in(E,F,G,H)],[]).
-eq(evalEx1bb4in(A,B,C,D),1,[loop_exit_evalEx1bb4in(A,B,C,D)],[C>=D]).
-eq(loop_cont_evalEx1bb4in(A,B,C,D),0,[evalEx1bb5in(A,B,C,D)],[]).
-eq(evalEx1bb6in(A,B,C,D),1,[loop_exit_evalEx1bb6in(A,B,C,D)],[A>=B]).

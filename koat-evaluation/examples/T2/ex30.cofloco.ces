@@ -8,5 +8,3 @@ eq(f12(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[loop_exit_f12(A,B,C,D,A,0,O,H,I,J,K,L,M,N
 eq(loop_exit_f12(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F=M,G=N]).
 eq(loop_exit_f25(A,B,C,D,E,F,G),0,[],[]).
 eq(f34(A,B,C,D,E,F,G),0,[],[]).
-eq(f12(A,B,C,D,E,F,G),1,[f12(A,B,C,D+1,E,F,G)],[C>=D+1]).
-eq(f12(A,B,C,D,E,F,G),1,[loop_exit_f12(A,B,C,D,A,0,H)],[D>=C]).

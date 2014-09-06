@@ -1,4 +1,3 @@
 eq(f1(A),1,[f4(3,B),loop_cont_f4(B)],[]).
 eq(f4(A,B),1,[f4(3,B)],[]).
 eq(loop_exit_f4(A,B),0,[],[A=B]).
-eq(f4(A),1,[f4(3)],[]).

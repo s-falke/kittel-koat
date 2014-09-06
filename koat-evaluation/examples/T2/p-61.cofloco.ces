@@ -5,6 +5,3 @@ eq(f300(A,B,C,D,E,F,G,H,I,J),1,[loop_exit_f300(A,B,0,0,0,F,G,H,I,J)],[100>=A,9>=
 eq(f300(A,B,C,D,E,F,G,H,I,J),1,[loop_exit_f300(A,B,0,0,0,F,G,H,I,J)],[B>=10]).
 eq(loop_exit_f300(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
 eq(f2(A,B,C,D,E),0,[],[]).
-eq(f300(A,B,C,D,E),1,[f300(-1+A,B,C,D,E)],[A>=101,9>=B]).
-eq(f300(A,B,C,D,E),1,[loop_exit_f300(A,B,0,0,0)],[100>=A,9>=B]).
-eq(f300(A,B,C,D,E),1,[loop_exit_f300(A,B,0,0,0)],[B>=10]).

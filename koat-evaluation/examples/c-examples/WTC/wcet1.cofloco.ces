@@ -15,13 +15,3 @@ eq(evalwcet1bb6in(A,B,C,D,E,F,G,H),1,[loop_exit_evalwcet1bbin(A,B,C,D,E,F,G,H)],
 eq(evalwcet1bb5in(A,B,C,D,E,F,G,H),1,[evalwcet1bb6in(A,B,C,0,E,F,G,H)],[]).
 eq(loop_exit_evalwcet1bbin(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(evalwcet1stop(A,B,C,D),0,[],[]).
-eq(evalwcet1bbin(A,B,C,D),1,[evalwcet1bb1in(A,B,C,D)],[0>=E+1]).
-eq(evalwcet1bbin(A,B,C,D),1,[evalwcet1bb1in(A,B,C,D)],[E>=1]).
-eq(evalwcet1bbin(A,B,C,D),1,[evalwcet1bb4in(A,B,C,D)],[]).
-eq(evalwcet1bb1in(A,B,C,D),1,[evalwcet1bb6in(A,B,C,0)],[B+1>=A]).
-eq(evalwcet1bb1in(A,B,C,D),1,[evalwcet1bb6in(A,B,C,B+1)],[A>=B+2]).
-eq(evalwcet1bb4in(A,B,C,D),1,[evalwcet1bb5in(A,B,C,D)],[1>=B]).
-eq(evalwcet1bb4in(A,B,C,D),1,[evalwcet1bb6in(A,B,C,B-1)],[B>=2]).
-eq(evalwcet1bb5in(A,B,C,D),1,[evalwcet1bb6in(A,B,C,0)],[]).
-eq(evalwcet1bb6in(A,B,C,D),1,[evalwcet1bbin(A,D,C-1,D)],[C>=2]).
-eq(evalwcet1bb6in(A,B,C,D),1,[loop_exit_evalwcet1bbin(A,B,C,D)],[1>=C]).

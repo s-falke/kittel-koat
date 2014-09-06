@@ -6,7 +6,3 @@ eq(f8(A,B,C,D,E,F,G,H),1,[loop_exit_f8(A,B,C,D,E,F,G,H)],[A>=4,0>=I+1]).
 eq(f8(A,B,C,D,E,F,G,H),1,[loop_exit_f8(A,B,C,D,E,F,G,H)],[A>=4]).
 eq(loop_exit_f8(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(f23(A,B,C,D),0,[],[]).
-eq(f8(A,B,C,D),1,[f8(A+1,B,C,D)],[3>=A]).
-eq(f8(A,B,C,D),1,[f8(A+1,A,A+1,E)],[3>=A]).
-eq(f8(A,B,C,D),1,[loop_exit_f8(A,B,C,D)],[A>=4,0>=E+1]).
-eq(f8(A,B,C,D),1,[loop_exit_f8(A,B,C,D)],[A>=4]).

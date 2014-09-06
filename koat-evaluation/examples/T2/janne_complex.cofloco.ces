@@ -12,12 +12,3 @@ eq(loop_cont_f10(A,B,C,D,E,F,G,H,I,J,K,L),0,[f8(A,B,C,D,E,F,G,H,I,J,K,L)],[]).
 eq(loop_exit_f10(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[A=G,B=H,C=I,D=J,E=K,F=L]).
 eq(loop_exit_f8(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[A=G,B=H,C=I,D=J,E=K,F=L]).
 eq(f28(A,B,C,D,E,F),0,[],[]).
-eq(f10(A,B,C,D,E,F),1,[f14(A,B,C,D,G,F)],[D>=E+1,E>=6]).
-eq(f10(A,B,C,D,E,F),1,[f14(A,B,C,D,E+2,F)],[D>=E+1,5>=E]).
-eq(f14(A,B,C,D,E,F),1,[f10(A,B,C,D+10,E,F)],[12>=E,E>=10]).
-eq(f14(A,B,C,D,E,F),1,[f10(A,B,C,D+1,E,F)],[E>=13]).
-eq(f14(A,B,C,D,E,F),1,[f10(A,B,C,D+1,E,F)],[9>=E]).
-eq(f8(A,B,C,D,E,F),1,[f10(A,B,C,D,E,F,G,H,I,J,K,L),loop_cont_f10(G,H,I,J,K,L)],[29>=D]).
-eq(f10(A,B,C,D,E,F),1,[loop_exit_f10(A,B,C,D+2,E-10,F)],[E>=D]).
-eq(loop_cont_f10(A,B,C,D,E,F),0,[f8(A,B,C,D,E,F)],[]).
-eq(f8(A,B,C,D,E,F),1,[loop_exit_f8(A,B,1,D,E,1)],[D>=30]).

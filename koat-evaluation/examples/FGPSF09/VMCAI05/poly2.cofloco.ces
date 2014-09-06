@@ -2,5 +2,3 @@ eq(start(A,B,C),1,[eval(A,B,C,D,E,F),loop_cont_eval(D,E,F)],[]).
 eq(eval(A,B,C,D,E,F),1,[eval(A+B,B-2,C+1,D,E,F)],[A>=0]).
 eq(eval(A,B,C,D,E,F),1,[eval(A+C,B,C-2,D,E,F)],[A>=0]).
 eq(loop_exit_eval(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
-eq(eval(A,B,C),1,[eval(A+B,B-2,C+1)],[A>=0]).
-eq(eval(A,B,C),1,[eval(A+C,B,C-2)],[A>=0]).

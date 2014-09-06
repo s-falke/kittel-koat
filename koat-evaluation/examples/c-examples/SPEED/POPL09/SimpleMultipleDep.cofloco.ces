@@ -10,9 +10,3 @@ eq(evalSimpleMultipleDepbb1in(A,B,C,D,E,F,G,H),1,[evalSimpleMultipleDepbb3in(A+1
 eq(evalSimpleMultipleDepbb2in(A,B,C,D,E,F,G,H),1,[evalSimpleMultipleDepbb3in(0,B+1,C,D,E,F,G,H)],[]).
 eq(loop_exit_evalSimpleMultipleDepbb3in(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(evalSimpleMultipleDepstop(A,B,C,D),0,[],[]).
-eq(evalSimpleMultipleDepbb3in(A,B,C,D),1,[evalSimpleMultipleDepbbin(A,B,C,D)],[C>=B+1]).
-eq(evalSimpleMultipleDepbbin(A,B,C,D),1,[evalSimpleMultipleDepbb1in(A,B,C,D)],[D>=A+1]).
-eq(evalSimpleMultipleDepbbin(A,B,C,D),1,[evalSimpleMultipleDepbb2in(A,B,C,D)],[A>=D]).
-eq(evalSimpleMultipleDepbb1in(A,B,C,D),1,[evalSimpleMultipleDepbb3in(A+1,B,C,D)],[]).
-eq(evalSimpleMultipleDepbb2in(A,B,C,D),1,[evalSimpleMultipleDepbb3in(0,B+1,C,D)],[]).
-eq(evalSimpleMultipleDepbb3in(A,B,C,D),1,[loop_exit_evalSimpleMultipleDepbb3in(A,B,C,D)],[B>=C]).

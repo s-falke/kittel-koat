@@ -15,12 +15,3 @@ eq(loop_cont_evalloopsbb4in(A,B,C,D),0,[evalloopsbb5in(A,B,C,D)],[]).
 eq(loop_exit_evalloopsbb4in(A,B,C,D),0,[],[A=C,B=D]).
 eq(loop_exit_evalloopsbb6in(A,B,C,D),0,[],[A=C,B=D]).
 eq(evalloopsstop(A,B),0,[],[]).
-eq(evalloopsbb6in(A,B),1,[evalloopsbb1in(A,B)],[A>=0]).
-eq(evalloopsbb1in(A,B),1,[evalloopsbb5in(A,C)],[1>=A]).
-eq(evalloopsbb4in(A,B),1,[evalloopsbb3in(A,B)],[A>=B+1]).
-eq(evalloopsbb3in(A,B),1,[evalloopsbb4in(A,2*B)],[]).
-eq(evalloopsbb5in(A,B),1,[evalloopsbb6in(A-1,B)],[]).
-eq(evalloopsbb1in(A,B),1,[evalloopsbb4in(A,1,C,D),loop_cont_evalloopsbb4in(C,D)],[A>=2]).
-eq(evalloopsbb4in(A,B),1,[loop_exit_evalloopsbb4in(A,B)],[B>=A]).
-eq(loop_cont_evalloopsbb4in(A,B),0,[evalloopsbb5in(A,B)],[]).
-eq(evalloopsbb6in(A,B),1,[loop_exit_evalloopsbb6in(A,B)],[0>=A+1]).

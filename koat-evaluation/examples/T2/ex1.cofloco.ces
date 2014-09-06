@@ -4,5 +4,3 @@ eq(f5(A,B,C,D,E,F),1,[f5(A+1,B+2,G+H,D,E,F)],[]).
 eq(f5(A,B,C,D,E,F),1,[loop_exit_f5(A,B,C,D,E,F)],[]).
 eq(loop_exit_f5(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(f16(A,B,C),0,[],[]).
-eq(f5(A,B,C),1,[f5(A+1,B+2,D+E)],[]).
-eq(f5(A,B,C),1,[loop_exit_f5(A,B,C)],[]).

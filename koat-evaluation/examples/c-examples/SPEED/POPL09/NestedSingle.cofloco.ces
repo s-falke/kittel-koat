@@ -15,13 +15,3 @@ eq(evalNestedSinglebb1in(A,B,C,D,E,F),1,[evalNestedSinglebb2in(A,B,C+1,D,E,F)],[
 eq(loop_exit_evalNestedSinglebb5in(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(loop_exit_evalNestedSinglebb2in(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(evalNestedSinglestop(A,B,C),0,[],[]).
-eq(evalNestedSinglebb2in(A,B,C),1,[evalNestedSinglebb3in(A,B,C)],[B>=C+1]).
-eq(evalNestedSinglebb3in(A,B,C),1,[evalNestedSinglebb1in(A,B,C)],[0>=D+1]).
-eq(evalNestedSinglebb3in(A,B,C),1,[evalNestedSinglebb1in(A,B,C)],[D>=1]).
-eq(evalNestedSinglebb1in(A,B,C),1,[evalNestedSinglebb2in(A,B,C+1)],[]).
-eq(evalNestedSinglebb4in(A,B,C),1,[evalNestedSinglebb5in(C+1,B,C)],[]).
-eq(evalNestedSinglebb5in(A,B,C),1,[loop_exit_evalNestedSinglebb5in(A,B,C)],[A>=B]).
-eq(evalNestedSinglebb5in(A,B,C),1,[evalNestedSinglebb2in(A,B,A,D,E,F),loop_cont_evalNestedSinglebb2in(D,E,F)],[B>=A+1]).
-eq(evalNestedSinglebb3in(A,B,C),1,[loop_exit_evalNestedSinglebb2in(A,B,C)],[]).
-eq(loop_cont_evalNestedSinglebb2in(A,B,C),0,[evalNestedSinglebb4in(A,B,C)],[]).
-eq(evalNestedSinglebb2in(A,B,C),1,[loop_exit_evalNestedSinglebb2in(A,B,C)],[C>=B]).

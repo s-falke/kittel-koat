@@ -11,8 +11,3 @@ eq(loop_exit_f14(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(loop_exit_f9(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(loop_exit_f22(A,B,C,D),0,[],[]).
 eq(f27(A,B,C,D),0,[],[]).
-eq(f14(A,B,C,D),1,[f14(A,B,C-1,D)],[C>=1]).
-eq(f9(A,B,C,D),1,[f14(A,0,E,D,F,G,H,I),loop_cont_f14(F,G,H,I)],[0>=A]).
-eq(f14(A,B,C,D),1,[loop_exit_f14(E,B,C,0)],[0>=C]).
-eq(loop_cont_f14(A,B,C,D),0,[f9(A,B,C,D)],[]).
-eq(f9(A,B,C,D),1,[loop_exit_f9(A,B,C,D)],[A>=1]).

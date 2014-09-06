@@ -10,4 +10,3 @@ eq(f24(A,B,C,D,E,F,G,H,I,J,K),1,[f32(1,L,C,M,M,F,G,H,I,J,K,N,O,P,Q,R,S,T,U,V,W,X
 eq(f32(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),1,[f32(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V)],[]).
 eq(loop_exit_f32(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),0,[],[A=L,B=M,C=N,D=O,E=P,F=Q,G=R,H=S,I=T,J=U,K=V]).
 eq(f37(A,B,C,D,E,F,G,H,I,J,K),0,[],[]).
-eq(f32(A,B,C,D,E,F,G,H,I,J,K),1,[f32(A,B,C,D,E,F,G,H,I,J,K)],[]).

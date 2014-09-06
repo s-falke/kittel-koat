@@ -21,6 +21,3 @@ eq(loop_exit_f5(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F=M,G=N])
 eq(loop_exit_f17(A,B,C,D,E,F,G),0,[],[]).
 eq(loop_exit_f32(A,B,C,D,E,F,G),0,[],[]).
 eq(f13(A,B,C,D,E,F,G),0,[],[]).
-eq(f5(A,B,C,D,E,F,G),1,[f5(A+1,B,C,D,E,F,G)],[99>=A]).
-eq(f5(A,B,C,D,E,F,G),1,[loop_exit_f5(A,B,C,A-2,E,F,G)],[A>=100]).
-eq(f5(A,B,C,D,E,F,G),1,[loop_exit_f5(A,A-2,C,A-2,E,F,G)],[0>=A+1,A>=100]).

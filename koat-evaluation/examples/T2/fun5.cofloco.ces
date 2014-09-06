@@ -12,15 +12,3 @@ eq(f3(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f1(A,B,C,F,G,F,G,H,I,J,K,L,M,N)],[F>=D+1])
 eq(f3(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f1(A,B,C,F,G,F,G,H,I,J,K,L,M,N)],[E>=G+1]).
 eq(f3(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f1(A,B,C,F,G,F,G,H,I,J,K,L,M,N)],[G>=E+1]).
 eq(loop_exit_f1(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F=M,G=N]).
-eq(f1(A,B,C,D,E,F,G),1,[f2(A,B,C,D,E,D+1,G)],[1+B>=2*D]).
-eq(f1(A,B,C,D,E,F,G),1,[f2(A,B,C,D,E,D-1,G)],[2*D>=4+B]).
-eq(f1(A,B,C,D,E,F,G),1,[f2(A,B,C,D,E,D,G)],[B+2=2*D]).
-eq(f1(A,B,C,D,E,F,G),1,[f2(A,B,C,D,E,D,G)],[B+3=2*D]).
-eq(f2(A,B,C,D,E,F,G),1,[f3(A,B,C,D,E,F,E+1)],[D+A>=2*E+1]).
-eq(f2(A,B,C,D,E,F,G),1,[f3(A,B,C,D,E,F,E-1)],[2*E>=2+D+A]).
-eq(f2(A,B,C,D,E,F,G),1,[f3(A,B,C,D,E,F,E)],[D+A=2*E]).
-eq(f2(A,B,C,D,E,F,G),1,[f3(A,B,C,D,E,F,E)],[D+A+1=2*E]).
-eq(f3(A,B,C,D,E,F,G),1,[f1(A,B,C,F,G,F,G)],[D>=F+1]).
-eq(f3(A,B,C,D,E,F,G),1,[f1(A,B,C,F,G,F,G)],[F>=D+1]).
-eq(f3(A,B,C,D,E,F,G),1,[f1(A,B,C,F,G,F,G)],[E>=G+1]).
-eq(f3(A,B,C,D,E,F,G),1,[f1(A,B,C,F,G,F,G)],[G>=E+1]).

@@ -4,5 +4,3 @@ eq(f3(A,B,C,D),1,[f3(A+1,10-A,C,D)],[10>=A]).
 eq(f3(A,B,C,D),1,[loop_exit_f3(A,B,C,D)],[A>=11]).
 eq(loop_exit_f3(A,B,C,D),0,[],[A=C,B=D]).
 eq(f10(A,B),0,[],[]).
-eq(f3(A,B),1,[f3(A+1,10-A)],[10>=A]).
-eq(f3(A,B),1,[loop_exit_f3(A,B)],[A>=11]).

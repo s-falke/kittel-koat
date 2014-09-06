@@ -11,8 +11,3 @@ eq(loop_exit_f16(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[A=G,B=H,C=I,D=J,E=K,F=L]).
 eq(loop_exit_f10(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[A=G,B=H,C=I,D=J,E=K,F=L]).
 eq(loop_exit_f25(A,B,C,D,E,F),0,[],[]).
 eq(f30(A,B,C,D,E,F),0,[],[]).
-eq(f16(A,B,C,D,E,F),1,[f16(A,B,C,D,E,F)],[D>=1]).
-eq(f10(A,B,C,D,E,F),1,[f16(A,0,G,G,E,F,H,I,J,K,L,M),loop_cont_f16(H,I,J,K,L,M)],[0>=A]).
-eq(f16(A,B,C,D,E,F),1,[loop_exit_f16(G,B,C,D,0,G)],[0>=D]).
-eq(loop_cont_f16(A,B,C,D,E,F),0,[f10(A,B,C,D,E,F)],[]).
-eq(f10(A,B,C,D,E,F),1,[loop_exit_f10(A,B,C,D,E,F)],[A>=1]).

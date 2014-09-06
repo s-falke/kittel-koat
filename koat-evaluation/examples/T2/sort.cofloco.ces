@@ -36,13 +36,3 @@ eq(loop_exit_f33(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X),0,[],[A=M,B=N,
 eq(loop_exit_f29(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[]).
 eq(loop_exit_f52(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[]).
 eq(f71(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[]).
-eq(f23(A,B,C,D,E,F,G,H,I,J,K,L),1,[f23(A,B,C,D,E,F+1,G,H,I,J,K,L)],[C>=F+1]).
-eq(f33(A,B,C,D,E,F,G,H,I,J,K,L),1,[f33(A,B,C,D,E,F,1,H+1,1,J,K,L)],[0>=G+1,C>=H+1]).
-eq(f33(A,B,C,D,E,F,G,H,I,J,K,L),1,[f33(A,B,C,D,E,F,1,H+1,1,J,K,L)],[G>=1,C>=H+1]).
-eq(f33(A,B,C,D,E,F,G,H,I,J,K,L),1,[f33(A,B,C,D,E,F,1,H+1,1,J,K,L)],[C>=H+1,G=0]).
-eq(f33(A,B,C,D,E,F,G,H,I,J,K,L),1,[f33(A,B,C,D,E,F,0,H+1,0,J,K,L)],[M>=N+1,C>=H+1,G=0]).
-eq(f33(A,B,C,D,E,F,G,H,I,J,K,L),1,[f33(A,B,C,D,E,F,0,H+1,0,J,K,L)],[C>=H+1,G=0]).
-eq(f23(A,B,C,D,E,F,G,H,I,J,K,L),1,[loop_exit_f23(A,B,C,D,E,0,G,H,I,J,K,L)],[F>=C]).
-eq(f33(A,B,C,D,E,F,G,H,I,J,K,L),1,[loop_exit_f33(A,B,C,D,E,F,G,H,I,J,K,L)],[0>=A+1,H>=C]).
-eq(f33(A,B,C,D,E,F,G,H,I,J,K,L),1,[loop_exit_f33(A,B,C,D,E,F,G,H,I,J,K,L)],[A>=1,H>=C]).
-eq(f33(A,B,C,D,E,F,G,H,I,J,K,L),1,[loop_exit_f33(0,B,C,D,E,F+1,G,H,I,0,K,L)],[H>=C,A=0]).

@@ -13,10 +13,3 @@ eq(loop_exit_start(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(stop1(A,B,C,D),0,[],[]).
 eq(stop2(A,B,C,D),0,[],[]).
 eq(stop3(A,B,C,D),0,[],[]).
-eq(start(A,B,C,D),1,[cont1(A,B,C,D)],[D>=1,A>=0,B>=0,C>=0,D>=0,A>=D]).
-eq(cont1(A,B,C,D),1,[a(A,B,C-1,D)],[C>=1,D>=1,C>=0,B>=0,A>=D]).
-eq(a(A,B,C,D),1,[b(A,B,E,D-1)],[A>=D,B>=0,C>=0,D>=1]).
-eq(b(A,B,C,D),1,[start(A,B,C,D)],[C>=0,D>=0,B>=0,A>=D+1]).
-eq(b(A,B,C,D),1,[loop_exit_start(A,B,C,D)],[0>=C+1,D>=0,B>=0,A>=D+1]).
-eq(cont1(A,B,C,D),1,[loop_exit_start(A,B,1,D-1)],[D>=1,B>=0,A>=D,C=0]).
-eq(start(A,B,C,D),1,[loop_exit_start(A,B,C,D)],[A>=0,B>=0,C>=0,D=0]).

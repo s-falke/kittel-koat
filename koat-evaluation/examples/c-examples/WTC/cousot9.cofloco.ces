@@ -10,9 +10,3 @@ eq(evalcousot9bb1in(A,B,C,D,E,F),1,[evalcousot9bb3in(A-1,B,C,D,E,F)],[]).
 eq(evalcousot9bb2in(A,B,C,D,E,F),1,[evalcousot9bb3in(C,B-1,C,D,E,F)],[]).
 eq(loop_exit_evalcousot9bb3in(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(evalcousot9stop(A,B,C),0,[],[]).
-eq(evalcousot9bb3in(A,B,C),1,[evalcousot9bbin(A,B,C)],[B>=1]).
-eq(evalcousot9bbin(A,B,C),1,[evalcousot9bb1in(A,B,C)],[A>=1]).
-eq(evalcousot9bbin(A,B,C),1,[evalcousot9bb2in(A,B,C)],[0>=A]).
-eq(evalcousot9bb1in(A,B,C),1,[evalcousot9bb3in(A-1,B,C)],[]).
-eq(evalcousot9bb2in(A,B,C),1,[evalcousot9bb3in(C,B-1,C)],[]).
-eq(evalcousot9bb3in(A,B,C),1,[loop_exit_evalcousot9bb3in(A,B,C)],[0>=B]).

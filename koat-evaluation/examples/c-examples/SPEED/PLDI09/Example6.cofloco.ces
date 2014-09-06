@@ -17,14 +17,3 @@ eq(loop_exit_evalfbb5in(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F
 eq(loop_exit_evalfbb1in(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F=M,G=N]).
 eq(loop_exit_evalfbb3in(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F=M,G=N]).
 eq(evalfstop(A,B,C,D,E,F,G),0,[],[]).
-eq(evalfbb5in(A,B,C,D,E,F,G),1,[evalfbbin(A,B,C,D,C+1,F,G)],[D>=C+1]).
-eq(evalfbb1in(A,B,C,D,E,F,G),1,[evalfbb1in(A,B,C,D,E,F+1,G)],[G>=F+1]).
-eq(evalfbb3in(A,B,C,D,E,F,G),1,[evalfbb3in(A,B,C,D,E,F+1,G)],[G>=F+1]).
-eq(evalfbb5in(A,B,C,D,E,F,G),1,[loop_exit_evalfbb5in(A,B,C,D,E,F,G)],[C>=D]).
-eq(evalfbbin(A,B,C,D,E,F,G),1,[evalfbb1in(A,B,C,D,E,B,G,H,I,J,K,L,M,N),loop_cont_evalfbb1in(H,I,J,K,L,M,N)],[0>=O+1]).
-eq(evalfbbin(A,B,C,D,E,F,G),1,[evalfbb1in(A,B,C,D,E,B,G,H,I,J,K,L,M,N),loop_cont_evalfbb1in(H,I,J,K,L,M,N)],[O>=1]).
-eq(evalfbb1in(A,B,C,D,E,F,G),1,[loop_exit_evalfbb1in(A,F+1,E,D,E,F,G)],[F>=G]).
-eq(loop_cont_evalfbb1in(A,B,C,D,E,F,G),0,[evalfbb5in(A,B,C,D,E,F,G)],[]).
-eq(evalfbbin(A,B,C,D,E,F,G),1,[evalfbb3in(A,B,C,D,E,A,G,H,I,J,K,L,M,N),loop_cont_evalfbb3in(H,I,J,K,L,M,N)],[]).
-eq(evalfbb3in(A,B,C,D,E,F,G),1,[loop_exit_evalfbb3in(F+1,B,E,D,E,F,G)],[F>=G]).
-eq(loop_cont_evalfbb3in(A,B,C,D,E,F,G),0,[evalfbb5in(A,B,C,D,E,F,G)],[]).

@@ -2,5 +2,3 @@ eq(f0(A),1,[f3(A,B),loop_cont_f3(B)],[]).
 eq(f3(A,B),1,[f3(A-1,B)],[A>=2]).
 eq(f3(A,B),1,[f3(A-1,B)],[]).
 eq(loop_exit_f3(A,B),0,[],[A=B]).
-eq(f3(A),1,[f3(A-1)],[A>=2]).
-eq(f3(A),1,[f3(A-1)],[]).

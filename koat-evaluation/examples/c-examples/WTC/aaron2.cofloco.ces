@@ -13,11 +13,3 @@ eq(evalaaron2bb4in(A,B,C,D,E,F),1,[evalaaron2bb6in(A,B,C-A-1,D,E,F)],[]).
 eq(evalaaron2bb5in(A,B,C,D,E,F),1,[evalaaron2bb6in(A,B+A+1,C,D,E,F)],[]).
 eq(loop_exit_evalaaron2bb6in(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(evalaaron2stop(A,B,C),0,[],[]).
-eq(evalaaron2bb6in(A,B,C),1,[evalaaron2bb3in(A,B,C)],[C>=B,A>=0]).
-eq(evalaaron2bb3in(A,B,C),1,[evalaaron2bb4in(A,B,C)],[0>=D+1]).
-eq(evalaaron2bb3in(A,B,C),1,[evalaaron2bb4in(A,B,C)],[D>=1]).
-eq(evalaaron2bb3in(A,B,C),1,[evalaaron2bb5in(A,B,C)],[]).
-eq(evalaaron2bb4in(A,B,C),1,[evalaaron2bb6in(A,B,C-A-1)],[]).
-eq(evalaaron2bb5in(A,B,C),1,[evalaaron2bb6in(A,B+A+1,C)],[]).
-eq(evalaaron2bb6in(A,B,C),1,[loop_exit_evalaaron2bb6in(A,B,C)],[B>=C+1]).
-eq(evalaaron2bb6in(A,B,C),1,[loop_exit_evalaaron2bb6in(A,B,C)],[0>=A+1]).

@@ -5,5 +5,3 @@ eq(f4(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f4(A-B,B,C,D,E,F,G,H,I,J,K,L,M,N)],[A>=0])
 eq(f4(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[loop_exit_f4(A,B,0,0,0,0,0,H,I,J,K,L,M,N)],[0>=A+1]).
 eq(loop_exit_f4(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F=M,G=N]).
 eq(f6(A,B,C,D,E,F,G),0,[],[]).
-eq(f4(A,B,C,D,E,F,G),1,[f4(A-B,B,C,D,E,F,G)],[A>=0]).
-eq(f4(A,B,C,D,E,F,G),1,[loop_exit_f4(A,B,0,0,0,0,0)],[0>=A+1]).

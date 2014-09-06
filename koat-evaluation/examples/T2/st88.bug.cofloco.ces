@@ -14,12 +14,3 @@ eq(loop_cont_f20(A,B,C,D),0,[f9(A,B,C,D)],[]).
 eq(loop_exit_f9(A,B,C,D),0,[],[A=C,B=D]).
 eq(loop_exit_f20(A,B,C,D),0,[],[A=C,B=D]).
 eq(f30(A,B),0,[],[]).
-eq(f9(A,B),1,[f12(A,C)],[5>=A,0>=C+1]).
-eq(f9(A,B),1,[f12(A,C)],[5>=A,C>=1]).
-eq(f12(A,B),1,[f9(A+1,B)],[A>=6]).
-eq(f20(A,B),1,[f20(A-1,B)],[A>=3]).
-eq(f12(A,B),1,[f9(A+1,B)],[5>=A]).
-eq(f9(A,B),1,[f20(A,0,C,D),loop_cont_f20(C,D)],[5>=A]).
-eq(f9(A,B),1,[f20(A,B,C,D),loop_cont_f20(C,D)],[A>=6]).
-eq(f20(A,B),1,[loop_exit_f20(A,B)],[2>=A]).
-eq(loop_cont_f20(A,B),0,[f9(A,B)],[]).

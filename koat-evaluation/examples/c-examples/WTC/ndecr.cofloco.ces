@@ -7,6 +7,3 @@ eq(evalndecrbb1in(A,B),1,[loop_exit_evalndecrbb1in(A,B)],[1>=A]).
 eq(evalndecrbbin(A,B),1,[evalndecrbb1in(A-1,B)],[]).
 eq(loop_exit_evalndecrbb1in(A,B),0,[],[A=B]).
 eq(evalndecrstop(A),0,[],[]).
-eq(evalndecrbb1in(A),1,[evalndecrbbin(A)],[A>=2]).
-eq(evalndecrbbin(A),1,[evalndecrbb1in(A-1)],[]).
-eq(evalndecrbb1in(A),1,[loop_exit_evalndecrbb1in(A)],[1>=A]).

@@ -17,9 +17,3 @@ eq(loop_exit_f8(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F=M,G=N])
 eq(loop_exit_f18(A,B,C,D,E,F,G),0,[],[]).
 eq(loop_exit_f22(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F=M,G=N]).
 eq(f40(A,B,C,D,E,F,G),0,[],[]).
-eq(f8(A,B,C,D,E,F,G),1,[f8(A,B,C+1,D,E,F,G)],[100>=C]).
-eq(f22(A,B,C,D,E,F,G),1,[f22(A,B,C,D,E,F+1,G)],[99>=F,100>=D+F]).
-eq(f22(A,B,C,D,E,F,G),1,[f22(A,B,C,D,0,F+1,H)],[99>=F,100>=D+F]).
-eq(f8(A,B,C,D,E,F,G),1,[loop_exit_f8(A,B,C,1,0,F,G)],[C>=101]).
-eq(f22(A,B,C,D,E,F,G),1,[loop_exit_f22(A,B,C,D,E,F,G)],[F>=100]).
-eq(f22(A,B,C,D,E,F,G),1,[loop_exit_f22(A,B,C,D,E,F,G)],[99>=F,F+D>=101]).

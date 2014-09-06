@@ -33,13 +33,3 @@ eq(loop_exit_f120(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(loop_exit_f12(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(f10000(A,B,C,D),0,[],[]).
 eq(f10001(A,B,C,D),0,[],[]).
-eq(f2(A,B,C,D),1,[f2(A,B,C,D)],[]).
-eq(f12(A,B,C,D),1,[f12(A,B,C,D)],[]).
-eq(f120(A,B,C,D),1,[f120(A,B,C,D)],[]).
-eq(f1200(A,B,C,D),1,[f1200(A,B,C,D)],[]).
-eq(f2(A,B,C,D),1,[loop_exit_f2(A,B,C,D)],[]).
-eq(f2(A,B,C,D),1,[loop_exit_f2(B,B,C,D)],[]).
-eq(loop_cont_f2(A,B,C,D),0,[f1200(A,B,C,D)],[]).
-eq(f1200(A,B,C,D),1,[loop_exit_f1200(A,B,C,1)],[]).
-eq(f120(A,B,C,D),1,[loop_exit_f120(A,B,C,1)],[]).
-eq(f12(A,B,C,D),1,[loop_exit_f12(A,B,C,1)],[]).

@@ -10,9 +10,3 @@ eq(evalfbb1in(A,B,C,D,E,F),1,[evalfbb3in(A+1,B,C,D,E,F)],[]).
 eq(evalfbb2in(A,B,C,D,E,F),1,[evalfbb3in(A,B+1,C,D,E,F)],[]).
 eq(loop_exit_evalfbb3in(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
 eq(evalfstop(A,B,C),0,[],[]).
-eq(evalfbb3in(A,B,C),1,[evalfbbin(A,B,C)],[99>=B]).
-eq(evalfbbin(A,B,C),1,[evalfbb1in(A,B,C)],[C>=A+1]).
-eq(evalfbbin(A,B,C),1,[evalfbb2in(A,B,C)],[A>=C]).
-eq(evalfbb1in(A,B,C),1,[evalfbb3in(A+1,B,C)],[]).
-eq(evalfbb2in(A,B,C),1,[evalfbb3in(A,B+1,C)],[]).
-eq(evalfbb3in(A,B,C),1,[loop_exit_evalfbb3in(A,B,C)],[B>=100]).

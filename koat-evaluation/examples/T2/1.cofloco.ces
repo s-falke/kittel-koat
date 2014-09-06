@@ -11,6 +11,3 @@ eq(f16(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1),1,[loop_exit_f
 eq(loop_exit_f16(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1),0,[],[A=O,B=P,C=Q,D=R,E=S,F=T,G=U,H=V,I=W,J=X,K=Y,L=Z,M=A1,N=B1]).
 eq(loop_exit_f11(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[]).
 eq(f13(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[]).
-eq(f16(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f16(A,B,C,D,E,F,G+1,O,O,O,K,L,M,N)],[E>=0,F>=G+2]).
-eq(f16(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[loop_exit_f16(A,O,P,Q,E,F,G,H,I,J,R,J,J,N)],[1+G>=F,P>=1,E>=0]).
-eq(f16(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[loop_exit_f16(A,O,P,Q,E,F,G,H,I,J,R,J,J,N)],[1+G>=F,0>=P+1,E>=0]).

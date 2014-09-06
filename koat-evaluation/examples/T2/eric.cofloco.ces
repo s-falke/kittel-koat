@@ -4,7 +4,3 @@ eq(f2(A,B,C,D,E,F),1,[f3(A,B,C,D,E,F)],[C>=B+1]).
 eq(f3(A,B,C,D,E,F),1,[f2(A,B,0,D,E,F)],[A+1>=0,C>=1,C>=A+1]).
 eq(f3(A,B,C,D,E,F),1,[f2(A,B,C+1,D,E,F)],[A>=C,C+1>=0]).
 eq(loop_exit_f2(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
-eq(f2(A,B,C),1,[f3(A,B,C)],[B>=C+1]).
-eq(f2(A,B,C),1,[f3(A,B,C)],[C>=B+1]).
-eq(f3(A,B,C),1,[f2(A,B,0)],[A+1>=0,C>=1,C>=A+1]).
-eq(f3(A,B,C),1,[f2(A,B,C+1)],[A>=C,C+1>=0]).

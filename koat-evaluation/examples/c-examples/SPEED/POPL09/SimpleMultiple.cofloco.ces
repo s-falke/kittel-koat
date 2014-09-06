@@ -10,9 +10,3 @@ eq(evalSimpleMultiplebb1in(A,B,C,D,E,F,G,H),1,[evalSimpleMultiplebb3in(A+1,B,C,D
 eq(evalSimpleMultiplebb2in(A,B,C,D,E,F,G,H),1,[evalSimpleMultiplebb3in(A,B+1,C,D,E,F,G,H)],[]).
 eq(loop_exit_evalSimpleMultiplebb3in(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
 eq(evalSimpleMultiplestop(A,B,C,D),0,[],[]).
-eq(evalSimpleMultiplebb3in(A,B,C,D),1,[evalSimpleMultiplebbin(A,B,C,D)],[C>=B+1]).
-eq(evalSimpleMultiplebbin(A,B,C,D),1,[evalSimpleMultiplebb1in(A,B,C,D)],[D>=A+1]).
-eq(evalSimpleMultiplebbin(A,B,C,D),1,[evalSimpleMultiplebb2in(A,B,C,D)],[A>=D]).
-eq(evalSimpleMultiplebb1in(A,B,C,D),1,[evalSimpleMultiplebb3in(A+1,B,C,D)],[]).
-eq(evalSimpleMultiplebb2in(A,B,C,D),1,[evalSimpleMultiplebb3in(A,B+1,C,D)],[]).
-eq(evalSimpleMultiplebb3in(A,B,C,D),1,[loop_exit_evalSimpleMultiplebb3in(A,B,C,D)],[B>=C]).

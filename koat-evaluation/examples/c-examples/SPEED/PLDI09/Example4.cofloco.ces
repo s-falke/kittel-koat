@@ -13,12 +13,3 @@ eq(evalfbb1in(A,B,C,D),1,[evalfbb3in(A+1,B,C,D)],[]).
 eq(evalfbb2in(A,B,C,D),1,[evalfbb3in(A-B,B,C,D)],[]).
 eq(loop_exit_evalfbb3in(A,B,C,D),0,[],[A=C,B=D]).
 eq(evalfstop(A,B),0,[],[]).
-eq(evalfbb3in(A,B),1,[evalfbb4in(A,B)],[A>=1]).
-eq(evalfbb4in(A,B),1,[evalfbbin(A,B)],[0>=C+1]).
-eq(evalfbb4in(A,B),1,[evalfbbin(A,B)],[C>=1]).
-eq(evalfbbin(A,B),1,[evalfbb1in(A,B)],[B>=A+1]).
-eq(evalfbbin(A,B),1,[evalfbb2in(A,B)],[A>=B]).
-eq(evalfbb1in(A,B),1,[evalfbb3in(A+1,B)],[]).
-eq(evalfbb2in(A,B),1,[evalfbb3in(A-B,B)],[]).
-eq(evalfbb4in(A,B),1,[loop_exit_evalfbb3in(A,B)],[]).
-eq(evalfbb3in(A,B),1,[loop_exit_evalfbb3in(A,B)],[0>=A]).

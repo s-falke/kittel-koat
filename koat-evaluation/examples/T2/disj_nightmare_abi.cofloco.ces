@@ -2,5 +2,3 @@ eq(start(A,B),1,[f0(A,B,C,D),loop_cont_f0(C,D)],[]).
 eq(f0(A,B,C,D),1,[f0(A,A,C,D)],[0>=A+1,B=0]).
 eq(f0(A,B,C,D),1,[f0(A,A,C,D)],[A>=1,B=0]).
 eq(loop_exit_f0(A,B,C,D),0,[],[A=C,B=D]).
-eq(f0(A,B),1,[f0(A,A)],[0>=A+1,B=0]).
-eq(f0(A,B),1,[f0(A,A)],[A>=1,B=0]).
