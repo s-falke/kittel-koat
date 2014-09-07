@@ -58,7 +58,7 @@ module Make (RuleT : AbstractRule) = struct
                 (Printf.sprintf "  \"%s\" -> \"%s\"" (RuleT.toDotString rule1) (RuleT.toDotString rule2))::accu
               else
                 accu)
-          ruleToIdx [])
+          ruleToIdx accu)
       ruleToIdx [] in
     String.concat "\n" accu
 
