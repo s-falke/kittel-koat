@@ -46,16 +46,16 @@ let rec remdupC comp l =
     | [] -> []
     | x::xs -> x::(remdupC comp (List.filter (fun y -> not (comp x y)) xs))
 
-(* Removes the first occurence of an element from a list, using comparison comp *)
+(* Removes all occurences of an element from a list, using comparison comp *)
 let rec removeC comp l e =
   match l with
     | [] -> []
     | x::xs -> if comp x e then
-                 xs
+                 (removeC comp xs e)
                else
                  x::(removeC comp xs e)
 
-(* Removes the first occurence of each element from a list from another list, using comparison comp *)
+(* Removes all occurences of each element from a list from another list, using comparison comp *)
 let rec removeAllC comp l l' =
   match l' with
     | [] -> l
