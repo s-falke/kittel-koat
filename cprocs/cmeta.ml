@@ -45,7 +45,7 @@ let proofs = ref []
 let output_nums = ref []
 let input_nums = ref []
 let did_ai = ref false
-let todo = ref (CTRSObl.getInitialObl [] "", (TGraph.G.empty, TGraph.RuleMap.empty), None, 0)
+let todo = ref (CTRSObl.getInitialObl [] "", (TGraph.G.empty, Array.of_list []), None, 0)
 
 let rec check trs =
   if trs = [] then

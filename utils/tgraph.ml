@@ -27,79 +27,75 @@ module Int = struct
   let equal = (=)
 end
 
+exception Found of int
+
 module Make (RuleT : AbstractRule) = struct
   module G = Graph.Persistent.Digraph.Concrete(Int)
   module SCC = Graph.Components.Make(G)
-  module RuleMap =
-    Map.Make(struct
-      type t = RuleT.rule
-      let compare = RuleT.compare
-    end)
 
-  let rec toDot (g, ruleToIdx) =
+  let rec toDot (g, trsa) =
     "digraph kittel {\n" ^
-    (getNodes ruleToIdx) ^
+    (getNodes trsa) ^
     "\n" ^
-    (getEdges g ruleToIdx) ^
+    (getEdges g trsa) ^
     "\n\n}\n"
-  and getNodes ruleToIdx =
+  and getNodes trsa =
     let res = ref "" in
-    RuleMap.iter
-      (fun rule _ ->
-        res := Printf.sprintf "%s\n  \"%s\"" !res (RuleT.toDotString rule)) ruleToIdx;
-    !res
-  and getEdges g ruleToIdx =
-    let accu =
-      RuleMap.fold
-        (fun rule1 idx1 accu ->
-          RuleMap.fold
-            (fun rule2 idx2 accu ->
-              if G.mem_edge g idx1 idx2 then
-                (Printf.sprintf "  \"%s\" -> \"%s\"" (RuleT.toDotString rule1) (RuleT.toDotString rule2))::accu
-              else
-                accu)
-          ruleToIdx [])
-      ruleToIdx [] in
-    String.concat "\n" accu
+      for i = 0 to (Array.length trsa - 1) do
+        res := !res ^ "\n  \"" ^ (RuleT.toDotString (snd trsa.(i))) ^ "\""
+      done;
+      !res
+  and getEdges g trsa =
+    let len = Array.length trsa
+    and accu = ref [] in
+      for i = 0 to (len - 1) do
+        for j = 0 to (len - 1) do
+          if G.mem_edge g (fst trsa.(i)) (fst trsa.(j)) then
+            accu := !accu @ ["  \"" ^ (RuleT.toDotString (snd trsa.(i))) ^ "\" -> \"" ^ (RuleT.toDotString (snd trsa.(j))) ^ "\""]
+        done
+      done;
+      String.concat "\n" !accu
 
   (* Compute termination graph of trs *)
   let rec compute trs =
     let len = List.length trs in
-    let ruleToIdx =
-      fst
-        (List.fold_left
-           (fun (ruleToIdx, idx) rule ->
-             (RuleMap.add rule idx ruleToIdx, idx + 1))
-           (RuleMap.empty, 0)
-           trs) in
-    (create_graph len ruleToIdx, ruleToIdx)
-  and create_graph len ruleToIdx =
-    let res = ref G.empty in
+      let trsa = Array.init len (fun i -> (i, List.nth trs i))
+      and edges = Array.make_matrix len len false in
+        compute_edges edges trsa len;
+        (create_graph len edges, trsa)
+  and compute_edges edges trsa len =
     for i = 0 to (len - 1) do
-      res := G.add_vertex !res i
-    done;
-    RuleMap.iter
-      (fun rule1 idx1 ->
-        RuleMap.iter
-          (fun rule2 idx2 ->
-            if connectable rule1 rule2 then
-              res := G.add_edge !res idx1 idx2)
-          ruleToIdx)
-      ruleToIdx;
-    !res
+      let r1 = (snd trsa.(i)) in
+        for j = 0 to (len - 1) do
+          if connectable r1 (snd trsa.(j)) then
+            edges.(i).(j) <- true
+        done
+    done
+  and create_graph len edges =
+    let res = ref G.empty in
+      for i = 0 to (len - 1) do
+        res := G.add_vertex !res i
+      done;
+      for i = 0 to (len - 1) do
+        for j = 0 to (len - 1) do
+          if edges.(i).(j) then
+            res := G.add_edge !res i j
+        done
+      done;
+      !res
   and connectable r1 r2' =
     let r2 = RuleT.renameVars (RuleT.getVars r1) r2' in
-    let lt = RuleT.getLeft r2 in
-    List.exists (connectableOne lt (RuleT.getCond r1) (RuleT.getCond r2)) (RuleT.getRights r1)
-  and connectableOne lt cond1 cond2 rt =
+      let lt = RuleT.getLeft r2 in
+        List.exists (connectableOne lt (RuleT.getCond r1) (RuleT.getCond r2)) (RuleT.getRights r1)
+  and connectableOne lt c1 c2 rt =
     if (Term.getFun rt) <> (Term.getFun lt) then
       false
     else
-      let rargs = Term.getArgs rt in
-      let largs = Term.getArgs lt in
-      let sigma = getSubstitution largs rargs in
-      let cond2sigma = Pc.instantiate cond2 sigma in
-      Smt.isSatisfiable (Pc.dropNonLinearAtoms (cond1 @ cond2sigma)) <> Ynm.No
+      let rargs = Term.getArgs rt
+      and largs = Term.getArgs lt in
+        let sigma = getSubstitution largs rargs in
+          let c2sigma = Pc.instantiate c2 sigma in
+            Smt.isSatisfiable (Pc.dropNonLinearAtoms (c1 @ c2sigma)) <> Ynm.No
   and getSubstitution largs rargs =
     getSubstitutionAux largs rargs []
   and getSubstitutionAux largs rargs accu =
@@ -107,195 +103,254 @@ module Make (RuleT : AbstractRule) = struct
       | [] -> accu
       | x::l -> getSubstitutionAux l (List.tl rargs) ((List.hd (Poly.getVars x), List.hd rargs)::accu)
 
-  (* Turns a list of indices in the graph into a list of the corresponding rules. *)
-  let idxsToRules ruleToIdx idxs =
-    RuleMap.fold
-      (fun rule idx rules ->
-        if Utils.contains idxs idx then
-          rule::rules
-        else
-          rules)
-      ruleToIdx
-      []
-
-  (* Turns a list of rules into the corresponding indices in the graph. *)
-  let rulesToIdxs ruleToIdx rules =
-    List.map (fun rule -> RuleMap.find rule ruleToIdx) rules
-
   (* Return nontrivial SCCs *)
-  let getNontrivialSccs (g, ruleToIdx) =
-    let nontrivial g scc =
-      match scc with
+  let rec getNontrivialSccs (g, trsa) =
+    let sccs = SCC.scc_list g in
+      let nontrivial = List.filter (nontrivial g) sccs in
+        List.map (fun scc -> getTrsScc trsa scc) nontrivial
+  and nontrivial g scc =
+    match scc with
       | [] -> false
       | [x] -> G.mem_edge g x x
-      | _ -> true in
-    let sccs = SCC.scc_list g in
-    let nontrivial = List.filter (nontrivial g) sccs in
-    List.map (fun sccIdxs -> idxsToRules ruleToIdx sccIdxs) nontrivial
+      | _ -> true
+  and getTrsScc trsa nums =
+    let res = ref [] in
+      for j = 0 to (Array.length trsa - 1) do
+        let elem = trsa.(j) in
+          if Utils.contains nums (fst elem) then
+            res := (snd elem)::!res
+      done;
+      List.rev !res
+
+  let hasEdgeNums g trsa i j =
+    G.mem_edge g (fst trsa.(i)) (fst trsa.(j))
 
   (* Compute reachable nodes *)
-  let computeReachable (g, ruleToIdx) startNodes =
-    let frontier = ref (rulesToIdxs ruleToIdx startNodes) in
-    let reachable = ref (rulesToIdxs ruleToIdx startNodes) in
-    let progress = ref true in
-    while !progress do
-      let new_frontier = ref [] in
-      List.iter
-        (fun v ->
-          G.iter_succ
-            (fun vSucc ->
-              if not (Utils.contains !reachable vSucc) then
-                (
-                  reachable := vSucc::!reachable;
-                  new_frontier := vSucc::!new_frontier;))
-            g v)
-        !frontier;
-      if !new_frontier <> [] then
-        (
-          frontier := !new_frontier;
-          progress := true;
-        )
+  let rec computeReachable (g, trsa) startNodes =
+    let frontier = ref (getNums trsa startNodes)
+    and reachable = ref (getNums trsa startNodes) in
+      computeReachableAux g trsa (Array.length trsa) frontier reachable;
+      getRules trsa !reachable
+  and computeReachableAux g trsa len frontier reachable =
+    if computeReachableAuxStep g trsa len frontier reachable then
+      computeReachableAux g trsa len frontier reachable
+  and computeReachableAuxStep g trsa len frontier reachable =
+    let new_frontier = ref [] in
+      for i = 0 to (len - 1) do
+        if (isIn frontier i) then
+          for j = 0 to (len - 1) do
+            if hasEdgeNums g trsa i j && not (isIn reachable j) then
+            (
+              reachable := j::!reachable;
+              new_frontier := j::!new_frontier
+            )
+          done;
+      done;
+      if !new_frontier = [] then
+        false
       else
-        progress := false;
-    done;
-    idxsToRules ruleToIdx !reachable
+      (
+        frontier := !new_frontier;
+        true
+      )
+  and isIn listref j =
+    Utils.contains !listref j
+  and getNums trsa rules =
+    let res = ref [] in
+      for i = 0 to (Array.length trsa) - 1 do
+        let rule = snd trsa.(i) in
+        if (List.exists (fun rule' -> RuleT.equal rule rule') rules) then
+          res := i::!res
+      done;
+      !res
+  and getRules trsa nums =
+    List.map (fun i -> (snd trsa.(i))) nums
 
   (* Compute rules in s that are subsumed by rules in k *)
-  let rec computeSubsumed (g, ruleToIdx) s k =
-    let sl = rulesToIdxs ruleToIdx s in
-    let kl = rulesToIdxs ruleToIdx k in
-    let subsumed = ref [] in
-    computeSubsumedAux sl kl g ruleToIdx subsumed;
-    idxsToRules ruleToIdx !subsumed
-  and computeSubsumedAux sl kl g ruleToIdx subsumed =
-    if computeSubsumedAuxStep sl kl g ruleToIdx subsumed then
-      computeSubsumedAux sl kl g ruleToIdx subsumed
-  and computeSubsumedAuxStep sl kl g ruleToIdx subsumed =
-    let isK kl subsumed j =
-      (Utils.contains !subsumed j) || (Utils.contains kl j) in
-    let changed = ref false in
-    List.iter
-      (fun i ->
-        if not(isK kl subsumed i) then
+  let rec computeSubsumed (g, trsa) s k =
+    let subsumed = ref []
+    and sl = getNums trsa s
+    and kl = getNums trsa k in
+      computeSubsumedAux sl kl g trsa (Array.length trsa) subsumed;
+      getRules trsa !subsumed
+  and computeSubsumedAux sl kl g trsa len subsumed =
+    if computeSubsumedAuxStep sl kl g trsa len subsumed then
+      computeSubsumedAux sl kl g trsa len subsumed
+  and computeSubsumedAuxStep sl kl g trsa len subsumed =
+    let res = ref false in
+      for i = 0 to (len - 1) do
+        if (Utils.contains sl i) && (not (isK kl subsumed i)) then
           let goodrow = ref true in
-          RuleMap.iter
-            (fun _ j ->
-              if G.mem_edge g j i && not(isK kl subsumed j) then
-                goodrow := false)
-            ruleToIdx;
-          if !goodrow then
+            for j = 0 to (len - 1) do
+              if hasEdgeNums g trsa j i && not (isK kl subsumed j) then
+                goodrow := false
+            done;
+            if !goodrow then
             (
               subsumed := i::!subsumed;
-              changed := true
+              res := true
             )
-      ) sl;
-    !changed
+      done;
+      !res
+  and isK kl subsumed j =
+    (Utils.contains !subsumed j) || (Utils.contains kl j)
 
   (* remove nodes *)
-  let removeNodes (g, ruleToIdx) rules =
-    List.fold_left
-      (fun (g, ruleToIdx) rule ->
-        (G.remove_vertex g (RuleMap.find rule ruleToIdx),
-         RuleMap.remove rule ruleToIdx))
-      (g, ruleToIdx)
-      rules
+  let rec removeNodes (g, trsa) rules =
+    let bad = getPairs trsa rules in
+      (removeFromGraph g (List.map snd bad), removeFromArray trsa (List.map fst bad))
+  and removeFromGraph g toRemove =
+    match toRemove with
+      | [] -> g
+      | i::more -> removeFromGraph (G.remove_vertex g i) more
+  and removeFromArray trsa badnums =
+    let res = ref [] in
+      for i = 0 to (Array.length trsa) - 1 do
+        if not (Utils.contains badnums i) then
+          res := (trsa.(i))::!res
+      done;
+      Array.of_list (List.rev !res)
+  and getPairs trsa rules =
+    let res = ref [] in
+      for i = 0 to (Array.length trsa) - 1 do
+        let entry = trsa.(i) in
+        let rule = snd entry in
+          if (List.exists (fun rule' -> RuleT.equal rule rule') rules) then
+            res := (i, fst entry)::!res
+      done;
+      !res
 
   (* add nodes *)
-  let addNodes (g, ruleToIdx) newRules =
-    (* First create new indices, store in map and add vertices to graph. *)
-    let maxIdx = RuleMap.fold (fun _ idx maxIdx -> max idx maxIdx) ruleToIdx 0 in
-    let (ruleToIdx, g) =
-      fst
-        (List.fold_left
-           (fun ((ruleToIdx, g), idx) newRule ->
-             ((RuleMap.add newRule idx ruleToIdx, G.add_vertex g idx), idx + 1))
-           ((ruleToIdx, g), maxIdx + 1)
-        newRules) in
-    (* Now create the needed edges from/to (old \cup new) to new *)
-    let g =
-      RuleMap.fold
-        (fun rule1 rule1Idx g ->
-          List.fold_left
-            (fun g rule2 ->
-              let rule2Idx = RuleMap.find rule2 ruleToIdx in
-              let g =
-                if connectable rule1 rule2 then
-                  G.add_edge g rule1Idx rule2Idx
-                else
-                  g in
-              if connectable rule2 rule1 then
-                G.add_edge g rule2Idx rule1Idx
-              else
-                g
-            )
-            g newRules)
-        ruleToIdx
-        g in
-    (g, ruleToIdx)
+  let rec addNodes (g, trsa) rules =
+    let maxx = getMaxNum trsa in
+      let news = getNewPairs rules (maxx + 1) in
+        let (g', trsa') = (addToGraph g (List.map fst news), addToArray trsa news) in
+          let res = (addNeededEdges g' trsa' news, trsa') in
+            res
+  and getMaxNum trsa =
+    let res = ref 0 in
+      for i = 0 to (Array.length trsa - 1) do
+        let entry = trsa.(i) in
+          if (fst entry) > !res then
+            res := fst entry
+      done;
+      !res
+  and getNewPairs rules j =
+    match rules with
+      | [] -> []
+      | rule::more -> (j, rule)::(getNewPairs more (j + 1))
+  and addToGraph g nums =
+    match nums with
+      | [] -> g
+      | i::more -> addToGraph (G.add_vertex g i) more
+  and addNeededEdges g trsa news =
+    match news with
+      | [] -> g
+      | irule::more -> addNeededEdges (addNeededEdgesOne g trsa irule) trsa more
+  and addNeededEdgesOne g trsa (i, rule) =
+    let res = ref g in
+      if connectable rule rule then
+        res := G.add_edge !res i i;
+      for j = 0 to (Array.length trsa - 1) do
+        let entry = trsa.(j) in
+          if i <> (fst entry) then
+          (
+            if connectable rule (snd entry) then
+              res := G.add_edge !res i (fst entry);
+            if connectable (snd entry) rule then
+              res := G.add_edge !res (fst entry) i
+          )
+      done;
+      !res
+  and addToArray trsa news =
+    let trsa' = Array.init (List.length news) (fun i -> List.nth news i) in
+      Array.append trsa trsa'
 
   (* only keep certain nodes *)
-  let keepNodes (g, ruleToIdx) rulesToKeep =
-    RuleMap.fold
-      (fun rule idx (g, ruleToIdx) ->
-        if Utils.containsP RuleT.equal rulesToKeep rule then
-          (g, ruleToIdx)
-        else
-          (G.remove_vertex g (RuleMap.find rule ruleToIdx),
-           RuleMap.remove rule ruleToIdx))
-      ruleToIdx
-      (g, ruleToIdx)
+  let rec keepNodes (g, trsa) rules =
+    let bad = getComplementPairs trsa rules in
+      (removeFromGraph g (List.map snd bad), removeFromArray trsa (List.map fst bad))
+  and getComplementPairs trsa rules =
+    let res = ref [] in
+      for i = 0 to (Array.length trsa) - 1 do
+        let entry = trsa.(i) in
+        let rule = snd entry in
+          if not (List.exists (fun rule' -> RuleT.equal rule rule') rules) then
+            res := (i, fst entry)::!res
+      done;
+      !res
 
   (* compute predecessors of rules *)
-  let getPreds (g, ruleToIdx) rules =
-    let predIdxs =
-      List.fold_left
-        (fun predIdxs rule ->
-          G.fold_pred (fun predIdx predIdxs -> predIdx::predIdxs)
-            g (RuleMap.find rule ruleToIdx) predIdxs)
-        [] rules in
-    idxsToRules ruleToIdx (Utils.remdup predIdxs)
+  let rec getPreds (g, trsa) rules =
+    let preds = ref []
+    and rulesnums = ref (getNums trsa rules) in
+      computePreds g trsa (Array.length trsa) rulesnums preds;
+      getRules trsa (Utils.remdup !preds)
+  and computePreds g trsa len rulesnums preds =
+    for i = 0 to (len - 1) do
+      if (isIn rulesnums i) then
+        for j = 0 to (len - 1) do
+          if (hasEdgeNums g trsa j i) then
+            preds := j::!preds
+        done;
+    done
 
   (* compute sucessors of rules *)
-  let getSuccs (g, ruleToIdx) rules =
-    let succIdxs =
-      List.fold_left
-        (fun succIdxs rule ->
-          G.fold_succ
-            (fun succIdx succIdxs -> succIdx::succIdxs)
-            g (RuleMap.find rule ruleToIdx) succIdxs)
-        [] rules in
-    idxsToRules ruleToIdx (Utils.remdup succIdxs)
+  let rec getSuccs (g, trsa) rules =
+    let succs = ref []
+    and rulesnums = ref (getNums trsa rules) in
+      computeSuccs g trsa (Array.length trsa) rulesnums succs;
+      getRules trsa (Utils.remdup !succs)
+  and computeSuccs g trsa len rulesnums succs =
+    for i = 0 to (len - 1) do
+      if (isIn rulesnums i) then
+        for j = 0 to (len - 1) do
+          if (hasEdgeNums g trsa i j) then
+            succs := j::!succs
+        done;
+    done
+
+  exception Found of int
 
   (* determine whether there is an edge *)
-  let hasEdge (g, ruleToIdx) rule1 rule2 =
-    let rule1num = RuleMap.find rule1 ruleToIdx in
-    let rule2num = RuleMap.find rule2 ruleToIdx in
-    G.mem_edge g rule1num rule2num
+  let rec hasEdge (g, trsa) rule1 rule2 =
+    let rule1num = getNum trsa rule1
+    and rule2num = getNum trsa rule2 in
+      hasEdgeNums g trsa rule1num rule2num
+  and getNum trsa rule =
+    try
+      for i = 0 to (Array.length trsa) - 1 do
+        if (RuleT.equal rule (snd trsa.(i))) then
+        (
+          raise (Found i)
+        )
+      done;
+      failwith "Did not find rule!"
+    with
+      | Found i -> i
 
   (* Compute rules in twigs *)
-  let computeRulesInTwigs (g, ruleToIdx) =
+  let rec computeRulesInTwigs (g, trsa) =
     let leaves = ref [] in
-    let progress = ref true in
-    while !progress do
-      let newLeaves =
-        G.fold_vertex
-          (fun idx newLeaves ->
-            if Utils.contains !leaves idx then
-              newLeaves
-            else
-              let reachable = G.fold_succ (fun succIdx succIdxs -> succIdx::succIdxs) g idx [] in
-              if Utils.containsAll !leaves reachable then
-                idx::newLeaves
-              else
-                newLeaves)
-          g [] in
-      if newLeaves = [] then
-        progress := false
-      else
-        (
-          progress := true;
-          leaves := newLeaves @ !leaves
-        )
-    done;
-    idxsToRules ruleToIdx !leaves
+      computeLeavesAux g trsa (Array.length trsa) leaves;
+      getRules trsa !leaves
+  and computeLeavesAux g trsa len leaves =
+    if computeLeavesAuxStep g trsa len leaves then
+      computeLeavesAux g trsa len leaves
+  and computeLeavesAuxStep g trsa len leaves =
+    let res = ref false in
+      for i = 0 to (len - 1) do
+        if not (isIn leaves i) then
+          let goodrow = ref true in
+            for j = 0 to (len - 1) do
+              if hasEdgeNums g trsa i j && not (isIn leaves j) then
+                goodrow := false
+            done;
+            if !goodrow then
+            (
+              leaves := i::!leaves;
+              res := true
+            )
+      done;
+      !res
 end
