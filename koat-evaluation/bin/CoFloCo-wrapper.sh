@@ -12,7 +12,7 @@ INPUT_FILE=$(echo "${TIME_FILE}" | sed -e 's/.time$/.input.txt/')
 TEMPDIR=$(mktemp -d)
 cd "$TEMPDIR"
 cp "$EXAMPLE_FILE" main.cofloco
-"$COFLOCO" -fill_base_cases -v 2 -stats  -n_rankings 2 -assume_sequential -maximize_fast 9 -i main.cofloco > "${STDOUT_FILE}" 2> "${STDERR_FILE}" || :
+"$COFLOCO" -v 2 -stats  -n_rankings 2 -assume_sequential -maximize_fast 9 -i main.cofloco > "${STDOUT_FILE}" 2> "${STDERR_FILE}" || :
 cp main.cofloco "${INPUT_FILE}" || true
 cd - >/dev/null
 rm -rf "$TEMPDIR"
