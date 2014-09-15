@@ -50,6 +50,9 @@ convert: force_look
 koatCConv: force_look
 	ocamlbuild ${OPTS} ${LIBPATH} ${LIBS} koatCConv.native
 
+koatFSTConv: force_look
+	ocamlbuild ${OPTS} ${LIBPATH} ${LIBS} koatFSTConv.native
+
 clean: force_look
 	ocamlbuild -clean
 	rm -f git_sha1.ml
