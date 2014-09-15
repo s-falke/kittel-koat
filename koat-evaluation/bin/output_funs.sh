@@ -68,8 +68,8 @@ function loopusresult
     then
 	ORIGINAL_BOUND="$( grep '^Total Bound: ' "$1" | sed -e 's/^Total Bound: //' -e 's/×/*/g'i )"
         echo -n "'originalBound': \"${ORIGINAL_BOUND}\", "
-        if [ "${ORIGINAL_BOUND}" = "inf" ] || [ "${ORIGINAL_BOUND}" = "inf " ]; then
-            echo -n "'parseError': 'Could not parse bound'"
+        if `echo "${ORIGINAL_BOUND}" | grep -q "nondet_"`; then
+            echo -n "'parseError': 'Could not parse bound including nondeterministic values'"
         else
             echo "${ORIGINAL_BOUND}" | bin/parsebound
         fi
