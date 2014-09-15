@@ -19,7 +19,7 @@ cd "${TEMPDIR}"
 cp "${EXAMPLE_FILE}" main.koat
 "${KOATCCONV}" main.koat > main.koat.Loopus.c 2>"${STDERR_FILE}"
 "${CLANG}" -g -emit-llvm -c main.koat.Loopus.c -o main.koat.Loopus.o 2>"${STDERR_FILE}"
-"${LOOPUS}" -zT "${TIMEOUT}" -zDisableFunctions -zExpressBoundsInFunctionParameters -zAssumeUpperBoundsOnNonDetValues -zPrintComplexity -zPrintFunctionBound main.koat.Loopus.o > "${STDOUT_FILE}" 2> "${STDERR_FILE}" || :
+"${LOOPUS}" -zT "${TIMEOUT}" -zDisableFunctions -zExpressBoundsInFunctionParameters -zPrintFunctionBoundOnly -zPrintComplexity -zAllowContextualization main.koat.Loopus.o > "${STDOUT_FILE}" 2> "${STDERR_FILE}" || :
 cp main.koat.Loopus.c "${INPUT_FILE}" || true
 cd - >/dev/null
 rm -rf "$TEMPDIR"
