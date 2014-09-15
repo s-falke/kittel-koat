@@ -5,7 +5,15 @@
         if (!results.hasOwnProperty(provername)) {
             continue;
         }
-        if (provername.substr(0,4) == 'KoAT') {
+        if (provername == 'KoAT-TACAS') {
+            provers.push({ name: provername
+                         , supports_nonlinear: true
+                         , supports_recursion: false
+                         , stdoutext: '.koat.' + provername + '.stdout.txt'
+                         , stderrext: '.koat.' + provername + '.stderr.txt'
+                         , inputext: '.koat.' + provername + '.input.txt'
+                         });
+        } else if (provername.substr(0,4) == 'KoAT') {
             provers.push({ name: provername
                          , supports_nonlinear: true
                          , supports_recursion: true
@@ -21,10 +29,10 @@
                          , stderrext: '.ces.' + provername + '.stderr.txt'
                          , inputext: '.ces.' + provername + '.input.txt'
                          });
-        } else if (provername.substr(0,5) == 'SAS10') {
+        } else if (provername.substr(0,5) == 'SAS10' || provername.substr(0,5) == 'Rank') {
             provers.push({ name: provername
                          , supports_nonlinear: false
-                         , supports_recursion: true
+                         , supports_recursion: false
                          , stdoutext: '.fst.' + provername + '.rank.stdout.txt'
                          , stderrext: '.fst.' + provername + '.rank.stderr.txt'
                          , aspicstdoutext: '.fst.' + provername + '.aspic.stdout.txt'
@@ -66,15 +74,15 @@
     function getOh(i) {
         if (!ohCache.hasOwnProperty(i)) {
             var n;
-            if (i === -1) {
+            if (i == Number.MAX_VALUE) {
                 n = text('no result');
-            } else if (i === 0) {
+            } else if (i == 0) {
                 n = text('O(1)');
-            } else if (i === 0.5) {
+            } else if (i == 0.5) {
                 n = text('O(log n)');
-            } else if (i === 1) {
+            } else if (i == 1) {
                 n = text('O(n)');
-            } else if (i === 1.5) {
+            } else if (i == 1.5) {
                 n = text('O(n log n)');
             } else if (i >= 1000) {
                 n = text('EXP');
@@ -107,67 +115,69 @@
 
     function generateResultCell(res, prover, file) {
         var td = el('td');
-        if (res.hasOwnProperty('degree')) {
-            td.setAttribute('class', 'hasBound');
-            var n = res.hasOwnProperty('parsedBound') ? res.parsedBound : res.originalBound;
-            if (n.length > 30) {
-                var s = el('span');
-                s.setAttribute('title', n);
-                s.appendChild(text(n.substr(0,20) + '...'));
-                td.appendChild(s);
-            } else {
-                td.appendChild(text(n));
-            }
-        } else {
-            td.setAttribute('class', 'noBound');
-        }
-        td.appendChild(el('br'));
         var s = el('span');
-        s.setAttribute('class', 'lower_line');
-        if (res.hasOwnProperty('time')) {
-            s.appendChild(text(res.time + 'ms'));
-        } else {
-            s.appendChild(text('TIMEOUT'));
-        }
-        if (res.hasOwnProperty('degree')) {
-            s.appendChild(text(', '));
-            s.appendChild(getOh(res.degree));
-        }
-        if (res.hasOwnProperty('variableCount')) {
-            s.appendChild(text(', #vars: ' + res.variableCount));
-        }
-        e = el('a');
-        e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.inputext);
-        e.appendChild(text('input'));
-        s.appendChild(text(', '));
-        s.appendChild(e);
-        if (res.hasOwnProperty('aspic_stdout')) {
-            var e = el('a');
-            e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.aspicstdoutext);
-            e.appendChild(text('aspic'));
-            s.appendChild(text(', '));
-            s.appendChild(e);
-        }
-        if (res.hasOwnProperty('aspic_stderr')) {
-            var e = el('a');
-            e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.aspicstderrext);
-            e.appendChild(text('aspic (errors)'));
-            s.appendChild(text(', '));
-            s.appendChild(e);
-        }
-        if (res.hasOwnProperty('stdout')) {
-            var e = el('a');
-            e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.stdoutext);
-            e.appendChild(text('output'));
+        if (res) {
+            if (res.hasOwnProperty('degree')) {
+                td.setAttribute('class', 'hasBound');
+                var n = res.hasOwnProperty('parsedBound') ? res.parsedBound : res.originalBound;
+                if (n.length > 30) {
+                    var s = el('span');
+                    s.setAttribute('title', n);
+                    s.appendChild(text(n.substr(0,20) + '...'));
+                    td.appendChild(s);
+                } else {
+                    td.appendChild(text(n));
+                }
+            } else {
+                td.setAttribute('class', 'noBound');
+            }
+            td.appendChild(el('br'));
+            s.setAttribute('class', 'lower_line');
+            if (res.hasOwnProperty('time')) {
+                s.appendChild(text(res.time + 'ms'));
+            } else {
+                s.appendChild(text('TIMEOUT'));
+            }
+            if (res.hasOwnProperty('degree')) {
+                s.appendChild(text(', '));
+                s.appendChild(getOh(res.degree));
+            }
+            if (res.hasOwnProperty('variableCount')) {
+                s.appendChild(text(', #vars: ' + res.variableCount));
+            }
+            e = el('a');
+            e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.inputext);
+            e.appendChild(text('input'));
             s.appendChild(text(', '));
             s.appendChild(e);
-        }
-        if (res.hasOwnProperty('errors')) {
-            var e = el('a');
-            e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.stderrext);
-            e.appendChild(text('errors'));
-            s.appendChild(text(', '));
-            s.appendChild(e);
+            if (res.hasOwnProperty('aspic_stdout')) {
+                var e = el('a');
+                e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.aspicstdoutext);
+                e.appendChild(text('aspic'));
+                s.appendChild(text(', '));
+                s.appendChild(e);
+            }
+            if (res.hasOwnProperty('aspic_stderr')) {
+                var e = el('a');
+                e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.aspicstderrext);
+                e.appendChild(text('aspic (errors)'));
+                s.appendChild(text(', '));
+                s.appendChild(e);
+            }
+            if (res.hasOwnProperty('stdout')) {
+                var e = el('a');
+                e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.stdoutext);
+                e.appendChild(text('output'));
+                s.appendChild(text(', '));
+                s.appendChild(e);
+            }
+            if (res.hasOwnProperty('errors')) {
+                var e = el('a');
+                e.setAttribute('href', 'runs/' + prover.name + '/' + file + prover.stderrext);
+                e.appendChild(text('errors'));
+                s.appendChild(text(', '));
+                s.appendChild(e);
+            }
         }
         td.appendChild(s);
         return td;
@@ -176,11 +186,8 @@
     function generateRow(example) {
         var tr = el('tr');
         var td = el('td');
-        var a = el('a');
         var file = example.filename;
-        a.setAttribute('href', file + '.koat.txt');
-        a.appendChild(text(file));
-        td.appendChild(a);
+        td.appendChild(text(file));
         td.appendChild(el('br'));
         var s = el('span');
         td.appendChild(s);
@@ -214,13 +221,20 @@
         return tr;
     }
 
+    function getProverByName(name) {
+        for (var i in provers) {
+            if (provers[i].name == name) {
+                return provers[i];
+            }
+        }
+    }
+
     function generateOverviewTable(res) {
         var degrees = {};
         var solvedtimes = {};
         var alltimes = {};
         var solvedExamples = {};
         var useddegrees = {};
-        var maxdegree = 0;
         var numEx = res.length;
 
         for (var pi in provers) {
@@ -232,35 +246,50 @@
 
         for (var name in results) {
             var p = results[name];
+            var prover = getProverByName(name);
+
             for (var i in res) {
                 var ex = res[i];
                 if (!p.hasOwnProperty(ex.filename)) {
                     continue;
                 }
+
+                if ((!prover.supports_recursion && ex.recursive) || (!prover.supports_nonlinear && ex.nonlinear)) {
+                    var deg = Number.MAX_VALUE;
+                    useddegrees[deg] = true;
+                    var count = degrees[name].hasOwnProperty(deg) ? degrees[name][deg] : 0;
+                    degrees[name][deg] = count + 1;
+                    continue;
+                }
+
                 var proof = p[ex.filename];
                 if (proof.hasOwnProperty('degree')) {
                     var deg = proof.degree;
-                    maxdegree = Math.max(deg, maxdegree);
-                    if (deg >= 1000) { deg = 1000 } //group all EXP degrees...
+                    if (deg >= 10000) { deg = 10000 } //group all EXP degrees...
                     useddegrees[deg] = true;
                     var count = degrees[name].hasOwnProperty(deg) ? degrees[name][deg] : 0;
                     degrees[name][deg] = count + 1;
                     solvedtimes[name] += proof.time;
                     solvedExamples[name]++;
+                } else {
+                    var deg = Number.MAX_VALUE;
+                    useddegrees[deg] = true;
+                    var count = degrees[name].hasOwnProperty(deg) ? degrees[name][deg] : 0;
+                    degrees[name][deg] = count + 1;
                 }
                 alltimes[name] += proof.time;
             }
         }
 
+        var alldegrees = Object.keys(useddegrees).sort(function(a, b){return a-b})
+
         var t = el('table');
         var tr = el('tr');
         tr.appendChild(el('th'));
-        for (var i = 0; i <= maxdegree; i += 0.5) {
-            if (!useddegrees.hasOwnProperty(i)) {
-                continue;
-            }
+        for (var i in alldegrees) {
+            var deg = alldegrees[i];
             var th = el('th');
-            th.appendChild(getOh(i));
+            th.appendChild(getOh(deg));
             tr.appendChild(th);
         }
         th = el('th');
@@ -277,12 +306,10 @@
             var name = prover.name;
             th.appendChild(text(prover.name));
             tr.appendChild(th);
-            for (var i = 0; i <= maxdegree; i += 0.5) {
-                if (!useddegrees.hasOwnProperty(i)) {
-                    continue;
-                }
+            for (var i in alldegrees) {
+                var deg = alldegrees[i];
                 var td = el('td');
-                var count = degrees[name].hasOwnProperty(i) ? degrees[name][i] : 0;
+                var count = degrees[name].hasOwnProperty(deg) ? degrees[name][deg] : 0;
                 td.appendChild(text(count));
                 tr.appendChild(td);
             }
@@ -546,6 +573,8 @@
     {
         var proverA = getGroupValue('proverA');
         var proverB = getGroupValue('proverB');
+        var proverAInfo = getProverByName(proverA);
+        var proverBInfo = getProverByName(proverB);
 
         var useddegrees = {};
         var comp_tab = {};
@@ -566,6 +595,8 @@
         function addResult (a, b, i) {
             maxdegree = Math.max(maxdegree, a);
             maxdegree = Math.max(maxdegree, b);
+            if (a >= 10000 && a < Number.MAX_VALUE) { a = 10000 } //group all EXP degrees...
+            if (b >= 10000 && b < Number.MAX_VALUE) { b = 10000 } //group all EXP degrees...
             useddegrees[a] = true;
             useddegrees[b] = true;
             if (!comp_tab.hasOwnProperty(a)) {
@@ -589,29 +620,23 @@
                 continue;
             }
 
-            var a = -1;
-            var b = -1;
-            if (results[proverA].hasOwnProperty(filename) && results[proverA][filename].hasOwnProperty('degree')) {
+            var a = Number.MAX_VALUE;
+            var b = Number.MAX_VALUE;
+            if ((proverAInfo.supports_recursion || !example.recursive) && (proverAInfo.supports_nonlinear || !example.nonlinear) && results[proverA].hasOwnProperty(filename) && results[proverA][filename].hasOwnProperty('degree')) {
                 a = results[proverA][filename].degree;
             }
-            if (results[proverB].hasOwnProperty(filename) && results[proverB][filename].hasOwnProperty('degree')) {
+            if ((proverBInfo.supports_recursion || !example.recursive) && (proverBInfo.supports_nonlinear || !example.nonlinear) && results[proverB].hasOwnProperty(filename) && results[proverB][filename].hasOwnProperty('degree')) {
                 b = results[proverB][filename].degree;
             }
             addResult(a, b, 1);
         }
 
+        useddegrees[Number.MAX_VALUE] = true; 
+        var alldegrees = Object.keys(useddegrees).sort(function(a, b){return a-b});
         var degrees = [];
-        for (var i = 0; i <= maxdegree; i += 0.5) {
-            if (!useddegrees.hasOwnProperty(i)) {
-                continue;
-            }
-            degrees.push(i);
+        for (var i in alldegrees) {
+            degrees.push(alldegrees[i]);
         }
-        //add unknown
-        if (useddegrees.hasOwnProperty(-1)) {
-            degrees.push(-1);
-        }
-
 
         // preparation done, now generate html
         var table = document.createElement('table');
