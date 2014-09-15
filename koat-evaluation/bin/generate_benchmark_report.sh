@@ -19,35 +19,35 @@ for TIME_FILE in `find runs/${RUN_NAME}/ -name \*.time`; do
         echo -n $(reporttime "${TIME_FILE}")
     fi
 
-    if [ $RUN_NAME = "PUBS" ]; then
+    if grep -q '^PUBS' <<<"${RUN_NAME}"; then
         test -f "${STDERR_FILE}" && test $(stat -c%s "${STDERR_FILE}") -gt 0 && echo -n '"errors": true, '
         test -f "${STDOUT_FILE}" && test $(stat -c%s "${STDOUT_FILE}") -gt 0 && echo -n '"stdout": true, '
         pubsresult "${STDOUT_FILE}"
         echo -n $(reporttime "${TIME_FILE}")
     fi
 
-    if [ $RUN_NAME = "COSTA" ]; then
+    if grep -q '^COSTA' <<<"${RUN_NAME}"; then
         test -f "${STDERR_FILE}" && test $(stat -c%s "${STDERR_FILE}") -gt 0 && echo -n '"errors": true, '
         test -f "${STDOUT_FILE}" && test $(stat -c%s "${STDOUT_FILE}") -gt 0 && echo -n '"stdout": true, '
         pubsresult "${STDOUT_FILE}"
         echo -n $(reporttime "${TIME_FILE}")
     fi
 
-    if [ $RUN_NAME = "CoFloCo" ]; then
+    if grep -q '^CoFloCo' <<<"${RUN_NAME}"; then
         test -f "${STDERR_FILE}" && test $(stat -c%s "${STDERR_FILE}") -gt 0 && echo -n '"errors": true, '
         test -f "${STDOUT_FILE}" && test $(stat -c%s "${STDOUT_FILE}") -gt 0 && echo -n '"stdout": true, '
         coflocoresult "${STDOUT_FILE}"
         echo -n $(reporttime "${TIME_FILE}")
     fi
 
-    if [ $RUN_NAME = "Loopus" ]; then
+    if grep -q '^Loopus' <<<"${RUN_NAME}"; then
         test -f "${STDERR_FILE}" && test $(stat -c%s "${STDERR_FILE}") -gt 0 && echo -n '"errors": true, '
         test -f "${STDOUT_FILE}" && test $(stat -c%s "${STDOUT_FILE}") -gt 0 && echo -n '"stdout": true, '
         loopusresult "${STDOUT_FILE}"
         echo -n $(reporttime "${TIME_FILE}")
     fi
 
-    if [ $RUN_NAME = "SAS10" ]; then
+    if grep -q '^SAS10' <<<"${RUN_NAME}"; then
         ASPIC_ERR_FILE=$(echo "${TIME_FILE}" | sed -e 's/.fst.SAS10.*/.fst.SAS10.aspic.stderr.txt/')
         ASPIC_OUT_FILE=$(echo "${TIME_FILE}" | sed -e 's/.fst.SAS10.*/.fst.SAS10.aspic.stdout.txt/')
         RANK_ERR_FILE=$(echo "${TIME_FILE}" | sed -e 's/.fst.SAS10.*/.fst.SAS10.rank.stderr.txt/')
