@@ -58,14 +58,17 @@ let rec getConstant e =
     | Pol p -> Poly.getConstant p
     | Sum (e1, e2) -> Big_int.add_big_int (getConstant e1) (getConstant e2)
     | Mul (e1, e2) -> Big_int.mult_big_int (getConstant e1) (getConstant e2)
-    | Exp (p, e) -> Big_int.zero_big_int
+    | Exp (b, e) -> Big_int.power_big_int_positive_big_int (getConstant b) (getConstant e)
 
 let rec getSummands e =
   match e with
-    | Pol _ -> [e]
+    | Pol _ | Mul _ | Exp _ -> [e]
     | Sum (e1, e2) -> (getSummands e1) @ (getSummands e2)
-    | Mul _ -> [e]
-    | Exp _ -> [e]
+
+let rec getFactors e =
+  match e with
+    | Pol _ | Sum _ | Exp _ -> [e]
+    | Mul (e1, e2) -> (getFactors e1) @ (getFactors e2)
 
 (* Construct a string for an expexp *)
 let toString e =
@@ -74,42 +77,76 @@ let toString e =
       if strength >= force then s else "(" ^ s ^ ")"
     in
     match e with
-    | Pol p -> protect 1 force (Poly.toString p)
+    | Pol p ->
+      (
+        match p with
+        | ([], const) ->
+          Poly.toString p
+        | ([_], const) when Big_int.eq_big_int const Big_int.zero_big_int ->
+          Poly.toString p
+        | _ -> protect 1 force (Poly.toString p)
+      )
     | Sum (e1, e2) ->
       protect 1 force (toString' 1 e1 ^ " + " ^ toString' 1 e2)
-    | Mul (e1, e2) when isConst e1 ->
-      protect 2 force ((Big_int.string_of_big_int (getConstant e1)) ^ " * " ^ toString' 2 e2)
-    | Mul (e1, e2) when isConst e2 ->
-      protect 2 force ((Big_int.string_of_big_int (getConstant e2)) ^ " * " ^ toString' 2 e1)
     | Mul (e1, e2) ->
-      protect 2 force (toString' 2 e1 ^ " * " ^ toString' 2 e2)
+        if isConst e1 then
+          (
+            match e2 with
+            | Pol pe2 ->
+              protect 1 force (Poly.toString (Poly.mult (Poly.fromConstant (getConstant e1)) pe2))
+            | _ -> protect 2 force ((Big_int.string_of_big_int (getConstant e1)) ^ " * " ^ toString' 2 e2)
+          )
+        else
+          protect 2 force (toString' 2 e1 ^ " * " ^ toString' 2 e2)
     | Exp (e1, e2) ->
       "pow(" ^ (toString' 0 e1) ^ ", " ^ (toString' 0 e2) ^ ")"
   in
 
-  let rec groupSummands summandList =
-    match summandList with
-    | [] -> []
-    | x::xs ->
-      (
-        let (sameSummands, otherSummands) = Utils.split (equal x) xs in
-        let thisOne =
-          if List.length sameSummands > 1 then
-            Mul (fromConstant (Big_int.big_int_of_int (List.length sameSummands)), x)
-          else
-            x in
-        thisOne :: (groupSummands otherSummands)
-      )
-  in
-
-  let summands = getSummands e in
-  let grouped_summands = groupSummands summands in
-  let e' =
+  let rec groupPowers e =
+    let rec groupPowers' factorList =
+      match factorList with
+      | [] -> []
+      | Exp(base, exp)::xs ->
+        (
+          let (sameBase, otherFactors) = Utils.split (fun a -> match a with Exp(base', _) -> equal base base' | _ -> false) xs in
+          let thisOne =
+            Exp (base,
+                 groupSummands
+                   (List.fold_left
+                      (fun sum a ->
+                        match a with
+                        | Exp(_, thisExp) -> Sum(sum, thisExp)
+                        | _ -> assert(false) (* Should happen after split above *))
+                      exp sameBase)) in
+          thisOne :: (groupPowers' otherFactors)
+        )
+      | a::xs -> a :: (groupPowers' xs) in
+    let grouped_powers = groupPowers' (getFactors e) in
+    if grouped_powers = [] then
+      one
+    else
+      List.fold_left (fun s res -> Mul (s, res)) (List.hd grouped_powers) (List.tl grouped_powers)
+  and groupSummands e =
+    let rec groupSummands' summandList =
+      match summandList with
+      | [] -> []
+      | x::xs ->
+        (
+          let (sameSummands, otherSummands) = Utils.split (equal x) xs in
+          let thisOne =
+            if List.length sameSummands >= 1 then
+              Mul (fromConstant (Big_int.big_int_of_int (1 + List.length sameSummands)), x)
+            else
+              x in
+          thisOne :: (groupSummands' otherSummands)
+        ) in
+    let summands = List.map groupPowers (getSummands e) in
+    let grouped_summands = groupSummands' summands in
     if grouped_summands = [] then
       zero
     else
       List.fold_left (fun s res -> Sum (s, res)) (List.hd grouped_summands) (List.tl grouped_summands) in
-  toString' 0 e'
+  toString' 0 (groupSummands e)
 
 let toPoly e =
   match e with
@@ -376,8 +413,15 @@ let rec max e1 e2 =
 and getMax e1' e2' =
   let s1 = getSummands e1'
   and s2 = getSummands e2' in
-    let s = remdup (s1 @ s2) in
-      List.fold_left (fun e1 e2 -> Sum (e1, e2)) (Pol Poly.zero) s
+  let s = remdup (s1 @ s2) in
+  (* Remove constants <= 1 if we have at least one pow() *)
+  let s =
+    if (List.exists (fun a -> match a with | Exp _ -> true | _ -> false) s) then
+      List.filter (fun a -> not(isConst a && Big_int.le_big_int (getConstant a) Big_int.unit_big_int)) s
+    else
+      s in
+  let res = List.fold_left (fun e1 e2 -> Sum (e1, e2)) (Pol Poly.zero) s in
+  res
 and remdup s =
   match s with
     | [] -> []
