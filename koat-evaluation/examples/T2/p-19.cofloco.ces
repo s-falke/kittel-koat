@@ -1,6 +1,5 @@
-eq(f1(A,B,C,D,E,F,G,H),1,[f2(A,B,C,D,E,I,J,I,K,L,M,N,O,P,Q,R),loop_cont_f2(K,L,M,N,O,P,Q,R)],[]).
+eq(f1(A,B,C,D,E,F,G,H),1,[f2(A,B,C,D,E,I,J,I,K,L,M,N,O,P,Q,R,S),loop_cont_f2(L,M,N,O,P,Q,R,S)],[K=0]).
+eq(f1(A,B,C,D,E,F,G,H),1,[f2(A,B,C,D,E,I,J,I,K,L,M,N,O,P,Q,R,S)],[K=1]).
 eq(loop_cont_f2(A,B,C,D,E,F,G,H),0,[f300(A,B,C,D,E,F,G,H)],[]).
-eq(f2(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P),1,[f2(A,Q,R,S,E,F,G,H,I,J,K,L,M,N,O,P)],[A>=1]).
-eq(f2(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P),1,[loop_exit_f2(A,Q,R,D,S,F,G,H,I,J,K,L,M,N,O,P)],[0>=A]).
-eq(loop_exit_f2(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P),0,[],[A=I,B=J,C=K,D=L,E=M,F=N,G=O,H=P]).
-eq(f300(A,B,C,D,E,F,G,H),0,[],[]).
+eq(f2(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f2(A,R,S,T,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[A>=1]).
+eq(f2(A,B,C,D,E,F,G,H,I,A,J,K,D,L,F,G,H),1,[],[I=0,0>=A]).

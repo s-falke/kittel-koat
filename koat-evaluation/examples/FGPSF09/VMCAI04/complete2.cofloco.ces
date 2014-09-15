@@ -1,3 +1,4 @@
-eq(start(A),1,[eval(A,B),loop_cont_eval(B)],[]).
-eq(eval(A,B),1,[eval(C,B)],[A>=0,C+2*A>=10,10>=2*A+C]).
-eq(loop_exit_eval(A,B),0,[],[A=B]).
+eq(start(A),1,[eval(A,B,C),loop_cont_eval(C)],[B=0]).
+eq(start(A),1,[eval(A,B,C)],[B=1]).
+eq(eval(A,B,C),1,[eval(D,B,C)],[A>=0,D+2*A>=10,10>=2*A+D]).
+eq(eval(A,B,A),0,[],[B=1]).

@@ -1,8 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS f0))
-(VAR x)
-(RULES
-  f0(x) -> Com_1(f3(x)) :|: TRUE
-  f3(x) -> Com_1(f3(x - 1)) :|: x > 1
-  f3(x) -> Com_1(f3(x - 1)) :|: TRUE
-)

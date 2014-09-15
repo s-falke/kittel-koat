@@ -1,4 +1,5 @@
-eq(start(A,B),1,[eval(A,B,C,D),loop_cont_eval(C,D)],[]).
-eq(eval(A,B,C,D),1,[eval(E,B,C,D)],[A>=0,B>=0,B>=A+1,A+B>=2*F,3*F>=A+B+1,E>=F+1,A+B>=2*G,3*G>=A+B+1,G+1>=E]).
-eq(eval(A,B,C,D),1,[eval(A,E,C,D)],[A>=0,B>=0,B>=A+1,A+B>=2*F,3*F>=A+B+1,E>=F,A+B>=2*G,3*G>=A+B+1,G>=E]).
-eq(loop_exit_eval(A,B,C,D),0,[],[A=C,B=D]).
+eq(start(A,B),1,[eval(A,B,C,D,E),loop_cont_eval(D,E)],[C=0]).
+eq(start(A,B),1,[eval(A,B,C,D,E)],[C=1]).
+eq(eval(A,B,C,D,E),1,[eval(F,B,C,D,E)],[A>=0,B>=0,B>=A+1,A+B>=2*G,3*G>=A+B+1,F>=G+1,A+B>=2*H,3*H>=A+B+1,H+1>=F]).
+eq(eval(A,B,C,D,E),1,[eval(A,F,C,D,E)],[A>=0,B>=0,B>=A+1,A+B>=2*G,3*G>=A+B+1,F>=G,A+B>=2*H,3*H>=A+B+1,H>=F]).
+eq(eval(A,B,C,A,B),0,[],[C=1]).

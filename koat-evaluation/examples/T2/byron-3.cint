@@ -1,8 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS f1))
-(VAR rt_11 x_13 y_15 st_14)
-(RULES
-  f0(rt_11, x_13, y_15) -> Com_1(f2(st_14, x_13, y_15)) :|: x_13 < 1
-  f0(rt_11, x_13, y_15) -> Com_1(f0(rt_11, x_13 + y_15, -1 + y_15)) :|: x_13 > 0
-  f1(rt_11, x_13, y_15) -> Com_1(f0(rt_11, x_13, y_15)) :|: TRUE
-)

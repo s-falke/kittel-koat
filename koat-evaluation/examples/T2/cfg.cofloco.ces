@@ -1,4 +1,6 @@
-eq(f0(A),1,[f2(A+200,B),loop_cont_f2(B)],[A+99>=0]).
-eq(f0(A),1,[f2(A+500,B),loop_cont_f2(B)],[A>=1]).
-eq(f2(A,B),1,[f2(A+700,B)],[A+199>=0]).
-eq(loop_exit_f2(A,B),0,[],[A=B]).
+eq(f0(A),1,[f2(A+200,B,C),loop_cont_f2(C)],[B=0,A+99>=0]).
+eq(f0(A),1,[f2(A+200,B,C)],[B=1,A+99>=0]).
+eq(f0(A),1,[f2(A+500,B,C),loop_cont_f2(C)],[B=0,A>=1]).
+eq(f0(A),1,[f2(A+500,B,C)],[B=1,A>=1]).
+eq(f2(A,B,C),1,[f2(A+700,B,C)],[A+199>=0]).
+eq(f2(A,B,A),0,[],[B=1]).

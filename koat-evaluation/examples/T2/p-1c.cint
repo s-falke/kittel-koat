@@ -1,8 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS f2))
-(VAR y_6 x_5 ct_13 ct_12 lt_10 lt_11 lt_9 ct_21 ct_27 Result_4 $nondet $nondet1 $nondet3 $nondet5 $nondet2)
-(RULES
-  f2(y_6, x_5, ct_13, ct_12, lt_10, lt_11, lt_9, ct_21, ct_27, Result_4) -> Com_1(f300($nondet, $nondet1, $nondet3, $nondet5, lt_10, lt_11, lt_9, ct_21, ct_27, Result_4)) :|: TRUE
-  f300(y_6, x_5, ct_13, ct_12, lt_10, lt_11, lt_9, ct_21, ct_27, Result_4) -> Com_1(f300(y_6, x_5, ct_13, ct_12, $nondet, $nondet1, $nondet2, ct_21, ct_27, Result_4)) :|: 0 <= -1 - ct_21 + ct_27
-  f300(y_6, x_5, ct_13, ct_12, lt_10, lt_11, lt_9, ct_21, ct_27, Result_4) -> Com_1(f1(y_6, x_5, ct_13, ct_12, $nondet, $nondet1, lt_9, ct_21, ct_27, $nondet2)) :|: 0 > -1 - ct_21 + ct_27
-)

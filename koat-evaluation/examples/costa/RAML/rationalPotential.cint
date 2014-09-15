@@ -1,7 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS zip3))
-(VAR L Ls L1 L2 L3 Ls1 Ls2 Ls3)
-(RULES
- zip3(L1, L2, L3) -> Com_1(zip3(Ls1, Ls2, Ls3)) :|: L1>=1 && L2>=1 && L3>=1 && Ls1=L1 - 1 && Ls2=L2 - 1 && Ls3=L3 - 1
- group3(L) -> Com_1(group3(Ls)) :|: L>=4 && Ls=L - 3
-)

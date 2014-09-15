@@ -1,8 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS f))
-(VAR x y f' z)
-(RULES
-  f(x, y) -> Com_2(f(x, f'), round(x)) :|: x - 1 >= 0 && y - (x - 1) >= 0 && x - 1 - y >= 0
-  round(x) -> Com_0 :|: TRUE
-  round(x) -> Com_0 :|: z - (x + 1) >= 0 && x + 1 - z >= 0
-)

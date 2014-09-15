@@ -1,6 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM CONSTRUCTOR-BASED)
-(VAR x)
-(RULES
-  f(x) -> Com_1(f(x)) :|: 0 - x * x - 1 >= 0
-)

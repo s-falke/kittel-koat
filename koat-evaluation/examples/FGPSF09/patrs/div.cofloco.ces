@@ -1,7 +1,4 @@
-eq(start(A,B),1,[divv(A,B,C,D),loop_cont_divv(C,D)],[]).
-eq(loop_cont_divv(A,B),0,[end(A,B)],[]).
-eq(divv(A,B,C,D),1,[divv(A,B-A,C,D)],[B>=A+1,A>=1]).
-eq(divv(A,B,C,D),1,[loop_exit_divv(A,B,C,D)],[0>=A]).
-eq(divv(A,B,C,D),1,[loop_exit_divv(A,B,C,D)],[A>=B]).
-eq(loop_exit_divv(A,B,C,D),0,[],[A=C,B=D]).
-eq(end(A,B),0,[],[]).
+eq(start(A,B),1,[A div B],[]).
+eq(A div B,1,[end(A,B)],[0>=A]).
+eq(A div B,1,[end(A,B)],[A>=B]).
+eq(A div B,1,[A div B-A],[B>=A+1,A>=1]).

@@ -11,6 +11,3 @@ eq(lbl101(A,B,C,D,E,F),1,[stop(A,B,C,D,E,F)],[B>=D+1,E>=D,A>=0,B>=A+C+1,A+D+1>=B
 eq(lbl101(A,B,C,D,E,F),1,[stop(A,B,C,D,E,F)],[D>=B,0>=A+1,E>=D,A>=0,B>=A+C+1,A+D+1>=B,F=A]).
 eq(lbl101(A,B,C,D,E,F),1,[lbl91(A,B,C,D-1-F,E,F)],[A>=0,D>=B,E>=D,B>=A+C+1,A+D+1>=B,F=A]).
 eq(lbl101(A,B,C,D,E,F),1,[lbl101(A,1+F+B,C,D,E,F)],[A>=0,D>=B,E>=D,B>=A+C+1,A+D+1>=B,F=A]).
-eq(loop_exit_lbl91(A,B,C,D,E,F),0,[],[]).
-eq(loop_exit_lbl101(A,B,C,D,E,F),0,[],[]).
-eq(stop(A,B,C,D,E,F),0,[],[]).

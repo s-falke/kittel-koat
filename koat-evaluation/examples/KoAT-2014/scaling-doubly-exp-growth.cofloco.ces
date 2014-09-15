@@ -1,0 +1,14 @@
+eq(f(A,B,C),1,[g(A,1,1,D,E,F,G),loop_cont_g(E,F,G)],[D=0]).
+eq(f(A,B,C),1,[g(A,1,1,D,E,F,G)],[D=1]).
+eq(loop_cont_g(A,B,C),0,[h(A,B,C,D,E,F,G),loop_cont_h(E,F,G)],[D=0]).
+eq(loop_cont_g(A,B,C),0,[h(A,B,C,D,E,F,G)],[D=1]).
+eq(loop_cont_h(A,B,C),0,[i(A,B,C,D,E,F,G),loop_cont_i(E,F,G)],[D=0]).
+eq(loop_cont_h(A,B,C),0,[i(A,B,C,D,E,F,G)],[D=1]).
+eq(g(A,B,C,D,E,F,G),1,[g(A-1,2*B,C,D,E,F,G)],[A>0]).
+eq(h(A,B,C,D,E,F,G),1,[h(A,B-1,2*C,D,E,F,G)],[B>0]).
+eq(i(A,B,C,D,E,F,G),1,[i(A,B,C-1,D,E,F,G)],[C>0]).
+eq(g(A,B,C,D,A,B,C),1,[],[D=0,<=(A,0)]).
+eq(g(A,B,C,D,A,B,C),0,[],[D=1]).
+eq(h(A,B,C,D,A,B,C),1,[],[D=0,<=(B,0)]).
+eq(h(A,B,C,D,A,B,C),0,[],[D=1]).
+eq(i(A,B,C,D,A,B,C),0,[],[D=1]).

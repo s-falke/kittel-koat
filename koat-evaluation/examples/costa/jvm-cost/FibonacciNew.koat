@@ -6,13 +6,13 @@
   f8(A,B,C,D) -> Com_1(f2(A,B,C,D)) :|: A >= C + 1
   f8(A,B,C,D) -> Com_1(f3(A,B,C,D)) :|: C >= A
   f20(A,B,C,D) -> Com_1(pubsSFibonaccifibonacciMethodLBIRBI(A,B - 1,C,D))
-  f21(A,B,C,D) -> Com_1(lW9normal(A,B,C,D))
+  f21(A,B,C,D) -> Com_1(f9normal(A,B,C,D))
   f2(A,B,C,D) -> Com_2(f20(E,B,F,D),f21(E,B,F,D)) :|: E >= 1
   f3(A,B,C,D) -> Com_1(f6(1,B,C,D))
   pubsSFibonaccifibonacciMethodLBIRBI(A,B,C,D) -> Com_1(f8(B,B,1,D))
   f9normal(A,B,C,D) -> Com_1(f4(A,B,C,D))
   f40(A,B,C,D) -> Com_1(pubsSFibonaccifibonacciMethodLBIRBI(A,B - 2,C,D))
-  f41(A,B,C,D) -> Com_1(lW10normal(A,B,C,D))
+  f41(A,B,C,D) -> Com_1(f10normal(A,B,C,D))
   f4(A,B,C,D) -> Com_2(f40(A,B,E,F),f41(A,B,E,F)) :|: E >= 1
   f10normal(A,B,C,D) -> Com_1(f7(A,B,C,D))
   f7(A,B,C,D) -> Com_1(f6(A + C,B,C,D))

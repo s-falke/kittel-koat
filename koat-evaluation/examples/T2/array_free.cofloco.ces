@@ -1,7 +1,6 @@
-eq(f0(A),1,[f3(0,B),loop_cont_f3(B)],[]).
+eq(f0(A),1,[f3(0,B,C),loop_cont_f3(C)],[B=0]).
+eq(f0(A),1,[f3(0,B,C)],[B=1]).
 eq(loop_cont_f3(A),0,[f13(A)],[]).
-eq(f3(A,B),1,[f3(A+1,B)],[41>=A]).
-eq(f3(A,B),1,[f3(A+1,B)],[41>=A,0>=C+1]).
-eq(f3(A,B),1,[loop_exit_f3(A,B)],[A>=42]).
-eq(loop_exit_f3(A,B),0,[],[A=B]).
-eq(f13(A),0,[],[]).
+eq(f3(A,B,C),1,[f3(A+1,B,C)],[41>=A]).
+eq(f3(A,B,C),1,[f3(A+1,B,C)],[41>=A,0>=D+1]).
+eq(f3(A,B,A),1,[],[B=0,A>=42]).

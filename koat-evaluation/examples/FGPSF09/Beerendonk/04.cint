@@ -1,6 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM CONSTRUCTOR-BASED)
-(VAR x y)
-(RULES
-  eval(x, y) -> Com_1(eval(y, x)) :|: x - y - 1 >= 0
-)

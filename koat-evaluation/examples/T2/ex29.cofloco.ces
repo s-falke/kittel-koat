@@ -13,4 +13,3 @@ eq(f36(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f32(A,B,C,D,E,F,G,H,I,J,K,L,M,N)],[0>=O+1
 eq(f36(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f32(A,B,C,D,E,F,G,H,I,J,K,L,M,N)],[]).
 eq(f26(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f32(A,B,C,D,E,F,G,H,I,J,K,L,M,N)],[0>=O+1]).
 eq(f26(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f32(A,B,C,D,E,F,G,H,I,J,K,L,M,N)],[]).
-eq(f32(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[]).

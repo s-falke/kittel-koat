@@ -1,8 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS eval_0))
-(VAR x y z z')
-(RULES
-  eval_0(x, y, z) -> Com_1(eval_1(x, y, z)) :|: y - 0 - 1 >= 0
-  eval_1(x, y, z) -> Com_1(eval_1(z', y, z)) :|: y - x - 1 >= 0 && z - y - 1 >= 0 && y - 0 - 1 >= 0 && z' - (x + y) >= 0 && x + y - z' >= 0
-  eval_1(x, y, z) -> Com_1(eval_1(x, y, z')) :|: y - x - 1 >= 0 && z - y - 1 >= 0 && y - 0 - 1 >= 0 && z' - (x - y) >= 0 && x - y - z' >= 0
-)

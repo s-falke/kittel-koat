@@ -1,8 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS minSort))
-(VAR N Ns)
-(RULES
- minSort(N) -> Com_1(findMin(N)) :|: N=0
- minSort(N) -> Com_2(findMin(N),minSort(Ns)) :|: N>=1 && Ns=N - 1
- findMin(N) -> Com_1(findMin(Ns)) :|: N>=1 && Ns=N - 1
-)

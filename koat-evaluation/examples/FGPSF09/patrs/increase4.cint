@@ -1,6 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM CONSTRUCTOR-BASED)
-(VAR x y z z')
-(RULES
-  f(x, y) -> Com_1(f(z, z')) :|: x - y - 1 >= 0 && z - (x + 1) >= 0 && x + 1 - z >= 0 && z' - (y + 2) >= 0 && y + 2 - z' >= 0
-)

@@ -1,9 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS l0))
-(VAR x r i s)
-(RULES
-  l0(x, r, i, s) -> Com_1(l1(x, 0, i, s))
-  l1(x, r, i, s) -> Com_1(l2(x, r, 0, 0)) :|: x > 0
-  l2(x, r, i, s) -> Com_1(l2(x, r, i + 1, s + i)) :|: i < x
-  l2(x, r, i, s) -> Com_1(l1(x - 1, r + s, i, s)) :|: i >= x
-)

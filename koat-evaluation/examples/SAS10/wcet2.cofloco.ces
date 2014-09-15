@@ -8,6 +8,3 @@ eq(lbl92(A,B,C,D,E,F,G,H),1,[lbl82(A,0,C,D,E,1,G,H)],[D>=2,3>=D,D>=A,F+10>=5*D,F
 eq(lbl82(A,B,C,D,E,F,G,H),1,[lbl92(A,B,C,H,E,F,G,1+H)],[2>=H,9>=B,B>=0,H>=A,H>=3,4>=H,F=B+1]).
 eq(lbl82(A,B,C,D,E,F,G,H),1,[lbl92(A,B,C,H,E,F,G,1+H)],[H>=A,H>=3,4>=H,F=10,B=9]).
 eq(lbl82(A,B,C,D,E,F,G,H),1,[lbl82(A,F,C,D,E,1+F,G,H)],[H>=3,8>=B,9>=B,B>=0,H>=A,4>=H,F=B+1]).
-eq(loop_exit_lbl92(A,B,C,D,E,F,G,H),0,[],[]).
-eq(loop_exit_lbl82(A,B,C,D,E,F,G,H),0,[],[]).
-eq(stop(A,B,C,D,E,F,G,H),0,[],[]).

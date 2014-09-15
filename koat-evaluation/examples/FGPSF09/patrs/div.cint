@@ -1,8 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM CONSTRUCTOR-BASED)
-(VAR x y z z')
-(RULES
-  div(x, y) -> Com_0 :|: 0 - y >= 0 && z >= 0 && 0 - z >= 0
-  div(x, y) -> Com_0 :|: y - x >= 0 && z >= 0 && 0 - z >= 0
-  div(x, y) -> Com_1(div(z, y)) :|: x - y - 1 >= 0 && y - 0 - 1 >= 0 && z - (x - y) >= 0 && x - y - z >= 0 && z' - 1 >= 0 && 1 - z' >= 0
-)

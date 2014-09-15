@@ -1,3 +1,4 @@
-eq(start(A,B,C),1,[eval(A,B,C,D,E,F),loop_cont_eval(D,E,F)],[]).
-eq(eval(A,B,C,D,E,F),1,[eval(A,B+1,C+1,D,E,F)],[A>=B+C+1]).
-eq(loop_exit_eval(A,B,C,D,E,F),0,[],[A=D,B=E,C=F]).
+eq(start(A,B,C),1,[eval(A,B,C,D,E,F,G),loop_cont_eval(E,F,G)],[D=0]).
+eq(start(A,B,C),1,[eval(A,B,C,D,E,F,G)],[D=1]).
+eq(eval(A,B,C,D,E,F,G),1,[eval(A,B+1,C+1,D,E,F,G)],[A>=B+C+1]).
+eq(eval(A,B,C,D,A,B,C),0,[],[D=1]).

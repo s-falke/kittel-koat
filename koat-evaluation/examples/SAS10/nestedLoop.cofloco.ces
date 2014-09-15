@@ -15,7 +15,3 @@ eq(lbl121(A,B,C,D,E,F,G,H,I,J,K,L),1,[lbl121(A,B,C,D,E,J,G,1+H,I,J,K,L)],[E>=H+1
 eq(lbl121(A,B,C,D,E,F,G,H,I,J,K,L),1,[lbl111(A,B,C,D,E,1+J,G,1+H,I,J,K,L)],[A>=F+1,E>=H+1,A+C>=F+1,A>=0,E>=H,F>=A,H>=1,J=F,L=A,D=E,B=C]).
 eq(lbl111(A,B,C,D,E,F,G,H,I,J,K,L),1,[lbl121(A,B,C,D,E,F,G,H,I,F,K,L)],[A>=J+1,E>=1,J>=0,C>=J+1,F=A,H=1,L=A,D=E,B=C]).
 eq(lbl111(A,B,C,D,E,F,G,H,I,J,K,L),1,[lbl111(A,B,C,D,E,1+F,G,H,I,J,K,L)],[A>=F+1,F>=J+1,E>=1,J>=0,A>=F,C>=J+1,H=1,L=A,D=E,B=C]).
-eq(loop_exit_lbl131(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[]).
-eq(loop_exit_lbl121(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[]).
-eq(loop_exit_lbl111(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[]).
-eq(stop(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[]).

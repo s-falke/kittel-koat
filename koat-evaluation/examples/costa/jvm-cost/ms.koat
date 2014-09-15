@@ -6,25 +6,25 @@
   f27(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f2(A,B,C,D,E,F,G,H,I,J,K)) :|: B >= D
   f27(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f3(A,B,C,D,E,F,G,H,I,J,K)) :|: D >= B + 1
   f30(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(mssort(A,B,C,D,E,F,G,H,I,J,K))
-  f31(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(lW28normal(E,B,C,D,A,F,G,H,I,J,K))
+  f31(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f28normal(E,B,C,D,A,F,G,H,I,J,K))
   f3(A,B,C,D,E,F,G,H,I,J,K) -> Com_2(f30(E,M,C,D,L,F,G,H,I,J,K),f31(E,M,C,D,L,F,G,H,I,J,K)) :|: 2*L + 2 >= C + E && C + E >= 2*L
   f28normal0(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(mssort(A,B,C + 1,D,E,F,G,H,I,J,K))
-  f28normal1(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(lW29normal(C,B,A,D,E,F,G,H,I,J,K))
+  f28normal1(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f29normal(C,B,A,D,E,F,G,H,I,J,K))
   f28normal(A,B,C,D,E,F,G,H,I,J,K) -> Com_2(f28normal0(C,L,A,D,E,F,G,H,I,J,K),f28normal1(C,L,A,D,E,F,G,H,I,J,K))
-  f29normal(A,B,C,D,E,F,G,H,I,J,K) -> Com_2(testingSrecursionSmsmergeLBLSBIIIIRBV(A,L,C,D,E,F,G,H,I,J,K),lW30normal(A,L,C,D,E,F,G,H,I,J,K)) :|: F >= 0
+  f29normal(A,B,C,D,E,F,G,H,I,J,K) -> Com_2(testingSrecursionSmsmergeLBLSBIIIIRBV(A,L,C,D,E,F,G,H,I,J,K),f30normal(A,L,C,D,E,F,G,H,I,J,K)) :|: F >= 0
   testingSrecursionSmsmergeLBLSBIIIIRBV(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f9(A,C,C,C,E,F,A + 1,F,I,J,K)) :|: F >= 0
   f30normal(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f2(A,B,C,D,E,F,G,H,I,J,K))
   f90(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f9loop(A,B,C,D,E,F,G,H,I,J,K))
-  f91(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(lW38normal(E,A - B - D + I + J,H,I,C,F,J,G,K,J,K))
+  f91(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f38normal(E,A - B - D + I + J,H,I,C,F,J,G,K,J,K))
   f9(A,B,C,D,E,F,G,H,I,J,K) -> Com_2(f90(B,D,E,G,A,F,H,C,L,M,N),f91(B,D,E,G,A,F,H,C,L,M,N)) :|: B + L + M >= E + D + G + 1
   f9loop(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f39(A,B,C,D,E,F,G,A,C,J,K))
   f38normal(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f12(A,C,C,D,E,F,G,H,I,J,K))
   f39(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f11(A,B,C,D,E,F,G,H,I,J,K)) :|: I >= H && A = H && C = I
   f39(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f9loopnexit(A,B,C,D,E,F,G,H,I,J,K)) :|: H >= I + 1 && A = H && C = I
   f120(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f12loop(A,B,C,D,E,F,G,H,I,J,K))
-  f121(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(lW36normal(D,G,B,H,C,F,I,A,J,J,K))
+  f121(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f36normal(D,G,B,H,C,F,I,A,J,J,K))
   f12(A,B,C,D,E,F,G,H,I,J,K) -> Com_2(f120(H,C,E,A,B,F,L,D,G,M,K),f121(H,C,E,A,B,F,L,D,G,M,K)) :|: L >= E + 1 && L >= B
-  f11(A,B,C,D,E,F,G,H,I,J,K) -> Com_2(testingSrecursionSmsCOUNTPOINTLBRBV(A,B,C,D,E,F,G,H,I,J,K),lW31normal(A,B,C,D,E,F,G,H,I,J,K))
+  f11(A,B,C,D,E,F,G,H,I,J,K) -> Com_2(testingSrecursionSmsCOUNTPOINTLBRBV(A,B,C,D,E,F,G,H,I,J,K),f31normal(A,B,C,D,E,F,G,H,I,J,K))
   f12loop(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f37(A,E,C,C,E,F,G,H,I,J,K))
   f36normal(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f18(A,B,C,D,E,F,G,H,I,J,K))
   testingSrecursionSmsCOUNTPOINTLBRBV(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f25(A,B,C,D,E,F,G,H,I,J,K))
@@ -33,7 +33,7 @@
   f37(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f12loopnexit(A,B,C,D,E,F,G,H,I,J,K)) :|: B >= D + 1 && E = B && C = D
   f32(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f16(A,B,C,D,E,F,G,H,I,J,K)) :|: H >= I + 1
   f32(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f17(A,B,C,D,E,F,G,H,I,J,K)) :|: I >= H
-  f15(A,B,C,D,E,F,G,H,I,J,K) -> Com_2(testingSrecursionSmsCOUNTPOINTLBRBV(A,B,C,D,E,F,G,H,I,J,K),lW33normal(A,B,C,D,E,F,G,H,I,J,K))
+  f15(A,B,C,D,E,F,G,H,I,J,K) -> Com_2(testingSrecursionSmsCOUNTPOINTLBRBV(A,B,C,D,E,F,G,H,I,J,K),f33normal(A,B,C,D,E,F,G,H,I,J,K))
   f16(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f20(A,B,C,D + 1,E,F,G,H,I,J,K))
   f17(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f34(A,B,C,D,E,F,G,D,C,J,K))
   f33normal(A,B,C,D,E,F,G,H,I,J,K) -> Com_1(f12loop(A,B,C,D,E + 1,F,G,H,I,J,K))

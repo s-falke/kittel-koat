@@ -1,9 +1,8 @@
 eq(evalSimpleSinglestart(A,B),1,[evalSimpleSingleentryin(A,B)],[]).
 eq(evalSimpleSinglereturnin(A,B),1,[evalSimpleSinglestop(A,B)],[]).
-eq(evalSimpleSingleentryin(A,B),1,[evalSimpleSinglebb3in(0,B,C,D),loop_cont_evalSimpleSinglebb3in(C,D)],[]).
+eq(evalSimpleSingleentryin(A,B),1,[evalSimpleSinglebb3in(0,B,C,D,E),loop_cont_evalSimpleSinglebb3in(D,E)],[C=0]).
+eq(evalSimpleSingleentryin(A,B),1,[evalSimpleSinglebb3in(0,B,C,D,E)],[C=1]).
 eq(loop_cont_evalSimpleSinglebb3in(A,B),0,[evalSimpleSinglereturnin(A,B)],[]).
-eq(evalSimpleSinglebb3in(A,B,C,D),1,[evalSimpleSinglebbin(A,B,C,D)],[B>=A+1]).
-eq(evalSimpleSinglebb3in(A,B,C,D),1,[loop_exit_evalSimpleSinglebb3in(A,B,C,D)],[A>=B]).
-eq(evalSimpleSinglebbin(A,B,C,D),1,[evalSimpleSinglebb3in(A+1,B,C,D)],[]).
-eq(loop_exit_evalSimpleSinglebb3in(A,B,C,D),0,[],[A=C,B=D]).
-eq(evalSimpleSinglestop(A,B),0,[],[]).
+eq(evalSimpleSinglebb3in(A,B,C,D,E),1,[evalSimpleSinglebbin(A,B,C,D,E)],[B>=A+1]).
+eq(evalSimpleSinglebbin(A,B,C,D,E),1,[evalSimpleSinglebb3in(A+1,B,C,D,E)],[]).
+eq(evalSimpleSinglebb3in(A,B,C,A,B),1,[],[C=0,A>=B]).

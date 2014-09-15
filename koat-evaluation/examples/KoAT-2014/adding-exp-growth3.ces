@@ -1,0 +1,6 @@
+eq(pubs_start(A,B,C),0,[f(A,B,C)],[]).
+eq(f(A, B, C),1,[(g(A, 1, 0)],[]).
+eq(g(A, B, C),1,[(g1(A - 1, B, B)],[A > 0]).
+ g1(A, B, C),1,[(g(A, C + B, C)],[]).
+eq(g(A, B, C),1,[(h(A, B, C)],[A <= 0]).
+eq(h(A, B, C),1,[(h(A, B - 1, C)],[B > 0]).

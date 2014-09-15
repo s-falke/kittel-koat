@@ -1,8 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS sqrt))
-(VAR x z z' z'' u w z1)
-(RULES
-  sqrt(x) -> Com_1(f(x, z, z', z'')) :|: z >= 0 && 0 - z >= 0 && z' - 1 >= 0 && 1 - z' >= 0 && z'' - 1 >= 0 && 1 - z'' >= 0
-  f(x, z, u, w) -> Com_1(f(x, z', z'', z1)) :|: x - w >= 0 && u >= 0 && z' - (z + 1) >= 0 && z + 1 - z' >= 0 && z'' - (u + 2) >= 0 && u + 2 - z'' >= 0 && z1 - (w + u + 2) >= 0 && w + u + 2 - z1 >= 0
-  f(x, z, u, w) -> Com_0 :|: w - x - 1 >= 0
-)

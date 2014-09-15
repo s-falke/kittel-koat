@@ -1,6 +1,7 @@
-eq(start(A,B,C,D,E),1,[eval(A,B,C,D,E,F,G,H,I,J),loop_cont_eval(F,G,H,I,J)],[]).
-eq(eval(A,B,C,D,E,F,G,H,I,J),1,[eval(A,B+1,C,D,E+1,F,G,H,I,J)],[A>=B+1,C>=D+1]).
-eq(eval(A,B,C,D,E,F,G,H,I,J),1,[eval(A,B,C,D+1,E+1,F,G,H,I,J)],[A>=B+1,C>=D+1]).
-eq(eval(A,B,C,D,E,F,G,H,I,J),1,[eval(A,B,C,D+1,E+1,F,G,H,I,J)],[B>=A,C>=D+1]).
-eq(eval(A,B,C,D,E,F,G,H,I,J),1,[eval(A,B+1,C,D,E+1,F,G,H,I,J)],[A>=B+1,D>=C]).
-eq(loop_exit_eval(A,B,C,D,E,F,G,H,I,J),0,[],[A=F,B=G,C=H,D=I,E=J]).
+eq(start(A,B,C,D,E),1,[eval(A,B,C,D,E,F,G,H,I,J,K),loop_cont_eval(G,H,I,J,K)],[F=0]).
+eq(start(A,B,C,D,E),1,[eval(A,B,C,D,E,F,G,H,I,J,K)],[F=1]).
+eq(eval(A,B,C,D,E,F,G,H,I,J,K),1,[eval(A,B+1,C,D,E+1,F,G,H,I,J,K)],[A>=B+1,C>=D+1]).
+eq(eval(A,B,C,D,E,F,G,H,I,J,K),1,[eval(A,B,C,D+1,E+1,F,G,H,I,J,K)],[A>=B+1,C>=D+1]).
+eq(eval(A,B,C,D,E,F,G,H,I,J,K),1,[eval(A,B,C,D+1,E+1,F,G,H,I,J,K)],[B>=A,C>=D+1]).
+eq(eval(A,B,C,D,E,F,G,H,I,J,K),1,[eval(A,B+1,C,D,E+1,F,G,H,I,J,K)],[A>=B+1,D>=C]).
+eq(eval(A,B,C,D,E,F,A,B,C,D,E),0,[],[F=1]).

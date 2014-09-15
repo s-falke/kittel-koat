@@ -1,7 +1,7 @@
-eq(f0(A,B,C,D),1,[f6(1,C,C,D,E,F,G,H),loop_cont_f6(E,F,G,H)],[]).
+eq(f0(A,B,C,D),1,[f6(1,C,C,D,E,F,G,H,I),loop_cont_f6(F,G,H,I)],[E=0]).
+eq(f0(A,B,C,D),1,[f6(1,C,C,D,E,F,G,H,I)],[E=1]).
 eq(loop_cont_f6(A,B,C,D),0,[f16(A,B,C,D)],[]).
-eq(f6(A,B,C,D,E,F,G,H),1,[f6(A,I,C,I,E,F,G,H)],[B>=A+2,I*I>=C+1]).
-eq(f6(A,B,C,D,E,F,G,H),1,[f6(I,B,C,I,E,F,G,H)],[B>=A+2,C>=I*I]).
-eq(f6(A,B,C,D,E,F,G,H),1,[loop_exit_f6(A,B,C,D,E,F,G,H)],[A+1>=B]).
-eq(loop_exit_f6(A,B,C,D,E,F,G,H),0,[],[A=E,B=F,C=G,D=H]).
-eq(f16(A,B,C,D),0,[],[]).
+eq(f6(A,B,C,D,E,F,G,H,I),1,[f6(A,J,C,J,E,F,G,H,I)],[B>=A+2,J*J>=C+1]).
+eq(f6(A,B,C,D,E,F,G,H,I),1,[f6(J,B,C,J,E,F,G,H,I)],[B>=A+2,C>=J*J]).
+eq(f6(A,B,C,D,E,A,B,C,D),1,[],[E=0,A+1>=B]).
+eq(f6(A,B+1,C,D,E,A,B+1,C,D),0,[],[E=1,B>=A+1]).

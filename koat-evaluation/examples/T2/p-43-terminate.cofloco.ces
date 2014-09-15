@@ -50,8 +50,3 @@ eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f31(K,L,-1+C,-1+C,1,F,G,H,I,J)],[I>=D+1,C>=H,D>=1
 eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f31(K,L,-1+C,-1+C,1,F,G,H,I,J)],[I>=D+1,C>=H,D>=1,C>=1,L>=1,C+D>=1,E=1]).
 eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f29(K,0,-2+D,-1+D,1,F,G,H,I,J)],[I>=D+1,C>=H,D>=1,C+D>=1,C>=1,E=1]).
 eq(f31(A,B,C,D,E,F,G,H,I,J),1,[f9(A,B,C,D,E,F,G,H,I,K)],[0>=C]).
-eq(loop_exit_f27(A,B,C,D,E,F,G,H,I,J),0,[],[]).
-eq(loop_exit_f30(A,B,C,D,E,F,G,H,I,J),0,[],[]).
-eq(loop_exit_f28(A,B,C,D,E,F,G,H,I,J),0,[],[]).
-eq(f300(A,B,C,D,E,F,G,H,I,J),0,[],[]).
-eq(f9(A,B,C,D,E,F,G,H,I,J),0,[],[]).

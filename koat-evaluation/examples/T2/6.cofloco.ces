@@ -1,4 +1,5 @@
-eq(f1(A),1,[f4(3,B),loop_cont_f4(B)],[]).
+eq(f1(A),1,[f4(3,B,C),loop_cont_f4(C)],[B=0]).
+eq(f1(A),1,[f4(3,B,C)],[B=1]).
 eq(f8(A),1,[f8(2)],[]).
-eq(f4(A,B),1,[f4(3,B)],[]).
-eq(loop_exit_f4(A,B),0,[],[A=B]).
+eq(f4(A,B,C),1,[f4(3,B,C)],[]).
+eq(f4(A,B,A),0,[],[B=1]).

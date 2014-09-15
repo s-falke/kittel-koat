@@ -4,19 +4,19 @@
 (RULES
   doSum(A,B,C,D,E) -> Com_1(f2(0,B,C,D,E))
   f20(A,B,C,D,E) -> Com_1(f2loop(A,B,C,D,E))
-  f21(A,B,C,D,E) -> Com_1(lW15normal(D,C,E,D,E))
+  f21(A,B,C,D,E) -> Com_1(f15normal(D,C,E,D,E))
   f2(A,B,C,D,E) -> Com_2(f20(A,B,F,G,H),f21(A,B,F,G,H)) :|: 0 >= F + 1 && B >= F
   f2loop(A,B,C,D,E) -> Com_1(f16(A,B,B,D,E))
   f15normal(A,B,C,D,E) -> Com_1(f6(A,B,A,D,E))
   f16(A,B,C,D,E) -> Com_1(f3(A,B,C,D,E)) :|: C >= 0 && B = C
   f16(A,B,C,D,E) -> Com_1(f2loopnexit(A,B,C,D,E)) :|: 0 >= 1 + C && B = C
-  f3(A,B,C,D,E) -> Com_2(pubsSFactSumfactorialLBIRBI(A,B,A,F,E),lW14normal(A,B,A,F,E))
+  f3(A,B,C,D,E) -> Com_2(pubsSFactSumfactorialLBIRBI(A,B,A,F,E),f14normal(A,B,A,F,E))
   pubsSFactSumfactorialLBIRBI(A,B,C,D,E) -> Com_1(f17(B,B,C,D,E))
   f14normal(A,B,C,D,E) -> Com_1(f2loop(C + D,B - 1,C,D,E)) :|: C = A
   f17(A,B,C,D,E) -> Com_1(f9(A,B,C,D,E)) :|: A >= 1
   f17(A,B,C,D,E) -> Com_1(f10(A,B,C,D,E)) :|: 0 >= A
   f90(A,B,C,D,E) -> Com_1(pubsSFactSumfactorialLBIRBI(A,B - 1,C,D,E))
-  f91(A,B,C,D,E) -> Com_1(lW18normal(B,B,A,C,E))
+  f91(A,B,C,D,E) -> Com_1(f18normal(B,B,A,C,E))
   f9(A,B,C,D,E) -> Com_2(f90(F,B,G,D,E),f91(F,B,G,D,E))
   f10(A,B,C,D,E) -> Com_1(f12(1,B,C,D,E))
   f18normal(A,B,C,D,E) -> Com_1(f12(F,B,C,D,E)) :|: B = A

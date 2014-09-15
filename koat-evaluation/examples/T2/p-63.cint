@@ -1,9 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS f5))
-(VAR i_5 __retres3_7 __cil_tmp4_8 Result_4 __retres1_9 __cil_tmp2_10 d_6 x0 x1 x2 x3 x4 x5 x6)
-(RULES
-  f4(i_5, __retres3_7, __cil_tmp4_8, Result_4, __retres1_9, __cil_tmp2_10, d_6) -> Com_1(f4(i_5 + d_6, __retres3_7, __cil_tmp4_8, Result_4, __retres1_9, __cil_tmp2_10, d_6)) :|: i_5 > -1
-  f4(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f6(x0, 0, 0, 0, 0, 0, x6)) :|: x0 < 0
-  f5(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f4(x0, x1, x2, x3, x4, x5, x6)) :|: x6 < 0
-  f5(x0, x1, x2, x3, x4, x5, x6) -> Com_1(f6(x0, 0, 0, 0, 0, 0, x6)) :|: x6 > -1
-)

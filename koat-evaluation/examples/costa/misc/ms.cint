@@ -1,6 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS ms))
-(VAR F M T M1)
-(RULES
- ms(F, T) -> Com_2(ms(F, M),_Wms(M1, T)) :|: T-F>=2 && (F+T) - 2<=2*M && 2*M<=F+T && M1=M+1 && F>=0 && T>=0
-)

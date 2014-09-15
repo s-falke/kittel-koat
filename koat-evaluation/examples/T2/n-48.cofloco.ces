@@ -1,7 +1,6 @@
 eq(f5(A,B,C,D,E,F,G),1,[f6(A,B,0,0,0,0,0)],[B>=0]).
-eq(f5(A,B,C,D,E,F,G),1,[f4(A,B,C,D,E,F,G,H,I,J,K,L,M,N),loop_cont_f4(H,I,J,K,L,M,N)],[0>=B+1]).
+eq(f5(A,B,C,D,E,F,G),1,[f4(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O),loop_cont_f4(I,J,K,L,M,N,O)],[H=0,0>=B+1]).
+eq(f5(A,B,C,D,E,F,G),1,[f4(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O)],[H=1,0>=B+1]).
 eq(loop_cont_f4(A,B,C,D,E,F,G),0,[f6(A,B,C,D,E,F,G)],[]).
-eq(f4(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[f4(A-B,B,C,D,E,F,G,H,I,J,K,L,M,N)],[A>=0]).
-eq(f4(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[loop_exit_f4(A,B,0,0,0,0,0,H,I,J,K,L,M,N)],[0>=A+1]).
-eq(loop_exit_f4(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[A=H,B=I,C=J,D=K,E=L,F=M,G=N]).
-eq(f6(A,B,C,D,E,F,G),0,[],[]).
+eq(f4(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O),1,[f4(A-B,B,C,D,E,F,G,H,I,J,K,L,M,N,O)],[A>=0]).
+eq(f4(A,B,C,D,E,F,G,H,A,B,0,0,0,0,0),1,[],[H=0,0>=A+1]).

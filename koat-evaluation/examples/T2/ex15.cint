@@ -1,6 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS f0))
-(VAR x0 x1 x2 x3 x4)
-(RULES
-  f0(x0, x1, x2, x3, x4) -> Com_1(f28(4, 0, 1, 2, 3)) :|: TRUE
-)

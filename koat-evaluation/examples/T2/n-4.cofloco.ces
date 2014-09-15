@@ -11,7 +11,3 @@ eq(f300(A,B,C,D,E),1,[f300(A,B,1+C,D,E)],[A>=1+C,A>=B]).
 eq(f300(A,B,C,D,E),1,[f4(1+A,B,C,F,E)],[F>=1,A>=1+C,B>=1+A]).
 eq(f300(A,B,C,D,E),1,[f4(1+A,B,C,F,E)],[0>=F+1,A>=1+C,B>=1+A]).
 eq(f300(A,B,C,D,E),1,[f2(A,B,C,0,E)],[A>=1+C,B>=1+A]).
-eq(loop_exit_f300(A,B,C,D,E),0,[],[]).
-eq(loop_exit_f4(A,B,C,D,E),0,[],[]).
-eq(loop_exit_f2(A,B,C,D,E),0,[],[]).
-eq(f1(A,B,C,D,E),0,[],[]).

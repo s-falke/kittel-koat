@@ -11,6 +11,3 @@ eq(lbl53(A,B,C,D,E,F,G,H,I,J,K,L),1,[lbl53(A,I,C,D,E,F,G,H,1+I,J,K,L)],[K>=B+2,B
 eq(lbl13(A,B,C,D,E,F,G,H,I,J,K,L),1,[stop(A,B,C,D,E,F,G,H,I,J,K,L)],[A>=2,K=0,D=1,H=A,I=1,B=0]).
 eq(lbl13(A,B,C,D,E,F,G,H,I,J,K,L),1,[lbl71(A,B,C,0,E,M,G,H,0,J,K,L)],[B>=1,B>=0,A>=2+B,D=1,H=A,K=B,I=1+B]).
 eq(lbl13(A,B,C,D,E,F,G,H,I,J,K,L),1,[lbl53(A,0,C,0,E,F,G,H,1,J,K,L)],[B>=1,B>=0,A>=2+B,D=1,H=A,K=B,I=1+B]).
-eq(loop_exit_lbl71(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[]).
-eq(loop_exit_lbl53(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[]).
-eq(stop(A,B,C,D,E,F,G,H,I,J,K,L),0,[],[]).

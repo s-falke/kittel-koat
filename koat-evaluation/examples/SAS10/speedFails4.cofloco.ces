@@ -9,6 +9,3 @@ eq(lbl71(A,B,C,D,E,F,G,H,I,J),1,[lbl81(A,B,C,D-E,E,F,G,H,I,J)],[C>=D,0>=A,D>=B+1
 eq(lbl81(A,B,C,D,E,F,G,H,I,J),1,[stop(A,B,C,D,E,F,G,H,I,J)],[0>=A,C>=B,D=C+1,E+1=0,J=A,H=I,G=C]).
 eq(lbl81(A,B,C,D,E,F,G,H,I,J),1,[lbl71(A,B,C,E+D,E,F,G,H,I,J)],[A>=1,C>=D,0>=A,D>=B+1,C+1>=D,E+1=0,J=A,H=I,G=C]).
 eq(lbl81(A,B,C,D,E,F,G,H,I,J),1,[lbl81(A,B,C,D-E,E,F,G,H,I,J)],[C>=D,0>=A,D>=B+1,C+1>=D,E+1=0,J=A,H=I,G=C]).
-eq(loop_exit_lbl71(A,B,C,D,E,F,G,H,I,J),0,[],[]).
-eq(loop_exit_lbl81(A,B,C,D,E,F,G,H,I,J),0,[],[]).
-eq(stop(A,B,C,D,E,F,G,H,I,J),0,[],[]).

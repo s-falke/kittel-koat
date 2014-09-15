@@ -1,6 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM CONSTRUCTOR-BASED)
-(VAR i j z z' nat pos)
-(RULES
-  eval(i, j) -> Com_1(eval(z, z')) :|: i - j - 1 >= 0 && nat >= 0 && pos - 0 - 1 >= 0 && z - (i - nat) >= 0 && i - nat - z >= 0 && z' - (j + pos) >= 0 && j + pos - z' >= 0
-)

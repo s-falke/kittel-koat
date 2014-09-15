@@ -1,7 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS insertionsortD))
-(VAR A Ap B Bp X)
-(RULES
- insertionsortD(A) -> Com_2(insertD(X, Ap),insertionsortD(Ap)) :|: A>=1 && Ap=A - 1
- insertD(A, B) -> Com_1(insertD(A, Bp)) :|: B>=1 && Bp = B - 1
-)

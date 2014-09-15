@@ -1,9 +1,8 @@
-% ENTRIES
-%
-entry(a(N):[N>=1]).
-entry(a(N):[N>=2]).
-entry(a(N):[N>=4]).
-
-
-eq(a(N),1,[],[N=<1]).
-eq(a(N),2,[a(N2)],[N2*2=N,N>=2]).
+eq(start(A),1,[a(A,B,C),loop_cont_a(C)],[B=0,A>=1]).
+eq(start(A),1,[a(A,B,C)],[B=1,A>=1]).
+eq(start(A),1,[a(A,B,C),loop_cont_a(C)],[B=0,A>=2]).
+eq(start(A),1,[a(A,B,C)],[B=1,A>=2]).
+eq(start(A),1,[a(A,B,C),loop_cont_a(C)],[B=0,A>=4]).
+eq(start(A),1,[a(A,B,C)],[B=1,A>=4]).
+eq(a(A,B,C),1,[a(A*D,B,C)],[1>=2*D,3*D>=2,A>=2]).
+eq(a(A,B,A),0,[],[B=1]).

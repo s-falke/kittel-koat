@@ -1,3 +1,4 @@
-eq(f0(A),1,[f1(B,C),loop_cont_f1(C)],[B>=2]).
-eq(f1(A,B),1,[f1(C,B)],[1>=C,C+1>=0,D>=2]).
-eq(loop_exit_f1(A,B),0,[],[A=B]).
+eq(f0(A),1,[f1(B,C,D),loop_cont_f1(D)],[C=0,B>=2]).
+eq(f0(A),1,[f1(B,C,D)],[C=1,B>=2]).
+eq(f1(A,B,C),1,[f1(D,B,C)],[1>=D,D+1>=0,E>=2]).
+eq(f1(A,B,A),0,[],[B=1]).

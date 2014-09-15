@@ -1,9 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM CONSTRUCTOR-BASED)
-(VAR an bn cn i j z z')
-(RULES
-  eval(an, bn, cn, i, j) -> Com_1(eval(an, bn, z, i, z')) :|: bn - j - 1 >= 0 && an - i - 1 >= 0 && z - (cn + 1) >= 0 && cn + 1 - z >= 0 && z' - (j + 1) >= 0 && j + 1 - z' >= 0
-  eval(an, bn, cn, i, j) -> Com_1(eval(an, bn, z, z', j)) :|: bn - j - 1 >= 0 && an - i - 1 >= 0 && z - (cn + 1) >= 0 && cn + 1 - z >= 0 && z' - (i + 1) >= 0 && i + 1 - z' >= 0
-  eval(an, bn, cn, i, j) -> Com_1(eval(an, bn, z, z', j)) :|: j - bn >= 0 && an - i - 1 >= 0 && z - (cn + 1) >= 0 && cn + 1 - z >= 0 && z' - (i + 1) >= 0 && i + 1 - z' >= 0
-  eval(an, bn, cn, i, j) -> Com_1(eval(an, bn, z, i, z')) :|: bn - j - 1 >= 0 && i - an >= 0 && z - (cn + 1) >= 0 && cn + 1 - z >= 0 && z' - (j + 1) >= 0 && j + 1 - z' >= 0
-)

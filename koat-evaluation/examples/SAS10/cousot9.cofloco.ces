@@ -8,6 +8,3 @@ eq(lbl52(A,B,C,D,E,F),1,[lbl72(A,F,C,D-1,E,F)],[D>=1,A>=D,B=0,F=A]).
 eq(lbl72(A,B,C,D,E,F),1,[stop(A,B,C,D,E,F)],[A>=1,D=0,F=A,B=A]).
 eq(lbl72(A,B,C,D,E,F),1,[lbl52(A,B-1,C,D,E,F)],[D>=1,A>=1,D>=0,A>=D+1,F=A,B=A]).
 eq(lbl72(A,B,C,D,E,F),1,[lbl72(A,F,C,D-1,E,F)],[D>=1,0>=A,D>=0,A>=D+1,F=A,B=A]).
-eq(loop_exit_lbl52(A,B,C,D,E,F),0,[],[]).
-eq(loop_exit_lbl72(A,B,C,D,E,F),0,[],[]).
-eq(stop(A,B,C,D,E,F),0,[],[]).

@@ -1,9 +1,8 @@
 eq(evalfstart(A,B),1,[evalfentryin(A,B)],[]).
 eq(evalfreturnin(A,B),1,[evalfstop(A,B)],[]).
-eq(evalfentryin(A,B),1,[evalfbb1in(B,A,C,D),loop_cont_evalfbb1in(C,D)],[]).
+eq(evalfentryin(A,B),1,[evalfbb1in(B,A,C,D,E),loop_cont_evalfbb1in(D,E)],[C=0]).
+eq(evalfentryin(A,B),1,[evalfbb1in(B,A,C,D,E)],[C=1]).
 eq(loop_cont_evalfbb1in(A,B),0,[evalfreturnin(A,B)],[]).
-eq(evalfbb1in(A,B,C,D),1,[evalfbbin(A,B,C,D)],[A>=B]).
-eq(evalfbb1in(A,B,C,D),1,[loop_exit_evalfbb1in(A,B,C,D)],[B>=A+1]).
-eq(evalfbbin(A,B,C,D),1,[evalfbb1in(A,B+1,C,D)],[]).
-eq(loop_exit_evalfbb1in(A,B,C,D),0,[],[A=C,B=D]).
-eq(evalfstop(A,B),0,[],[]).
+eq(evalfbb1in(A,B,C,D,E),1,[evalfbbin(A,B,C,D,E)],[A>=B]).
+eq(evalfbbin(A,B,C,D,E),1,[evalfbb1in(A,B+1,C,D,E)],[]).
+eq(evalfbb1in(A,B,C,A,B),1,[],[C=0,B>=A+1]).

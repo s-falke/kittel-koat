@@ -1,6 +1,7 @@
-eq(start(A),1,[eval(A,B),loop_cont_eval(B)],[]).
-eq(eval(A,B),1,[eval(0,B)],[2*C>=0,0>=2*C,A=1]).
-eq(eval(A,B),1,[eval(2*C,B)],[2*C>=0,2+2*C>=0,A=1+2*C]).
-eq(eval(A,B),1,[eval(C,B)],[1>=2*D,2*D>=0,2*E>=1,1>=2*E,1>=2*F,3*F>=2,C>=F,1>=2*G,3*G>=2,G>=C,A=1]).
-eq(eval(A,B),1,[eval(C,B)],[2*D>=1,1+2*D>=0,2*D>=2*E,1+2*E>=2*D,2*D>=2*F,3*F>=2*D+1,C>=F,2*D>=2*G,3*G>=2*D+1,G>=C,A=2*D]).
-eq(loop_exit_eval(A,B),0,[],[A=B]).
+eq(start(A),1,[eval(A,B,C),loop_cont_eval(C)],[B=0]).
+eq(start(A),1,[eval(A,B,C)],[B=1]).
+eq(eval(A,B,C),1,[eval(0,B,C)],[2*D>=0,0>=2*D,A=1]).
+eq(eval(A,B,C),1,[eval(2*D,B,C)],[2*D>=0,2+2*D>=0,A=1+2*D]).
+eq(eval(A,B,C),1,[eval(D,B,C)],[1>=2*E,2*E>=0,2*F>=1,1>=2*F,1>=2*G,3*G>=2,D>=G,1>=2*H,3*H>=2,H>=D,A=1]).
+eq(eval(A,B,C),1,[eval(D,B,C)],[2*E>=1,1+2*E>=0,2*E>=2*F,1+2*F>=2*E,2*E>=2*G,3*G>=2*E+1,D>=G,2*E>=2*H,3*H>=2*E+1,H>=D,A=2*E]).
+eq(eval(A,B,A),0,[],[B=1]).

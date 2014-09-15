@@ -17,7 +17,3 @@ eq(lbl111(A,B,C,D,E,F,G,H),1,[lbl161(A,F-20,C,D-1,E,F-10,G,H)],[F=111,D=2,H=100,
 eq(lbl111(A,B,C,D,E,F,G,H),1,[lbl221(A,B,C,D,E,1+F,G,H)],[11*D+A>=112,D>=3,121>=11*D+A,122>=11*D+A,11*D>=22,H=A,B=C,F+11=11*D+A]).
 eq(lbl111(A,B,C,D,E,F,G,H),1,[lbl221(A,B,C,D,E,1+F,G,H)],[11*D+A>=112,D>=2,121>=11*D+A,122>=11*D+A,11*D>=22,H=A,B=C,F+11=11*D+A]).
 eq(lbl111(A,B,C,D,E,F,G,H),1,[lbl221(A,B,C,D-1,E,F-9,G,H)],[D>=3,11*D>=22,F=111,H+11*D=122,B=C,A+11*D=122]).
-eq(loop_exit_lbl111(A,B,C,D,E,F,G,H),0,[],[]).
-eq(loop_exit_lbl161(A,B,C,D,E,F,G,H),0,[],[]).
-eq(loop_exit_lbl221(A,B,C,D,E,F,G,H),0,[],[]).
-eq(stop(A,B,C,D,E,F,G,H),0,[],[]).

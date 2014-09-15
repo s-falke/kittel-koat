@@ -1,7 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS f0))
-(VAR len_98 elem_13 l_11 arith $nondet1 arith1 $nondet)
-(RULES
-  f0(len_98, elem_13, l_11) -> Com_1(f1(len_98, elem_13, l_11)) :|: TRUE
-  f1(len_98, elem_13, arith) -> Com_1(f1($nondet1, arith, arith1)) :|: len_98 > 0 && 0 < $nondet && 0 = -1 * arith
-)

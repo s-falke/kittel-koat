@@ -1,7 +1,0 @@
-(GOAL COMPLEXITY)
-(STARTTERM (FUNCTIONSYMBOLS dyade))
-(VAR M Mp N Np X)
-(RULES
- dyade(N, M) -> Com_2(mult(X, M),dyade(Np, M)) :|: N >=1 && Np = N - 1
- mult(N, M) -> Com_1(mult(N, Mp)) :|: M>=1 && Mp = M - 1
-)

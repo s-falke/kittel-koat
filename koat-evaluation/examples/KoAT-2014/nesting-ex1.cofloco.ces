@@ -1,0 +1,14 @@
+eq(l0(A,B,C,D),1,[l1(0,B,C,D,E,F,G,H,I),loop_cont_l1(F,G,H,I)],[E=0]).
+eq(l0(A,B,C,D),1,[l1(0,B,C,D,E,F,G,H,I)],[E=1]).
+eq(loop_cont_l1(A,B,C,D),0,[l3(A,B,C,D,E,F,G,H,I),loop_cont_l3(F,G,H,I)],[E=0]).
+eq(loop_cont_l1(A,B,C,D),0,[l3(A,B,C,D,E,F,G,H,I)],[E=1]).
+eq(l1(A,B,C,D,E,F,G,H,I),1,[l2(A,B,0,0,J,K,L,M,N),loop_cont_l2(K,L,M,N,E,F,G,H,I)],[J=0,B>0]).
+eq(l1(A,B,C,D,E,F,G,H,I),1,[l2(A,B,0,0,J,K,L,M,N)],[E=1,J=1,B>0]).
+eq(l2(A,B,C,D,E,F,G,H,I),1,[l2(A,B,C+1,D+C,E,F,G,H,I)],[C<B]).
+eq(l3(A,B,C,D,E,F,G,H,I),1,[l3(A-1,B,C,D,E,F,G,H,I)],[A>0]).
+eq(loop_cont_l2(A,B,C,D,E,F,G,H,I),0,[l1(A,B,C,D,E,F,G,H,I)],[]).
+eq(l1(A,B,C,D,E,A,B,C,D),1,[],[E=0,<=(B,0)]).
+eq(l1(A,B,C,D,E,A,B,C,D),0,[],[E=1]).
+eq(l2(A,B,C,D,E,A+D,B-1,C,D),1,[],[E=0,C>=B]).
+eq(l2(A,B+1,C,D,E,A,B+1,C,D),0,[],[E=1,B>=C]).
+eq(l3(A,B,C,D,E,A,B,C,D),0,[],[E=1]).

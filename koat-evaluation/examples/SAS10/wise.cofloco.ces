@@ -10,6 +10,3 @@ eq(lbl81(A,B,C,D),1,[lbl91(A,1+B,C,D)],[D>=C+3,D>=A+1,A>=0,C>=D+2,B=C]).
 eq(lbl91(A,B,C,D),1,[stop(A,B,C,D)],[A>=3+C,C>=0,B+2=A,D=A]).
 eq(lbl91(A,B,C,D),1,[lbl81(A,B,C,1+D)],[B>=A+3,A>=B+2,B>=C+1,C>=0,D=A]).
 eq(lbl91(A,B,C,D),1,[lbl91(A,1+B,C,D)],[A>=B+3,A>=B+2,B>=C+1,C>=0,D=A]).
-eq(loop_exit_lbl81(A,B,C,D),0,[],[]).
-eq(loop_exit_lbl91(A,B,C,D),0,[],[]).
-eq(stop(A,B,C,D),0,[],[]).
