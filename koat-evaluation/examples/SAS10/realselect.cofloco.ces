@@ -4,12 +4,10 @@ eq(start(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[lbl53(A,B,C,1,E,F,G,0,I,2,K,0,M,N,O,P,Q
 eq(start(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[lbl53(A,B,C,1,E,F,G,0,I,2,K,0,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1)],[O=1,A>=2,B=C,D=E,F=G,H=I,J=K,L=M,N=A]).
 eq(start(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[lbl53(A,B,C,1,E,F,G,1,I,2,K,0,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1),loop_cont_lbl53(P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1)],[O=0,A>=2,B=C,D=E,F=G,H=I,J=K,L=M,N=A]).
 eq(start(A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[lbl53(A,B,C,1,E,F,G,1,I,2,K,0,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1)],[O=1,A>=2,B=C,D=E,F=G,H=I,J=K,L=M,N=A]).
-eq(loop_cont_lbl53(A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[stop(A,B,C,D,E,F,G,H,I,J,K,L,M,N)],[]).
 eq(lbl53(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1),1,[lbl91(A,B,C,D,E,D1,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1)],[D>=H,D>=1,A>=1+D,H+1>=D,J=A,L+1=D,N=A]).
 eq(lbl53(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1),1,[lbl53(A,B,C,J,E,F,G,H,I,1+J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1)],[A>=J+1,D>=H,D>=1,A>=J,J>=1+D,H+1>=D,L+1=D,N=A]).
 eq(lbl53(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1),1,[lbl53(A,B,C,J,E,F,G,J,I,1+J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1)],[A>=J+1,D>=H,D>=1,A>=J,J>=1+D,H+1>=D,L+1=D,N=A]).
 eq(lbl91(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1),1,[lbl13(A,L,C,D,E,F,G,H,I,J,K,1+L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1)],[D>=H,D>=1,H+1>=D,A>=1+D,N=A,L+1=D,J=A]).
 eq(lbl13(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1),1,[lbl53(A,B,C,1+L,E,F,G,L,I,2+L,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1)],[A>=B+3,A>=B+2,H>=B,B>=0,B+1>=H,L=B+1,D=B+1,N=A,J=A]).
 eq(lbl13(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1),1,[lbl53(A,B,C,1+L,E,F,G,1+L,I,2+L,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A1,B1,C1)],[A>=B+3,A>=B+2,H>=B,B>=0,B+1>=H,L=B+1,D=B+1,N=A,J=A]).
-eq(lbl13(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[],[O=0,H+2>=A,A>=2,A>=1+H,L+1=A,B+2=A,D+1=A,N=A,J=A]).
-eq(lbl13(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,A,B,C,D,E,F,G,H,I,J,K,L,M,N),0,[],[O=1]).
+eq(lbl13(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,A,B,C,D,E,F,G,H,I,J,K,L,M,N),1,[],[O=1,H+2>=A,A>=2,A>=1+H,L+1=A,B+2=A,D+1=A,N=A,J=A]).

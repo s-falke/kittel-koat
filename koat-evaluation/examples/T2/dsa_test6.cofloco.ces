@@ -1,5 +1,4 @@
 eq(f0(A,B),1,[f6(C,0,D,E,F),loop_cont_f6(E,F)],[D=0]).
 eq(f0(A,B),1,[f6(C,0,D,E,F)],[D=1]).
-eq(loop_cont_f6(A,B),0,[f15(A,B)],[]).
 eq(f6(A,B,C,D,E),1,[f6(A,B+1,C,D,E)],[9>=B]).
-eq(f6(A,B,C,A,B),1,[],[C=0,B>=10]).
+eq(f6(A,B,C,A,B),1,[],[C=1,B>=10]).

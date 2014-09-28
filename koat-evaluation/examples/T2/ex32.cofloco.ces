@@ -5,8 +5,7 @@ eq(f8(A,B,C,D),1,[f19(A,999,C,D,E,F,G,H,I),loop_cont_f19(F,G,H,I)],[E=0,0>=A+1])
 eq(f8(A,B,C,D),1,[f19(A,999,C,D,E,F,G,H,I)],[E=1,0>=A+1]).
 eq(loop_cont_f19(A,B,C,D),0,[f28(A,B,C,D,E,F,G,H,I),loop_cont_f28(F,G,H,I)],[E=0]).
 eq(loop_cont_f19(A,B,C,D),0,[f28(A,B,C,D,E,F,G,H,I)],[E=1]).
-eq(loop_cont_f28(A,B,C,D),0,[f36(A,B,C,D)],[]).
 eq(f19(A,B,C,D,E,F,G,H,I),1,[f19(A,B-1,C,D,E,F,G,H,I)],[B>=0]).
 eq(f28(A,B,C,D,E,F,G,H,I),1,[f28(A,B,C-1,D,E,F,G,H,I)],[C>=0]).
 eq(f19(A,B,C,D,E,A,B,999,D),1,[],[E=0,0>=B+1]).
-eq(f28(A,B,C,D,E,A,B,C,D),1,[],[E=0,0>=C+1]).
+eq(f28(A,B,C,D,E,A,B,C,D),1,[],[E=1,0>=C+1]).

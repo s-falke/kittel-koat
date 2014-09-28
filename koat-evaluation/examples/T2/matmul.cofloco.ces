@@ -2,7 +2,6 @@ eq(f0(A,B,C),1,[f10(1,B,C,D,E,F,G),loop_cont_f10(E,F,G)],[D=0]).
 eq(f0(A,B,C),1,[f10(1,B,C,D,E,F,G)],[D=1]).
 eq(loop_cont_f10(A,B,C),0,[f21(A,B,C,D,E,F,G),loop_cont_f21(E,F,G)],[D=0]).
 eq(loop_cont_f10(A,B,C),0,[f21(A,B,C,D,E,F,G)],[D=1]).
-eq(loop_cont_f21(A,B,C),0,[f39(A,B,C)],[]).
 eq(f10(A,B,C,D,E,F,G),1,[f13(A,1,C,H,I,J,K),loop_cont_f13(I,J,K,D,E,F,G)],[H=0,5>=A]).
 eq(f10(A,B,C,D,E,F,G),1,[f13(A,1,C,H,I,J,K)],[D=1,H=1,5>=A]).
 eq(f13(A,B,C,D,E,F,G),1,[f13(A,B+1,C,D,E,F,G)],[5>=B]).
@@ -16,6 +15,6 @@ eq(loop_cont_f24(A,B,C,D,E,F,G),0,[f21(A,B,C,D,E,F,G)],[]).
 eq(loop_cont_f27(A,B,C,D,E,F,G),0,[f24(A,B,C,D,E,F,G)],[]).
 eq(f10(A,B,C,D,1,B,C),1,[],[D=0,A>=6]).
 eq(f13(A,B,C,D,A+1,B,C),1,[],[D=0,B>=6]).
-eq(f21(A,B,C,D,A,B,C),1,[],[D=0,A>=6]).
+eq(f21(A,B,C,D,A,B,C),1,[],[D=1,A>=6]).
 eq(f24(A,B,C,D,A+1,B,C),1,[],[D=0,B>=6]).
 eq(f27(A,B,C,D,A,B+1,C),1,[],[D=0,C>=6]).

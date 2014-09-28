@@ -4,7 +4,6 @@ eq(f0(A,B,C,D,E),1,[f15(F,0,F,G,E,H,I,J,K,L,M),loop_cont_f15(I,J,K,L,M)],[H=0,10
 eq(f0(A,B,C,D,E),1,[f15(F,0,F,G,E,H,I,J,K,L,M)],[H=1,100>=F,F>=1]).
 eq(loop_cont_f15(A,B,C,D,E),0,[f23(A,B,C,D,E,F,G,H,I,J,K),loop_cont_f23(G,H,I,J,K)],[F=0]).
 eq(loop_cont_f15(A,B,C,D,E),0,[f23(A,B,C,D,E,F,G,H,I,J,K)],[F=1]).
-eq(loop_cont_f23(A,B,C,D,E),0,[f7(A,B,C,D,E)],[]).
 eq(f15(A,B,C,D,E,F,G,H,I,J,K),1,[f16(A,B,C,D,E,F,G,H,I,J,K)],[A>=B+1]).
 eq(f15(A,B,C,D,E,F,G,H,I,J,K),1,[f16(A,B,C,D,E,F,G,H,I,J,K)],[B>=1+A]).
 eq(f23(A,B,C,D,E,F,G,H,I,J,K),1,[f23(A,B,C,D,E+1,F,G,H,I,J,K)],[B>=E+1]).
@@ -12,4 +11,4 @@ eq(f16(A,B,C,D,E,F,G,H,I,J,K),1,[f15(A,B+1,C,D,E,F,G,H,I,J,K)],[]).
 eq(f16(A,B,C,D,E,F,A,B-1,C,D,0),1,[],[F=0]).
 eq(f15(A,B,C,D,E,F,A,A-1,C,D,0),1,[],[F=0,A=B]).
 eq(f15(A,B,C,D,E,F,A,B,C,D,E),0,[],[F=1]).
-eq(f23(A,B,C,D,E,F,A,B,C,D,E),1,[],[F=0,E>=B]).
+eq(f23(A,B,C,D,E,F,A,B,C,D,E),1,[],[F=1,E>=B]).

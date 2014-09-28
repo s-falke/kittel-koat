@@ -238,7 +238,6 @@ eq(loop_cont_f914(A,B,C),0,[f920(A,B,C,D,E,F,G),loop_cont_f920(E,F,G)],[D=0]).
 eq(loop_cont_f914(A,B,C),0,[f920(A,B,C,D,E,F,G)],[D=1]).
 eq(loop_cont_f920(A,B,C),0,[f926(A,B,C,D,E,F,G),loop_cont_f926(E,F,G)],[D=0]).
 eq(loop_cont_f920(A,B,C),0,[f926(A,B,C,D,E,F,G)],[D=1]).
-eq(loop_cont_f926(A,B,C),0,[f934(A,B,C)],[]).
 eq(f154(A,B,C,D,E,F,G),1,[f154(A+C,B,C+1,D,E,F,G)],[2>=C]).
 eq(f160(A,B,C,D,E,F,G),1,[f160(A+C,B,C+1,D,E,F,G)],[3>=C]).
 eq(f166(A,B,C,D,E,F,G),1,[f166(A+C,B,C+1,D,E,F,G)],[2>=C]).
@@ -478,4 +477,4 @@ eq(f900(A,B,C,D,A,B,16),1,[],[D=0,0>=8+C]).
 eq(f908(A,B,C,D,A,B,16),1,[],[D=0,0>=8+C]).
 eq(f914(A,B,C,D,A,B,16),1,[],[D=0,0>=9+C]).
 eq(f920(A,B,C,D,A,B,16),1,[],[D=0,0>=8+C]).
-eq(f926(A,B,C,D,A,B,C),1,[],[D=0,0>=9+C]).
+eq(f926(A,B,C,D,A,B,C),1,[],[D=1,0>=9+C]).

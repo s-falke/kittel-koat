@@ -2,8 +2,7 @@ eq(f0(A,B,C),1,[f9(0,D,0,E,F,G,H),loop_cont_f9(F,G,H)],[E=0]).
 eq(f0(A,B,C),1,[f9(0,D,0,E,F,G,H)],[E=1]).
 eq(loop_cont_f9(A,B,C),0,[f17(A,B,C,D,E,F,G),loop_cont_f17(E,F,G)],[D=0]).
 eq(loop_cont_f9(A,B,C),0,[f17(A,B,C,D,E,F,G)],[D=1]).
-eq(loop_cont_f17(A,B,C),0,[f24(A,B,C)],[]).
 eq(f9(A,B,C,D,E,F,G),1,[f9(A,B,C+1,D,E,F,G)],[49>=C]).
 eq(f17(A,B,C,D,E,F,G),1,[f17(A+1,B,C,D,E,F,G)],[49>=A]).
 eq(f9(A,B,C,D,0,B,C),1,[],[D=0,C>=50]).
-eq(f17(A,B,C,D,A,B,C),1,[],[D=0,A>=50]).
+eq(f17(A,B,C,D,A,B,C),1,[],[D=1,A>=50]).

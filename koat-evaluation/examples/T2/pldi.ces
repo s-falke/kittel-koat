@@ -1,8 +1,8 @@
 eq(pubs_start(A,B,C,D),0,[f0(A,B,C,D)],[]).
-eq(f0(A,B,C,D),1,[f4(0,B,C,D)],[]).
-eq(f4(A,B,C,D),1,[f7(A,B,A + 1,D)],[B >= A + 1]).
-eq(f7(A,B,C,D),1,[f7(A,B,C + 1,0)],[B >= C + 1]).
-eq(f7(A,B,C,D),1,[f7(A,B - 1,C,E)],[B >= C + 1, 0 >= E + 1]).
-eq(f7(A,B,C,D),1,[f7(A,B - 1,C,E)],[B >= C + 1, E >= 1]).
-eq(f7(A,B,C,D),1,[f4(A + 1,B,C,D)],[C >= B]).
 eq(f4(A,B,C,D),1,[f19(A,B,C,D)],[A >= B]).
+eq(f7(A,B,C,D),1,[f4(1 + A,B,C,D)],[C >= B]).
+eq(f7(A,B,C,D),1,[f7(A,-1 + B,C,E)],[B >= 1 + C, E >= 1]).
+eq(f7(A,B,C,D),1,[f7(A,-1 + B,C,E)],[B >= 1 + C, 0 >= 1 + E]).
+eq(f7(A,B,C,D),1,[f7(A,B,1 + C,0)],[B >= 1 + C]).
+eq(f4(A,B,C,D),1,[f7(A,B,1 + A,D)],[B >= 1 + A]).
+eq(f0(A,B,C,D),1,[f4(0,B,C,D)],[]).

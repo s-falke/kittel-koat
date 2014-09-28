@@ -2,7 +2,6 @@ eq(f0(A,B,C),1,[f8(0,B,C,D,E,F,G),loop_cont_f8(E,F,G)],[D=0]).
 eq(f0(A,B,C),1,[f8(0,B,C,D,E,F,G)],[D=1]).
 eq(loop_cont_f8(A,B,C),0,[f23(A,B,C,D,E,F,G),loop_cont_f23(E,F,G)],[D=0]).
 eq(loop_cont_f8(A,B,C),0,[f23(A,B,C,D,E,F,G)],[D=1]).
-eq(loop_cont_f23(A,B,C),0,[f38(A,B,C)],[]).
 eq(f8(A,B,C,D,E,F,G),1,[f14(A,A,C,D,E,F,G)],[0>=A,0>=H]).
 eq(f8(A,B,C,D,E,F,G),1,[f14(A,A,C,D,E,F,G)],[0>=A]).
 eq(f8(A,B,C,D,E,F,G),1,[f8(A+1,A,C,D,E,F,G)],[0>=A]).
@@ -14,4 +13,4 @@ eq(f14(A,B,C,D,E,F,G),1,[f8(A+1,B,C,D,E,F,G)],[0>=H+1]).
 eq(f28(A,B,C,D,E,F,G),1,[f23(A+1,B,C,D,E,F,G)],[]).
 eq(f28(A,B,C,D,E,F,G),1,[f23(A+1,B,C,D,E,F,G)],[0>=H+1]).
 eq(f8(A,B,C,D,0,B,C),1,[],[D=0,A>=1]).
-eq(f23(A,B,C,D,A,B,C),1,[],[D=0,A>=1]).
+eq(f23(A,B,C,D,A,B,C),1,[],[D=1,A>=1]).

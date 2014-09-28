@@ -1,18 +1,18 @@
 eq(pubs_start(A,B,C,D),0,[evalEx1start(A,B,C,D)],[]).
-eq(evalEx1start(A,B,C,D),1,[evalEx1entryin(A,B,C,D)],[]).
-eq(evalEx1entryin(A,B,C,D),1,[evalEx1bb6in(0,A,C,D)],[]).
-eq(evalEx1bb6in(A,B,C,D),1,[evalEx1bbin(A,B,C,D)],[B >= A + 1]).
-eq(evalEx1bb6in(A,B,C,D),1,[evalEx1returnin(A,B,C,D)],[A >= B]).
-eq(evalEx1bbin(A,B,C,D),1,[evalEx1bb4in(A,B,A + 1,B)],[]).
-eq(evalEx1bb4in(A,B,C,D),1,[evalEx1bb1in(A,B,C,D)],[D >= C + 1]).
-eq(evalEx1bb4in(A,B,C,D),1,[evalEx1bb5in(A,B,C,D)],[C >= D]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,D - 1)],[0 >= E + 1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,D - 1)],[0 >= E + 1, E >= 1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,D - 1)],[E >= 1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,D)],[0 >= 1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,D)],[0 >= 1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C + 1,D - 1)],[0 >= 1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C + 1,D - 1)],[0 >= 1]).
-eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C + 1,D)],[]).
-eq(evalEx1bb5in(A,B,C,D),1,[evalEx1bb6in(A + 1,D,C,D)],[]).
 eq(evalEx1returnin(A,B,C,D),1,[evalEx1stop(A,B,C,D)],[]).
+eq(evalEx1bb5in(A,B,C,D),1,[evalEx1bb6in(1 + A,D,C,D)],[]).
+eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,1 + C,D)],[]).
+eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,1 + C,-1 + D)],[0 >= 1]).
+eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,1 + C,-1 + D)],[0 >= 1]).
+eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,D)],[0 >= 1]).
+eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,D)],[0 >= 1]).
+eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,-1 + D)],[E >= 1]).
+eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,-1 + D)],[0 >= 1 + E, E >= 1]).
+eq(evalEx1bb1in(A,B,C,D),1,[evalEx1bb4in(A,B,C,-1 + D)],[0 >= 1 + E]).
+eq(evalEx1bb4in(A,B,C,D),1,[evalEx1bb5in(A,B,C,D)],[C >= D]).
+eq(evalEx1bb4in(A,B,C,D),1,[evalEx1bb1in(A,B,C,D)],[D >= 1 + C]).
+eq(evalEx1bbin(A,B,C,D),1,[evalEx1bb4in(A,B,1 + A,B)],[]).
+eq(evalEx1bb6in(A,B,C,D),1,[evalEx1returnin(A,B,C,D)],[A >= B]).
+eq(evalEx1bb6in(A,B,C,D),1,[evalEx1bbin(A,B,C,D)],[B >= 1 + A]).
+eq(evalEx1entryin(A,B,C,D),1,[evalEx1bb6in(0,A,C,D)],[]).
+eq(evalEx1start(A,B,C,D),1,[evalEx1entryin(A,B,C,D)],[]).

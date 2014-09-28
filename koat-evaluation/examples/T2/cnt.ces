@@ -1,11 +1,11 @@
 eq(pubs_start(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),0,[f0(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[]).
-eq(f11(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f14(A,0,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[9 >= A]).
-eq(f33(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f36(A,B,C,0,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[9 >= C]).
-eq(f36(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f36(A,B,C,D + 1,E + S,F + 1,G,H,I,J,K,L,M,N,O,P,Q)],[9 >= D, 0 >= R + 1]).
-eq(f36(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f36(A,B,C,D + 1,E,F,G + S,H + 1,I,J,K,L,M,N,O,P,Q)],[9 >= D]).
-eq(f36(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f33(A,B,C + 1,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[D >= 10]).
-eq(f33(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f58(A,B,C,D,E,F,G,H,E,F,G,H,1500,S,O,P,Q)],[C >= 10]).
-eq(f14(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f14(A,B + 1,C,D,E,F,G,H,I,J,K,L,M,N,S,S,Q)],[9 >= B]).
-eq(f14(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f11(A + 1,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[B >= 10]).
-eq(f11(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f33(A,B,0,D,0,0,0,0,I,J,K,L,M,N,O,P,1000)],[A >= 10]).
 eq(f0(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f11(0,B,C,D,E,F,G,H,I,J,K,L,M,N,0,P,Q)],[]).
+eq(f11(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f33(A,B,0,D,0,0,0,0,I,J,K,L,M,N,O,P,1000)],[A >= 10]).
+eq(f14(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f11(1 + A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[B >= 10]).
+eq(f14(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f14(A,1 + B,C,D,E,F,G,H,I,J,K,L,M,N,R,R,Q)],[9 >= B]).
+eq(f33(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f58(A,B,C,D,E,F,G,H,E,F,G,H,1500,R,O,P,Q)],[C >= 10]).
+eq(f36(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f33(A,B,1 + C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[D >= 10]).
+eq(f36(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f36(A,B,C,1 + D,E,F,G + R,1 + H,I,J,K,L,M,N,O,P,Q)],[9 >= D]).
+eq(f36(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f36(A,B,C,1 + D,E + R,1 + F,G,H,I,J,K,L,M,N,O,P,Q)],[9 >= D, 0 >= 1 + S]).
+eq(f33(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f36(A,B,C,0,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[9 >= C]).
+eq(f11(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f14(A,0,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[9 >= A]).

@@ -1,19 +1,19 @@
 eq(pubs_start(A,B,C,D,E),0,[doSum(A,B,C,D,E)],[]).
-eq(doSum(A,B,C,D,E),1,[f2(0,B,C,D,E)],[]).
-eq(f20(A,B,C,D,E),1,[f2loop(A,B,C,D,E)],[]).
-eq(f21(A,B,C,D,E),1,[f15normal(D,C,E,D,E)],[]).
-eq(f2(A,B,C,D,E),1,[f20(A,B,F,G,H),f21(A,B,F,G,H)],[0 >= F + 1, B >= F]).
-eq(f2loop(A,B,C,D,E),1,[f16(A,B,B,D,E)],[]).
-eq(f15normal(A,B,C,D,E),1,[f6(A,B,A,D,E)],[]).
-eq(f16(A,B,C,D,E),1,[f3(A,B,C,D,E)],[C >= 0, B = C]).
-eq(f16(A,B,C,D,E),1,[f2loopnexit(A,B,C,D,E)],[0 >= 1 + C, B = C]).
-eq(f3(A,B,C,D,E),1,[pubsSFactSumfactorialLBIRBI(A,B,A,F,E),f14normal(A,B,A,F,E)],[]).
-eq(pubsSFactSumfactorialLBIRBI(A,B,C,D,E),1,[f17(B,B,C,D,E)],[]).
-eq(f14normal(A,B,C,D,E),1,[f2loop(C + D,B - 1,C,D,E)],[C = A]).
-eq(f17(A,B,C,D,E),1,[f9(A,B,C,D,E)],[A >= 1]).
-eq(f17(A,B,C,D,E),1,[f10(A,B,C,D,E)],[0 >= A]).
-eq(f90(A,B,C,D,E),1,[pubsSFactSumfactorialLBIRBI(A,B - 1,C,D,E)],[]).
-eq(f91(A,B,C,D,E),1,[f18normal(B,B,A,C,E)],[]).
-eq(f9(A,B,C,D,E),1,[f90(F,B,G,D,E),f91(F,B,G,D,E)],[]).
-eq(f10(A,B,C,D,E),1,[f12(1,B,C,D,E)],[]).
 eq(f18normal(A,B,C,D,E),1,[f12(F,B,C,D,E)],[B = A]).
+eq(f10(A,B,C,D,E),1,[f12(1,B,C,D,E)],[]).
+eq(f9(A,B,C,D,E),1,[f90(F,B,G,D,E),f91(F,B,G,D,E)],[]).
+eq(f91(A,B,C,D,E),1,[f18normal(B,B,A,C,E)],[]).
+eq(f90(A,B,C,D,E),1,[pubsSFactSumfactorialLBIRBI(A,-1 + B,C,D,E)],[]).
+eq(f17(A,B,C,D,E),1,[f10(A,B,C,D,E)],[0 >= A]).
+eq(f17(A,B,C,D,E),1,[f9(A,B,C,D,E)],[A >= 1]).
+eq(f14normal(A,B,C,D,E),1,[f2loop(C + D,-1 + B,C,D,E)],[C = A]).
+eq(pubsSFactSumfactorialLBIRBI(A,B,C,D,E),1,[f17(B,B,C,D,E)],[]).
+eq(f3(A,B,C,D,E),1,[pubsSFactSumfactorialLBIRBI(A,B,A,F,E),f14normal(A,B,A,F,E)],[]).
+eq(f16(A,B,C,D,E),1,[f2loopnexit(A,B,C,D,E)],[0 >= 1 + C, B = C]).
+eq(f16(A,B,C,D,E),1,[f3(A,B,C,D,E)],[C >= 0, B = C]).
+eq(f15normal(A,B,C,D,E),1,[f6(A,B,A,D,E)],[]).
+eq(f2loop(A,B,C,D,E),1,[f16(A,B,B,D,E)],[]).
+eq(f2(A,B,C,D,E),1,[f20(A,B,F,G,H),f21(A,B,F,G,H)],[0 >= 1 + F, B >= F]).
+eq(f21(A,B,C,D,E),1,[f15normal(D,C,E,D,E)],[]).
+eq(f20(A,B,C,D,E),1,[f2loop(A,B,C,D,E)],[]).
+eq(doSum(A,B,C,D,E),1,[f2(0,B,C,D,E)],[]).

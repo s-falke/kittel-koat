@@ -1,6 +1,4 @@
 eq(f0(A,B,C),1,[f4(D,D+1,B,E,F,G,H),loop_cont_f4(F,G,H)],[E=0]).
 eq(f0(A,B,C),1,[f4(D,D+1,B,E,F,G,H)],[E=1]).
-eq(loop_cont_f4(A,B,C),0,[f5(A,B,C)],[]).
 eq(f4(A,B,C,D,E,F,G),1,[f4(H,H+1,B,D,E,F,G)],[]).
-eq(f4(A,B,C,D,A,B,C),1,[],[D=0,A>=B+1]).
-eq(f4(A,B,C,D,A,B,C),0,[],[D=1,B>=A]).
+eq(f4(A,B,C,D,A,B,C),1,[],[D=1,A>=B+1]).

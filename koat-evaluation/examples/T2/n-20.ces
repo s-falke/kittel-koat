@@ -1,5 +1,5 @@
 eq(pubs_start(A,B,C,D,E,F,G,H,I,J,K),0,[f300(A,B,C,D,E,F,G,H,I,J,K)],[]).
+eq(f300(A,B,C,D,E,F,G,H,I,J,K),1,[f1(A,L,L,M,N,O,G,P,Q,R,S)],[0 >= A, G >= 1]).
+eq(f300(A,B,C,D,E,F,G,H,I,J,K),1,[f2(A,L,L,M,N,O,G,P,Q,R,K)],[A >= 1, G >= 1]).
+eq(f300(A,B,C,D,E,F,G,H,I,J,K),1,[f1(A,L,M,N,O,F,G,L,P,Q,R)],[0 >= G]).
 eq(f2(A,B,C,D,E,F,G,H,I,J,K),1,[f2(A,C,C,L,M,N,G,H,I,J,K)],[A >= 1]).
-eq(f300(A,B,C,D,E,F,G,H,I,J,K),1,[f1(A,L,N,P,Q,F,G,L,M,O,R)],[0 >= G]).
-eq(f300(A,B,C,D,E,F,G,H,I,J,K),1,[f2(A,N,N,P,Q,R,G,L,M,O,K)],[A >= 1, G >= 1]).
-eq(f300(A,B,C,D,E,F,G,H,I,J,K),1,[f1(A,N,N,P,Q,R,G,L,M,O,S)],[0 >= A, G >= 1]).

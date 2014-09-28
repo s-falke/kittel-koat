@@ -1,11 +1,11 @@
 eq(pubs_start(A,B,C,D,E,F,G,H),0,[start0(A,B,C,D,E,F,G,H)],[]).
-eq(start(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[0 >= A + 1, B = C, D = A, E = F, G = H]).
-eq(start(A,B,C,D,E,F,G,H),1,[lbl82(A,B,C,D,2*D,F,2*D - 1,H)],[A >= 0, B = C, D = A, E = F, G = H]).
-eq(start(A,B,C,D,E,F,G,H),1,[lbl121(A,2*D,C,D,2*D - 1,F,2*D - 1,H)],[A >= 0, B = C, D = A, E = F, G = H]).
-eq(lbl82(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[E >= A, 2*A >= E, D = A, G + 1 = A]).
-eq(lbl82(A,B,C,D,E,F,G,H),1,[lbl82(A,B,C,D,E,F,G - 1,H)],[G >= A, E >= G + 1, 2*A >= E, G + 1 >= A, D = A]).
-eq(lbl82(A,B,C,D,E,F,G,H),1,[lbl121(A,G,C,D,E - 1,F,E - 1,H)],[G >= A, E >= G + 1, 2*A >= E, G + 1 >= A, D = A]).
-eq(lbl121(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[A >= E + 1, 2*A >= E + 1, B >= A, E + 1 >= B, G = E, D = A]).
-eq(lbl121(A,B,C,D,E,F,G,H),1,[lbl82(A,B,C,D,E,F,G - 1,H)],[E >= A, 2*A >= E + 1, B >= A, E + 1 >= B, G = E, D = A]).
-eq(lbl121(A,B,C,D,E,F,G,H),1,[lbl121(A,G,C,D,E - 1,F,E - 1,H)],[E >= A, 2*A >= E + 1, B >= A, E + 1 >= B, G = E, D = A]).
 eq(start0(A,B,C,D,E,F,G,H),1,[start(A,C,C,A,F,F,H,H)],[]).
+eq(lbl121(A,B,C,D,E,F,G,H),1,[lbl121(A,G,C,D,-1 + E,F,-1 + E,H)],[E >= A, 2 * A >= 1 + E, B >= A, 1 + E >= B, G = E, D = A]).
+eq(lbl121(A,B,C,D,E,F,G,H),1,[lbl82(A,B,C,D,E,F,-1 + G,H)],[E >= A, 2 * A >= 1 + E, B >= A, 1 + E >= B, G = E, D = A]).
+eq(lbl121(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[A >= 1 + E, 2 * A >= 1 + E, B >= A, 1 + E >= B, G = E, D = A]).
+eq(lbl82(A,B,C,D,E,F,G,H),1,[lbl121(A,G,C,D,-1 + E,F,-1 + E,H)],[G >= A, E >= 1 + G, 2 * A >= E, 1 + G >= A, D = A]).
+eq(lbl82(A,B,C,D,E,F,G,H),1,[lbl82(A,B,C,D,E,F,-1 + G,H)],[G >= A, E >= 1 + G, 2 * A >= E, 1 + G >= A, D = A]).
+eq(lbl82(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[E >= A, 2 * A >= E, D = A, 1 + G = A]).
+eq(start(A,B,C,D,E,F,G,H),1,[lbl121(A,2 * D,C,D,-1 + 2 * D,F,-1 + 2 * D,H)],[A >= 0, B = C, D = A, E = F, G = H]).
+eq(start(A,B,C,D,E,F,G,H),1,[lbl82(A,B,C,D,2 * D,F,-1 + 2 * D,H)],[A >= 0, B = C, D = A, E = F, G = H]).
+eq(start(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[0 >= 1 + A, B = C, D = A, E = F, G = H]).

@@ -1,16 +1,16 @@
 eq(pubs_start(A,B,C,D,E,F,G),0,[evalfstart(A,B,C,D,E,F,G)],[]).
-eq(evalfstart(A,B,C,D,E,F,G),1,[evalfentryin(A,B,C,D,E,F,G)],[]).
-eq(evalfentryin(A,B,C,D,E,F,G),1,[evalfbb10in(B,C,D,A,E,F,G)],[]).
-eq(evalfbb10in(A,B,C,D,E,F,G),1,[evalfbb8in(A,B,C,D,1,F,G)],[D >= 1]).
-eq(evalfbb10in(A,B,C,D,E,F,G),1,[evalfreturnin(A,B,C,D,E,F,G)],[0 >= D]).
-eq(evalfbb8in(A,B,C,D,E,F,G),1,[evalfbb6in(A,B,C,D,E,D,G)],[A >= E]).
-eq(evalfbb8in(A,B,C,D,E,F,G),1,[evalfbb9in(A,B,C,D,E,F,G)],[E >= A + 1]).
-eq(evalfbb6in(A,B,C,D,E,F,G),1,[evalfbb4in(A,B,C,D,E,F,C)],[B >= F]).
-eq(evalfbb6in(A,B,C,D,E,F,G),1,[evalfbb7in(A,B,C,D,E,F,G)],[F >= B + 1]).
-eq(evalfbb4in(A,B,C,D,E,F,G),1,[evalfbb3in(A,B,C,D,E,F,G)],[E >= G]).
-eq(evalfbb4in(A,B,C,D,E,F,G),1,[evalfbb5in(A,B,C,D,E,F,G)],[G >= E + 1]).
-eq(evalfbb3in(A,B,C,D,E,F,G),1,[evalfbb4in(A,B,C,D,E,F,G - 1)],[]).
-eq(evalfbb5in(A,B,C,D,E,F,G),1,[evalfbb6in(A,B,C,D,E,F + 1,G)],[]).
-eq(evalfbb7in(A,B,C,D,E,F,G),1,[evalfbb8in(A,B,C,D,E + 1,F,G)],[]).
-eq(evalfbb9in(A,B,C,D,E,F,G),1,[evalfbb10in(A,B,C,D - 1,E,F,G)],[]).
 eq(evalfreturnin(A,B,C,D,E,F,G),1,[evalfstop(A,B,C,D,E,F,G)],[]).
+eq(evalfbb9in(A,B,C,D,E,F,G),1,[evalfbb10in(A,B,C,-1 + D,E,F,G)],[]).
+eq(evalfbb7in(A,B,C,D,E,F,G),1,[evalfbb8in(A,B,C,D,1 + E,F,G)],[]).
+eq(evalfbb5in(A,B,C,D,E,F,G),1,[evalfbb6in(A,B,C,D,E,1 + F,G)],[]).
+eq(evalfbb3in(A,B,C,D,E,F,G),1,[evalfbb4in(A,B,C,D,E,F,-1 + G)],[]).
+eq(evalfbb4in(A,B,C,D,E,F,G),1,[evalfbb5in(A,B,C,D,E,F,G)],[G >= 1 + E]).
+eq(evalfbb4in(A,B,C,D,E,F,G),1,[evalfbb3in(A,B,C,D,E,F,G)],[E >= G]).
+eq(evalfbb6in(A,B,C,D,E,F,G),1,[evalfbb7in(A,B,C,D,E,F,G)],[F >= 1 + B]).
+eq(evalfbb6in(A,B,C,D,E,F,G),1,[evalfbb4in(A,B,C,D,E,F,C)],[B >= F]).
+eq(evalfbb8in(A,B,C,D,E,F,G),1,[evalfbb9in(A,B,C,D,E,F,G)],[E >= 1 + A]).
+eq(evalfbb8in(A,B,C,D,E,F,G),1,[evalfbb6in(A,B,C,D,E,D,G)],[A >= E]).
+eq(evalfbb10in(A,B,C,D,E,F,G),1,[evalfreturnin(A,B,C,D,E,F,G)],[0 >= D]).
+eq(evalfbb10in(A,B,C,D,E,F,G),1,[evalfbb8in(A,B,C,D,1,F,G)],[D >= 1]).
+eq(evalfentryin(A,B,C,D,E,F,G),1,[evalfbb10in(B,C,D,A,E,F,G)],[]).
+eq(evalfstart(A,B,C,D,E,F,G),1,[evalfentryin(A,B,C,D,E,F,G)],[]).

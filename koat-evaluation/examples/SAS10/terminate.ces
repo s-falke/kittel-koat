@@ -1,8 +1,8 @@
 eq(pubs_start(A,B,C,D,E,F,G,H),0,[start0(A,B,C,D,E,F,G,H)],[]).
-eq(start(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[A >= 101, B = C, D = E, F = A, G = H]).
-eq(start(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[E >= C + 1, B = C, D = E, F = A, G = H]).
-eq(start(A,B,C,D,E,F,G,H),1,[lbl72(A,B - 1,C,1 + F,E,D,F,H)],[C >= E, 100 >= A, B = C, D = E, F = A, G = H]).
-eq(lbl72(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[F >= 101, 100 >= A, 101 + F + B >= A + E + C, B + 1 >= F, C >= 1 + B, C >= E, G + 1 + F + B = A + E + C, D + F + B = A + E + C]).
-eq(lbl72(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[A + E + C >= F + 2*B + 1, 100 >= A, 101 + F + B >= A + E + C, B + 1 >= F, C >= 1 + B, C >= E, G + 1 + F + B = A + E + C, D + F + B = A + E + C]).
-eq(lbl72(A,B,C,D,E,F,G,H),1,[lbl72(A,B - 1,C,1 + F,E,D,F,H)],[2*B + F >= A + E + C, 100 >= F, 100 >= A, 101 + F + B >= A + E + C, B + 1 >= F, C >= 1 + B, C >= E, G + 1 + F + B = A + E + C, D + F + B = A + E + C]).
 eq(start0(A,B,C,D,E,F,G,H),1,[start(A,C,C,E,E,A,H,H)],[]).
+eq(lbl72(A,B,C,D,E,F,G,H),1,[lbl72(A,-1 + B,C,1 + F,E,D,F,H)],[2 * B + F >= A + E + C, 100 >= F, 100 >= A, 101 + F + B >= A + E + C, 1 + B >= F, C >= 1 + B, C >= E, 1 + G + F + B = A + E + C, D + F + B = A + E + C]).
+eq(lbl72(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[A + E + C >= 1 + F + 2 * B, 100 >= A, 101 + F + B >= A + E + C, 1 + B >= F, C >= 1 + B, C >= E, 1 + G + F + B = A + E + C, D + F + B = A + E + C]).
+eq(lbl72(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[F >= 101, 100 >= A, 101 + F + B >= A + E + C, 1 + B >= F, C >= 1 + B, C >= E, 1 + G + F + B = A + E + C, D + F + B = A + E + C]).
+eq(start(A,B,C,D,E,F,G,H),1,[lbl72(A,-1 + B,C,1 + F,E,D,F,H)],[C >= E, 100 >= A, B = C, D = E, F = A, G = H]).
+eq(start(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[E >= 1 + C, B = C, D = E, F = A, G = H]).
+eq(start(A,B,C,D,E,F,G,H),1,[stop(A,B,C,D,E,F,G,H)],[A >= 101, B = C, D = E, F = A, G = H]).

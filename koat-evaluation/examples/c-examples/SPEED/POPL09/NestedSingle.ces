@@ -1,13 +1,13 @@
 eq(pubs_start(A,B,C),0,[evalNestedSinglestart(A,B,C)],[]).
-eq(evalNestedSinglestart(A,B,C),1,[evalNestedSingleentryin(A,B,C)],[]).
-eq(evalNestedSingleentryin(A,B,C),1,[evalNestedSinglebb5in(0,B,C)],[]).
-eq(evalNestedSinglebb5in(A,B,C),1,[evalNestedSinglebb2in(A,B,A)],[B >= A + 1]).
-eq(evalNestedSinglebb5in(A,B,C),1,[evalNestedSinglereturnin(A,B,C)],[A >= B]).
-eq(evalNestedSinglebb2in(A,B,C),1,[evalNestedSinglebb4in(A,B,C)],[C >= B]).
-eq(evalNestedSinglebb2in(A,B,C),1,[evalNestedSinglebb3in(A,B,C)],[B >= C + 1]).
-eq(evalNestedSinglebb3in(A,B,C),1,[evalNestedSinglebb1in(A,B,C)],[0 >= D + 1]).
-eq(evalNestedSinglebb3in(A,B,C),1,[evalNestedSinglebb1in(A,B,C)],[D >= 1]).
-eq(evalNestedSinglebb3in(A,B,C),1,[evalNestedSinglebb4in(A,B,C)],[]).
-eq(evalNestedSinglebb1in(A,B,C),1,[evalNestedSinglebb2in(A,B,C + 1)],[]).
-eq(evalNestedSinglebb4in(A,B,C),1,[evalNestedSinglebb5in(C + 1,B,C)],[]).
 eq(evalNestedSinglereturnin(A,B,C),1,[evalNestedSinglestop(A,B,C)],[]).
+eq(evalNestedSinglebb4in(A,B,C),1,[evalNestedSinglebb5in(1 + C,B,C)],[]).
+eq(evalNestedSinglebb1in(A,B,C),1,[evalNestedSinglebb2in(A,B,1 + C)],[]).
+eq(evalNestedSinglebb3in(A,B,C),1,[evalNestedSinglebb4in(A,B,C)],[]).
+eq(evalNestedSinglebb3in(A,B,C),1,[evalNestedSinglebb1in(A,B,C)],[D >= 1]).
+eq(evalNestedSinglebb3in(A,B,C),1,[evalNestedSinglebb1in(A,B,C)],[0 >= 1 + D]).
+eq(evalNestedSinglebb2in(A,B,C),1,[evalNestedSinglebb3in(A,B,C)],[B >= 1 + C]).
+eq(evalNestedSinglebb2in(A,B,C),1,[evalNestedSinglebb4in(A,B,C)],[C >= B]).
+eq(evalNestedSinglebb5in(A,B,C),1,[evalNestedSinglereturnin(A,B,C)],[A >= B]).
+eq(evalNestedSinglebb5in(A,B,C),1,[evalNestedSinglebb2in(A,B,A)],[B >= 1 + A]).
+eq(evalNestedSingleentryin(A,B,C),1,[evalNestedSinglebb5in(0,B,C)],[]).
+eq(evalNestedSinglestart(A,B,C),1,[evalNestedSingleentryin(A,B,C)],[]).

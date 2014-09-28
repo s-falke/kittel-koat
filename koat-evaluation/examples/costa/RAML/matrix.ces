@@ -1,32 +1,32 @@
 eq(pubs_start(A,B,C,D),0,[start(A,B,C,D)],[]).
-eq(matrixmult0(A,B,C,D),1,[transAcc(B,B,0,D)],[]).
-eq(matrixmult1(A,B,C,D),1,[matrixmultp(B,A,A + D,C)],[]).
-eq(matrixmult2(A,B,C,D),1,[makeBase(A,B,C,D)],[]).
-eq(matrixmult(A,B,C,D),1,[matrixmult0(B,A,D,C),matrixmult1(B,A,D,C),matrixmult2(B,A,D,C)],[B >= 0, D >= 0, A >= 0, C >= 0]).
-eq(transAcc0(A,B,C,D),1,[attach(A + D - 1,B,C,D - 1)],[]).
-eq(transAcc1(A,B,C,D),1,[transAcc(C,D - 1,A,B)],[]).
-eq(transAcc(A,B,C,D),1,[transAcc0(C,D,A,B),transAcc1(C,D,A,B)],[B >= 1]).
-eq(out1transAcc(A,B,C,D),1,[out1transAcc(A,B - 1,C,D)],[B >= 1]).
-eq(out2transAcc(A,B,C,D),1,[out2transAcc(A,B - 1,C,D)],[B >= 1]).
-eq(attach(A,B,C,D),1,[attach(A,B - 1,C,D - 1)],[B >= 1]).
-eq(makeBase(A,B,C,D),1,[mkBase(A,D,C,D)],[B >= 1]).
-eq(mkBase(A,B,C,D),1,[mkBase(A,B - 1,C,D)],[B >= 1]).
-eq(out1split(A,B,C,D),1,[out1split(A,B - 1,C,D)],[B >= 1]).
-eq(out2split(A,B,C,D),1,[out2split(A,B - 1,C,D)],[B >= 1]).
-eq(out3split(A,B,C,D),1,[out3split(A,B - 1,C,D)],[B >= 1]).
-eq(split(A,B,C,D),1,[split(A,B - 1,C,D)],[B >= 1]).
-eq(out1makeBase(A,B,C,D),1,[outmkBase(A,D,C,D)],[B = 0]).
-eq(outmkBase(A,B,C,D),1,[outmkBase(A,B - 1,C,D)],[B >= 1]).
-eq(matrixmult3(A,B,C,D),1,[matrixmult(A,B,C,D)],[]).
-eq(matrixmultp0(A,B,C,D),1,[linemult(A,B,C,D)],[]).
-eq(matrixmultp1(A,B,C,D),1,[matrixmultp(D,C - 1,A,B)],[]).
-eq(matrixmultp(A,B,C,D),1,[matrixmultp0(C,D,B,A),matrixmultp1(C,D,B,A)],[B >= 1]).
-eq(linemult0(A,B,C,D),1,[mult(A,B,C,D)],[]).
-eq(linemult1(A,B,C,D),1,[linemult(D,B,C,A - 1)],[]).
-eq(linemult(A,B,C,D),1,[linemult0(D,B,C,A),linemult1(D,B,C,A)],[D >= 1]).
-eq(mult(A,B,C,D),1,[mult(A,B - 1,C,D - 1)],[B >= 1, D >= 1]).
-eq(transpose(A,B,C,D),1,[split(A,B,C,D)],[B >= 1, D = 1]).
-eq(transpose0(A,B,C,D),1,[split(A,B,C,D)],[]).
-eq(transpose1(A,B,C,D),1,[transpose(A,B,C,D - 1)],[]).
-eq(transpose(A,B,C,D),1,[transpose0(A,B,C,D),transpose1(A,B,C,D)],[B >= 1, D >= 2]).
 eq(start(A,B,C,D),1,[matrixmult(A,B,C,D)],[]).
+eq(transpose(A,B,C,D),1,[transpose0(A,B,C,D),transpose1(A,B,C,D)],[B >= 1, D >= 2]).
+eq(transpose1(A,B,C,D),1,[transpose(A,B,C,-1 + D)],[]).
+eq(transpose0(A,B,C,D),1,[split(A,B,C,D)],[]).
+eq(transpose(A,B,C,D),1,[split(A,B,C,D)],[B >= 1, D = 1]).
+eq(mult(A,B,C,D),1,[mult(A,-1 + B,C,-1 + D)],[B >= 1, D >= 1]).
+eq(linemult(A,B,C,D),1,[linemult0(D,B,C,A),linemult1(D,B,C,A)],[D >= 1]).
+eq(linemult1(A,B,C,D),1,[linemult(D,B,C,-1 + A)],[]).
+eq(linemult0(A,B,C,D),1,[mult(A,B,C,D)],[]).
+eq(matrixmultp(A,B,C,D),1,[matrixmultp0(C,D,B,A),matrixmultp1(C,D,B,A)],[B >= 1]).
+eq(matrixmultp1(A,B,C,D),1,[matrixmultp(D,-1 + C,A,B)],[]).
+eq(matrixmultp0(A,B,C,D),1,[linemult(A,B,C,D)],[]).
+eq(matrixmult3(A,B,C,D),1,[matrixmult(A,B,C,D)],[]).
+eq(outmkBase(A,B,C,D),1,[outmkBase(A,-1 + B,C,D)],[B >= 1]).
+eq(out1makeBase(A,B,C,D),1,[outmkBase(A,D,C,D)],[B = 0]).
+eq(split(A,B,C,D),1,[split(A,-1 + B,C,D)],[B >= 1]).
+eq(out3split(A,B,C,D),1,[out3split(A,-1 + B,C,D)],[B >= 1]).
+eq(out2split(A,B,C,D),1,[out2split(A,-1 + B,C,D)],[B >= 1]).
+eq(out1split(A,B,C,D),1,[out1split(A,-1 + B,C,D)],[B >= 1]).
+eq(mkBase(A,B,C,D),1,[mkBase(A,-1 + B,C,D)],[B >= 1]).
+eq(makeBase(A,B,C,D),1,[mkBase(A,D,C,D)],[B >= 1]).
+eq(attach(A,B,C,D),1,[attach(A,-1 + B,C,-1 + D)],[B >= 1]).
+eq(out2transAcc(A,B,C,D),1,[out2transAcc(A,-1 + B,C,D)],[B >= 1]).
+eq(out1transAcc(A,B,C,D),1,[out1transAcc(A,-1 + B,C,D)],[B >= 1]).
+eq(transAcc(A,B,C,D),1,[transAcc0(C,D,A,B),transAcc1(C,D,A,B)],[B >= 1]).
+eq(transAcc1(A,B,C,D),1,[transAcc(C,-1 + D,A,B)],[]).
+eq(transAcc0(A,B,C,D),1,[attach(-1 + A + D,B,C,-1 + D)],[]).
+eq(matrixmult(A,B,C,D),1,[matrixmult0(B,A,D,C),matrixmult1(B,A,D,C),matrixmult2(B,A,D,C)],[B >= 0, D >= 0, A >= 0, C >= 0]).
+eq(matrixmult2(A,B,C,D),1,[makeBase(A,B,C,D)],[]).
+eq(matrixmult1(A,B,C,D),1,[matrixmultp(B,A,A + D,C)],[]).
+eq(matrixmult0(A,B,C,D),1,[transAcc(B,B,0,D)],[]).

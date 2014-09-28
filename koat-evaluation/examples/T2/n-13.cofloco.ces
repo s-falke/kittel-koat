@@ -1,5 +1,4 @@
 eq(f3(A,B),1,[f1(A,B,C,D,E),loop_cont_f1(D,E)],[C=0]).
 eq(f3(A,B),1,[f1(A,B,C,D,E)],[C=1]).
-eq(loop_cont_f1(A,B),0,[f300(A,B)],[]).
 eq(f1(A,B,C,D,E),1,[f1(1+A,B,C,D,E)],[A>=0]).
-eq(f1(A,B,C,A,D),1,[],[C=0,0>=A+1]).
+eq(f1(A,B,C,A,D),1,[],[C=1,0>=A+1]).

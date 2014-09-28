@@ -1,10 +1,10 @@
 eq(pubs_start(A,B,C,D,E),0,[evalNestedMultipleDepstart(A,B,C,D,E)],[]).
-eq(evalNestedMultipleDepstart(A,B,C,D,E),1,[evalNestedMultipleDepentryin(A,B,C,D,E)],[]).
-eq(evalNestedMultipleDepentryin(A,B,C,D,E),1,[evalNestedMultipleDepbb3in(0,B,C,D,E)],[]).
-eq(evalNestedMultipleDepbb3in(A,B,C,D,E),1,[evalNestedMultipleDepbbin(A,B,C,D,E)],[B >= A + 1]).
-eq(evalNestedMultipleDepbb3in(A,B,C,D,E),1,[evalNestedMultipleDepreturnin(A,B,C,D,E)],[A >= B]).
-eq(evalNestedMultipleDepbbin(A,B,C,D,E),1,[evalNestedMultipleDepbb2in(A,B,A + 1,0,E)],[]).
-eq(evalNestedMultipleDepbb2in(A,B,C,D,E),1,[evalNestedMultipleDepbb1in(A,B,C,D,E)],[E >= D + 1]).
-eq(evalNestedMultipleDepbb2in(A,B,C,D,E),1,[evalNestedMultipleDepbb3in(C,B,C,D,E)],[D >= E]).
-eq(evalNestedMultipleDepbb1in(A,B,C,D,E),1,[evalNestedMultipleDepbb2in(A,B,C,D + 1,E)],[]).
 eq(evalNestedMultipleDepreturnin(A,B,C,D,E),1,[evalNestedMultipleDepstop(A,B,C,D,E)],[]).
+eq(evalNestedMultipleDepbb1in(A,B,C,D,E),1,[evalNestedMultipleDepbb2in(A,B,C,1 + D,E)],[]).
+eq(evalNestedMultipleDepbb2in(A,B,C,D,E),1,[evalNestedMultipleDepbb3in(C,B,C,D,E)],[D >= E]).
+eq(evalNestedMultipleDepbb2in(A,B,C,D,E),1,[evalNestedMultipleDepbb1in(A,B,C,D,E)],[E >= 1 + D]).
+eq(evalNestedMultipleDepbbin(A,B,C,D,E),1,[evalNestedMultipleDepbb2in(A,B,1 + A,0,E)],[]).
+eq(evalNestedMultipleDepbb3in(A,B,C,D,E),1,[evalNestedMultipleDepreturnin(A,B,C,D,E)],[A >= B]).
+eq(evalNestedMultipleDepbb3in(A,B,C,D,E),1,[evalNestedMultipleDepbbin(A,B,C,D,E)],[B >= 1 + A]).
+eq(evalNestedMultipleDepentryin(A,B,C,D,E),1,[evalNestedMultipleDepbb3in(0,B,C,D,E)],[]).
+eq(evalNestedMultipleDepstart(A,B,C,D,E),1,[evalNestedMultipleDepentryin(A,B,C,D,E)],[]).

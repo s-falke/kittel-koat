@@ -1,4 +1,4 @@
 eq(pubs_start(A,B,C),0,[start(A,B,C)],[]).
-eq(f(A,B,C),1,[f(A,B + 1,C)],[A >= B + C + 1]).
-eq(f(A,B,C),1,[f(A,B,C + 1)],[A >= B + C + 1]).
 eq(start(A,B,C),1,[f(A,B,C)],[]).
+eq(f(A,B,C),1,[f(A,B,1 + C)],[A >= 1 + B + C]).
+eq(f(A,B,C),1,[f(A,1 + B,C)],[A >= 1 + B + C]).

@@ -1,4 +1,4 @@
 eq(pubs_start(A,B,C),0,[f3(A,B,C)],[]).
-eq(f2(A,B,C),1,[f2(A + B,B,C)],[A + B >= 0]).
-eq(f3(A,B,C),1,[f2(A,B,C)],[]).
 eq(f2(A,B,C),1,[f300(A + B,B,D)],[0 >= 1 + A + B]).
+eq(f3(A,B,C),1,[f2(A,B,C)],[]).
+eq(f2(A,B,C),1,[f2(A + B,B,C)],[A + B >= 0]).

@@ -1,8 +1,8 @@
 eq(pubs_start(A,B),0,[listReverse(A,B)],[]).
-eq(listReverse(A,B),1,[m2(A,B)],[]).
-eq(m0(A,B),1,[m1(A,B)],[A >= 0]).
-eq(m5(A,B),1,[m3(0,B),m0(0,B)],[]).
-eq(m2(A,B),1,[m5(A,B)],[]).
-eq(m6(A,B),1,[m0(B,C)],[A >= 0, C >= 0, B >= C + 1]).
-eq(m1(A,B),1,[m6(A,B)],[]).
 eq(m1(A,B),1,[m4(A,B)],[]).
+eq(m1(A,B),1,[m6(A,B)],[]).
+eq(m6(A,B),1,[m0(B,C)],[A >= 0, C >= 0, B >= 1 + C]).
+eq(m2(A,B),1,[m5(A,B)],[]).
+eq(m5(A,B),1,[m3(0,B),m0(0,B)],[]).
+eq(m0(A,B),1,[m1(A,B)],[A >= 0]).
+eq(listReverse(A,B),1,[m2(A,B)],[]).

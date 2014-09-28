@@ -13,7 +13,6 @@ eq(loop_cont_f19(A,B,C,D,E,F,G,H,I,J,K,L),0,[f32(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P
 eq(loop_cont_f32(A,B,C,D,E,F,G,H,I,J,K,L),0,[f48(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y),loop_cont_f48(N,O,P,Q,R,S,T,U,V,W,X,Y)],[M=0]).
 eq(loop_cont_f32(A,B,C,D,E,F,G,H,I,J,K,L),0,[f48(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y)],[M=1]).
 eq(loop_cont_f48(A,B,C,D,E,F,G,H,I,J,K,L),0,[f62(A,B,C,D,E,F,G,H,I,J,K,L)],[]).
-eq(loop_cont_f48(A,B,C,D,E,F,G,H,I,J,K,L),0,[f71(A,B,C,D,E,F,G,H,I,J,K,L)],[]).
 eq(f13(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y),1,[f13(A,B,C,D,E,F+1,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y)],[B>=F+1]).
 eq(f19(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y),1,[f22(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y)],[0>=C+1,B>=F+1]).
 eq(f19(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y),1,[f22(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y)],[C>=1,B>=F+1]).
@@ -46,4 +45,4 @@ eq(f35(A,B+1,C,D,E,F,G,H,I,J,K,L,M,A,B+1,C,D,E,F,G,H,I,J,K,L),0,[],[M=1,B>=H]).
 eq(f48(A,B,C,D,E,F,G,H,I,J,K,L,M,A,B,C,D,E,F,G,H,I,J,K,L),1,[],[M=0,0>=C+1,F+1>=B]).
 eq(f48(A,B,C,D,E,F,G,H,I,J,K,L,M,A,B,C,D,E,F,G,H,I,J,K,L),0,[],[M=1]).
 eq(f48(A,B,C,D,E,F,G,H,I,J,K,L,M,A,B,C,D,E,F,G,H,I,J,K,L),1,[],[M=0,C>=1,F+1>=B]).
-eq(f48(A,B,C,D,E,F,G,H,I,J,K,L,M,A,B,0,D,E,F,G,H,I,J,K,1),1,[],[M=0,F+1>=B,C=0]).
+eq(f48(A,B,C,D,E,F,G,H,I,J,K,L,M,A,B,0,D,E,F,G,H,I,J,K,1),1,[],[M=1,F+1>=B,C=0]).

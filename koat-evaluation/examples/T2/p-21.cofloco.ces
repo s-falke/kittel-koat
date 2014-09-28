@@ -1,9 +1,8 @@
 eq(f3(A,B,C),1,[f300(A,B,C,D,E,F,G),loop_cont_f300(E,F,G)],[D=0]).
 eq(f3(A,B,C),1,[f300(A,B,C,D,E,F,G)],[D=1]).
-eq(loop_cont_f300(A,B,C),0,[f1(A,B,C)],[]).
 eq(f300(A,B,C,D,E,F,G),1,[f2(A,B,C,H,I,J,K),loop_cont_f2(I,J,K,D,E,F,G)],[H=0,B>=21]).
 eq(f300(A,B,C,D,E,F,G),1,[f2(A,B,C,H,I,J,K)],[D=1,H=1,B>=21]).
 eq(f2(A,B,C,D,E,F,G),1,[f2(-1+A,B,C,D,E,F,G)],[A>=31]).
 eq(loop_cont_f2(A,B,C,D,E,F,G),0,[f300(A,B,C,D,E,F,G)],[]).
-eq(f300(A,B,C,D,A,B,E),1,[],[D=0,20>=B]).
+eq(f300(A,B,C,D,A,B,E),1,[],[D=1,20>=B]).
 eq(f2(A,B,C,D,A,-1+B,C),1,[],[D=0,30>=A]).

@@ -1,10 +1,10 @@
 eq(pubs_start(A,B,C),0,[evalcousot9start(A,B,C)],[]).
-eq(evalcousot9start(A,B,C),1,[evalcousot9entryin(A,B,C)],[]).
-eq(evalcousot9entryin(A,B,C),1,[evalcousot9bb3in(D,C,C)],[]).
-eq(evalcousot9bb3in(A,B,C),1,[evalcousot9bbin(A,B,C)],[B >= 1]).
-eq(evalcousot9bb3in(A,B,C),1,[evalcousot9returnin(A,B,C)],[0 >= B]).
-eq(evalcousot9bbin(A,B,C),1,[evalcousot9bb1in(A,B,C)],[A >= 1]).
-eq(evalcousot9bbin(A,B,C),1,[evalcousot9bb2in(A,B,C)],[0 >= A]).
-eq(evalcousot9bb1in(A,B,C),1,[evalcousot9bb3in(A - 1,B,C)],[]).
-eq(evalcousot9bb2in(A,B,C),1,[evalcousot9bb3in(C,B - 1,C)],[]).
 eq(evalcousot9returnin(A,B,C),1,[evalcousot9stop(A,B,C)],[]).
+eq(evalcousot9bb2in(A,B,C),1,[evalcousot9bb3in(C,-1 + B,C)],[]).
+eq(evalcousot9bb1in(A,B,C),1,[evalcousot9bb3in(-1 + A,B,C)],[]).
+eq(evalcousot9bbin(A,B,C),1,[evalcousot9bb2in(A,B,C)],[0 >= A]).
+eq(evalcousot9bbin(A,B,C),1,[evalcousot9bb1in(A,B,C)],[A >= 1]).
+eq(evalcousot9bb3in(A,B,C),1,[evalcousot9returnin(A,B,C)],[0 >= B]).
+eq(evalcousot9bb3in(A,B,C),1,[evalcousot9bbin(A,B,C)],[B >= 1]).
+eq(evalcousot9entryin(A,B,C),1,[evalcousot9bb3in(D,C,C)],[]).
+eq(evalcousot9start(A,B,C),1,[evalcousot9entryin(A,B,C)],[]).

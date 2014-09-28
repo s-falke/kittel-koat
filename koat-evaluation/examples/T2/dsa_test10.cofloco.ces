@@ -2,8 +2,7 @@ eq(f0(A,B,C,D,E),1,[f12(0,B,C,F,G,H,I,J,K,L,M),loop_cont_f12(I,J,K,L,M)],[H=0]).
 eq(f0(A,B,C,D,E),1,[f12(0,B,C,F,G,H,I,J,K,L,M)],[H=1]).
 eq(loop_cont_f12(A,B,C,D,E),0,[f25(A,B,C,D,E,F,G,H,I,J,K),loop_cont_f25(G,H,I,J,K)],[F=0]).
 eq(loop_cont_f12(A,B,C,D,E),0,[f25(A,B,C,D,E,F,G,H,I,J,K)],[F=1]).
-eq(loop_cont_f25(A,B,C,D,E),0,[f36(A,B,C,D,E)],[]).
 eq(f12(A,B,C,D,E,F,G,H,I,J,K),1,[f12(A+1,B,C,D,E,F,G,H,I,J,K)],[9>=A]).
 eq(f25(A,B,C,D,E,F,G,H,I,J,K),1,[f25(A,B+1,C,D,E,F,G,H,I,J,K)],[9>=B]).
 eq(f12(A,B,C,D,E,F,A,0,G,D,E),1,[],[F=0,A>=10]).
-eq(f25(A,B,C,D,E,F,A,B,C,D,E),1,[],[F=0,B>=10]).
+eq(f25(A,B,C,D,E,F,A,B,C,D,E),1,[],[F=1,B>=10]).

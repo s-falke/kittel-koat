@@ -1,4 +1,4 @@
 eq(pubs_start(A,B),0,[start(A,B)],[]).
-eq(eval(A,B),1,[eval(D,B)],[A >= 0, B >= 0, B >= A + 1, A + B >= 2*C, 3*C >= A + B + 1, D >= C + 1, A + B >= 2*E, 3*E >= A + B + 1, E + 1 >= D]).
-eq(eval(A,B),1,[eval(A,D)],[A >= 0, B >= 0, B >= A + 1, A + B >= 2*C, 3*C >= A + B + 1, D >= C, A + B >= 2*E, 3*E >= A + B + 1, E >= D]).
 eq(start(A,B),1,[eval(A,B)],[]).
+eq(eval(A,B),1,[eval(A,C)],[A >= 0, B >= 0, B >= 1 + A, A + B >= 2 * E, 3 * E >= 1 + A + B, C >= E, A + B >= 2 * D, 3 * D >= 1 + A + B, D >= C]).
+eq(eval(A,B),1,[eval(C,B)],[A >= 0, B >= 0, B >= 1 + A, A + B >= 2 * E, 3 * E >= 1 + A + B, C >= 1 + E, A + B >= 2 * D, 3 * D >= 1 + A + B, 1 + D >= C]).

@@ -1,4 +1,4 @@
 eq(pubs_start(A,B,C,D,E,F),0,[f1(A,B,C,D,E,F)],[]).
-eq(f1(A,B,C,D,E,F),1,[f2(G,G,C,D,E,F)],[]).
-eq(f2(A,B,C,D,E,F),1,[f2(A,B,C,D,G,F)],[D >= 1 + C]).
 eq(f2(A,B,C,D,E,F),1,[f300(A,B,C,D,E,G)],[C >= D]).
+eq(f2(A,B,C,D,E,F),1,[f2(A,B,C,D,G,F)],[D >= 1 + C]).
+eq(f1(A,B,C,D,E,F),1,[f2(G,G,C,D,E,F)],[]).

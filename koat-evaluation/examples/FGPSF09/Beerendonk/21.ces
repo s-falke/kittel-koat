@@ -1,5 +1,5 @@
 eq(pubs_start(A,B,C),0,[start(A,B,C)],[]).
-eq(eval1(A,B,C),1,[eval2(A,B,C)],[A >= B + 1, C = A]).
-eq(eval2(A,B,C),1,[eval2(A - 1,B,C - 1)],[A >= B + 1]).
-eq(eval2(A,B,C),1,[eval1(A,B,C)],[B >= A]).
 eq(start(A,B,C),1,[eval1(A,B,C)],[]).
+eq(eval2(A,B,C),1,[eval1(A,B,C)],[B >= A]).
+eq(eval2(A,B,C),1,[eval2(-1 + A,B,-1 + C)],[A >= 1 + B]).
+eq(eval1(A,B,C),1,[eval2(A,B,C)],[A >= 1 + B, C = A]).

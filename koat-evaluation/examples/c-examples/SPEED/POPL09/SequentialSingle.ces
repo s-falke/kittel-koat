@@ -1,13 +1,13 @@
 eq(pubs_start(A,B),0,[evalSequentialSinglestart(A,B)],[]).
-eq(evalSequentialSinglestart(A,B),1,[evalSequentialSingleentryin(A,B)],[]).
-eq(evalSequentialSingleentryin(A,B),1,[evalSequentialSinglebb1in(0,B)],[]).
-eq(evalSequentialSinglebb1in(A,B),1,[evalSequentialSinglebb5in(A,B)],[A >= B]).
-eq(evalSequentialSinglebb1in(A,B),1,[evalSequentialSinglebb2in(A,B)],[B >= A + 1]).
-eq(evalSequentialSinglebb2in(A,B),1,[evalSequentialSinglebbin(A,B)],[0 >= C + 1]).
-eq(evalSequentialSinglebb2in(A,B),1,[evalSequentialSinglebbin(A,B)],[C >= 1]).
-eq(evalSequentialSinglebb2in(A,B),1,[evalSequentialSinglebb5in(A,B)],[]).
-eq(evalSequentialSinglebbin(A,B),1,[evalSequentialSinglebb1in(A + 1,B)],[]).
-eq(evalSequentialSinglebb5in(A,B),1,[evalSequentialSinglebb4in(A,B)],[B >= A + 1]).
-eq(evalSequentialSinglebb5in(A,B),1,[evalSequentialSinglereturnin(A,B)],[A >= B]).
-eq(evalSequentialSinglebb4in(A,B),1,[evalSequentialSinglebb5in(A + 1,B)],[]).
 eq(evalSequentialSinglereturnin(A,B),1,[evalSequentialSinglestop(A,B)],[]).
+eq(evalSequentialSinglebb4in(A,B),1,[evalSequentialSinglebb5in(1 + A,B)],[]).
+eq(evalSequentialSinglebb5in(A,B),1,[evalSequentialSinglereturnin(A,B)],[A >= B]).
+eq(evalSequentialSinglebb5in(A,B),1,[evalSequentialSinglebb4in(A,B)],[B >= 1 + A]).
+eq(evalSequentialSinglebbin(A,B),1,[evalSequentialSinglebb1in(1 + A,B)],[]).
+eq(evalSequentialSinglebb2in(A,B),1,[evalSequentialSinglebb5in(A,B)],[]).
+eq(evalSequentialSinglebb2in(A,B),1,[evalSequentialSinglebbin(A,B)],[C >= 1]).
+eq(evalSequentialSinglebb2in(A,B),1,[evalSequentialSinglebbin(A,B)],[0 >= 1 + C]).
+eq(evalSequentialSinglebb1in(A,B),1,[evalSequentialSinglebb2in(A,B)],[B >= 1 + A]).
+eq(evalSequentialSinglebb1in(A,B),1,[evalSequentialSinglebb5in(A,B)],[A >= B]).
+eq(evalSequentialSingleentryin(A,B),1,[evalSequentialSinglebb1in(0,B)],[]).
+eq(evalSequentialSinglestart(A,B),1,[evalSequentialSingleentryin(A,B)],[]).

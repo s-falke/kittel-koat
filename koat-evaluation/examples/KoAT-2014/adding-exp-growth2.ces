@@ -1,5 +1,5 @@
 eq(pubs_start(A,B,C),0,[f(A,B,C)],[]).
-eq(f(A, B, C),1,[(g(1, 1, C)],[]).
-eq(g(A, B, C),1,[(g(A + B, A + B, C - 1)],[C > 0]).
-eq(g(A, B, C),1,[(h(A, B, C)],[C <= 0]).
-eq(h(A, B, C),1,[(h(A, B - 1, C)],[B > 0 ]).
+eq(h(A,B,C),1,[h(A,-1 + B,C)],[B > 0]).
+eq(g(A,B,C),1,[h(A,B,C)],[0 >= C]).
+eq(g(A,B,C),1,[g(A + B,A + B,-1 + C)],[C > 0]).
+eq(f(A,B,C),1,[g(1,1,C)],[]).

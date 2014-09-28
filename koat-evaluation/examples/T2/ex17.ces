@@ -1,15 +1,15 @@
 eq(pubs_start(A,B,C,D,E,F,G),0,[f0(A,B,C,D,E,F,G)],[]).
-eq(f0(A,B,C,D,E,F,G),1,[f5(0,B,C,D,E,F,G)],[]).
-eq(f5(A,B,C,D,E,F,G),1,[f5(A + 1,B,C,D,E,F,G)],[99 >= A]).
-eq(f17(A,B,C,D,E,F,G),1,[f17(A,B,C,D,E,F,G)],[]).
-eq(f17(A,B,C,D,E,F,G),1,[f17(A,B + 1,C,D,E,F,G)],[0 >= H + 1]).
-eq(f17(A,B,C,D,E,F,G),1,[f17(A,B + 1,C,D,E,F,G)],[]).
-eq(f32(A,B,C,D,E,F,G),1,[f32(A,B,C,D,E,F,G)],[]).
-eq(f32(A,B,C,D,E,F,G),1,[f32(A,B,C + 1,D,E,F,G)],[0 >= H + 1]).
-eq(f32(A,B,C,D,E,F,G),1,[f32(A,B,C + 1,D,E,F,G)],[]).
-eq(f32(A,B,C,D,E,F,G),1,[f13(A,B,C,C,C,F,G)],[]).
-eq(f17(A,B,C,D,E,F,G),1,[f32(A,B,B,B,E,B,H)],[0 >= I + 1]).
-eq(f17(A,B,C,D,E,F,G),1,[f32(A,B,B,B,E,B,H)],[]).
+eq(f5(A,B,C,D,E,F,G),1,[f17(A,-2 + A,C,-2 + A,E,F,G)],[0 >= 1 + A, A >= 100]).
+eq(f5(A,B,C,D,E,F,G),1,[f13(A,B,C,-2 + A,E,F,G)],[A >= 100]).
 eq(f17(A,B,C,D,E,F,G),1,[f13(A,B,C,B,E,B,H)],[]).
-eq(f5(A,B,C,D,E,F,G),1,[f13(A,B,C,A - 2,E,F,G)],[A >= 100]).
-eq(f5(A,B,C,D,E,F,G),1,[f17(A,A - 2,C,A - 2,E,F,G)],[0 >= A + 1, A >= 100]).
+eq(f17(A,B,C,D,E,F,G),1,[f32(A,B,B,B,E,B,H)],[]).
+eq(f17(A,B,C,D,E,F,G),1,[f32(A,B,B,B,E,B,H)],[0 >= 1 + I]).
+eq(f32(A,B,C,D,E,F,G),1,[f13(A,B,C,C,C,F,G)],[]).
+eq(f32(A,B,C,D,E,F,G),1,[f32(A,B,1 + C,D,E,F,G)],[]).
+eq(f32(A,B,C,D,E,F,G),1,[f32(A,B,1 + C,D,E,F,G)],[0 >= 1 + H]).
+eq(f32(A,B,C,D,E,F,G),1,[f32(A,B,C,D,E,F,G)],[]).
+eq(f17(A,B,C,D,E,F,G),1,[f17(A,1 + B,C,D,E,F,G)],[]).
+eq(f17(A,B,C,D,E,F,G),1,[f17(A,1 + B,C,D,E,F,G)],[0 >= 1 + H]).
+eq(f17(A,B,C,D,E,F,G),1,[f17(A,B,C,D,E,F,G)],[]).
+eq(f5(A,B,C,D,E,F,G),1,[f5(1 + A,B,C,D,E,F,G)],[99 >= A]).
+eq(f0(A,B,C,D,E,F,G),1,[f5(0,B,C,D,E,F,G)],[]).

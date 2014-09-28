@@ -4,7 +4,6 @@ eq(loop_cont_f10(A,B,C,D,E,F,G,H),0,[f18(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),loop
 eq(loop_cont_f10(A,B,C,D,E,F,G,H),0,[f18(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[I=1]).
 eq(loop_cont_f18(A,B,C,D,E,F,G,H),0,[f34(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),loop_cont_f34(J,K,L,M,N,O,P,Q)],[I=0]).
 eq(loop_cont_f18(A,B,C,D,E,F,G,H),0,[f34(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[I=1]).
-eq(loop_cont_f34(A,B,C,D,E,F,G,H),0,[f43(A,B,C,D,E,F,G,H)],[]).
 eq(f10(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f10(A,B+1,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)],[C>=B+1]).
 eq(f18(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f22(A,B,C,D,E,E,E+1,H,R,S,T,U,V,W,X,Y,Z),loop_cont_f22(S,T,U,V,W,X,Y,Z,I,J,K,L,M,N,O,P,Q)],[R=0,D>=2+E]).
 eq(f18(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),1,[f22(A,B,C,D,E,E,E+1,H,R,S,T,U,V,W,X,Y,Z)],[I=1,R=1,D>=2+E]).
@@ -15,4 +14,4 @@ eq(loop_cont_f22(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),0,[f18(A,B,C,D,E,F,G,H,I,J,K
 eq(f10(A,B,C,D,E,F,G,H,I,A,B,C,C,0,F,G,H),1,[],[I=0,B>=C]).
 eq(f18(A,B,C,D,E,F,G,H,I,A,B,C,D,0,F,G,H),1,[],[I=0,E+1>=D]).
 eq(f22(A,B,C,D,E,F,G,H,I,A,B,C,D,E+1,F,G,J),1,[],[I=0,G>=D]).
-eq(f34(A,B,C,D,E,F,G,H,I,A,B,C,D,E,F,G,H),1,[],[I=0,E+1>=D]).
+eq(f34(A,B,C,D,E,F,G,H,I,A,B,C,D,E,F,G,H),1,[],[I=1,E+1>=D]).

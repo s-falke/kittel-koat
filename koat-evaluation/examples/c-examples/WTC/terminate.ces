@@ -1,8 +1,8 @@
 eq(pubs_start(A,B,C),0,[evalterminatestart(A,B,C)],[]).
-eq(evalterminatestart(A,B,C),1,[evalterminateentryin(A,B,C)],[]).
-eq(evalterminateentryin(A,B,C),1,[evalterminatebb1in(B,A,C)],[]).
-eq(evalterminatebb1in(A,B,C),1,[evalterminatebbin(A,B,C)],[100 >= B, A >= C]).
-eq(evalterminatebb1in(A,B,C),1,[evalterminatereturnin(A,B,C)],[B >= 101]).
-eq(evalterminatebb1in(A,B,C),1,[evalterminatereturnin(A,B,C)],[C >= A + 1]).
-eq(evalterminatebbin(A,B,C),1,[evalterminatebb1in(A - 1,C,B + 1)],[]).
 eq(evalterminatereturnin(A,B,C),1,[evalterminatestop(A,B,C)],[]).
+eq(evalterminatebbin(A,B,C),1,[evalterminatebb1in(-1 + A,C,1 + B)],[]).
+eq(evalterminatebb1in(A,B,C),1,[evalterminatereturnin(A,B,C)],[C >= 1 + A]).
+eq(evalterminatebb1in(A,B,C),1,[evalterminatereturnin(A,B,C)],[B >= 101]).
+eq(evalterminatebb1in(A,B,C),1,[evalterminatebbin(A,B,C)],[100 >= B, A >= C]).
+eq(evalterminateentryin(A,B,C),1,[evalterminatebb1in(B,A,C)],[]).
+eq(evalterminatestart(A,B,C),1,[evalterminateentryin(A,B,C)],[]).

@@ -1,7 +1,7 @@
 eq(pubs_start(A,B,C,D,E,F),0,[f1(A,B,C,D,E,F)],[]).
-eq(f0(A,B,C,D,E,F),1,[f0(-A,B + A,C + A,D,E,F)],[0 >= A + 1]).
-eq(f0(A,B,C,D,E,F),1,[f0(A + B,-B,C,D + B,E,F)],[0 >= B + 1]).
-eq(f0(A,B,C,D,E,F),1,[f0(A,B + D,C,-D,E + D,F)],[0 >= D + 1]).
-eq(f0(A,B,C,D,E,F),1,[f0(A,B,C + E,D + E,-E,F)],[0 >= E + 1]).
-eq(f0(A,B,C,D,E,F),1,[f0(A + C,B,-C,D,E + C,F)],[0 >= C + 1]).
-eq(f1(A,B,C,D,E,F),1,[f0(G,H,K,I,J,G + H + I + J + K)],[G + H + I + J + K >= 1]).
+eq(f1(A,B,C,D,E,F),1,[f0(G,H,I,J,K,G + H + J + K + I)],[G + H + J + K + I >= 1]).
+eq(f0(A,B,C,D,E,F),1,[f0(A + C,B,-C,D,E + C,F)],[0 >= 1 + C]).
+eq(f0(A,B,C,D,E,F),1,[f0(A,B,C + E,D + E,-E,F)],[0 >= 1 + E]).
+eq(f0(A,B,C,D,E,F),1,[f0(A,B + D,C,-D,E + D,F)],[0 >= 1 + D]).
+eq(f0(A,B,C,D,E,F),1,[f0(A + B,-B,C,D + B,E,F)],[0 >= 1 + B]).
+eq(f0(A,B,C,D,E,F),1,[f0(-A,B + A,C + A,D,E,F)],[0 >= 1 + A]).

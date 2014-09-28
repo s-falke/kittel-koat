@@ -1,6 +1,6 @@
 eq(pubs_start(A,B,C,D,E),0,[f2(A,B,C,D,E)],[]).
-eq(f2(A,B,C,D,E),1,[f1(A,F,C,D,E)],[1 >= A]).
-eq(f2(A,B,C,D,E),1,[f300(A,B,C,D,E)],[A >= 2, C >= 2]).
-eq(f300(A,B,C,D,E),1,[f1(A,F,C,D,E)],[D + 1 >= 0]).
-eq(f300(A,B,C,D,E),1,[f300(A,B,C,1 + D,1 + E)],[E >= 0, 0 >= 2 + D]).
 eq(f300(A,B,C,D,E),1,[f300(A,B,C,1 + D,1 + E)],[0 >= 2 + E, 0 >= 2 + D]).
+eq(f300(A,B,C,D,E),1,[f300(A,B,C,1 + D,1 + E)],[E >= 0, 0 >= 2 + D]).
+eq(f300(A,B,C,D,E),1,[f1(A,F,C,D,E)],[1 + D >= 0]).
+eq(f2(A,B,C,D,E),1,[f300(A,B,C,D,E)],[A >= 2, C >= 2]).
+eq(f2(A,B,C,D,E),1,[f1(A,F,C,D,E)],[1 >= A]).

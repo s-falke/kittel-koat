@@ -1,7 +1,7 @@
 eq(pubs_start(A,B,C),0,[start(A,B,C)],[]).
-eq(start(A,B,C),1,[a(A,B,C)],[A >= 1]).
-eq(start(A,B,C),1,[a(A,B,C)],[A >= 2]).
+eq(a(A,B,C),1,[a0(D,A,E),a1(D,A,E)],[1 >= 2 * D, 3 * D >= 2, 1 >= 2 * E, 3 * E >= 2, A >= 2]).
+eq(a1(A,B,C),1,[a(B * C,B,C)],[]).
+eq(a0(A,B,C),1,[a(A * B,B,C)],[]).
 eq(start(A,B,C),1,[a(A,B,C)],[A >= 4]).
-eq(a0(A,B,C),1,[a(A*B,B,C)],[]).
-eq(a1(A,B,C),1,[a(B*C,B,C)],[]).
-eq(a(A,B,C),1,[a0(D,A,E),a1(D,A,E)],[1 >= 2*D, 3*D >= 2, 1 >= 2*E, 3*E >= 2, A >= 2]).
+eq(start(A,B,C),1,[a(A,B,C)],[A >= 2]).
+eq(start(A,B,C),1,[a(A,B,C)],[A >= 1]).

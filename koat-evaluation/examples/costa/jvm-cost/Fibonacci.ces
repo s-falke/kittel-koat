@@ -1,12 +1,12 @@
 eq(pubs_start(A,B),0,[start(A,B)],[]).
-eq(fibonacciMethod(A,B),1,[m0(A,B)],[A >= 0]).
-eq(m0(A,B),1,[m2(A,B)],[A >= 0]).
-eq(m3(A,B),1,[m1(A,B)],[A >= 0, 1 >= A]).
-eq(m40(A,B),1,[m1(A,B)],[]).
-eq(m41(A,B),1,[fibonacciMethod(A,B)],[]).
-eq(m42(A,B),1,[fibonacciMethod(B,B)],[]).
-eq(m4(A,B),1,[m40(D,C),m41(D,C),m42(D,C)],[A >= 2, A >= C + 2, 2 + C >= A, A >= D + 1, 1 + D >= A]).
-eq(m2(A,B),1,[m5(A,B)],[A >= 0]).
-eq(m5(A,B),1,[m4(A,B)],[]).
-eq(m5(A,B),1,[m3(A,B)],[]).
 eq(start(A,B),1,[fibonacciMethod(A,B)],[]).
+eq(m5(A,B),1,[m3(A,B)],[]).
+eq(m5(A,B),1,[m4(A,B)],[]).
+eq(m2(A,B),1,[m5(A,B)],[A >= 0]).
+eq(m4(A,B),1,[m40(C,D),m41(C,D),m42(C,D)],[A >= 2, A >= 2 + D, 2 + D >= A, A >= 1 + C, 1 + C >= A]).
+eq(m42(A,B),1,[fibonacciMethod(B,B)],[]).
+eq(m41(A,B),1,[fibonacciMethod(A,B)],[]).
+eq(m40(A,B),1,[m1(A,B)],[]).
+eq(m3(A,B),1,[m1(A,B)],[A >= 0, 1 >= A]).
+eq(m0(A,B),1,[m2(A,B)],[A >= 0]).
+eq(fibonacciMethod(A,B),1,[m0(A,B)],[A >= 0]).

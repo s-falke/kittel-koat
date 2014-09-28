@@ -1,11 +1,11 @@
 eq(pubs_start(A,B),0,[evalwcet2start(A,B)],[]).
-eq(evalwcet2start(A,B),1,[evalwcet2entryin(A,B)],[]).
-eq(evalwcet2entryin(A,B),1,[evalwcet2bb5in(A,B)],[]).
-eq(evalwcet2bb5in(A,B),1,[evalwcet2bb2in(A,0)],[4 >= A]).
-eq(evalwcet2bb5in(A,B),1,[evalwcet2returnin(A,B)],[A >= 5]).
-eq(evalwcet2bb2in(A,B),1,[evalwcet2bb1in(A,B)],[A >= 3, 9 >= B]).
-eq(evalwcet2bb2in(A,B),1,[evalwcet2bb4in(A,B)],[2 >= A]).
-eq(evalwcet2bb2in(A,B),1,[evalwcet2bb4in(A,B)],[B >= 10]).
-eq(evalwcet2bb1in(A,B),1,[evalwcet2bb2in(A,B + 1)],[]).
-eq(evalwcet2bb4in(A,B),1,[evalwcet2bb5in(A + 1,B)],[]).
 eq(evalwcet2returnin(A,B),1,[evalwcet2stop(A,B)],[]).
+eq(evalwcet2bb4in(A,B),1,[evalwcet2bb5in(1 + A,B)],[]).
+eq(evalwcet2bb1in(A,B),1,[evalwcet2bb2in(A,1 + B)],[]).
+eq(evalwcet2bb2in(A,B),1,[evalwcet2bb4in(A,B)],[B >= 10]).
+eq(evalwcet2bb2in(A,B),1,[evalwcet2bb4in(A,B)],[2 >= A]).
+eq(evalwcet2bb2in(A,B),1,[evalwcet2bb1in(A,B)],[A >= 3, 9 >= B]).
+eq(evalwcet2bb5in(A,B),1,[evalwcet2returnin(A,B)],[A >= 5]).
+eq(evalwcet2bb5in(A,B),1,[evalwcet2bb2in(A,0)],[4 >= A]).
+eq(evalwcet2entryin(A,B),1,[evalwcet2bb5in(A,B)],[]).
+eq(evalwcet2start(A,B),1,[evalwcet2entryin(A,B)],[]).

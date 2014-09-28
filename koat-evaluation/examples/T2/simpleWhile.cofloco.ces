@@ -4,10 +4,9 @@ eq(f15(A,B,C,D),1,[f19(C+1,B,C,1)],[A=C+1]).
 eq(f15(A,B,C,D),1,[f19(A,B,C,0)],[C>=A]).
 eq(f15(A,B,C,D),1,[f19(A,B,C,0)],[A>=2+C]).
 eq(loop_cont_f6(A,B,C,D),0,[f15(A,B,C,D)],[]).
-eq(loop_cont_f6(A,B,C,D),0,[f19(A,B,C,D)],[]).
 eq(f6(A,B,C,D,E,F,G,H,I),1,[f6(A,B+1,C,D,E,F,G,H,I)],[C>=B+1]).
 eq(f6(A,B,C,D,E,F,G,H,I),1,[f6(A+2,B+1,C,D,E,F,G,H,I)],[C>=B+1]).
 eq(f6(A,B,C,D,E,A,B,C,D),1,[],[E=0,B>=C,C>=A+1]).
 eq(f6(A,B,C,D,E,A,B,C,D),0,[],[E=1]).
 eq(f6(A,B,C,D,E,A,B,C,D),1,[],[E=0,A>=1+C,B>=C]).
-eq(f6(A,B,C,D,E,A,B,A,1),1,[],[E=0,B>=C,A=C]).
+eq(f6(A,B,C,D,E,A,B,A,1),1,[],[E=1,B>=C,A=C]).

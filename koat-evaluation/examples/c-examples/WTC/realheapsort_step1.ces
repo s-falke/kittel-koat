@@ -1,43 +1,43 @@
 eq(pubs_start(A,B,C),0,[evalrealheapsortstep1start(A,B,C)],[]).
-eq(evalrealheapsortstep1start(A,B,C),1,[evalrealheapsortstep1entryin(A,B,C)],[]).
-eq(evalrealheapsortstep1entryin(A,B,C),1,[evalrealheapsortstep1bb6in(A,1,C)],[A >= 3]).
-eq(evalrealheapsortstep1entryin(A,B,C),1,[evalrealheapsortstep1returnin(A,B,C)],[2 >= A]).
-eq(evalrealheapsortstep1bb6in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,B)],[A >= 1 + B]).
-eq(evalrealheapsortstep1bb6in(A,B,C),1,[evalrealheapsortstep1returnin(A,B,C)],[B >= A]).
-eq(evalrealheapsortstep1bb3in(A,B,C),1,[evalrealheapsortstep1bb5in(A,B,C)],[0 >= C]).
-eq(evalrealheapsortstep1bb3in(A,B,C),1,[evalrealheapsortstep1bb4in(A,B,C)],[C >= 1]).
-eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb2in(A,B,C)],[C + 1 = 0]).
-eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb2in(A,B,C)],[C >= 0, D >= 0, C + 1 >= 2*D, 2*D >= C]).
-eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb2in(A,B,C)],[0 >= C + 2, 0 >= D, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb5in(A,B,C)],[C + 1 = 0]).
-eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb5in(A,B,C)],[C >= 0, D >= 0, C + 1 >= 2*D, 2*D >= C]).
-eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb5in(A,B,C)],[0 >= C + 2, 0 >= D, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[C + 1 = 0]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= 1, D >= 0, 0 >= 2*D, 1 + 2*D >= 0, C + 1 = 0]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= 1, 0 >= D, C + 1 = 0, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, D >= 0, 0 >= 2*D, 1 + 2*D >= 0, C + 1 = 0]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= 1, E >= 0, 0 >= 2*E, 1 + 2*E >= 0, D >= 0, 0 >= 2*D, 1 + 2*D >= 0, C + 1 = 0]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= 1, E >= 0, 0 >= 2*E, 1 + 2*E >= 0, 0 >= D, C + 1 = 0, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, 0 >= D, C + 1 = 0, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= 1, 0 >= E, D >= 0, 0 >= 2*D, 1 + 2*D >= 0, C + 1 = 0, 2*E >= C + 1, 2 + C >= 2*E]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= 1, 0 >= E, 0 >= D, C + 1 = 0, 2*E >= C + 1, 2 + C >= 2*E, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, D >= 0, 0 >= 2*D, 1 + 2*D >= 0, C + 1 = 0]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= 1, E >= 0, 0 >= 2*E, 1 + 2*E >= 0, D >= 0, 0 >= 2*D, 1 + 2*D >= 0, C + 1 = 0]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= 1, E >= 0, 0 >= 2*E, 1 + 2*E >= 0, 0 >= D, C + 1 = 0, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, D >= 0, 0 >= 2*D, 1 + 2*D >= 0, E >= 0, 0 >= 2*E, 1 + 2*E >= 0, C + 1 = 0]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[C >= 0, E >= 0, C + 1 >= 2*E, 2*E >= C, F >= 0, C + 1 >= 2*F, 2*F >= C, D >= 0, C + 1 >= 2*D, 2*D >= C]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[C >= 0, E >= 0, C + 1 >= 2*E, 2*E >= C, F >= 0, C + 1 >= 2*F, 2*F >= C, 0 >= C + 2, 0 >= D, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, D >= 0, 0 >= 2*D, 1 + 2*D >= 0, 0 >= E, C + 1 = 0, 2*E >= C + 1, 2 + C >= 2*E]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[C >= 0, E >= 0, C + 1 >= 2*E, 2*E >= C, 0 >= C + 2, 0 >= F, D >= 0, C + 1 >= 2*D, 2*D >= C, 2*F >= C + 1, 2 + C >= 2*F]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[C >= 0, E >= 0, C + 1 >= 2*E, 2*E >= C, 0 >= C + 2, 0 >= F, 0 >= D, 2*F >= C + 1, 2 + C >= 2*F, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, 0 >= D, C + 1 = 0, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= 1, 0 >= E, D >= 0, 0 >= 2*D, 1 + 2*D >= 0, C + 1 = 0, 2*E >= C + 1, 2 + C >= 2*E]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= 1, 0 >= E, 0 >= D, C + 1 = 0, 2*E >= C + 1, 2 + C >= 2*E, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, 0 >= D, E >= 0, 0 >= 2*E, 1 + 2*E >= 0, C + 1 = 0, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= C + 2, 0 >= E, C >= 0, F >= 0, C + 1 >= 2*F, 2*F >= C, D >= 0, C + 1 >= 2*D, 2*D >= C, 2*E >= C + 1, 2 + C >= 2*E]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= C + 2, 0 >= E, C >= 0, F >= 0, C + 1 >= 2*F, 2*F >= C, 0 >= D, 2*E >= C + 1, 2 + C >= 2*E, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, 0 >= D, 0 >= E, C + 1 = 0, 2*D >= C + 1, 2 + C >= 2*D, 2*E >= C + 1, 2 + C >= 2*E]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= C + 2, 0 >= E, 0 >= F, C >= 0, D >= 0, C + 1 >= 2*D, 2*D >= C, 2*E >= C + 1, 2 + C >= 2*E, 2*F >= C + 1, 2 + C >= 2*F]).
-eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,D - 1)],[0 >= C + 2, 0 >= E, 0 >= F, 0 >= D, 2*E >= C + 1, 2 + C >= 2*E, 2*F >= C + 1, 2 + C >= 2*F, 2*D >= C + 1, 2 + C >= 2*D]).
-eq(evalrealheapsortstep1bb5in(A,B,C),1,[evalrealheapsortstep1bb6in(A,B + 1,C)],[]).
 eq(evalrealheapsortstep1returnin(A,B,C),1,[evalrealheapsortstep1stop(A,B,C)],[]).
+eq(evalrealheapsortstep1bb5in(A,B,C),1,[evalrealheapsortstep1bb6in(A,1 + B,C)],[]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 2 + C, 0 >= F, 0 >= E, 0 >= D, 2 * F >= 1 + C, 2 + C >= 2 * F, 2 * E >= 1 + C, 2 + C >= 2 * E, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 2 + C, 0 >= F, 0 >= E, C >= 0, D >= 0, 1 + C >= 2 * D, 2 * D >= C, 2 * F >= 1 + C, 2 + C >= 2 * F, 2 * E >= 1 + C, 2 + C >= 2 * E]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, 0 >= E, 0 >= D, 1 + C = 0, 2 * E >= 1 + C, 2 + C >= 2 * E, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 2 + C, 0 >= E, C >= 0, F >= 0, 1 + C >= 2 * F, 2 * F >= C, 0 >= D, 2 * E >= 1 + C, 2 + C >= 2 * E, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 2 + C, 0 >= E, C >= 0, F >= 0, 1 + C >= 2 * F, 2 * F >= C, D >= 0, 1 + C >= 2 * D, 2 * D >= C, 2 * E >= 1 + C, 2 + C >= 2 * E]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, 0 >= D, E >= 0, 0 >= 2 * E, 1 + 2 * E >= 0, 1 + C = 0, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 1, 0 >= E, 0 >= D, 1 + C = 0, 2 * E >= 1 + C, 2 + C >= 2 * E, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 1, 0 >= E, D >= 0, 0 >= 2 * D, 1 + 2 * D >= 0, 1 + C = 0, 2 * E >= 1 + C, 2 + C >= 2 * E]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, 0 >= D, 1 + C = 0, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[C >= 0, F >= 0, 1 + C >= 2 * F, 2 * F >= C, 0 >= 2 + C, 0 >= E, 0 >= D, 2 * E >= 1 + C, 2 + C >= 2 * E, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[C >= 0, F >= 0, 1 + C >= 2 * F, 2 * F >= C, 0 >= 2 + C, 0 >= E, D >= 0, 1 + C >= 2 * D, 2 * D >= C, 2 * E >= 1 + C, 2 + C >= 2 * E]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, E >= 0, 0 >= 2 * E, 1 + 2 * E >= 0, 0 >= D, 1 + C = 0, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[C >= 0, F >= 0, 1 + C >= 2 * F, 2 * F >= C, E >= 0, 1 + C >= 2 * E, 2 * E >= C, 0 >= 2 + C, 0 >= D, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[C >= 0, F >= 0, 1 + C >= 2 * F, 2 * F >= C, E >= 0, 1 + C >= 2 * E, 2 * E >= C, D >= 0, 1 + C >= 2 * D, 2 * D >= C]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, E >= 0, 0 >= 2 * E, 1 + 2 * E >= 0, D >= 0, 0 >= 2 * D, 1 + 2 * D >= 0, 1 + C = 0]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 1, E >= 0, 0 >= 2 * E, 1 + 2 * E >= 0, 0 >= D, 1 + C = 0, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 1, E >= 0, 0 >= 2 * E, 1 + 2 * E >= 0, D >= 0, 0 >= 2 * D, 1 + 2 * D >= 0, 1 + C = 0]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, D >= 0, 0 >= 2 * D, 1 + 2 * D >= 0, 1 + C = 0]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 1, 0 >= E, 0 >= D, 1 + C = 0, 2 * E >= 1 + C, 2 + C >= 2 * E, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 1, 0 >= E, D >= 0, 0 >= 2 * D, 1 + 2 * D >= 0, 1 + C = 0, 2 * E >= 1 + C, 2 + C >= 2 * E]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, 0 >= D, 1 + C = 0, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 1, E >= 0, 0 >= 2 * E, 1 + 2 * E >= 0, 0 >= D, 1 + C = 0, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 1, E >= 0, 0 >= 2 * E, 1 + 2 * E >= 0, D >= 0, 0 >= 2 * D, 1 + 2 * D >= 0, 1 + C = 0]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[0 >= 1, D >= 0, 0 >= 2 * D, 1 + 2 * D >= 0, 1 + C = 0]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 1, 0 >= D, 1 + C = 0, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1 + D)],[0 >= 1, D >= 0, 0 >= 2 * D, 1 + 2 * D >= 0, 1 + C = 0]).
+eq(evalrealheapsortstep1bb2in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,-1)],[1 + C = 0]).
+eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb5in(A,B,C)],[0 >= 2 + C, 0 >= D, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb5in(A,B,C)],[C >= 0, D >= 0, 1 + C >= 2 * D, 2 * D >= C]).
+eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb5in(A,B,C)],[1 + C = 0]).
+eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb2in(A,B,C)],[0 >= 2 + C, 0 >= D, 2 * D >= 1 + C, 2 + C >= 2 * D]).
+eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb2in(A,B,C)],[C >= 0, D >= 0, 1 + C >= 2 * D, 2 * D >= C]).
+eq(evalrealheapsortstep1bb4in(A,B,C),1,[evalrealheapsortstep1bb2in(A,B,C)],[1 + C = 0]).
+eq(evalrealheapsortstep1bb3in(A,B,C),1,[evalrealheapsortstep1bb4in(A,B,C)],[C >= 1]).
+eq(evalrealheapsortstep1bb3in(A,B,C),1,[evalrealheapsortstep1bb5in(A,B,C)],[0 >= C]).
+eq(evalrealheapsortstep1bb6in(A,B,C),1,[evalrealheapsortstep1returnin(A,B,C)],[B >= A]).
+eq(evalrealheapsortstep1bb6in(A,B,C),1,[evalrealheapsortstep1bb3in(A,B,B)],[A >= 1 + B]).
+eq(evalrealheapsortstep1entryin(A,B,C),1,[evalrealheapsortstep1returnin(A,B,C)],[2 >= A]).
+eq(evalrealheapsortstep1entryin(A,B,C),1,[evalrealheapsortstep1bb6in(A,1,C)],[A >= 3]).
+eq(evalrealheapsortstep1start(A,B,C),1,[evalrealheapsortstep1entryin(A,B,C)],[]).

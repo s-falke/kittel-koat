@@ -8,7 +8,6 @@ eq(f3(A,B,C,D,E,F),1,[f2(1+A,G,G,D,E,F,H,I,J,K,L,M,N),loop_cont_f2(I,J,K,L,M,N)]
 eq(f3(A,B,C,D,E,F),1,[f2(1+A,G,G,D,E,F,H,I,J,K,L,M,N)],[H=1,G>=1,A>=1]).
 eq(f3(A,B,C,D,E,F),1,[f2(1+A,G,G,D,E,F,H,I,J,K,L,M,N),loop_cont_f2(I,J,K,L,M,N)],[H=0,0>=G+1,A>=1]).
 eq(f3(A,B,C,D,E,F),1,[f2(1+A,G,G,D,E,F,H,I,J,K,L,M,N)],[H=1,0>=G+1,A>=1]).
-eq(loop_cont_f2(A,B,C,D,E,F),0,[f0(A,B,C,D,E,F)],[]).
 eq(f2(A,B,C,D,E,F,G,H,I,J,K,L,M),1,[f2(1+A,N,N,D,E,F,G,H,I,J,K,L,M)],[N>=1,A>=1]).
 eq(f2(A,B,C,D,E,F,G,H,I,J,K,L,M),1,[f2(1+A,N,N,D,E,F,G,H,I,J,K,L,M)],[0>=N+1,A>=1]).
-eq(f2(A,B,C,D,E,F,G,A,0,0,H,E,F),1,[],[G=0]).
+eq(f2(A,B,C,D,E,F,G,A,0,0,H,E,F),1,[],[G=1]).

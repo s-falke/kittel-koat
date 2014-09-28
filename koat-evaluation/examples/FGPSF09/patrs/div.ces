@@ -1,5 +1,5 @@
 eq(pubs_start(A,B),0,[start(A,B)],[]).
-eq(div(A,B),1,[end(A,B)],[0 >= A]).
-eq(div(A,B),1,[end(A,B)],[A >= B]).
-eq(div(A,B),1,[div(A,B - A)],[B >= A + 1, A >= 1]).
 eq(start(A,B),1,[div(A,B)],[]).
+eq(div(A,B),1,[div(A,B + -A)],[B >= 1 + A, A >= 1]).
+eq(div(A,B),1,[end(A,B)],[A >= B]).
+eq(div(A,B),1,[end(A,B)],[0 >= A]).

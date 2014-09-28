@@ -1,13 +1,13 @@
 eq(pubs_start(A,B,C,D,E),0,[evalNestedMultiplestart(A,B,C,D,E)],[]).
-eq(evalNestedMultiplestart(A,B,C,D,E),1,[evalNestedMultipleentryin(A,B,C,D,E)],[]).
-eq(evalNestedMultipleentryin(A,B,C,D,E),1,[evalNestedMultiplebb5in(B,A,D,C,E)],[]).
-eq(evalNestedMultiplebb5in(A,B,C,D,E),1,[evalNestedMultiplebb2in(A,B,C,D,D)],[A >= B + 1]).
-eq(evalNestedMultiplebb5in(A,B,C,D,E),1,[evalNestedMultiplereturnin(A,B,C,D,E)],[B >= A]).
-eq(evalNestedMultiplebb2in(A,B,C,D,E),1,[evalNestedMultiplebb4in(A,B,C,D,E)],[E >= C]).
-eq(evalNestedMultiplebb2in(A,B,C,D,E),1,[evalNestedMultiplebb3in(A,B,C,D,E)],[C >= E + 1]).
-eq(evalNestedMultiplebb3in(A,B,C,D,E),1,[evalNestedMultiplebb1in(A,B,C,D,E)],[0 >= F + 1]).
-eq(evalNestedMultiplebb3in(A,B,C,D,E),1,[evalNestedMultiplebb1in(A,B,C,D,E)],[F >= 1]).
-eq(evalNestedMultiplebb3in(A,B,C,D,E),1,[evalNestedMultiplebb4in(A,B,C,D,E)],[]).
-eq(evalNestedMultiplebb1in(A,B,C,D,E),1,[evalNestedMultiplebb2in(A,B,C,D,E + 1)],[]).
-eq(evalNestedMultiplebb4in(A,B,C,D,E),1,[evalNestedMultiplebb5in(A,B + 1,C,E,E)],[]).
 eq(evalNestedMultiplereturnin(A,B,C,D,E),1,[evalNestedMultiplestop(A,B,C,D,E)],[]).
+eq(evalNestedMultiplebb4in(A,B,C,D,E),1,[evalNestedMultiplebb5in(A,1 + B,C,E,E)],[]).
+eq(evalNestedMultiplebb1in(A,B,C,D,E),1,[evalNestedMultiplebb2in(A,B,C,D,1 + E)],[]).
+eq(evalNestedMultiplebb3in(A,B,C,D,E),1,[evalNestedMultiplebb4in(A,B,C,D,E)],[]).
+eq(evalNestedMultiplebb3in(A,B,C,D,E),1,[evalNestedMultiplebb1in(A,B,C,D,E)],[F >= 1]).
+eq(evalNestedMultiplebb3in(A,B,C,D,E),1,[evalNestedMultiplebb1in(A,B,C,D,E)],[0 >= 1 + F]).
+eq(evalNestedMultiplebb2in(A,B,C,D,E),1,[evalNestedMultiplebb3in(A,B,C,D,E)],[C >= 1 + E]).
+eq(evalNestedMultiplebb2in(A,B,C,D,E),1,[evalNestedMultiplebb4in(A,B,C,D,E)],[E >= C]).
+eq(evalNestedMultiplebb5in(A,B,C,D,E),1,[evalNestedMultiplereturnin(A,B,C,D,E)],[B >= A]).
+eq(evalNestedMultiplebb5in(A,B,C,D,E),1,[evalNestedMultiplebb2in(A,B,C,D,D)],[A >= 1 + B]).
+eq(evalNestedMultipleentryin(A,B,C,D,E),1,[evalNestedMultiplebb5in(B,A,D,C,E)],[]).
+eq(evalNestedMultiplestart(A,B,C,D,E),1,[evalNestedMultipleentryin(A,B,C,D,E)],[]).

@@ -1,5 +1,4 @@
 eq(start(A,B),1,[sumto(A,B,C,D,E),loop_cont_sumto(D,E)],[C=0]).
 eq(start(A,B),1,[sumto(A,B,C,D,E)],[C=1]).
-eq(loop_cont_sumto(A,B),0,[end(A,B)],[]).
 eq(sumto(A,B,C,D,E),1,[sumto(A+1,B,C,D,E)],[B>=A]).
-eq(sumto(A,B,C,A,B),1,[],[C=0,A>=B+1]).
+eq(sumto(A,B,C,A,B),1,[],[C=1,A>=B+1]).

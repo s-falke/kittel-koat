@@ -4,10 +4,9 @@ eq(loop_cont_f18(A,B,C,D,E,F),0,[f24(A,B,C,D,E,F,G,H,I,J,K,L,M),loop_cont_f24(H,
 eq(loop_cont_f18(A,B,C,D,E,F),0,[f24(A,B,C,D,E,F,G,H,I,J,K,L,M)],[G=1]).
 eq(loop_cont_f24(A,B,C,D,E,F),0,[f31(A,B,C,D,E,F,G,H,I,J,K,L,M),loop_cont_f31(H,I,J,K,L,M)],[G=0]).
 eq(loop_cont_f24(A,B,C,D,E,F),0,[f31(A,B,C,D,E,F,G,H,I,J,K,L,M)],[G=1]).
-eq(loop_cont_f31(A,B,C,D,E,F),0,[f39(A,B,C,D,E,F)],[]).
 eq(f18(A,B,C,D,E,F,G,H,I,J,K,L,M),1,[f18(A,B+1,C,D,E,F,G,H,I,J,K,L,M)],[A>=B+1]).
 eq(f24(A,B,C,D,E,F,G,H,I,J,K,L,M),1,[f24(A,B+1,C,D,E,F,G,H,I,J,K,L,M)],[A>=B+1]).
 eq(f31(A,B,C,D,E,F,G,H,I,J,K,L,M),1,[f31(A,B+1,C,D,E,F,G,H,I,J,K,L,M)],[A>=B+1]).
 eq(f18(A,B,C,D,E,F,G,A,0,C,D,E,F),1,[],[G=0,B>=A]).
 eq(f24(A,B,C,D,E,F,G,A,0,C,D,E,F),1,[],[G=0,B>=A]).
-eq(f31(A,B,C,D,E,F,G,A,B,C,D,E,F),1,[],[G=0,B>=A]).
+eq(f31(A,B,C,D,E,F,G,A,B,C,D,E,F),1,[],[G=1,B>=A]).

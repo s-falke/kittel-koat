@@ -1,10 +1,10 @@
 eq(pubs_start(A,B,C,D),0,[evalSimpleMultiplestart(A,B,C,D)],[]).
-eq(evalSimpleMultiplestart(A,B,C,D),1,[evalSimpleMultipleentryin(A,B,C,D)],[]).
-eq(evalSimpleMultipleentryin(A,B,C,D),1,[evalSimpleMultiplebb3in(0,0,C,D)],[]).
-eq(evalSimpleMultiplebb3in(A,B,C,D),1,[evalSimpleMultiplebbin(A,B,C,D)],[C >= B + 1]).
-eq(evalSimpleMultiplebb3in(A,B,C,D),1,[evalSimpleMultiplereturnin(A,B,C,D)],[B >= C]).
-eq(evalSimpleMultiplebbin(A,B,C,D),1,[evalSimpleMultiplebb1in(A,B,C,D)],[D >= A + 1]).
-eq(evalSimpleMultiplebbin(A,B,C,D),1,[evalSimpleMultiplebb2in(A,B,C,D)],[A >= D]).
-eq(evalSimpleMultiplebb1in(A,B,C,D),1,[evalSimpleMultiplebb3in(A + 1,B,C,D)],[]).
-eq(evalSimpleMultiplebb2in(A,B,C,D),1,[evalSimpleMultiplebb3in(A,B + 1,C,D)],[]).
 eq(evalSimpleMultiplereturnin(A,B,C,D),1,[evalSimpleMultiplestop(A,B,C,D)],[]).
+eq(evalSimpleMultiplebb2in(A,B,C,D),1,[evalSimpleMultiplebb3in(A,1 + B,C,D)],[]).
+eq(evalSimpleMultiplebb1in(A,B,C,D),1,[evalSimpleMultiplebb3in(1 + A,B,C,D)],[]).
+eq(evalSimpleMultiplebbin(A,B,C,D),1,[evalSimpleMultiplebb2in(A,B,C,D)],[A >= D]).
+eq(evalSimpleMultiplebbin(A,B,C,D),1,[evalSimpleMultiplebb1in(A,B,C,D)],[D >= 1 + A]).
+eq(evalSimpleMultiplebb3in(A,B,C,D),1,[evalSimpleMultiplereturnin(A,B,C,D)],[B >= C]).
+eq(evalSimpleMultiplebb3in(A,B,C,D),1,[evalSimpleMultiplebbin(A,B,C,D)],[C >= 1 + B]).
+eq(evalSimpleMultipleentryin(A,B,C,D),1,[evalSimpleMultiplebb3in(0,0,C,D)],[]).
+eq(evalSimpleMultiplestart(A,B,C,D),1,[evalSimpleMultipleentryin(A,B,C,D)],[]).

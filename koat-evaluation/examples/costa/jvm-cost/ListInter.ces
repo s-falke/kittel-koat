@@ -1,41 +1,41 @@
 eq(pubs_start(A,B,C,D,E),0,[listInter(A,B,C,D,E)],[]).
-eq(listInter(A,B,C,D,E),1,[m9(A,B,C,D,E)],[A >= 0, B >= 0]).
-eq(m0(A,B,C,D,E),1,[m1(A,B,C,D,E)],[A >= 0]).
-eq(m2(A,B,C,D,E),1,[m3(A,B,C,D,E)],[C >= 0, A >= 1, B >= 0]).
-eq(m4(A,B,C,D,E),1,[m5(A,B,C,D,E)],[B >= 1]).
-eq(m5(A,B,C,D,E),1,[m8(A,B,C,D,E)],[B >= 1]).
-eq(n1(A,B,C,D,E),1,[n2(A,B,C,D,E)],[C >= 0, A >= 1, D >= 0, B >= 0, 1 >= D]).
-eq(n2(A,B,C,D,E),1,[m2(A,B,F,D,E)],[F >= 0, A >= 1, B >= 0, C >= F + 1]).
-eq(m3(A,B,C,D,E),1,[n4(A,B,C,D,E)],[]).
-eq(m3(A,B,C,D,E),1,[n3(A,C,C,D,E)],[]).
-eq(n50(A,B,C,D,E),1,[n0(A,B,C,D,E)],[]).
-eq(n51(A,B,C,D,E),1,[m4(A,B,C,D,E)],[]).
-eq(n52(A,B,C,D,E),1,[m2(C,A,D,D,E)],[]).
-eq(n5(A,B,C,D,E),1,[n50(A,F,G,B,E),n51(A,F,G,B,E),n52(A,F,G,B,E)],[G >= 1, F >= 1, A >= 0, B >= 0]).
-eq(m9(A,B,C,D,E),1,[n5(A,B,C,D,E)],[A >= 0, B >= 0]).
-eq(n60(A,B,C,D,E),1,[n2(A,B,C,D,E)],[]).
-eq(n61(A,B,C,D,E),1,[m4(A,D,C,D,E)],[]).
-eq(n6(A,B,C,D,E),1,[n60(F,B,C,G,E),n61(F,B,C,G,E)],[G >= 1, F >= 1, C >= 0, A >= 1, B >= 0, D = 1]).
-eq(n40(A,B,C,D,E),1,[n8(A,B,C,D,E)],[]).
-eq(n41(A,B,C,D,E),1,[n7(E,B,C,D,E)],[]).
-eq(n4(A,B,C,D,E),1,[n40(A,B,C,F,G),n41(A,B,C,F,G)],[C >= 0, A >= 1, F >= 0, B >= 0, 1 >= F]).
-eq(n8(A,B,C,D,E),1,[n1(A,B,C,D,E)],[]).
-eq(n8(A,B,C,D,E),1,[n6(A,B,C,D,E)],[]).
-eq(n7(A,B,C,D,E),1,[n9(A,B,C,D,E)],[B >= 0]).
-eq(o1(A,B,C,D,E),1,[o0(A,B,C,D,E)],[A = 0]).
-eq(o2(A,B,C,D,E),1,[o0(A,B,C,D,E)],[B >= A, A >= B]).
-eq(n9(A,B,C,D,E),1,[o3(A,B,C,D,E)],[B >= 0]).
-eq(o4(A,B,C,D,E),1,[m6(A,0,C,D,E)],[B = 0]).
-eq(o5(A,B,C,D,E),1,[m6(A,1,C,D,E)],[B >= 0]).
-eq(o30(A,B,C,D,E),1,[o6(A,B,C,D,E)],[]).
-eq(o31(A,B,C,D,E),1,[m0(C,A,C,D,E)],[]).
-eq(o3(A,B,C,D,E),1,[o30(A,F,B,D,E),o31(A,F,B,D,E)],[F >= 0, B >= F]).
-eq(o6(A,B,C,D,E),1,[o4(A,B,C,D,E)],[]).
-eq(o6(A,B,C,D,E),1,[o5(A,B,C,D,E)],[]).
-eq(m1(A,B,C,D,E),1,[o1(A,B,C,D,E)],[]).
-eq(m1(A,B,C,D,E),1,[o7(A,B,C,D,E)],[]).
-eq(o8(A,B,C,D,E),1,[m0(F,B,C,D,E)],[A >= 0, A >= 1, F >= 0, A >= F + 1]).
-eq(o7(A,B,C,D,E),1,[o9(F,B,A,D,E)],[A >= 0]).
-eq(o9(A,B,C,D,E),1,[o2(A,B,C,D,E)],[]).
-eq(o9(A,B,C,D,E),1,[o8(C,B,A,D,E)],[]).
 eq(m8(A,B,C,D,E),1,[m7(A,B,C,D,E),p0(A,B,C,D,E)],[B >= 1]).
+eq(o9(A,B,C,D,E),1,[o8(C,B,A,D,E)],[]).
+eq(o9(A,B,C,D,E),1,[o2(A,B,C,D,E)],[]).
+eq(o7(A,B,C,D,E),1,[o9(F,B,A,D,E)],[A >= 0]).
+eq(o8(A,B,C,D,E),1,[m0(F,B,C,D,E)],[A >= 0, A >= 1, F >= 0, A >= 1 + F]).
+eq(m1(A,B,C,D,E),1,[o7(A,B,C,D,E)],[]).
+eq(m1(A,B,C,D,E),1,[o1(A,B,C,D,E)],[]).
+eq(o6(A,B,C,D,E),1,[o5(A,B,C,D,E)],[]).
+eq(o6(A,B,C,D,E),1,[o4(A,B,C,D,E)],[]).
+eq(o3(A,B,C,D,E),1,[o30(A,F,B,D,E),o31(A,F,B,D,E)],[F >= 0, B >= F]).
+eq(o31(A,B,C,D,E),1,[m0(C,A,C,D,E)],[]).
+eq(o30(A,B,C,D,E),1,[o6(A,B,C,D,E)],[]).
+eq(o5(A,B,C,D,E),1,[m6(A,1,C,D,E)],[B >= 0]).
+eq(o4(A,B,C,D,E),1,[m6(A,0,C,D,E)],[B = 0]).
+eq(n9(A,B,C,D,E),1,[o3(A,B,C,D,E)],[B >= 0]).
+eq(o2(A,B,C,D,E),1,[o0(A,B,C,D,E)],[B >= A, A >= B]).
+eq(o1(A,B,C,D,E),1,[o0(A,B,C,D,E)],[A = 0]).
+eq(n7(A,B,C,D,E),1,[n9(A,B,C,D,E)],[B >= 0]).
+eq(n8(A,B,C,D,E),1,[n6(A,B,C,D,E)],[]).
+eq(n8(A,B,C,D,E),1,[n1(A,B,C,D,E)],[]).
+eq(n4(A,B,C,D,E),1,[n40(A,B,C,F,G),n41(A,B,C,F,G)],[C >= 0, A >= 1, F >= 0, B >= 0, 1 >= F]).
+eq(n41(A,B,C,D,E),1,[n7(E,B,C,D,E)],[]).
+eq(n40(A,B,C,D,E),1,[n8(A,B,C,D,E)],[]).
+eq(n6(A,B,C,D,E),1,[n60(F,B,C,G,E),n61(F,B,C,G,E)],[G >= 1, F >= 1, C >= 0, A >= 1, B >= 0, D = 1]).
+eq(n61(A,B,C,D,E),1,[m4(A,D,C,D,E)],[]).
+eq(n60(A,B,C,D,E),1,[n2(A,B,C,D,E)],[]).
+eq(m9(A,B,C,D,E),1,[n5(A,B,C,D,E)],[A >= 0, B >= 0]).
+eq(n5(A,B,C,D,E),1,[n50(A,F,G,B,E),n51(A,F,G,B,E),n52(A,F,G,B,E)],[G >= 1, F >= 1, A >= 0, B >= 0]).
+eq(n52(A,B,C,D,E),1,[m2(C,A,D,D,E)],[]).
+eq(n51(A,B,C,D,E),1,[m4(A,B,C,D,E)],[]).
+eq(n50(A,B,C,D,E),1,[n0(A,B,C,D,E)],[]).
+eq(m3(A,B,C,D,E),1,[n3(A,C,C,D,E)],[]).
+eq(m3(A,B,C,D,E),1,[n4(A,B,C,D,E)],[]).
+eq(n2(A,B,C,D,E),1,[m2(A,B,F,D,E)],[F >= 0, A >= 1, B >= 0, C >= 1 + F]).
+eq(n1(A,B,C,D,E),1,[n2(A,B,C,D,E)],[C >= 0, A >= 1, D >= 0, B >= 0, 1 >= D]).
+eq(m5(A,B,C,D,E),1,[m8(A,B,C,D,E)],[B >= 1]).
+eq(m4(A,B,C,D,E),1,[m5(A,B,C,D,E)],[B >= 1]).
+eq(m2(A,B,C,D,E),1,[m3(A,B,C,D,E)],[C >= 0, A >= 1, B >= 0]).
+eq(m0(A,B,C,D,E),1,[m1(A,B,C,D,E)],[A >= 0]).
+eq(listInter(A,B,C,D,E),1,[m9(A,B,C,D,E)],[A >= 0, B >= 0]).

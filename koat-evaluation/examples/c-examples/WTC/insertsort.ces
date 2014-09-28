@@ -1,13 +1,13 @@
 eq(pubs_start(A,B,C,D),0,[evalinsertsortstart(A,B,C,D)],[]).
-eq(evalinsertsortstart(A,B,C,D),1,[evalinsertsortentryin(A,B,C,D)],[]).
-eq(evalinsertsortentryin(A,B,C,D),1,[evalinsertsortbb5in(1,B,C,D)],[]).
-eq(evalinsertsortbb5in(A,B,C,D),1,[evalinsertsortbbin(A,B,C,D)],[B >= A + 1]).
-eq(evalinsertsortbb5in(A,B,C,D),1,[evalinsertsortreturnin(A,B,C,D)],[A >= B]).
-eq(evalinsertsortbbin(A,B,C,D),1,[evalinsertsortbb2in(A,B,E,A - 1)],[]).
-eq(evalinsertsortbb2in(A,B,C,D),1,[evalinsertsortbb4in(A,B,C,D)],[0 >= D + 1]).
-eq(evalinsertsortbb2in(A,B,C,D),1,[evalinsertsortbb3in(A,B,C,D)],[D >= 0]).
-eq(evalinsertsortbb3in(A,B,C,D),1,[evalinsertsortbb1in(A,B,C,D)],[E >= C + 1]).
-eq(evalinsertsortbb3in(A,B,C,D),1,[evalinsertsortbb4in(A,B,C,D)],[C >= E]).
-eq(evalinsertsortbb1in(A,B,C,D),1,[evalinsertsortbb2in(A,B,C,D - 1)],[]).
-eq(evalinsertsortbb4in(A,B,C,D),1,[evalinsertsortbb5in(A + 1,B,C,D)],[]).
 eq(evalinsertsortreturnin(A,B,C,D),1,[evalinsertsortstop(A,B,C,D)],[]).
+eq(evalinsertsortbb4in(A,B,C,D),1,[evalinsertsortbb5in(1 + A,B,C,D)],[]).
+eq(evalinsertsortbb1in(A,B,C,D),1,[evalinsertsortbb2in(A,B,C,-1 + D)],[]).
+eq(evalinsertsortbb3in(A,B,C,D),1,[evalinsertsortbb4in(A,B,C,D)],[C >= E]).
+eq(evalinsertsortbb3in(A,B,C,D),1,[evalinsertsortbb1in(A,B,C,D)],[E >= 1 + C]).
+eq(evalinsertsortbb2in(A,B,C,D),1,[evalinsertsortbb3in(A,B,C,D)],[D >= 0]).
+eq(evalinsertsortbb2in(A,B,C,D),1,[evalinsertsortbb4in(A,B,C,D)],[0 >= 1 + D]).
+eq(evalinsertsortbbin(A,B,C,D),1,[evalinsertsortbb2in(A,B,E,-1 + A)],[]).
+eq(evalinsertsortbb5in(A,B,C,D),1,[evalinsertsortreturnin(A,B,C,D)],[A >= B]).
+eq(evalinsertsortbb5in(A,B,C,D),1,[evalinsertsortbbin(A,B,C,D)],[B >= 1 + A]).
+eq(evalinsertsortentryin(A,B,C,D),1,[evalinsertsortbb5in(1,B,C,D)],[]).
+eq(evalinsertsortstart(A,B,C,D),1,[evalinsertsortentryin(A,B,C,D)],[]).

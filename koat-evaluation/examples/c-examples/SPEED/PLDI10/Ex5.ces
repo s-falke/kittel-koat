@@ -1,21 +1,21 @@
 eq(pubs_start(A,B,C,D,E),0,[evalEx5start(A,B,C,D,E)],[]).
-eq(evalEx5start(A,B,C,D,E),1,[evalEx5entryin(A,B,C,D,E)],[]).
-eq(evalEx5entryin(A,B,C,D,E),1,[evalEx5bb6in(0,A,C,D,E)],[]).
-eq(evalEx5bb6in(A,B,C,D,E),1,[evalEx5bb3in(A,B,0,B,E)],[B >= A + 1]).
-eq(evalEx5bb6in(A,B,C,D,E),1,[evalEx5returnin(A,B,C,D,E)],[A >= B]).
-eq(evalEx5bb3in(A,B,C,D,E),1,[evalEx5bb1in(A,B,C,D,E)],[0 >= F + 1]).
-eq(evalEx5bb3in(A,B,C,D,E),1,[evalEx5bb1in(A,B,C,D,E)],[F >= 1]).
-eq(evalEx5bb3in(A,B,C,D,E),1,[evalEx5bb4in(A,B,C,D,E)],[]).
-eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb2in(A,B,C,D,D - 1)],[0 >= F + 1]).
-eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb2in(A,B,C,D,D - 1)],[0 >= F + 1, F >= 1]).
-eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb2in(A,B,C,D,D - 1)],[F >= 1]).
-eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb3in(A,B,C,D - 1,E)],[0 >= 1]).
-eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb3in(A,B,C,D - 1,E)],[0 >= 1]).
-eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb2in(A,B,C,D,D)],[0 >= 1]).
-eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb2in(A,B,C,D,D)],[0 >= 1]).
-eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb3in(A,B,C,D,E)],[]).
-eq(evalEx5bb2in(A,B,C,D,E),1,[evalEx5bb3in(A,B,1,E,E)],[]).
-eq(evalEx5bb4in(A,B,C,D,E),1,[evalEx5bb6in(A + 1,D,C,D,E)],[C = 0]).
-eq(evalEx5bb4in(A,B,C,D,E),1,[evalEx5bb6in(A,D,C,D,E)],[0 >= C + 1]).
-eq(evalEx5bb4in(A,B,C,D,E),1,[evalEx5bb6in(A,D,C,D,E)],[C >= 1]).
 eq(evalEx5returnin(A,B,C,D,E),1,[evalEx5stop(A,B,C,D,E)],[]).
+eq(evalEx5bb4in(A,B,C,D,E),1,[evalEx5bb6in(A,D,C,D,E)],[C >= 1]).
+eq(evalEx5bb4in(A,B,C,D,E),1,[evalEx5bb6in(A,D,C,D,E)],[0 >= 1 + C]).
+eq(evalEx5bb4in(A,B,C,D,E),1,[evalEx5bb6in(1 + A,D,C,D,E)],[C = 0]).
+eq(evalEx5bb2in(A,B,C,D,E),1,[evalEx5bb3in(A,B,1,E,E)],[]).
+eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb3in(A,B,C,D,E)],[]).
+eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb2in(A,B,C,D,D)],[0 >= 1]).
+eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb2in(A,B,C,D,D)],[0 >= 1]).
+eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb3in(A,B,C,-1 + D,E)],[0 >= 1]).
+eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb3in(A,B,C,-1 + D,E)],[0 >= 1]).
+eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb2in(A,B,C,D,-1 + D)],[F >= 1]).
+eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb2in(A,B,C,D,-1 + D)],[0 >= 1 + F, F >= 1]).
+eq(evalEx5bb1in(A,B,C,D,E),1,[evalEx5bb2in(A,B,C,D,-1 + D)],[0 >= 1 + F]).
+eq(evalEx5bb3in(A,B,C,D,E),1,[evalEx5bb4in(A,B,C,D,E)],[]).
+eq(evalEx5bb3in(A,B,C,D,E),1,[evalEx5bb1in(A,B,C,D,E)],[F >= 1]).
+eq(evalEx5bb3in(A,B,C,D,E),1,[evalEx5bb1in(A,B,C,D,E)],[0 >= 1 + F]).
+eq(evalEx5bb6in(A,B,C,D,E),1,[evalEx5returnin(A,B,C,D,E)],[A >= B]).
+eq(evalEx5bb6in(A,B,C,D,E),1,[evalEx5bb3in(A,B,0,B,E)],[B >= 1 + A]).
+eq(evalEx5entryin(A,B,C,D,E),1,[evalEx5bb6in(0,A,C,D,E)],[]).
+eq(evalEx5start(A,B,C,D,E),1,[evalEx5entryin(A,B,C,D,E)],[]).

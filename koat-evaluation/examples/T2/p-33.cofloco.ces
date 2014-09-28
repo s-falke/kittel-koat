@@ -1,13 +1,9 @@
 eq(f3(A,B),1,[f2(A,B,C,D,E),loop_cont_f2(D,E)],[C=0]).
 eq(f3(A,B),1,[f2(A,B,C,D,E)],[C=1]).
-eq(loop_cont_f2(A,B),0,[f300(A,B)],[]).
 eq(f2(A,B,C,D,E),1,[f2(-1+F,B,C,D,E)],[0>=G,0>=A+1]).
 eq(f2(A,B,C,D,E),1,[f2(1+F,B,C,D,E)],[G>=2,0>=A+1]).
 eq(f2(A,B,C,D,E),1,[f2(-1+F,B,C,D,E)],[0>=2+G,A>=1]).
 eq(f2(A,B,C,D,E),1,[f2(1+F,B,C,D,E)],[G>=0,A>=1]).
-eq(f2(A,B,C,0,D),1,[],[C=0,0>=A+1]).
-eq(f2(A,B,C,A,B),0,[],[C=1,A>=0]).
-eq(f2(A,B,C,0,D),1,[],[C=0,A>=1]).
-eq(f2(A,B,C,A,B),0,[],[C=1,1>=A+1]).
-eq(f2(A,B,C,A,D),1,[],[C=0,A=0]).
-eq(f2(A,B,C,A,B),0,[],[C=1]).
+eq(f2(A,B,C,0,D),1,[],[C=1,0>=A+1]).
+eq(f2(A,B,C,0,D),1,[],[C=1,A>=1]).
+eq(f2(A,B,C,A,D),1,[],[C=1,A=0]).

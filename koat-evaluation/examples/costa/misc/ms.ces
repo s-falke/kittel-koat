@@ -1,5 +1,5 @@
 eq(pubs_start(A,B,C),0,[start(A,B,C)],[]).
-eq(ms0(A,B,C),1,[ms(A - 1,B,C)],[]).
-eq(ms1(A,B,C),1,[fms(C,A,C)],[]).
-eq(ms(A,B,C),1,[ms0(D,B,A),ms1(D,B,A)],[A >= B + 2, 2*D >= B + A, B + A + 2 >= 2*D, B >= 0, A >= 0]).
 eq(start(A,B,C),1,[ms(A,B,C)],[]).
+eq(ms(A,B,C),1,[ms0(D,B,A),ms1(D,B,A)],[A >= 2 + B, 2 * D >= B + A, 2 + B + A >= 2 * D, B >= 0, A >= 0]).
+eq(ms1(A,B,C),1,[fms(C,A,C)],[]).
+eq(ms0(A,B,C),1,[ms(-1 + A,B,C)],[]).

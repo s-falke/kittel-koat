@@ -1,7 +1,7 @@
 eq(pubs_start(A,B,C,D,E),0,[f30(A,B,C,D,E)],[]).
-eq(f4(A,B,C,D,E),1,[f5(A,1,C,D,E)],[A >= 2]).
-eq(f4(A,B,C,D,E),1,[f5(A,0,C,D,E)],[1 >= A]).
-eq(f30(A,B,C,D,E),1,[f4(2,B,2,F,E)],[]).
-eq(f5(A,B,C,D,E),1,[f4(A - 1,B,C,F,E)],[0 >= F, F >= 1]).
-eq(f5(A,B,C,D,E),1,[f4(A + 1,B,C,F,E)],[F >= 1]).
 eq(f5(A,B,C,D,E),1,[f3(A,B,C,D,0)],[0 >= B]).
+eq(f5(A,B,C,D,E),1,[f4(1 + A,B,C,F,E)],[F >= 1]).
+eq(f5(A,B,C,D,E),1,[f4(-1 + A,B,C,F,E)],[0 >= F, F >= 1]).
+eq(f30(A,B,C,D,E),1,[f4(2,B,2,F,E)],[]).
+eq(f4(A,B,C,D,E),1,[f5(A,0,C,D,E)],[1 >= A]).
+eq(f4(A,B,C,D,E),1,[f5(A,1,C,D,E)],[A >= 2]).

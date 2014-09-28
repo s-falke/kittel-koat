@@ -1,6 +1,4 @@
 eq(sqrt(A,B,C,D),1,[f(0,1,1,D,E,F,G,H,I),loop_cont_f(F,G,H,I)],[E=0]).
 eq(sqrt(A,B,C,D),1,[f(0,1,1,D,E,F,G,H,I)],[E=1]).
-eq(loop_cont_f(A,B,C,D),0,[end(A,B,C,D)],[]).
 eq(f(A,B,C,D,E,F,G,H,I),1,[f(A+1,B+2,C+B+2,D,E,F,G,H,I)],[D>=C,B>=0]).
-eq(f(A,B,C,D,E,A,B,C,D),1,[],[E=0,C>=D+1]).
-eq(f(A,B,C,D,E,A,B,C,D),0,[],[E=1,D>=C]).
+eq(f(A,B,C,D,E,A,B,C,D),1,[],[E=1,C>=D+1]).

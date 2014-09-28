@@ -1,5 +1,4 @@
 eq(f0(A,B,C,D,E),1,[f7(F,F,10,0,E,G,H,I,J,K,L),loop_cont_f7(H,I,J,K,L)],[G=0]).
 eq(f0(A,B,C,D,E),1,[f7(F,F,10,0,E,G,H,I,J,K,L)],[G=1]).
-eq(loop_cont_f7(A,B,C,D,E),0,[f19(A,B,C,D,E)],[]).
 eq(f7(A,B,C,D,E,F,G,H,I,J,K),1,[f7(A,B,C,D+1,L,F,G,H,I,J,K)],[C>=D+1]).
-eq(f7(A,B,C,D,E,F,A,B,C,D,E),1,[],[F=0,D>=C]).
+eq(f7(A,B,C,D,E,F,A,B,C,D,E),1,[],[F=1,D>=C]).

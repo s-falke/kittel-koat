@@ -1,23 +1,23 @@
 eq(pubs_start(A,B,C,D,E,F),0,[f0(A,B,C,D,E,F)],[]).
-eq(f5(A,B,C,D,E,F),1,[f7(A,B,C,D,E,F)],[0 >= A]).
-eq(f5(A,B,C,D,E,F),1,[f7(A,B,C,D,E,F)],[A >= 2]).
-eq(f7(A,B,C,D,E,F),1,[f9(A,0,C,D,E,F)],[B = 0]).
-eq(f16(A,B,C,D,E,F),1,[f5(A,B,C,G,E,F)],[255 >= C]).
-eq(f25(A,B,C,D,E,F),1,[f5(A,B,C,G,E,F)],[C >= 0]).
-eq(f0(A,B,C,D,E,F),1,[f5(4,0,C,G,0,F)],[]).
-eq(f7(A,B,C,D,E,F),1,[f9(A - 1,B,C,D,E,F)],[0 >= B + 1]).
-eq(f7(A,B,C,D,E,F),1,[f9(A - 1,B,C,D,E,F)],[B >= 1]).
-eq(f9(A,B,C,D,E,F),1,[f16(A,B,C + A,D,2,F)],[0 >= E, D >= 1 + F]).
-eq(f9(A,B,C,D,E,F),1,[f16(A,B,C + A,D,2,F)],[E >= 2, D >= 1 + F]).
-eq(f9(A,B,C,D,E,F),1,[f16(A,B,C + A,D,2,F)],[0 >= B + 1, D >= 1 + F, E = 1]).
-eq(f9(A,B,C,D,E,F),1,[f16(A,B,C + A,D,2,F)],[B >= 1, D >= 1 + F, E = 1]).
-eq(f9(A,B,C,D,E,F),1,[f16(A - 1,1,C + A - 1,D,2,F)],[D >= 1 + F, B = 0, E = 1]).
-eq(f9(A,B,C,D,E,F),1,[f25(A,B,C - A,D,1,F)],[1 >= E, F >= D + 1]).
-eq(f9(A,B,C,D,E,F),1,[f25(A,B,C - A,D,1,F)],[E >= 3, F >= D + 1]).
-eq(f9(A,B,C,D,E,F),1,[f25(A,B,C - A,D,1,F)],[0 >= B + 1, F >= D + 1, E = 2]).
-eq(f9(A,B,C,D,E,F),1,[f25(A,B,C - A,D,1,F)],[B >= 1, F >= D + 1, E = 2]).
-eq(f9(A,B,C,D,E,F),1,[f25(A - 1,1,C - A + 1,D,1,F)],[F >= D + 1, B = 0, E = 2]).
-eq(f5(A,B,C,D,E,F),1,[f30(1,B,C,D,E,F)],[A = 1]).
-eq(f16(A,B,C,D,E,F),1,[f30(A,B,C,D,E,F)],[C >= 256]).
-eq(f25(A,B,C,D,E,F),1,[f30(A,B,C,D,E,F)],[0 >= C + 1]).
 eq(f9(A,B,C,D,E,F),1,[f30(A,B,C,D,E,D)],[D = F]).
+eq(f25(A,B,C,D,E,F),1,[f30(A,B,C,D,E,F)],[0 >= 1 + C]).
+eq(f16(A,B,C,D,E,F),1,[f30(A,B,C,D,E,F)],[C >= 256]).
+eq(f5(A,B,C,D,E,F),1,[f30(1,B,C,D,E,F)],[A = 1]).
+eq(f9(A,B,C,D,E,F),1,[f25(-1 + A,1,1 + C + -A,D,1,F)],[F >= 1 + D, B = 0, E = 2]).
+eq(f9(A,B,C,D,E,F),1,[f25(A,B,C + -A,D,1,F)],[B >= 1, F >= 1 + D, E = 2]).
+eq(f9(A,B,C,D,E,F),1,[f25(A,B,C + -A,D,1,F)],[0 >= 1 + B, F >= 1 + D, E = 2]).
+eq(f9(A,B,C,D,E,F),1,[f25(A,B,C + -A,D,1,F)],[E >= 3, F >= 1 + D]).
+eq(f9(A,B,C,D,E,F),1,[f25(A,B,C + -A,D,1,F)],[1 >= E, F >= 1 + D]).
+eq(f9(A,B,C,D,E,F),1,[f16(-1 + A,1,-1 + C + A,D,2,F)],[D >= 1 + F, B = 0, E = 1]).
+eq(f9(A,B,C,D,E,F),1,[f16(A,B,C + A,D,2,F)],[B >= 1, D >= 1 + F, E = 1]).
+eq(f9(A,B,C,D,E,F),1,[f16(A,B,C + A,D,2,F)],[0 >= 1 + B, D >= 1 + F, E = 1]).
+eq(f9(A,B,C,D,E,F),1,[f16(A,B,C + A,D,2,F)],[E >= 2, D >= 1 + F]).
+eq(f9(A,B,C,D,E,F),1,[f16(A,B,C + A,D,2,F)],[0 >= E, D >= 1 + F]).
+eq(f7(A,B,C,D,E,F),1,[f9(-1 + A,B,C,D,E,F)],[B >= 1]).
+eq(f7(A,B,C,D,E,F),1,[f9(-1 + A,B,C,D,E,F)],[0 >= 1 + B]).
+eq(f0(A,B,C,D,E,F),1,[f5(4,0,C,G,0,F)],[]).
+eq(f25(A,B,C,D,E,F),1,[f5(A,B,C,G,E,F)],[C >= 0]).
+eq(f16(A,B,C,D,E,F),1,[f5(A,B,C,G,E,F)],[255 >= C]).
+eq(f7(A,B,C,D,E,F),1,[f9(A,0,C,D,E,F)],[B = 0]).
+eq(f5(A,B,C,D,E,F),1,[f7(A,B,C,D,E,F)],[A >= 2]).
+eq(f5(A,B,C,D,E,F),1,[f7(A,B,C,D,E,F)],[0 >= A]).

@@ -1,10 +1,10 @@
 eq(pubs_start(A,B,C,D),0,[evalDis1start(A,B,C,D)],[]).
-eq(evalDis1start(A,B,C,D),1,[evalDis1entryin(A,B,C,D)],[]).
-eq(evalDis1entryin(A,B,C,D),1,[evalDis1bb3in(B,A,D,C)],[]).
-eq(evalDis1bb3in(A,B,C,D),1,[evalDis1bbin(A,B,C,D)],[A >= B + 1]).
-eq(evalDis1bb3in(A,B,C,D),1,[evalDis1returnin(A,B,C,D)],[B >= A]).
-eq(evalDis1bbin(A,B,C,D),1,[evalDis1bb1in(A,B,C,D)],[C >= D + 1]).
-eq(evalDis1bbin(A,B,C,D),1,[evalDis1bb2in(A,B,C,D)],[D >= C]).
-eq(evalDis1bb1in(A,B,C,D),1,[evalDis1bb3in(A,B,C,D + 1)],[]).
-eq(evalDis1bb2in(A,B,C,D),1,[evalDis1bb3in(A,B + 1,C,D)],[]).
 eq(evalDis1returnin(A,B,C,D),1,[evalDis1stop(A,B,C,D)],[]).
+eq(evalDis1bb2in(A,B,C,D),1,[evalDis1bb3in(A,1 + B,C,D)],[]).
+eq(evalDis1bb1in(A,B,C,D),1,[evalDis1bb3in(A,B,C,1 + D)],[]).
+eq(evalDis1bbin(A,B,C,D),1,[evalDis1bb2in(A,B,C,D)],[D >= C]).
+eq(evalDis1bbin(A,B,C,D),1,[evalDis1bb1in(A,B,C,D)],[C >= 1 + D]).
+eq(evalDis1bb3in(A,B,C,D),1,[evalDis1returnin(A,B,C,D)],[B >= A]).
+eq(evalDis1bb3in(A,B,C,D),1,[evalDis1bbin(A,B,C,D)],[A >= 1 + B]).
+eq(evalDis1entryin(A,B,C,D),1,[evalDis1bb3in(B,A,D,C)],[]).
+eq(evalDis1start(A,B,C,D),1,[evalDis1entryin(A,B,C,D)],[]).

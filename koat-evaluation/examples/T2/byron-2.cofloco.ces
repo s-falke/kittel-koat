@@ -1,8 +1,6 @@
 eq(f1(A,B,C,D,E,F),1,[f0(A,B,C,D,E,F,G,H,I,J,K,L,M),loop_cont_f0(H,I,J,K,L,M)],[G=0]).
 eq(f1(A,B,C,D,E,F),1,[f0(A,B,C,D,E,F,G,H,I,J,K,L,M)],[G=1]).
-eq(loop_cont_f0(A,B,C,D,E,F),0,[f2(A,B,C,D,E,F)],[]).
 eq(f0(A,B,C,D,E,F,G,H,I,J,K,L,M),1,[f0(A,B,-1+C,N,0,O,G,H,I,J,K,L,M)],[A>=1,C>=3]).
 eq(f0(A,B,C,D,E,F,G,H,I,J,K,L,M),1,[f0(-1+A,B,N,O,P,F,G,H,I,J,K,L,M)],[0>=P+1,A>=1]).
 eq(f0(A,B,C,D,E,F,G,H,I,J,K,L,M),1,[f0(-1+A,B,N,O,P,F,G,H,I,J,K,L,M)],[P>=1,A>=1]).
-eq(f0(A,B,C,D,E,F,G,A,H,C,D,E,F),1,[],[G=0,0>=A]).
-eq(f0(A+1,B,C,D,E,F,G,A+1,B,C,D,E,F),0,[],[G=1,A>=0]).
+eq(f0(A,B,C,D,E,F,G,A,H,C,D,E,F),1,[],[G=1,0>=A]).

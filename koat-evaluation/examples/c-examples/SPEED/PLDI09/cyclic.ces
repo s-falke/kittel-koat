@@ -1,12 +1,12 @@
 eq(pubs_start(A,B,C),0,[evalcyclicstart(A,B,C)],[]).
-eq(evalcyclicstart(A,B,C),1,[evalcyclicentryin(A,B,C)],[]).
-eq(evalcyclicentryin(A,B,C),1,[evalcyclicbb3in(A,B,A + 1)],[A >= 0, B >= A + 1]).
-eq(evalcyclicbb3in(A,B,C),1,[evalcyclicreturnin(A,B,C)],[C = A]).
-eq(evalcyclicbb3in(A,B,C),1,[evalcyclicbb4in(A,B,C)],[A >= C + 1]).
-eq(evalcyclicbb3in(A,B,C),1,[evalcyclicbb4in(A,B,C)],[C >= A + 1]).
-eq(evalcyclicbb4in(A,B,C),1,[evalcyclicbbin(A,B,C)],[0 >= D + 1]).
-eq(evalcyclicbb4in(A,B,C),1,[evalcyclicbbin(A,B,C)],[D >= 1]).
-eq(evalcyclicbb4in(A,B,C),1,[evalcyclicreturnin(A,B,C)],[]).
-eq(evalcyclicbbin(A,B,C),1,[evalcyclicbb3in(A,B,C + 1)],[B >= C]).
-eq(evalcyclicbbin(A,B,C),1,[evalcyclicbb3in(A,B,0)],[C >= B + 1]).
 eq(evalcyclicreturnin(A,B,C),1,[evalcyclicstop(A,B,C)],[]).
+eq(evalcyclicbbin(A,B,C),1,[evalcyclicbb3in(A,B,0)],[C >= 1 + B]).
+eq(evalcyclicbbin(A,B,C),1,[evalcyclicbb3in(A,B,1 + C)],[B >= C]).
+eq(evalcyclicbb4in(A,B,C),1,[evalcyclicreturnin(A,B,C)],[]).
+eq(evalcyclicbb4in(A,B,C),1,[evalcyclicbbin(A,B,C)],[D >= 1]).
+eq(evalcyclicbb4in(A,B,C),1,[evalcyclicbbin(A,B,C)],[0 >= 1 + D]).
+eq(evalcyclicbb3in(A,B,C),1,[evalcyclicbb4in(A,B,C)],[C >= 1 + A]).
+eq(evalcyclicbb3in(A,B,C),1,[evalcyclicbb4in(A,B,C)],[A >= 1 + C]).
+eq(evalcyclicbb3in(A,B,C),1,[evalcyclicreturnin(A,B,C)],[C = A]).
+eq(evalcyclicentryin(A,B,C),1,[evalcyclicbb3in(A,B,1 + A)],[A >= 0, B >= 1 + A]).
+eq(evalcyclicstart(A,B,C),1,[evalcyclicentryin(A,B,C)],[]).

@@ -4,12 +4,7 @@ eq(f7(A,B,C,D,E,F),1,[f5(A,1+B,G,H,E,G,I,J,K,L,M,N,O),loop_cont_f5(J,K,L,M,N,O)]
 eq(f7(A,B,C,D,E,F),1,[f5(A,1+B,G,H,E,G,I,J,K,L,M,N,O)],[I=1]).
 eq(f8(A,B,C,D,E,F),1,[f5(A,1+B,G,H,E,G,I,J,K,L,M,N,O),loop_cont_f5(J,K,L,M,N,O)],[I=0]).
 eq(f8(A,B,C,D,E,F),1,[f5(A,1+B,G,H,E,G,I,J,K,L,M,N,O)],[I=1]).
-eq(loop_cont_f5(A,B,C,D,E,F),0,[f11(A,B,C,D,E,F)],[]).
-eq(loop_cont_f5(A,B,C,D,E,F),0,[f10(A,B,C,D,E,F)],[]).
 eq(f5(A,B,C,D,E,F,G,H,I,J,K,L,M),1,[f5(A,1+B,N,O,E,N,G,H,I,J,K,L,M)],[A>=1+B,C=0]).
-eq(f5(A,B,C,D,E,F,G,A,B,0,0,0,F),1,[],[G=0,B>=A,C=0]).
-eq(f5(A,B,C,D,E,F,G,A,B,C,D,E,F),0,[],[G=1]).
-eq(f5(A,B,C,D,E,F,G,A,B,C,C,C,F),1,[],[G=0,C>=1]).
-eq(f5(A,B,C,D,E,F,G,A,B,C,D,E,F),0,[],[G=1,1>=C+1]).
-eq(f5(A,B,C,D,E,F,G,A,B,C,C,C,F),1,[],[G=0,0>=C+1]).
-eq(f5(A,B,C,D,E,F,G,A,B,C,D,E,F),0,[],[G=1,C>=0]).
+eq(f5(A,B,C,D,E,F,G,A,B,0,0,0,F),1,[],[G=1,B>=A,C=0]).
+eq(f5(A,B,C,D,E,F,G,A,B,C,C,C,F),1,[],[G=1,C>=1]).
+eq(f5(A,B,C,D,E,F,G,A,B,C,C,C,F),1,[],[G=1,0>=C+1]).

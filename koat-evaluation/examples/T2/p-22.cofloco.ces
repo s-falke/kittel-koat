@@ -1,6 +1,5 @@
 eq(f300(A,B),1,[f1(A,C)],[0>=A]).
 eq(f300(A,B),1,[f5(-1+A,B,C,D,E),loop_cont_f5(D,E)],[C=0,A>=1]).
 eq(f300(A,B),1,[f5(-1+A,B,C,D,E)],[C=1,A>=1]).
-eq(loop_cont_f5(A,B),0,[f1(A,B)],[]).
 eq(f5(A,B,C,D,E),1,[f5(-1+A,B,C,D,E)],[A>=1]).
-eq(f5(A,B,C,A,D),1,[],[C=0,0>=A]).
+eq(f5(A,B,C,A,D),1,[],[C=1,0>=A]).

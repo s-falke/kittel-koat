@@ -1,12 +1,12 @@
 eq(pubs_start(A,B,C,D),0,[eval1(A,B,C,D)],[]).
-eq(eval1(A,B,C,D),1,[eval2(A - 1,B,C,D)],[A >= 2]).
-eq(eval1(A,B,C,D),1,[eval2(A,B - 1,C,D)],[1 >= A]).
-eq(eval2(A,B,C,D),1,[eval3(A,B,A,2*A)],[B >= 2]).
-eq(eval3(A,B,C,D),1,[eval4(A,B,C,D)],[B >= D, B >= 1 + D]).
-eq(eval3(A,B,C,D),1,[eval4(A,B,C,D + 1)],[B >= D, B >= 1 + D]).
-eq(eval3(A,B,C,D),1,[eval3(A,B,D,2*D)],[B >= D, B >= 1 + D, D >= 1]).
-eq(eval3(A,B,C,D),1,[eval3(A,B,D + 1,2*D + 2)],[B >= D, B >= 1 + D, D >= 1]).
+eq(eval4(A,B,C,D),1,[eval2(A,-1 + B,C,D)],[B >= 2, A = 1]).
+eq(eval4(A,B,C,D),1,[eval2(-1 + A,B,C,D)],[A >= 2, A >= 1, B >= 2]).
+eq(eval3(A,B,C,D),1,[eval3(A,B,D,2 * D)],[D >= 1, B = D]).
 eq(eval3(A,B,C,D),1,[eval4(A,B,C,D)],[B = D]).
-eq(eval3(A,B,C,D),1,[eval3(A,B,D,2*D)],[D >= 1, B = D]).
-eq(eval4(A,B,C,D),1,[eval2(A - 1,B,C,D)],[A >= 2, A >= 1, B >= 2]).
-eq(eval4(A,B,C,D),1,[eval2(A,B - 1,C,D)],[B >= 2, A = 1]).
+eq(eval3(A,B,C,D),1,[eval3(A,B,1 + D,2 + 2 * D)],[B >= D, B >= 1 + D, D >= 1]).
+eq(eval3(A,B,C,D),1,[eval3(A,B,D,2 * D)],[B >= D, B >= 1 + D, D >= 1]).
+eq(eval3(A,B,C,D),1,[eval4(A,B,C,1 + D)],[B >= D, B >= 1 + D]).
+eq(eval3(A,B,C,D),1,[eval4(A,B,C,D)],[B >= D, B >= 1 + D]).
+eq(eval2(A,B,C,D),1,[eval3(A,B,A,2 * A)],[B >= 2]).
+eq(eval1(A,B,C,D),1,[eval2(A,-1 + B,C,D)],[1 >= A]).
+eq(eval1(A,B,C,D),1,[eval2(-1 + A,B,C,D)],[A >= 2]).

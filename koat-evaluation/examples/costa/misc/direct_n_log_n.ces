@@ -1,6 +1,6 @@
 eq(pubs_start(A),0,[start(A)],[]).
-eq(start(A),1,[a(A)],[A >= 1]).
-eq(start(A),1,[a(A)],[A >= 2]).
+eq(a(A),1,[a(B)],[2 * B >= 1, A = 1 + 2 * B]).
+eq(a(A),1,[a(B)],[2 * B >= 2, A = 2 * B]).
 eq(start(A),1,[a(A)],[A >= 4]).
-eq(a(A),1,[a(B)],[2*B >= 2, A = 2*B]).
-eq(a(A),1,[a(B)],[2*B >= 1, A = 2*B + 1]).
+eq(start(A),1,[a(A)],[A >= 2]).
+eq(start(A),1,[a(A)],[A >= 1]).

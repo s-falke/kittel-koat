@@ -1,6 +1,6 @@
 eq(pubs_start(A,B,C,D),0,[start0(A,B,C,D)],[]).
-eq(start(A,B,C,D),1,[stop(A,B,C,D)],[1 >= A, B = C, D = A]).
-eq(start(A,B,C,D),1,[lbl32(A,B,C,D - 1)],[A >= 2, B = C, D = A]).
-eq(lbl32(A,B,C,D),1,[stop(A,B,C,D)],[A >= 2, D = 1, B = C]).
-eq(lbl32(A,B,C,D),1,[lbl32(A,B,C,D - 1)],[D >= 2, D >= 1, A >= D + 1, B = C]).
 eq(start0(A,B,C,D),1,[start(A,C,C,A)],[]).
+eq(lbl32(A,B,C,D),1,[lbl32(A,B,C,-1 + D)],[D >= 2, D >= 1, A >= 1 + D, B = C]).
+eq(lbl32(A,B,C,D),1,[stop(A,B,C,D)],[A >= 2, D = 1, B = C]).
+eq(start(A,B,C,D),1,[lbl32(A,B,C,-1 + D)],[A >= 2, B = C, D = A]).
+eq(start(A,B,C,D),1,[stop(A,B,C,D)],[1 >= A, B = C, D = A]).

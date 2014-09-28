@@ -1,8 +1,8 @@
 eq(pubs_start(A,B,C,D),0,[start0(A,B,C,D)],[]).
-eq(start(A,B,C,D),1,[lbl51(E,B,0,D)],[A = B, C = D]).
-eq(lbl51(A,B,C,D),1,[stop(A,B,C,D)],[C >= A, C >= 0, 9 >= C]).
-eq(lbl51(A,B,C,D),1,[stop(A,B,C,D)],[A >= C + 3, C >= 0, 9 >= C]).
-eq(lbl51(A,B,C,D),1,[cut(A,B,C,D)],[A >= C + 1, C + 2 >= A, 9 >= A, C >= 0, 9 >= C]).
-eq(lbl51(A,B,C,D),1,[stop(A,B,C,D)],[A >= 10, A >= C + 1, C + 2 >= A, C >= 0, 9 >= C]).
-eq(cut(A,B,C,D),1,[lbl51(E,B,A,D)],[C + 2 >= A, 9 >= A, C >= 0, A >= C + 1]).
 eq(start0(A,B,C,D),1,[start(B,B,D,D)],[]).
+eq(cut(A,B,C,D),1,[lbl51(E,B,A,D)],[2 + C >= A, 9 >= A, C >= 0, A >= 1 + C]).
+eq(lbl51(A,B,C,D),1,[stop(A,B,C,D)],[A >= 10, A >= 1 + C, 2 + C >= A, C >= 0, 9 >= C]).
+eq(lbl51(A,B,C,D),1,[cut(A,B,C,D)],[A >= 1 + C, 2 + C >= A, 9 >= A, C >= 0, 9 >= C]).
+eq(lbl51(A,B,C,D),1,[stop(A,B,C,D)],[A >= 3 + C, C >= 0, 9 >= C]).
+eq(lbl51(A,B,C,D),1,[stop(A,B,C,D)],[C >= A, C >= 0, 9 >= C]).
+eq(start(A,B,C,D),1,[lbl51(E,B,0,D)],[A = B, C = D]).

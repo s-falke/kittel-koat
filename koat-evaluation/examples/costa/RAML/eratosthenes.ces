@@ -1,7 +1,7 @@
 eq(pubs_start(A,B),0,[start(A,B)],[]).
-eq(eratos0(A,B),1,[eratos(A - 1,B)],[]).
-eq(eratos1(A,B),1,[filter(B,A - 1)],[]).
-eq(eratos(A,B),1,[eratos0(A,C),eratos1(A,C)],[A >= 1]).
-eq(outfilter(A,B),1,[outfilter(A,B - 1)],[B >= 1]).
-eq(filter(A,B),1,[filter(A,B - 1)],[B >= 1]).
 eq(start(A,B),1,[eratos(A,B)],[]).
+eq(filter(A,B),1,[filter(A,-1 + B)],[B >= 1]).
+eq(outfilter(A,B),1,[outfilter(A,-1 + B)],[B >= 1]).
+eq(eratos(A,B),1,[eratos0(A,C),eratos1(A,C)],[A >= 1]).
+eq(eratos1(A,B),1,[filter(B,-1 + A)],[]).
+eq(eratos0(A,B),1,[eratos(-1 + A,B)],[]).

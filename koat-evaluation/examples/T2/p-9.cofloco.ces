@@ -1,5 +1,4 @@
 eq(f2(A,B,C,D,E,F,G),1,[f1(A,B,C,D,E,H,H,I,J,K,L,M,N,O,P),loop_cont_f1(J,K,L,M,N,O,P)],[I=0]).
 eq(f2(A,B,C,D,E,F,G),1,[f1(A,B,C,D,E,H,H,I,J,K,L,M,N,O,P)],[I=1]).
-eq(loop_cont_f1(A,B,C,D,E,F,G),0,[f300(A,B,C,D,E,F,G)],[]).
 eq(f1(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O),1,[f1(A,B,P,Q,E,F,G,H,I,J,K,L,M,N,O)],[A>=1+B]).
-eq(f1(A,B,C,D,E,F,G,H,A,B,I,D,J,F,G),1,[],[H=0,B>=A]).
+eq(f1(A,B,C,D,E,F,G,H,A,B,I,D,J,F,G),1,[],[H=1,B>=A]).

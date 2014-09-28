@@ -1,19 +1,19 @@
 eq(pubs_start(A,B,C,D,E),0,[selectOrd(A,B,C,D,E)],[]).
-eq(selectOrd(A,B,C,D,E),1,[m4(A,B,C,D,E)],[A >= 0]).
-eq(m0(A,B,C,D,E),1,[m1(A,B,C,F,E)],[A >= B + 1, B >= C + 1, A >= F + 1, 1 + F >= A]).
-eq(m2(A,B,C,D,E),1,[m3(A,F,C,D,E)],[A >= F + 2, 2 + F >= A]).
-eq(m6(A,B,C,D,E),1,[m7(A,B,C,D,E)],[B >= C + 1, A >= B + 2, D >= E]).
-eq(n0(A,B,C,D,E),1,[m7(A,C,C,D,E)],[D >= B + 1, A >= C + 2]).
-eq(m7(A,B,C,D,E),1,[m0(A,F,C,D,E)],[B >= C, A >= B + 2, B + 1 >= F, F >= 1 + B]).
-eq(n1(A,B,C,D,E),1,[m5(A,B,0,D,E),m2(A,B,0,D,E)],[A >= 0]).
-eq(m4(A,B,C,D,E),1,[n1(A,B,C,D,E)],[A >= 0]).
-eq(n2(A,B,C,D,E),1,[n3(A,B,C,F,G)],[B >= C + 1, A >= B + 2, A >= D + 1, 1 + D >= A]).
-eq(n3(A,B,C,D,E),1,[m6(A,B,C,D,E)],[]).
-eq(n3(A,B,C,D,E),1,[n0(A,D,B,E,E)],[]).
-eq(m1(A,B,C,D,E),1,[n2(A,B,C,D,E)],[]).
-eq(m1(A,B,C,D,E),1,[m9(A,D,B,D,E)],[]).
-eq(n40(A,B,C,D,E),1,[m2(A,B,C,D,E)],[]).
-eq(n41(A,B,C,D,E),1,[m0(A,D,B,D,E)],[]).
-eq(n4(A,B,C,D,E),1,[n40(A,C,F,G,E),n41(A,C,F,G,E)],[A >= G + 2, C + 1 >= G, G >= 1 + C, F >= G, G >= F, A >= B + 2, 2 + B >= A]).
-eq(m3(A,B,C,D,E),1,[n4(A,B,C,D,E)],[]).
 eq(m3(A,B,C,D,E),1,[m8(C,B,B,D,E)],[]).
+eq(m3(A,B,C,D,E),1,[n4(A,B,C,D,E)],[]).
+eq(n4(A,B,C,D,E),1,[n40(A,C,F,G,E),n41(A,C,F,G,E)],[A >= 2 + G, 1 + C >= G, G >= 1 + C, F >= G, G >= F, A >= 2 + B, 2 + B >= A]).
+eq(n41(A,B,C,D,E),1,[m0(A,D,B,D,E)],[]).
+eq(n40(A,B,C,D,E),1,[m2(A,B,C,D,E)],[]).
+eq(m1(A,B,C,D,E),1,[m9(A,D,B,D,E)],[]).
+eq(m1(A,B,C,D,E),1,[n2(A,B,C,D,E)],[]).
+eq(n3(A,B,C,D,E),1,[n0(A,D,B,E,E)],[]).
+eq(n3(A,B,C,D,E),1,[m6(A,B,C,D,E)],[]).
+eq(n2(A,B,C,D,E),1,[n3(A,B,C,F,G)],[B >= 1 + C, A >= 2 + B, A >= 1 + D, 1 + D >= A]).
+eq(m4(A,B,C,D,E),1,[n1(A,B,C,D,E)],[A >= 0]).
+eq(n1(A,B,C,D,E),1,[m5(A,B,0,D,E),m2(A,B,0,D,E)],[A >= 0]).
+eq(m7(A,B,C,D,E),1,[m0(A,F,C,D,E)],[B >= C, A >= 2 + B, 1 + B >= F, F >= 1 + B]).
+eq(n0(A,B,C,D,E),1,[m7(A,C,C,D,E)],[D >= 1 + B, A >= 2 + C]).
+eq(m6(A,B,C,D,E),1,[m7(A,B,C,D,E)],[B >= 1 + C, A >= 2 + B, D >= E]).
+eq(m2(A,B,C,D,E),1,[m3(A,F,C,D,E)],[A >= 2 + F, 2 + F >= A]).
+eq(m0(A,B,C,D,E),1,[m1(A,B,C,F,E)],[A >= 1 + B, B >= 1 + C, A >= 1 + F, 1 + F >= A]).
+eq(selectOrd(A,B,C,D,E),1,[m4(A,B,C,D,E)],[A >= 0]).

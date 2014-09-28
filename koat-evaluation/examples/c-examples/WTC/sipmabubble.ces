@@ -1,13 +1,13 @@
 eq(pubs_start(A,B),0,[evalsipmabubblestart(A,B)],[]).
-eq(evalsipmabubblestart(A,B),1,[evalsipmabubbleentryin(A,B)],[]).
-eq(evalsipmabubbleentryin(A,B),1,[evalsipmabubblebb6in(A,B)],[]).
-eq(evalsipmabubblebb6in(A,B),1,[evalsipmabubblebb4in(A,0)],[A >= 0]).
-eq(evalsipmabubblebb6in(A,B),1,[evalsipmabubblereturnin(A,B)],[0 >= A + 1]).
-eq(evalsipmabubblebb4in(A,B),1,[evalsipmabubblebb1in(A,B)],[A >= 1 + B]).
-eq(evalsipmabubblebb4in(A,B),1,[evalsipmabubblebb5in(A,B)],[B >= A]).
-eq(evalsipmabubblebb1in(A,B),1,[evalsipmabubblebb2in(A,B)],[C >= D + 1]).
-eq(evalsipmabubblebb1in(A,B),1,[evalsipmabubblebb3in(A,B)],[D >= C]).
-eq(evalsipmabubblebb2in(A,B),1,[evalsipmabubblebb3in(A,B)],[]).
-eq(evalsipmabubblebb3in(A,B),1,[evalsipmabubblebb4in(A,B + 1)],[]).
-eq(evalsipmabubblebb5in(A,B),1,[evalsipmabubblebb6in(A - 1,B)],[]).
 eq(evalsipmabubblereturnin(A,B),1,[evalsipmabubblestop(A,B)],[]).
+eq(evalsipmabubblebb5in(A,B),1,[evalsipmabubblebb6in(-1 + A,B)],[]).
+eq(evalsipmabubblebb3in(A,B),1,[evalsipmabubblebb4in(A,1 + B)],[]).
+eq(evalsipmabubblebb2in(A,B),1,[evalsipmabubblebb3in(A,B)],[]).
+eq(evalsipmabubblebb1in(A,B),1,[evalsipmabubblebb3in(A,B)],[C >= D]).
+eq(evalsipmabubblebb1in(A,B),1,[evalsipmabubblebb2in(A,B)],[C >= 1 + D]).
+eq(evalsipmabubblebb4in(A,B),1,[evalsipmabubblebb5in(A,B)],[B >= A]).
+eq(evalsipmabubblebb4in(A,B),1,[evalsipmabubblebb1in(A,B)],[A >= 1 + B]).
+eq(evalsipmabubblebb6in(A,B),1,[evalsipmabubblereturnin(A,B)],[0 >= 1 + A]).
+eq(evalsipmabubblebb6in(A,B),1,[evalsipmabubblebb4in(A,0)],[A >= 0]).
+eq(evalsipmabubbleentryin(A,B),1,[evalsipmabubblebb6in(A,B)],[]).
+eq(evalsipmabubblestart(A,B),1,[evalsipmabubbleentryin(A,B)],[]).

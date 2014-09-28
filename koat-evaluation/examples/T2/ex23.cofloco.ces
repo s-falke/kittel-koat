@@ -1,6 +1,5 @@
 eq(f0(A,B,C),1,[f5(A,0,C)],[A>=128]).
 eq(f0(A,B,C),1,[f7(A,0,D,E,F,G,H),loop_cont_f7(F,G,H)],[E=0,127>=A]).
 eq(f0(A,B,C),1,[f7(A,0,D,E,F,G,H)],[E=1,127>=A]).
-eq(loop_cont_f7(A,B,C),0,[f5(A,B,C)],[]).
 eq(f7(A,B,C,D,E,F,G),1,[f7(A,B+1,C+1,D,E,F,G)],[35>=B]).
-eq(f7(A,B,C,D,A,B,C),1,[],[D=0,B>=36]).
+eq(f7(A,B,C,D,A,B,C),1,[],[D=1,B>=36]).
