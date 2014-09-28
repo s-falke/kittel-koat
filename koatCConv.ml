@@ -38,7 +38,7 @@ let (varToPreVarMap, varToPostVarMap) =
       let letter = Char.escaped (Char.chr i) in
       preRes := VarMap.add (Printf.sprintf "X_%i"  (i - 64)) letter !preRes;
       postRes := VarMap.add (Printf.sprintf "X_%i'" (i - 64)) (letter ^ "_") !postRes;
-      for j = 1 to 9 do
+      for j = 1 to 20 do
         preRes := VarMap.add (Printf.sprintf "X_%i"  (i - 64 + j*26)) (Printf.sprintf "%s%i" letter j) !preRes;
         postRes := VarMap.add (Printf.sprintf "X_%i'" (i - 64 + j*26)) (Printf.sprintf "%s%i_" letter j) !postRes;
       done
