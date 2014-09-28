@@ -120,11 +120,11 @@
             if (res.hasOwnProperty('degree')) {
                 td.setAttribute('class', 'hasBound');
                 var n = res.hasOwnProperty('parsedBound') ? res.parsedBound : res.originalBound;
-                if (n.length > 30) {
-                    var s = el('span');
-                    s.setAttribute('title', n);
-                    s.appendChild(text(n.substr(0,20) + '...'));
-                    td.appendChild(s);
+                if (n.length > 25) {
+                    var b = el('span');
+                    b.setAttribute('title', n);
+                    b.appendChild(text(n.substr(0,22) + '...'));
+                    td.appendChild(b);
                 } else {
                     td.appendChild(text(n));
                 }
