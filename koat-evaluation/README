@@ -21,11 +21,11 @@ Preparing the environment:
         - provers/aspic64          (for conversion/preprocessing)
         - provers/rank             (for the actual complexity analysis)
 
-    * For "PUBS": 
+    * For "PUBS":
       This is the backend of the COSTA termination and complexity prover,
       documented in many papers, e.g.
-        Elvira Albert, Puri Arenas, Samir Genaim, Germán Puebla, and Damiano Zanardini. 
-        Cost Analysis of Object-Oriented Bytecode Programs. 
+        Elvira Albert, Puri Arenas, Samir Genaim, Germán Puebla, and Damiano Zanardini.
+        Cost Analysis of Object-Oriented Bytecode Programs.
         In TCS 413, 1 (2012), 142–159.
       The website is
         http://costa.ls.fi.upm.es/web/
@@ -35,10 +35,10 @@ Preparing the environment:
 
     * For "CoFloCo":
       This is the implementation of the paper
-        Antonio Flores-Montoya and Reiner Haehnle. 
+        Antonio Flores-Montoya and Reiner Haehnle.
         Resource Analysis of Complex Programs with Cost Equations.
         In APLAS ’14.
-      The website is 
+      The website is
         https://www.se.tu-darmstadt.de/se/group-members/antonio-flores-montoya/cofloco/
       We use the following files:
         - provers/cofloco           (for the actual complexity analysis)
@@ -77,3 +77,17 @@ How to add support for new provers:
  - Add a new case to bin/generate_benchmark_report.sh (and bin/output_funs.sh/parsebound)
  - Include the new results-PROVER.js in report/report.html
  - Add knowledge about the prover (what it supports, file extensions) to report/table.js
+
+Getting the examples in the right formats:
+ - *.koat: The base files.
+ - *.ces: Use koatCESConv.
+   Note that this is usually not directly used for PUBS input, but that we use
+   bin/CESToCFG.pl and cfg2pubs_static (by Samir Genaim) to turn them into CES with
+   extracted loops. This is done in corresponding wrapper, though.
+ - *.cofloco.ces: Convert using bin/KoATtoCoFloCo.sh, after placing cfg2pubs and
+   koat2ces (by Antonio Flores Montoya) in provers/. Note that this does not work
+   for systems with Com_k, k > 2 rules. For these, we used the original CoFloCo files,
+   or used a manual translation where those were not available.
+ - *.fst: Use koatFSTConv.
+ - *.Loopus.c: Use koatCConv.
+
