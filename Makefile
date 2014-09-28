@@ -53,6 +53,9 @@ koatCConv: force_look
 koatFSTConv: force_look
 	ocamlbuild ${OPTS} ${LIBPATH} ${LIBS} koatFSTConv.native
 
+koatCESConv: force_look
+	ocamlbuild ${OPTS} ${LIBPATH} ${LIBS} koatCESConv.native
+
 clean: force_look
 	ocamlbuild -clean
 	rm -f git_sha1.ml
