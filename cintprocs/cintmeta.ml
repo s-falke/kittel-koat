@@ -205,6 +205,8 @@ and doChain1 () =
 and doChain2 () =
   run_ite (ChainProc.process 2) doLoop doExpFarkas
 and doExpFarkas () =
-  run_ite Cintexpfarkaspolo.process doLoop doNothing
+  run_ite (Cintexpfarkaspolo.process false) doLoop doExpFarkasSizeBound
+and doExpFarkasSizeBound () =
+  run_ite (Cintexpfarkaspolo.process true) doLoop doNothing
 and doNothing () =
   ()
