@@ -311,11 +311,16 @@ module Make(RuleT : AbstractRule) = struct
         (Procs.getStringSccs alli [newRules])
     in
 
-    let man = Box.manager_alloc () in
-    match add_invariants man trs startFuns with
-    | None -> None
-    | Some (funToInv, newRules) ->
-      Some ((newRules, Termgraph.compute newRules, false), get_proof man newRules funToInv)
+    if not (Utils.containsOne (Trs.getLeftFuns trs) startFuns) then
+      let trivial_proof = fun i alli -> Printf.sprintf "Since no start symbol occurs on a left-hand side of problem %i, the problem is trivial." i
+      in
+        Some (([], Termgraph.compute [], true), trivial_proof)
+    else
+      let man = Box.manager_alloc () in
+      match add_invariants man trs startFuns with
+      | None -> None
+      | Some (funToInv, newRules) ->
+        Some ((newRules, Termgraph.compute newRules, false), get_proof man newRules funToInv)
 
   let process_koat ctrsobl tgraph rvgraph =
     let add_invariants man rules startFun =
