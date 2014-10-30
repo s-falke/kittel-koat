@@ -42,7 +42,7 @@ module Make(RuleT : AbstractRule) = struct
     let open CTRS in
     let rulesString =
       if obl.ctrs.rules = [] then
-        "(none)"
+        prefix ^ "\t(none)"
       else
         let complCostRuleStrings =
           List.map (fun r -> (sprintf "(%s, %s)" (Complexity.toString (getComplexity obl r)) (Expexp.toString (getCost obl r)), RuleT.toString r)) obl.ctrs.rules in
