@@ -68,11 +68,12 @@ module Make(RuleT : AbstractRule) = struct
     let open Texpr1 in
     List.fold_left
       (fun res (coeff, mon) ->
-        binop Mul
-          (big_int_to_texpr1 env coeff)
-          (binop Add
-             (monomial_to_texpr1 env varM mon) res Int Zero)
-          Int Zero)
+        binop Add
+          (binop Mul
+             (big_int_to_texpr1 env coeff)
+             (monomial_to_texpr1 env varM mon)
+             Int Zero)
+          res Int Zero)
       (big_int_to_texpr1 env const) mons
 
   let atom_to_tcons1 env varM a =
@@ -214,6 +215,9 @@ module Make(RuleT : AbstractRule) = struct
           let condAtoms = Rule.getCond rule in
           let consArray = Tcons1.array_make ruleEnv (List.length condAtoms) in
           Utils.iteri (fun i c -> Tcons1.array_set consArray i (atom_to_tcons1 ruleEnv ruleVarMap c)) condAtoms;
+          Printf.printf "Turning %s into the following array:\n" (Pc.toString condAtoms);
+          Tcons1.array_print Format.std_formatter consArray;
+          Printf.printf "\n";
           FunMap.add lhsFun ((ruleEnv, consArray, rhsFun, dstPostEnv)::(findWithDef lhsFun [] acc)) acc)
         FunMap.empty
         rules in
@@ -236,19 +240,19 @@ module Make(RuleT : AbstractRule) = struct
               let oldDstAbstrVal = FunMap.find dstFun !funToAbstrVal in
               let newDstAbstrVal = applyTrans man curAbstrVal consArray ruleEnv dstPostEnv (Abstract1.env oldDstAbstrVal) in
 
-            (* (* DEBUG *)
+             (* DEBUG *)
                Printf.printf "Processing transition from %s to %s, with the following constraints:\n" f dstFun;
                Tcons1.array_print Format.std_formatter consArray;
                Printf.printf "\n Current abstract value at %s: %s\n" f (Pc.toString (abstr1_to_pc man curAbstrVal));
                Printf.printf "  Old abstract value at %s: %s\n" dstFun (Pc.toString (abstr1_to_pc man oldDstAbstrVal));
                Printf.printf "  New abstract value at %s: %s\n" dstFun (Pc.toString (abstr1_to_pc man newDstAbstrVal));
-            *)
+            
 
               Abstract1.join_with man newDstAbstrVal oldDstAbstrVal;
 
-            (* (* DEBUG *)
+             (* DEBUG *)
                Printf.printf "  Joined abstract value at %s: %s\n" dstFun (Pc.toString (abstr1_to_pc man newDstAbstrVal));
-            *)
+            
 
               let (newHistory, resAbstrVal) =
                 if Utils.contains history dstFun then
