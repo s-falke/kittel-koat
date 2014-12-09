@@ -283,6 +283,39 @@ module Make(RuleT : AbstractRule) = struct
           acc
       ) funToInv ""
 
+(*
+  (* DEBUG *)
+  let check_conditions man rules funToInv =
+    let result = List.map
+                    (fun rule ->
+                      let lhs = Rule.getLeft rule in
+                      let lDefSym = Term.getFun lhs in
+                      let lInv = abstr1_to_pc man (FunMap.find lDefSym funToInv) in
+                      let rhs = Rule.getRight rule in
+                      let rDefSym = Term.getFun rhs in
+                      if FunMap.exists (fun f _ -> f = rDefSym) funToInv then
+                        let rInv = abstr1_to_pc man (FunMap.find rDefSym funToInv) in
+
+                        (* Map from std names to actually used names: *)
+                        let lSubst = Utils.mapi (fun i v -> ("X_" ^ (string_of_int (i+1)), v)) (Term.getArgs lhs) in
+                        let lInv = Pc.instantiate lInv lSubst in
+                        let rSubst = Utils.mapi (fun i v -> ("X_" ^ (string_of_int (i+1)), v)) (Term.getArgs rhs) in
+                        let rInv = Pc.instantiate rInv rSubst in
+
+                        (* Full left-hand side *)
+                        let lInv = lInv@(Rule.getCond rule) in
+
+                        (* Check unsat of lInv /\ !rInv *)
+                        let satisfiable = Smt.isSatisfiableWithNegations lInv [rInv] in
+
+                        (* The query may be non-linear and, hence, may fail with an error. Z3 seems ok with this though *)
+                        satisfiable = Ynm.No
+                      else
+                        true)
+                    rules in
+    List.fold_left (&&) true result
+*)
+
   let process_kittel startFuns trs =
     let add_invariants man rules startFuns =
       let funToAbstrVal = compute_invariants man rules startFuns in
@@ -326,6 +359,7 @@ module Make(RuleT : AbstractRule) = struct
       match add_invariants man trs startFuns with
       | None -> None
       | Some (funToInv, newRules) ->
+        (* assert(check_conditions man trs funToInv); (* DEBUG *) *)
         Some ((newRules, Termgraph.compute newRules, false), get_proof man newRules funToInv)
 
   let process_koat ctrsobl tgraph rvgraph =
