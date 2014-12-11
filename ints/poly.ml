@@ -287,7 +287,7 @@ and expand (x, p) =
     x::(expand (x, p - 1))
 and const_to_string d =
   let isNeg = Big_int.lt_big_int d Big_int.zero_big_int in
-    (if isNeg then "(- " else "") ^ (Big_int.string_of_big_int (Big_int.abs_big_int d)) ^ (if isNeg then ")" else "")
+    (if isNeg then "(~ " else "") ^ (Big_int.string_of_big_int (Big_int.abs_big_int d)) ^ (if isNeg then ")" else "")
 
 (* Renames a polynomial *)
 let rec renameVars varmapping (poly, d) =
