@@ -68,16 +68,19 @@ and tryOneS useSizeComplexities ctrsobl tgraph rvgraph globalSizeComplexities s 
         let model' = Polo.fix_model model params in
         let concretePoly = Polo.get_concrete_poly abs model' in
         let newBound = getNewBound useSizeComplexities tgraph concretePoly ctrsobl toOrient globalSizeComplexities in
-        let nctrsobl = Cintfarkaspolo.annotate ctrsobl boundedAndStrict_with_rules model' newBound in
-        if CTRSObl.haveSameComplexities ctrsobl nctrsobl then
+        if newBound = Complexity.Unknown then
           None
         else
-          (
-            if Log.do_debug () then
-              Log.debug ("Found the following PRF:\n" ^ (Cintfarkaspolo.pol_to_string concretePoly));
-            Log.log (Printf.sprintf "ExpRF synthesis successful, proven complexity %s." (Complexity.toString newBound));
-            Some ((nctrsobl, tgraph, rvgraph), getProof ctrsobl nctrsobl concretePoly useSizeComplexities globalSizeComplexities toOrient)
-          )
+          let nctrsobl = Cintfarkaspolo.annotate ctrsobl boundedAndStrict_with_rules model' newBound in
+          if CTRSObl.haveSameComplexities ctrsobl nctrsobl then
+            None
+          else
+            (
+              if Log.do_debug () then
+                Log.debug ("Found the following PRF:\n" ^ (Cintfarkaspolo.pol_to_string concretePoly));
+              Log.log (Printf.sprintf "ExpRF synthesis successful, proven complexity %s." (Complexity.toString newBound));
+              Some ((nctrsobl, tgraph, rvgraph), getProof ctrsobl nctrsobl concretePoly useSizeComplexities globalSizeComplexities toOrient)
+            )
     )
 
 
@@ -100,7 +103,9 @@ and convert_rule_to_leqs rule abs =
 and getNewBound useSizeComplexities tgraph concretePoly ctrsobl toOrient globalSizeComplexities =
   let vars = CTRS.getVars ctrsobl.ctrs in
   let b = get_max_rhs_arity toOrient in
-  if useSizeComplexities then
+  if b < 2 then
+    Complexity.Unknown
+  else if useSizeComplexities then
     let funs_toOrient = Utils.remdup (List.map (fun rule -> Term.getFun (Comrule.getLeft rule)) toOrient) in
     let pre_toOrient = Utils.notInP Comrule.equal toOrient (TGraph.getPreds tgraph toOrient) in
     Complexity.listAdd (List.map (getTerm concretePoly b ctrsobl pre_toOrient globalSizeComplexities vars) funs_toOrient)
@@ -109,6 +114,7 @@ and getNewBound useSizeComplexities tgraph concretePoly ctrsobl toOrient globalS
     let powterm = getPowTerm b pol_startFun in
     let varBindings = Utils.mapi (fun i v -> ("X_" ^ (string_of_int (i + 1)), Expexp.fromVar v)) vars in
     Complexity.P (Expexp.abs (Expexp.instantiate powterm varBindings))
+
 and getTerm concretePoly b ctrsobl pre_toOrient globalSizeComplexities vars f =
   let getTermForPreComrule f pol_f b ctrsobl globalSizeComplexities vars prerule =
     let getAppliedSum f pol_f b globalSizeComplexities prerule vars =
