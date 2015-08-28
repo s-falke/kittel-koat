@@ -32,7 +32,7 @@ let rec process ctrsobl tgraph rvgraph =
   else
   (
     Log.log "Trying leaf removal processor ...";
-    let leaves = TGraph.computeRulesInTwigs tgraph in
+    let leaves = TGraph.computeRulesInTwigs tgraph (constantCostFilter ctrsobl) in
     if (leaves = []) || (List.for_all (fun rule -> not(CTRSObl.hasUnknownComplexity ctrsobl rule)) leaves) then
       None
     else
@@ -52,6 +52,9 @@ let rec process ctrsobl tgraph rvgraph =
         Some ((nctrsobl, ntgraph, nrvgraph), getProof nctrsobl)
       )
   )
+
+and constantCostFilter ctrsobl rule =
+  Expexp.isConst (CTRSObl.getCost ctrsobl rule)
 
 and getProof nctrsobl ini outi =
   "Repeatedly removing leaves of the complexity graph in problem " ^

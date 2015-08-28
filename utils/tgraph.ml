@@ -330,27 +330,30 @@ module Make (RuleT : AbstractRule) = struct
       | Found i -> i
 
   (* Compute rules in twigs *)
-  let rec computeRulesInTwigs (g, trsa) =
+  let rec computeRulesInTwigs (g, trsa) filter =
     let leaves = ref [] in
-      computeLeavesAux g trsa (Array.length trsa) leaves;
+      computeLeavesAux g trsa (Array.length trsa) filter leaves;
       getRules trsa !leaves
-  and computeLeavesAux g trsa len leaves =
-    if computeLeavesAuxStep g trsa len leaves then
-      computeLeavesAux g trsa len leaves
-  and computeLeavesAuxStep g trsa len leaves =
+  and computeLeavesAux g trsa len filter leaves =
+    if computeLeavesAuxStep g trsa len filter leaves then
+      computeLeavesAux g trsa len filter leaves
+  and computeLeavesAuxStep g trsa len filter leaves =
     let res = ref false in
       for i = 0 to (len - 1) do
         if not (isIn leaves i) then
-          let goodrow = ref true in
-            for j = 0 to (len - 1) do
-              if hasEdgeNums g trsa i j && not (isIn leaves j) then
-                goodrow := false
-            done;
-            if !goodrow then
-            (
-              leaves := i::!leaves;
-              res := true
-            )
+          if (filter (snd trsa.(i))) then
+          (
+            let goodrow = ref true in
+              for j = 0 to (len - 1) do
+                if hasEdgeNums g trsa i j && not (isIn leaves j) then
+                  goodrow := false
+              done;
+              if !goodrow then
+              (
+                leaves := i::!leaves;
+                res := true
+              )
+          )
       done;
       !res
 end
