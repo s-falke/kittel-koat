@@ -103,13 +103,17 @@ and getOverallCost tgraph globalSizeComplexities (ctrsobl, _, _, _) =
   let vars = CTRS.getVars ctrsobl.ctrs in
   let getCostForRule tgraph globalSizeComplexities vars rule =
     let preRules = TGraph.getPreds tgraph [rule] in
-    let getCostPerPreRule ruleCost globalSizeComplexities vars preRule =
-      let csmap = GSC.extractSizeMapForRule globalSizeComplexities preRule 0 vars in
-      Complexity.apply ruleCost csmap
-    in
     let ruleComplexity = CTRSObl.getComplexity ctrsobl rule in
     let ruleCost = CTRSObl.getCost ctrsobl rule in
-    Complexity.mult ruleComplexity (Complexity.sup (List.map (getCostPerPreRule ruleCost globalSizeComplexities vars) preRules)) in
+    if preRules = [] then
+      Complexity.mult ruleComplexity (Complexity.P ruleCost)
+    else
+      let getCostPerPreRule ruleCost globalSizeComplexities vars preRule =
+        let csmap = GSC.extractSizeMapForRule globalSizeComplexities preRule 0 vars in
+        Complexity.apply ruleCost csmap
+      in
+      Complexity.mult ruleComplexity (Complexity.sup (List.map (getCostPerPreRule ruleCost globalSizeComplexities vars) preRules))
+  in
   Complexity.add
     (Complexity.listAdd (List.map (getCostForRule tgraph globalSizeComplexities vars) ctrsobl.ctrs.rules))
     (Complexity.P ctrsobl.leafCost)
