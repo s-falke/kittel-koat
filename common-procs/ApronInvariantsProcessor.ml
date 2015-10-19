@@ -214,7 +214,9 @@ module Make(RuleT : AbstractRule) = struct
           let (dstPostEnv, _) = mk_env (Term.getVars (Rule.getRight rule)) in
           let condAtoms = Rule.getCond rule in
           let consArray = Tcons1.array_make ruleEnv (List.length condAtoms) in
-          Utils.iteri (fun i c -> Tcons1.array_set consArray i (atom_to_tcons1 ruleEnv ruleVarMap c)) condAtoms;
+          Utils.iteri
+	    (fun i c -> Tcons1.array_set consArray i (atom_to_tcons1 ruleEnv ruleVarMap c))
+	    (List.filter Pc.isLinearAtom condAtoms);
        (* (* DEBUG *)
           Printf.printf "Turning %s into the following array:\n" (Pc.toString condAtoms);
           Tcons1.array_print Format.std_formatter consArray;
