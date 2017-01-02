@@ -152,7 +152,7 @@ and getCand v =
     else if v.[0] = '_' then
       "underscore" ^ rest
     else
-      String.uncapitalize v
+      String.uncapitalize_ascii v
 and attachPrimes cand used =
   if (Utils.contains used cand) then
     attachPrimes (cand ^ "'") used
