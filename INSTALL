@@ -4,6 +4,7 @@ Requirements:
   OCamlbuild (reasonably recent version; I use version 0.10.1)
   Camlp4 (matching your OCaml version)
   OCamlgraph (reasonably recent version; I use version 1.8.7)
+  Num (if OCaml version >=4.06.0)
   One or more of the following SMT-solvers:
     yices, yices2, z3, cvc4, mathsat5
   Optionally:
