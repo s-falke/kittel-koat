@@ -121,7 +121,7 @@ let main () =
       rhss = List.map (fun rhs -> Term.instantiate rhs subst) rule.rhss ;
       cond = Pc.instantiate rule.cond subst ; } in
   let stdtrs = List.map standardize comtrs in
- 
+
   print_ces_header (List.map (fun pv -> List.hd (Poly.getVars pv)) (Term.getArgs (Comrule.getLeft (List.hd stdtrs)))) startFun;
   List.iter print_comrule stdtrs
 
